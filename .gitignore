@@ -6,3 +6,4 @@
 *.class
 *.jar
 *.war
+*.properties
