@@ -2,16 +2,16 @@ package org.gxfj.iknow.pojo;
 
 public class Major {
 
-  private long id;
+  private Integer id;
   private String name;
-  private long collegeId;
+  private Integer collegeId;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -29,7 +29,7 @@ public class Major {
     return collegeId;
   }
 
-  public void setCollegeId(long collegeId) {
+  public void setCollegeId(Integer collegeId) {
     this.collegeId = collegeId;
   }
 

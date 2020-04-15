@@ -4,22 +4,22 @@ import java.sql.Timestamp;
 
 public class Question {
 
-  private long id;
-  private long userId;
+  private Integer id;
+  private Integer userId;
   private String title;
   private String content;
-  private long typeId;
-  private long stateId;
-  private long scenarioId;
+  private Integer typeId;
+  private Integer stateId;
+  private Integer scenarioId;
   private Timestamp date;
-  private long isDelete;
+  private Integer isDelete;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -28,7 +28,7 @@ public class Question {
     return userId;
   }
 
-  public void setUserId(long userId) {
+  public void setUserId(Integer userId) {
     this.userId = userId;
   }
 
@@ -55,7 +55,7 @@ public class Question {
     return typeId;
   }
 
-  public void setTypeId(long typeId) {
+  public void setTypeId(Integer typeId) {
     this.typeId = typeId;
   }
 
@@ -64,7 +64,7 @@ public class Question {
     return stateId;
   }
 
-  public void setStateId(long stateId) {
+  public void setStateId(Integer stateId) {
     this.stateId = stateId;
   }
 
@@ -73,7 +73,7 @@ public class Question {
     return scenarioId;
   }
 
-  public void setScenarioId(long scenarioId) {
+  public void setScenarioId(Integer scenarioId) {
     this.scenarioId = scenarioId;
   }
 
@@ -91,7 +91,7 @@ public class Question {
     return isDelete;
   }
 
-  public void setIsDelete(long isDelete) {
+  public void setIsDelete(Integer isDelete) {
     this.isDelete = isDelete;
   }
 

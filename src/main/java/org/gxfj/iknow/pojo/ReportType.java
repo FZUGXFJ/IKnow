@@ -2,7 +2,7 @@ package org.gxfj.iknow.pojo;
 
 public class ReportType {
 
-  private long id;
+  private Integer id;
   private String type;
 
 
@@ -10,7 +10,7 @@ public class ReportType {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

@@ -1,10 +1,12 @@
 package org.gxfj.iknow.pojo;
 
+import java.sql.Timestamp;
+
 public class SearchHistory {
 
-  private long id;
-  private java.sql.Timestamp date;
-  private long userId;
+  private Integer id;
+  private Timestamp date;
+  private Integer userId;
   private String content;
 
 
@@ -12,16 +14,16 @@ public class SearchHistory {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
 
-  public java.sql.Timestamp getDate() {
+  public Timestamp getDate() {
     return date;
   }
 
-  public void setDate(java.sql.Timestamp date) {
+  public void setDate(Timestamp date) {
     this.date = date;
   }
 
@@ -30,7 +32,7 @@ public class SearchHistory {
     return userId;
   }
 
-  public void setUserId(long userId) {
+  public void setUserId(Integer userId) {
     this.userId = userId;
   }
 

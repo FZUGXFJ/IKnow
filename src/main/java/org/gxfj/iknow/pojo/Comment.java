@@ -4,19 +4,19 @@ import java.sql.Timestamp;
 
 public class Comment {
 
-  private long id;
-  private long userId;
+  private Integer id;
+  private Integer userId;
   private String content;
-  private long answerId;
+  private Integer answerId;
   private Timestamp date;
-  private long isDelete;
+  private Integer isDelete;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -25,7 +25,7 @@ public class Comment {
     return userId;
   }
 
-  public void setUserId(long userId) {
+  public void setUserId(Integer userId) {
     this.userId = userId;
   }
 
@@ -43,7 +43,7 @@ public class Comment {
     return answerId;
   }
 
-  public void setAnswerId(long answerId) {
+  public void setAnswerId(Integer answerId) {
     this.answerId = answerId;
   }
 
@@ -61,7 +61,7 @@ public class Comment {
     return isDelete;
   }
 
-  public void setIsDelete(long isDelete) {
+  public void setIsDelete(Integer isDelete) {
     this.isDelete = isDelete;
   }
 

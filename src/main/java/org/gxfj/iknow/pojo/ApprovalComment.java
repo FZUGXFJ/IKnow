@@ -4,17 +4,17 @@ import java.sql.Timestamp;
 
 public class ApprovalComment {
 
-  private long id;
+  private Integer id;
   private Timestamp date;
-  private long userId;
-  private long commentId;
+  private Integer userId;
+  private Integer commentId;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -32,7 +32,7 @@ public class ApprovalComment {
     return userId;
   }
 
-  public void setUserId(long userId) {
+  public void setUserId(Integer userId) {
     this.userId = userId;
   }
 
@@ -41,7 +41,7 @@ public class ApprovalComment {
     return commentId;
   }
 
-  public void setCommentId(long commentId) {
+  public void setCommentId(Integer commentId) {
     this.commentId = commentId;
   }
 

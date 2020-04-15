@@ -2,16 +2,16 @@ package org.gxfj.iknow.pojo;
 
 public class Majortype {
 
-  private long id;
+  private Integer id;
   private String name;
-  private long subjectId;
+  private Integer subjectId;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -29,7 +29,7 @@ public class Majortype {
     return subjectId;
   }
 
-  public void setSubjectId(long subjectId) {
+  public void setSubjectId(Integer subjectId) {
     this.subjectId = subjectId;
   }
 

@@ -2,12 +2,12 @@ package org.gxfj.iknow.pojo;
 
 public class UserIdentity {
 
-  private long id;
-  private long schoolId;
-  private long collegeId;
-  private long majorId;
-  private long studentNum;
-  private long jobNum;
+  private Integer id;
+  private Integer schoolId;
+  private Integer collegeId;
+  private Integer majorId;
+  private Integer studentNum;
+  private Integer jobNum;
   private String name;
   private String type;
 
@@ -16,7 +16,7 @@ public class UserIdentity {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -25,7 +25,7 @@ public class UserIdentity {
     return schoolId;
   }
 
-  public void setSchoolId(long schoolId) {
+  public void setSchoolId(Integer schoolId) {
     this.schoolId = schoolId;
   }
 
@@ -34,7 +34,7 @@ public class UserIdentity {
     return collegeId;
   }
 
-  public void setCollegeId(long collegeId) {
+  public void setCollegeId(Integer collegeId) {
     this.collegeId = collegeId;
   }
 
@@ -43,7 +43,7 @@ public class UserIdentity {
     return majorId;
   }
 
-  public void setMajorId(long majorId) {
+  public void setMajorId(Integer majorId) {
     this.majorId = majorId;
   }
 
@@ -52,7 +52,7 @@ public class UserIdentity {
     return studentNum;
   }
 
-  public void setStudentNum(long studentNum) {
+  public void setStudentNum(Integer studentNum) {
     this.studentNum = studentNum;
   }
 
@@ -61,7 +61,7 @@ public class UserIdentity {
     return jobNum;
   }
 
-  public void setJobNum(long jobNum) {
+  public void setJobNum(Integer jobNum) {
     this.jobNum = jobNum;
   }
 

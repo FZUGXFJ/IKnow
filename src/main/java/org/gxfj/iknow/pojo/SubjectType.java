@@ -2,16 +2,16 @@ package org.gxfj.iknow.pojo;
 
 public class SubjectType {
 
-  private long id;
+  private Integer id;
   private String name;
-  private long categoryId;
+  private Integer categoryId;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -29,7 +29,7 @@ public class SubjectType {
     return categoryId;
   }
 
-  public void setCategoryId(long categoryId) {
+  public void setCategoryId(Integer categoryId) {
     this.categoryId = categoryId;
   }
 

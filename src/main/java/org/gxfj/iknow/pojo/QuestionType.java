@@ -2,17 +2,17 @@ package org.gxfj.iknow.pojo;
 
 public class QuestionType {
 
-  private long id;
-  private long categoryId;
-  private long subjectId;
-  private long majorId;
+  private Integer id;
+  private Integer categoryId;
+  private Integer subjectId;
+  private Integer majorId;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -21,7 +21,7 @@ public class QuestionType {
     return categoryId;
   }
 
-  public void setCategoryId(long categoryId) {
+  public void setCategoryId(Integer categoryId) {
     this.categoryId = categoryId;
   }
 
@@ -30,7 +30,7 @@ public class QuestionType {
     return subjectId;
   }
 
-  public void setSubjectId(long subjectId) {
+  public void setSubjectId(Integer subjectId) {
     this.subjectId = subjectId;
   }
 
@@ -39,7 +39,7 @@ public class QuestionType {
     return majorId;
   }
 
-  public void setMajorId(long majorId) {
+  public void setMajorId(Integer majorId) {
     this.majorId = majorId;
   }
 

@@ -4,25 +4,25 @@ import java.sql.Timestamp;
 
 public class User {
 
-  private long id;
+  private Integer id;
   private String email;
   private String passwd;
   private String name;
   private String introduction;
   private String gender;
-  private long isAttest;
+  private Integer isAttest;
   private Timestamp date;
-  private long badgeNum;
-  private long exp;
-  private long stateId;
-  private long identityId;
+  private Integer badgeNum;
+  private Integer exp;
+  private Integer stateId;
+  private Integer identityId;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -76,7 +76,7 @@ public class User {
     return isAttest;
   }
 
-  public void setIsAttest(long isAttest) {
+  public void setIsAttest(Integer isAttest) {
     this.isAttest = isAttest;
   }
 
@@ -94,7 +94,7 @@ public class User {
     return badgeNum;
   }
 
-  public void setBadgeNum(long badgeNum) {
+  public void setBadgeNum(Integer badgeNum) {
     this.badgeNum = badgeNum;
   }
 
@@ -103,7 +103,7 @@ public class User {
     return exp;
   }
 
-  public void setExp(long exp) {
+  public void setExp(Integer exp) {
     this.exp = exp;
   }
 
@@ -112,7 +112,7 @@ public class User {
     return stateId;
   }
 
-  public void setStateId(long stateId) {
+  public void setStateId(Integer stateId) {
     this.stateId = stateId;
   }
 
@@ -121,7 +121,7 @@ public class User {
     return identityId;
   }
 
-  public void setIdentityId(long identityId) {
+  public void setIdentityId(Integer identityId) {
     this.identityId = identityId;
   }
 

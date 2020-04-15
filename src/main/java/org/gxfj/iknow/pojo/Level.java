@@ -1,18 +1,23 @@
 package org.gxfj.iknow.pojo;
 
-public class Level {
+import javax.persistence.*;
 
-  private long id;
-  private long level;
-  private long expTopLimit;
-  private long expBotLimit;
+@Entity
+@Table(name = "level")
+public class Level {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+  private Integer level;
+  private Integer expTopLimit;
+  private Integer expBotLimit;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -21,7 +26,7 @@ public class Level {
     return level;
   }
 
-  public void setLevel(long level) {
+  public void setLevel(Integer level) {
     this.level = level;
   }
 
@@ -30,7 +35,7 @@ public class Level {
     return expTopLimit;
   }
 
-  public void setExpTopLimit(long expTopLimit) {
+  public void setExpTopLimit(Integer expTopLimit) {
     this.expTopLimit = expTopLimit;
   }
 
@@ -39,7 +44,7 @@ public class Level {
     return expBotLimit;
   }
 
-  public void setExpBotLimit(long expBotLimit) {
+  public void setExpBotLimit(Integer expBotLimit) {
     this.expBotLimit = expBotLimit;
   }
 

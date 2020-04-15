@@ -4,20 +4,20 @@ import java.sql.Timestamp;
 
 public class Report {
 
-  private long id;
-  private long userId;
-  private long type;
+  private Integer id;
+  private Integer userId;
+  private Integer type;
   private String description;
-  private long typeId;
+  private Integer typeId;
   private Timestamp date;
-  private long reasonId;
+  private Integer reasonId;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -26,7 +26,7 @@ public class Report {
     return userId;
   }
 
-  public void setUserId(long userId) {
+  public void setUserId(Integer userId) {
     this.userId = userId;
   }
 
@@ -35,7 +35,7 @@ public class Report {
     return type;
   }
 
-  public void setType(long type) {
+  public void setType(Integer type) {
     this.type = type;
   }
 
@@ -53,7 +53,7 @@ public class Report {
     return typeId;
   }
 
-  public void setTypeId(long typeId) {
+  public void setTypeId(Integer typeId) {
     this.typeId = typeId;
   }
 
@@ -71,7 +71,7 @@ public class Report {
     return reasonId;
   }
 
-  public void setReasonId(long reasonId) {
+  public void setReasonId(Integer reasonId) {
     this.reasonId = reasonId;
   }
 

@@ -3,8 +3,8 @@ package org.gxfj.iknow.pojo;
 
 public class Admin {
 
-  private long id;
-  private long account;
+  private Integer id;
+  private Integer account;
   private String passwd;
 
 
@@ -12,7 +12,7 @@ public class Admin {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -21,7 +21,7 @@ public class Admin {
     return account;
   }
 
-  public void setAccount(long account) {
+  public void setAccount(Integer account) {
     this.account = account;
   }
 

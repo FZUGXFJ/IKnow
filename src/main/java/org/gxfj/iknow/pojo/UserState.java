@@ -2,7 +2,7 @@ package org.gxfj.iknow.pojo;
 
 public class UserState {
 
-  private long id;
+  private Integer id;
   private String state;
 
 
@@ -10,7 +10,7 @@ public class UserState {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

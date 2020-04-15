@@ -5,17 +5,17 @@ import java.sql.Timestamp;
 
 public class AchievementRecord {
 
-  private long id;
+  private Integer id;
   private Timestamp date;
-  private long userId;
-  private long achievementId;
+  private Integer userId;
+  private Integer achievementId;
 
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -33,7 +33,7 @@ public class AchievementRecord {
     return userId;
   }
 
-  public void setUserId(long userId) {
+  public void setUserId(Integer userId) {
     this.userId = userId;
   }
 
@@ -42,7 +42,7 @@ public class AchievementRecord {
     return achievementId;
   }
 
-  public void setAchievementId(long achievementId) {
+  public void setAchievementId(Integer achievementId) {
     this.achievementId = achievementId;
   }
 
