@@ -3,6 +3,7 @@ package org.gxfj.iknow.pojo;
 public class UserIdentity {
 
   private Integer id;
+  private Integer userID;
   private Integer schoolId;
   private Integer collegeId;
   private Integer majorId;
@@ -18,6 +19,15 @@ public class UserIdentity {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+
+  public long getUserId() {
+    return userID;
+  }
+
+  public void setUserID(Integer userID) {
+    this.userID = userID;
   }
 
 
