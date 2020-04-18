@@ -1,0 +1,13 @@
+.navigation{
+    height: 100px;
+}
+.navigationPart{
+    float: left;
+    margin-left: 50px;
+    width:100px;
+}
+.button{
+    color: aliceblue;
+    background: aliceblue;
+    border-radius: 5px;
+}
