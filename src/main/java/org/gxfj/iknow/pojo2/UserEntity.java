@@ -1,8 +1,8 @@
 package org.gxfj.iknow.pojo2;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "user", schema = "iknow_dev", catalog = "")
@@ -14,7 +14,7 @@ public class UserEntity {
     private String introduction;
     private String gender;
     private byte isAttest;
-    private Timestamp date;
+    private Date date;
     private int badgeNum;
     private Integer exp;
     private int stateId;
@@ -110,11 +110,11 @@ public class UserEntity {
 
     @Basic
     @Column(name = "date")
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

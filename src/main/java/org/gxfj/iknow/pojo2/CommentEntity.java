@@ -1,8 +1,8 @@
 package org.gxfj.iknow.pojo2;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "comment", schema = "iknow_dev", catalog = "")
@@ -11,7 +11,7 @@ public class CommentEntity {
     private int userId;
     private String content;
     private int answerId;
-    private Timestamp date;
+    private Date date;
     private byte isDelete;
     private Collection<ApprovalcommentEntity> approvalcommentsById;
     private Collection<ApprovalreplyEntity> approvalrepliesById;
@@ -61,11 +61,11 @@ public class CommentEntity {
 
     @Basic
     @Column(name = "date")
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

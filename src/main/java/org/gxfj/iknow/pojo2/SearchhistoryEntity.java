@@ -1,13 +1,13 @@
 package org.gxfj.iknow.pojo2;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "searchhistory", schema = "iknow_dev", catalog = "")
 public class SearchhistoryEntity {
     private int id;
-    private Timestamp date;
+    private Date date;
     private int userId;
     private String content;
     private UserEntity userByUserId;
@@ -24,11 +24,11 @@ public class SearchhistoryEntity {
 
     @Basic
     @Column(name = "date")
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

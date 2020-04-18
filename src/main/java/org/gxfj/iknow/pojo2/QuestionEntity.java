@@ -1,8 +1,8 @@
 package org.gxfj.iknow.pojo2;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "question", schema = "iknow_dev", catalog = "")
@@ -14,7 +14,7 @@ public class QuestionEntity {
     private int typeId;
     private int stateId;
     private int scenarioId;
-    private Timestamp date;
+    private Date date;
     private byte isDelete;
     private Collection<AnswerEntity> answersById;
     private Collection<BrowsinghistoryEntity> browsinghistoriesById;
@@ -96,11 +96,11 @@ public class QuestionEntity {
 
     @Basic
     @Column(name = "date")
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
