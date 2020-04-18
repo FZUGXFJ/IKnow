@@ -1,13 +1,121 @@
 .navigation{
-    height: 100px;
+    height: 70px;
+    background: aliceblue;
+    border-radius: 10px;
+}
+#logo-but{
+    margin-left: 350px;
+    width:200px;
+    float: left;
+    margin-top: 10px;
+    height: 50px;
 }
 .navigationPart{
     float: left;
+    margin-top: 10px;
     margin-left: 50px;
     width:100px;
+    height: 50px;
 }
 .button{
-    color: aliceblue;
     background: aliceblue;
+    height: 50px;
+    border-style: none;
+    font-size: 24px;
+    padding-bottom: 5px;
+}
+#input{
+    float: left;
+    margin-top: 10px;
+    margin-left: 120px;
+    width:180px;
+    height: 50px;
+}
+#select{
+    height: 50px;
+    margin-top: 10px;
+    float: left;
+}
+#select-type{
+    height: 40px;
+    margin-top: 5px;
+    border-color: aqua;
     border-radius: 5px;
+    color: white;
+    background-color: aqua;
+}
+#search-img{
+    float: left;
+    margin-top: 10px;
+    margin-left: 0px;
+    width:100px;
+    height: 50px;
+}
+.text-input{
+    margin-top: 5px;
+    background: aliceblue;
+    height: 40px;
+    width:180px;
+    border-style: solid;
+    border-color: lightgrey;
+    color: lightgrey;
+}
+#logo{
+    width:119px;
+    height: 50px;
+    background:url("../img/LOGO透明 (1).png");
+    border-style: none;
+}
+#search{
+    margin-top: 5px;
+    height: 40px;
+    width: 40px;
+    background: url("../img/search.PNG");
+}
+#logo-context{
+    height: 100px;
+    margin-top: 50px;
+}
+#logo-in{
+    margin-left: 780px;
+    height:80px;
+    width: 240px;
+}
+#login{
+    margin-left: 650px;
+    width: 500px;
+    height: 600px;
+    background-color: white;
+}
+#free{
+    background-color: white;
+    border-style: none;
+    font-size: 24px;
+    font-weight: 100;
+}
+#key{
+    background-color: white;
+    border-style: none;
+    font-size: 24px;
+    font-weight: 100;
+}
+#freelogin{
+    margin-top: 40px;
+    margin-left: 40px;
+    float: left;
+}
+#keylogin{
+    margin-top: 40px;
+    margin-left: 20px;
+    float: left;
+}
+.type-choice{
+    height: 78px;
+}
+#login-underline{
+    height: 3px;
+    width: 135px;
+    background-color: aqua;
+    margin-top: 5px;
+    margin-left: 40px;
 }
