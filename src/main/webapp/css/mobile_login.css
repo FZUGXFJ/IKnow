@@ -1,0 +1,34 @@
+#title{
+    width: 100%;
+}
+label{
+    font-size: 3em;
+}
+div{
+    width: 100%;
+}
+#choose{
+    margin: 0 5%;
+}
+#choose span{
+    font-size: 3em;
+    margin-left: 2%;
+    padding: 2%;
+}
+.selected{
+    border-bottom: #6affe1 solid 10px;
+}
+#inputArea{
+    width: 80%;
+    margin: 5% auto
+}
+table{
+    width: 100%;
+}
+#inputArea input{
+    font-size: 3em;
+    padding: 0 5%;
+}
+#inputArea i{
+    color: #acacac;
+}
