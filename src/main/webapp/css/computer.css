@@ -83,11 +83,13 @@
 #logoContext{
     height: 100px;
     margin-top: 50px;
+    background: aliceblue;
 }
 #logoIn{
     margin-left: 780px;
     height:80px;
     width: 240px;
+    background: aliceblue;
 }
 #login{
     margin-left: 685px;
