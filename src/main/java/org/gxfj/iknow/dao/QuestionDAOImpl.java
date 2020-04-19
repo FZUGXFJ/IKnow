@@ -1,15 +1,14 @@
 package org.gxfj.iknow.dao;
 
-import org.gxfj.iknow.pojo.Level;
-import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.pojo.Question;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
-@Repository("userDAO")
-public class UserDAOImpl implements UserDAO {
+@Repository("questionDAO")
+public class QuestionDAOImpl implements QuestionDAO {
 
     private HibernateTemplate ht = null;
 
@@ -26,19 +25,23 @@ public class UserDAOImpl implements UserDAO {
         }
         return ht;
     }
+    @Override
+    public Question get(Integer id) {
+        return getHibernateTemplate().get(Question.class,id);
+    }
 
     @Override
-    public void add(User bean) {
+    public void update(Question bean) {
+        getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public void add(Question bean) {
         getHibernateTemplate().save(bean);
     }
 
     @Override
-    public User get(Integer id) {
-        return getHibernateTemplate().get(User.class,id);
-    }
-
-    @Override
-    public void update(User bean) {
-        getHibernateTemplate().update(bean);
+    public void delete(Question bean) {
+        update(bean);
     }
 }

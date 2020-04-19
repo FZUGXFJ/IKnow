@@ -8,7 +8,7 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository("LevelDAO")
-public class LevelDaoImpl implements LevelDAO {
+public class LevelDAOImpl implements LevelDAO {
 
     private HibernateTemplate ht = null;
 
