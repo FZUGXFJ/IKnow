@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "report", schema = "iknow_dev", catalog = "")
-public class ReportEntity {
+public class Report {
     private int id;
     private int userId;
     private int type;
@@ -13,9 +13,9 @@ public class ReportEntity {
     private int typeId;
     private Date date;
     private int reasonId;
-    private UserEntity userByUserId;
-    private ReporttypeEntity reporttypeByTypeId;
-    private ReportreasonEntity reportreasonByReasonId;
+    private User userByUserId;
+    private Reporttype reporttypeByTypeId;
+    private Reportreason reportreasonByReasonId;
 
     @Id
     @Column(name = "id")
@@ -92,7 +92,7 @@ public class ReportEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ReportEntity that = (ReportEntity) o;
+        Report that = (Report) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
@@ -119,31 +119,31 @@ public class ReportEntity {
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 
     @ManyToOne
     @JoinColumn(name = "typeID", referencedColumnName = "id", nullable = false)
-    public ReporttypeEntity getReporttypeByTypeId() {
+    public Reporttype getReporttypeByTypeId() {
         return reporttypeByTypeId;
     }
 
-    public void setReporttypeByTypeId(ReporttypeEntity reporttypeByTypeId) {
+    public void setReporttypeByTypeId(Reporttype reporttypeByTypeId) {
         this.reporttypeByTypeId = reporttypeByTypeId;
     }
 
     @ManyToOne
     @JoinColumn(name = "reasonID", referencedColumnName = "id", nullable = false)
-    public ReportreasonEntity getReportreasonByReasonId() {
+    public Reportreason getReportreasonByReasonId() {
         return reportreasonByReasonId;
     }
 
-    public void setReportreasonByReasonId(ReportreasonEntity reportreasonByReasonId) {
+    public void setReportreasonByReasonId(Reportreason reportreasonByReasonId) {
         this.reportreasonByReasonId = reportreasonByReasonId;
     }
 }

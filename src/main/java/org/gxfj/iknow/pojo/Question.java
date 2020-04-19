@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "question", schema = "iknow_dev", catalog = "")
-public class QuestionEntity {
+public class Question {
     private int id;
     private int userId;
     private String title;
@@ -16,13 +16,13 @@ public class QuestionEntity {
     private int scenarioId;
     private Date date;
     private byte isDelete;
-    private Collection<AnswerEntity> answersById;
-    private Collection<BrowsinghistoryEntity> browsinghistoriesById;
-    private Collection<CollectionproblemEntity> collectionproblemsById;
-    private UserEntity userByUserId;
-    private QuestiontypeEntity questiontypeByTypeId;
-    private QuestionstateEntity questionstateByStateId;
-    private QuestionscenarioEntity questionscenarioByScenarioId;
+    private Collection<Answer> answersById;
+    private Collection<Browsinghistory> browsinghistoriesById;
+    private Collection<Collectionproblem> collectionproblemsById;
+    private User userByUserId;
+    private Questiontype questiontypeByTypeId;
+    private Questionstate questionstateByStateId;
+    private Questionscenario questionscenarioByScenarioId;
 
     @Id
     @Column(name = "id")
@@ -119,7 +119,7 @@ public class QuestionEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        QuestionEntity that = (QuestionEntity) o;
+        Question that = (Question) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
@@ -149,69 +149,69 @@ public class QuestionEntity {
     }
 
     @OneToMany(mappedBy = "questionByQuestionId")
-    public Collection<AnswerEntity> getAnswersById() {
+    public Collection<Answer> getAnswersById() {
         return answersById;
     }
 
-    public void setAnswersById(Collection<AnswerEntity> answersById) {
+    public void setAnswersById(Collection<Answer> answersById) {
         this.answersById = answersById;
     }
 
     @OneToMany(mappedBy = "questionByQuestionId")
-    public Collection<BrowsinghistoryEntity> getBrowsinghistoriesById() {
+    public Collection<Browsinghistory> getBrowsinghistoriesById() {
         return browsinghistoriesById;
     }
 
-    public void setBrowsinghistoriesById(Collection<BrowsinghistoryEntity> browsinghistoriesById) {
+    public void setBrowsinghistoriesById(Collection<Browsinghistory> browsinghistoriesById) {
         this.browsinghistoriesById = browsinghistoriesById;
     }
 
     @OneToMany(mappedBy = "questionByQuestionId")
-    public Collection<CollectionproblemEntity> getCollectionproblemsById() {
+    public Collection<Collectionproblem> getCollectionproblemsById() {
         return collectionproblemsById;
     }
 
-    public void setCollectionproblemsById(Collection<CollectionproblemEntity> collectionproblemsById) {
+    public void setCollectionproblemsById(Collection<Collectionproblem> collectionproblemsById) {
         this.collectionproblemsById = collectionproblemsById;
     }
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 
     @ManyToOne
     @JoinColumn(name = "typeID", referencedColumnName = "id", nullable = false)
-    public QuestiontypeEntity getQuestiontypeByTypeId() {
+    public Questiontype getQuestiontypeByTypeId() {
         return questiontypeByTypeId;
     }
 
-    public void setQuestiontypeByTypeId(QuestiontypeEntity questiontypeByTypeId) {
+    public void setQuestiontypeByTypeId(Questiontype questiontypeByTypeId) {
         this.questiontypeByTypeId = questiontypeByTypeId;
     }
 
     @ManyToOne
     @JoinColumn(name = "stateID", referencedColumnName = "id", nullable = false)
-    public QuestionstateEntity getQuestionstateByStateId() {
+    public Questionstate getQuestionstateByStateId() {
         return questionstateByStateId;
     }
 
-    public void setQuestionstateByStateId(QuestionstateEntity questionstateByStateId) {
+    public void setQuestionstateByStateId(Questionstate questionstateByStateId) {
         this.questionstateByStateId = questionstateByStateId;
     }
 
     @ManyToOne
     @JoinColumn(name = "scenarioID", referencedColumnName = "id", nullable = false)
-    public QuestionscenarioEntity getQuestionscenarioByScenarioId() {
+    public Questionscenario getQuestionscenarioByScenarioId() {
         return questionscenarioByScenarioId;
     }
 
-    public void setQuestionscenarioByScenarioId(QuestionscenarioEntity questionscenarioByScenarioId) {
+    public void setQuestionscenarioByScenarioId(Questionscenario questionscenarioByScenarioId) {
         this.questionscenarioByScenarioId = questionscenarioByScenarioId;
     }
 }

@@ -5,13 +5,13 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "college", schema = "iknow_dev", catalog = "")
-public class CollegeEntity {
+public class College {
     private int id;
     private String name;
     private int schoolId;
-    private SchoolEntity schoolBySchoolId;
-    private Collection<MajorEntity> majorsById;
-    private Collection<UseridentityEntity> useridentitiesById;
+    private School schoolBySchoolId;
+    private Collection<Major> majorsById;
+    private Collection<Useridentity> useridentitiesById;
 
     @Id
     @Column(name = "id")
@@ -48,7 +48,7 @@ public class CollegeEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CollegeEntity that = (CollegeEntity) o;
+        College that = (College) o;
 
         if (id != that.id) return false;
         if (schoolId != that.schoolId) return false;
@@ -67,29 +67,29 @@ public class CollegeEntity {
 
     @ManyToOne
     @JoinColumn(name = "schoolID", referencedColumnName = "id", nullable = false)
-    public SchoolEntity getSchoolBySchoolId() {
+    public School getSchoolBySchoolId() {
         return schoolBySchoolId;
     }
 
-    public void setSchoolBySchoolId(SchoolEntity schoolBySchoolId) {
+    public void setSchoolBySchoolId(School schoolBySchoolId) {
         this.schoolBySchoolId = schoolBySchoolId;
     }
 
     @OneToMany(mappedBy = "collegeByCollegeId")
-    public Collection<MajorEntity> getMajorsById() {
+    public Collection<Major> getMajorsById() {
         return majorsById;
     }
 
-    public void setMajorsById(Collection<MajorEntity> majorsById) {
+    public void setMajorsById(Collection<Major> majorsById) {
         this.majorsById = majorsById;
     }
 
     @OneToMany(mappedBy = "collegeByCollegeId")
-    public Collection<UseridentityEntity> getUseridentitiesById() {
+    public Collection<Useridentity> getUseridentitiesById() {
         return useridentitiesById;
     }
 
-    public void setUseridentitiesById(Collection<UseridentityEntity> useridentitiesById) {
+    public void setUseridentitiesById(Collection<Useridentity> useridentitiesById) {
         this.useridentitiesById = useridentitiesById;
     }
 }

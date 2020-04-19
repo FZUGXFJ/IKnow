@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "admin", schema = "iknow_dev", catalog = "")
-public class AdminEntity {
+public class Admin {
     private int id;
     private int account;
     private String passwd;
@@ -44,7 +44,7 @@ public class AdminEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AdminEntity that = (AdminEntity) o;
+        Admin that = (Admin) o;
 
         if (id != that.id) return false;
         if (account != that.account) return false;

@@ -4,13 +4,14 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "searchhistory", schema = "iknow_dev", catalog = "")
-public class SearchhistoryEntity {
+@Table(name = "approvalanswer", schema = "iknow_dev", catalog = "")
+public class Approvalanswer {
     private int id;
     private Date date;
     private int userId;
-    private String content;
-    private UserEntity userByUserId;
+    private int answerId;
+    private User userByUserId;
+    private Answer answerByAnswerId;
 
     @Id
     @Column(name = "id")
@@ -43,13 +44,13 @@ public class SearchhistoryEntity {
     }
 
     @Basic
-    @Column(name = "content")
-    public String getContent() {
-        return content;
+    @Column(name = "answerID")
+    public int getAnswerId() {
+        return answerId;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setAnswerId(int answerId) {
+        this.answerId = answerId;
     }
 
     @Override
@@ -57,12 +58,12 @@ public class SearchhistoryEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SearchhistoryEntity that = (SearchhistoryEntity) o;
+        Approvalanswer that = (Approvalanswer) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
+        if (answerId != that.answerId) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
 
         return true;
     }
@@ -72,17 +73,27 @@ public class SearchhistoryEntity {
         int result = id;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + userId;
-        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + answerId;
         return result;
     }
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
+    public Answer getAnswerByAnswerId() {
+        return answerByAnswerId;
+    }
+
+    public void setAnswerByAnswerId(Answer answerByAnswerId) {
+        this.answerByAnswerId = answerByAnswerId;
     }
 }

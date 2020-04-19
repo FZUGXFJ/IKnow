@@ -5,12 +5,12 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "majortype", schema = "iknow_dev", catalog = "")
-public class MajortypeEntity {
+public class Majortype {
     private int id;
     private String name;
     private int subjectId;
-    private SubjecttypeEntity subjecttypeBySubjectId;
-    private Collection<QuestiontypeEntity> questiontypesById;
+    private Subjecttype subjecttypeBySubjectId;
+    private Collection<Questiontype> questiontypesById;
 
     @Id
     @Column(name = "id")
@@ -47,7 +47,7 @@ public class MajortypeEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MajortypeEntity that = (MajortypeEntity) o;
+        Majortype that = (Majortype) o;
 
         if (id != that.id) return false;
         if (subjectId != that.subjectId) return false;
@@ -66,20 +66,20 @@ public class MajortypeEntity {
 
     @ManyToOne
     @JoinColumn(name = "subjectID", referencedColumnName = "id", nullable = false)
-    public SubjecttypeEntity getSubjecttypeBySubjectId() {
+    public Subjecttype getSubjecttypeBySubjectId() {
         return subjecttypeBySubjectId;
     }
 
-    public void setSubjecttypeBySubjectId(SubjecttypeEntity subjecttypeBySubjectId) {
+    public void setSubjecttypeBySubjectId(Subjecttype subjecttypeBySubjectId) {
         this.subjecttypeBySubjectId = subjecttypeBySubjectId;
     }
 
     @OneToMany(mappedBy = "majortypeByMajorId")
-    public Collection<QuestiontypeEntity> getQuestiontypesById() {
+    public Collection<Questiontype> getQuestiontypesById() {
         return questiontypesById;
     }
 
-    public void setQuestiontypesById(Collection<QuestiontypeEntity> questiontypesById) {
+    public void setQuestiontypesById(Collection<Questiontype> questiontypesById) {
         this.questiontypesById = questiontypesById;
     }
 }

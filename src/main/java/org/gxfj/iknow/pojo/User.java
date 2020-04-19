@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "user", schema = "iknow_dev", catalog = "")
-public class UserEntity {
+public class User {
     private int id;
     private String email;
     private String passwd;
@@ -19,24 +19,24 @@ public class UserEntity {
     private Integer exp;
     private int stateId;
     private Integer identityId;
-    private Collection<AchievementrecordEntity> achievementrecordsById;
-    private Collection<AnswerEntity> answersById;
-    private Collection<ApprovalanswerEntity> approvalanswersById;
-    private Collection<ApprovalcommentEntity> approvalcommentsById;
-    private Collection<ApprovalreplyEntity> approvalrepliesById;
-    private Collection<BrowsinghistoryEntity> browsinghistoriesById;
-    private Collection<CollectionproblemEntity> collectionproblemsById;
-    private Collection<CommentEntity> commentsById;
-    private Collection<CommentEntity> commentsById_0;
-    private Collection<MessageEntity> messagesById;
-    private Collection<OppositionanswerEntity> oppositionanswersById;
-    private Collection<QuestionEntity> questionsById;
-    private Collection<ReplyEntity> repliesById;
-    private Collection<ReportEntity> reportsById;
-    private Collection<SearchhistoryEntity> searchhistoriesById;
-    private UserstateEntity userstateByStateId;
-    private UseridentityEntity useridentityByIdentityId;
-    private Collection<UseridentityEntity> useridentitiesById;
+    private Collection<Achievementrecord> achievementrecordsById;
+    private Collection<Answer> answersById;
+    private Collection<Approvalanswer> approvalanswersById;
+    private Collection<Approvalcomment> approvalcommentsById;
+    private Collection<Approvalreply> approvalrepliesById;
+    private Collection<Browsinghistory> browsinghistoriesById;
+    private Collection<Collectionproblem> collectionproblemsById;
+    private Collection<Comment> commentsById;
+    private Collection<Comment> commentsById_0;
+    private Collection<Message> messagesById;
+    private Collection<Oppositionanswer> oppositionanswersById;
+    private Collection<Question> questionsById;
+    private Collection<Reply> repliesById;
+    private Collection<Report> reportsById;
+    private Collection<Searchhistory> searchhistoriesById;
+    private Userstate userstateByStateId;
+    private Useridentity useridentityByIdentityId;
+    private Collection<Useridentity> useridentitiesById;
 
     @Id
     @Column(name = "id")
@@ -163,7 +163,7 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserEntity that = (UserEntity) o;
+        User that = (User) o;
 
         if (id != that.id) return false;
         if (isAttest != that.isAttest) return false;
@@ -199,166 +199,166 @@ public class UserEntity {
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<AchievementrecordEntity> getAchievementrecordsById() {
+    public Collection<Achievementrecord> getAchievementrecordsById() {
         return achievementrecordsById;
     }
 
-    public void setAchievementrecordsById(Collection<AchievementrecordEntity> achievementrecordsById) {
+    public void setAchievementrecordsById(Collection<Achievementrecord> achievementrecordsById) {
         this.achievementrecordsById = achievementrecordsById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<AnswerEntity> getAnswersById() {
+    public Collection<Answer> getAnswersById() {
         return answersById;
     }
 
-    public void setAnswersById(Collection<AnswerEntity> answersById) {
+    public void setAnswersById(Collection<Answer> answersById) {
         this.answersById = answersById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<ApprovalanswerEntity> getApprovalanswersById() {
+    public Collection<Approvalanswer> getApprovalanswersById() {
         return approvalanswersById;
     }
 
-    public void setApprovalanswersById(Collection<ApprovalanswerEntity> approvalanswersById) {
+    public void setApprovalanswersById(Collection<Approvalanswer> approvalanswersById) {
         this.approvalanswersById = approvalanswersById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<ApprovalcommentEntity> getApprovalcommentsById() {
+    public Collection<Approvalcomment> getApprovalcommentsById() {
         return approvalcommentsById;
     }
 
-    public void setApprovalcommentsById(Collection<ApprovalcommentEntity> approvalcommentsById) {
+    public void setApprovalcommentsById(Collection<Approvalcomment> approvalcommentsById) {
         this.approvalcommentsById = approvalcommentsById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<ApprovalreplyEntity> getApprovalrepliesById() {
+    public Collection<Approvalreply> getApprovalrepliesById() {
         return approvalrepliesById;
     }
 
-    public void setApprovalrepliesById(Collection<ApprovalreplyEntity> approvalrepliesById) {
+    public void setApprovalrepliesById(Collection<Approvalreply> approvalrepliesById) {
         this.approvalrepliesById = approvalrepliesById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<BrowsinghistoryEntity> getBrowsinghistoriesById() {
+    public Collection<Browsinghistory> getBrowsinghistoriesById() {
         return browsinghistoriesById;
     }
 
-    public void setBrowsinghistoriesById(Collection<BrowsinghistoryEntity> browsinghistoriesById) {
+    public void setBrowsinghistoriesById(Collection<Browsinghistory> browsinghistoriesById) {
         this.browsinghistoriesById = browsinghistoriesById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<CollectionproblemEntity> getCollectionproblemsById() {
+    public Collection<Collectionproblem> getCollectionproblemsById() {
         return collectionproblemsById;
     }
 
-    public void setCollectionproblemsById(Collection<CollectionproblemEntity> collectionproblemsById) {
+    public void setCollectionproblemsById(Collection<Collectionproblem> collectionproblemsById) {
         this.collectionproblemsById = collectionproblemsById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<CommentEntity> getCommentsById() {
+    public Collection<Comment> getCommentsById() {
         return commentsById;
     }
 
-    public void setCommentsById(Collection<CommentEntity> commentsById) {
+    public void setCommentsById(Collection<Comment> commentsById) {
         this.commentsById = commentsById;
     }
 
     @OneToMany(mappedBy = "userByAnswerId")
-    public Collection<CommentEntity> getCommentsById_0() {
+    public Collection<Comment> getCommentsById_0() {
         return commentsById_0;
     }
 
-    public void setCommentsById_0(Collection<CommentEntity> commentsById_0) {
+    public void setCommentsById_0(Collection<Comment> commentsById_0) {
         this.commentsById_0 = commentsById_0;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<MessageEntity> getMessagesById() {
+    public Collection<Message> getMessagesById() {
         return messagesById;
     }
 
-    public void setMessagesById(Collection<MessageEntity> messagesById) {
+    public void setMessagesById(Collection<Message> messagesById) {
         this.messagesById = messagesById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<OppositionanswerEntity> getOppositionanswersById() {
+    public Collection<Oppositionanswer> getOppositionanswersById() {
         return oppositionanswersById;
     }
 
-    public void setOppositionanswersById(Collection<OppositionanswerEntity> oppositionanswersById) {
+    public void setOppositionanswersById(Collection<Oppositionanswer> oppositionanswersById) {
         this.oppositionanswersById = oppositionanswersById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<QuestionEntity> getQuestionsById() {
+    public Collection<Question> getQuestionsById() {
         return questionsById;
     }
 
-    public void setQuestionsById(Collection<QuestionEntity> questionsById) {
+    public void setQuestionsById(Collection<Question> questionsById) {
         this.questionsById = questionsById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<ReplyEntity> getRepliesById() {
+    public Collection<Reply> getRepliesById() {
         return repliesById;
     }
 
-    public void setRepliesById(Collection<ReplyEntity> repliesById) {
+    public void setRepliesById(Collection<Reply> repliesById) {
         this.repliesById = repliesById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<ReportEntity> getReportsById() {
+    public Collection<Report> getReportsById() {
         return reportsById;
     }
 
-    public void setReportsById(Collection<ReportEntity> reportsById) {
+    public void setReportsById(Collection<Report> reportsById) {
         this.reportsById = reportsById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<SearchhistoryEntity> getSearchhistoriesById() {
+    public Collection<Searchhistory> getSearchhistoriesById() {
         return searchhistoriesById;
     }
 
-    public void setSearchhistoriesById(Collection<SearchhistoryEntity> searchhistoriesById) {
+    public void setSearchhistoriesById(Collection<Searchhistory> searchhistoriesById) {
         this.searchhistoriesById = searchhistoriesById;
     }
 
     @ManyToOne
     @JoinColumn(name = "stateID", referencedColumnName = "id", nullable = false)
-    public UserstateEntity getUserstateByStateId() {
+    public Userstate getUserstateByStateId() {
         return userstateByStateId;
     }
 
-    public void setUserstateByStateId(UserstateEntity userstateByStateId) {
+    public void setUserstateByStateId(Userstate userstateByStateId) {
         this.userstateByStateId = userstateByStateId;
     }
 
     @ManyToOne
     @JoinColumn(name = "identityID", referencedColumnName = "id")
-    public UseridentityEntity getUseridentityByIdentityId() {
+    public Useridentity getUseridentityByIdentityId() {
         return useridentityByIdentityId;
     }
 
-    public void setUseridentityByIdentityId(UseridentityEntity useridentityByIdentityId) {
+    public void setUseridentityByIdentityId(Useridentity useridentityByIdentityId) {
         this.useridentityByIdentityId = useridentityByIdentityId;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<UseridentityEntity> getUseridentitiesById() {
+    public Collection<Useridentity> getUseridentitiesById() {
         return useridentitiesById;
     }
 
-    public void setUseridentitiesById(Collection<UseridentityEntity> useridentitiesById) {
+    public void setUseridentitiesById(Collection<Useridentity> useridentitiesById) {
         this.useridentitiesById = useridentitiesById;
     }
 }

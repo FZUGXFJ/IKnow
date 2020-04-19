@@ -4,14 +4,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "message", schema = "iknow_dev", catalog = "")
-public class MessageEntity {
+@Table(name = "searchhistory", schema = "iknow_dev", catalog = "")
+public class Searchhistory {
     private int id;
     private Date date;
     private int userId;
-    private byte isRead;
     private String content;
-    private UserEntity userByUserId;
+    private User userByUserId;
 
     @Id
     @Column(name = "id")
@@ -44,16 +43,6 @@ public class MessageEntity {
     }
 
     @Basic
-    @Column(name = "isRead")
-    public byte getIsRead() {
-        return isRead;
-    }
-
-    public void setIsRead(byte isRead) {
-        this.isRead = isRead;
-    }
-
-    @Basic
     @Column(name = "content")
     public String getContent() {
         return content;
@@ -68,11 +57,10 @@ public class MessageEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MessageEntity that = (MessageEntity) o;
+        Searchhistory that = (Searchhistory) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (isRead != that.isRead) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
 
@@ -84,18 +72,17 @@ public class MessageEntity {
         int result = id;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + userId;
-        result = 31 * result + (int) isRead;
         result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 }

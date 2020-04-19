@@ -5,11 +5,11 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "categoriestype", schema = "iknow_dev", catalog = "")
-public class CategoriestypeEntity {
+public class Categoriestype {
     private int id;
     private String name;
-    private Collection<QuestiontypeEntity> questiontypesById;
-    private Collection<SubjecttypeEntity> subjecttypesById;
+    private Collection<Questiontype> questiontypesById;
+    private Collection<Subjecttype> subjecttypesById;
 
     @Id
     @Column(name = "id")
@@ -36,7 +36,7 @@ public class CategoriestypeEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CategoriestypeEntity that = (CategoriestypeEntity) o;
+        Categoriestype that = (Categoriestype) o;
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
@@ -52,20 +52,20 @@ public class CategoriestypeEntity {
     }
 
     @OneToMany(mappedBy = "categoriestypeByCategoryId")
-    public Collection<QuestiontypeEntity> getQuestiontypesById() {
+    public Collection<Questiontype> getQuestiontypesById() {
         return questiontypesById;
     }
 
-    public void setQuestiontypesById(Collection<QuestiontypeEntity> questiontypesById) {
+    public void setQuestiontypesById(Collection<Questiontype> questiontypesById) {
         this.questiontypesById = questiontypesById;
     }
 
     @OneToMany(mappedBy = "categoriestypeByCategoryId")
-    public Collection<SubjecttypeEntity> getSubjecttypesById() {
+    public Collection<Subjecttype> getSubjecttypesById() {
         return subjecttypesById;
     }
 
-    public void setSubjecttypesById(Collection<SubjecttypeEntity> subjecttypesById) {
+    public void setSubjecttypesById(Collection<Subjecttype> subjecttypesById) {
         this.subjecttypesById = subjecttypesById;
     }
 }

@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "reply", schema = "iknow_dev", catalog = "")
-public class ReplyEntity {
+public class Reply {
     private int id;
     private int userId;
     private String content;
@@ -13,8 +13,8 @@ public class ReplyEntity {
     private Date date;
     private int count;
     private byte isDelete;
-    private UserEntity userByUserId;
-    private CommentEntity commentByCommentId;
+    private User userByUserId;
+    private Comment commentByCommentId;
 
     @Id
     @Column(name = "id")
@@ -91,7 +91,7 @@ public class ReplyEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ReplyEntity that = (ReplyEntity) o;
+        Reply that = (Reply) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
@@ -118,21 +118,21 @@ public class ReplyEntity {
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 
     @ManyToOne
     @JoinColumn(name = "commentID", referencedColumnName = "id", nullable = false)
-    public CommentEntity getCommentByCommentId() {
+    public Comment getCommentByCommentId() {
         return commentByCommentId;
     }
 
-    public void setCommentByCommentId(CommentEntity commentByCommentId) {
+    public void setCommentByCommentId(Comment commentByCommentId) {
         this.commentByCommentId = commentByCommentId;
     }
 }

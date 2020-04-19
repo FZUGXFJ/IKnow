@@ -5,13 +5,13 @@ import java.util.Date;
 
 @Entity
 @Table(name = "oppositionanswer", schema = "iknow_dev", catalog = "")
-public class OppositionanswerEntity {
+public class Oppositionanswer {
     private int id;
     private Date date;
     private int userId;
     private int answerId;
-    private UserEntity userByUserId;
-    private AnswerEntity answerByAnswerId;
+    private User userByUserId;
+    private Answer answerByAnswerId;
 
     @Id
     @Column(name = "id")
@@ -58,7 +58,7 @@ public class OppositionanswerEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OppositionanswerEntity that = (OppositionanswerEntity) o;
+        Oppositionanswer that = (Oppositionanswer) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
@@ -79,21 +79,21 @@ public class OppositionanswerEntity {
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 
     @ManyToOne
     @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
-    public AnswerEntity getAnswerByAnswerId() {
+    public Answer getAnswerByAnswerId() {
         return answerByAnswerId;
     }
 
-    public void setAnswerByAnswerId(AnswerEntity answerByAnswerId) {
+    public void setAnswerByAnswerId(Answer answerByAnswerId) {
         this.answerByAnswerId = answerByAnswerId;
     }
 }

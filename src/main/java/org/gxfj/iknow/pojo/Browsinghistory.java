@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "achievementrecord", schema = "iknow_dev", catalog = "")
-public class AchievementrecordEntity {
+@Table(name = "browsinghistory", schema = "iknow_dev", catalog = "")
+public class Browsinghistory {
     private int id;
     private Date date;
     private int userId;
-    private int achievementId;
-    private UserEntity userByUserId;
-    private AchievementEntity achievementByAchievementId;
+    private int questionId;
+    private User userByUserId;
+    private Question questionByQuestionId;
 
     @Id
     @Column(name = "id")
@@ -44,13 +44,13 @@ public class AchievementrecordEntity {
     }
 
     @Basic
-    @Column(name = "achievementID")
-    public int getAchievementId() {
-        return achievementId;
+    @Column(name = "questionID")
+    public int getQuestionId() {
+        return questionId;
     }
 
-    public void setAchievementId(int achievementId) {
-        this.achievementId = achievementId;
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
     }
 
     @Override
@@ -58,11 +58,11 @@ public class AchievementrecordEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AchievementrecordEntity that = (AchievementrecordEntity) o;
+        Browsinghistory that = (Browsinghistory) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (achievementId != that.achievementId) return false;
+        if (questionId != that.questionId) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
@@ -73,27 +73,27 @@ public class AchievementrecordEntity {
         int result = id;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + userId;
-        result = 31 * result + achievementId;
+        result = 31 * result + questionId;
         return result;
     }
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 
     @ManyToOne
-    @JoinColumn(name = "achievementID", referencedColumnName = "id", nullable = false)
-    public AchievementEntity getAchievementByAchievementId() {
-        return achievementByAchievementId;
+    @JoinColumn(name = "questionID", referencedColumnName = "id", nullable = false)
+    public Question getQuestionByQuestionId() {
+        return questionByQuestionId;
     }
 
-    public void setAchievementByAchievementId(AchievementEntity achievementByAchievementId) {
-        this.achievementByAchievementId = achievementByAchievementId;
+    public void setQuestionByQuestionId(Question questionByQuestionId) {
+        this.questionByQuestionId = questionByQuestionId;
     }
 }

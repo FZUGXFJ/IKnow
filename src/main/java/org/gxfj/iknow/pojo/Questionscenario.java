@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "achievement", schema = "iknow_dev", catalog = "")
-public class AchievementEntity {
+@Table(name = "questionscenario", schema = "iknow_dev", catalog = "")
+public class Questionscenario {
     private int id;
     private String name;
-    private Collection<AchievementrecordEntity> achievementrecordsById;
+    private Collection<Question> questionsById;
 
     @Id
     @Column(name = "id")
@@ -35,7 +35,7 @@ public class AchievementEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AchievementEntity that = (AchievementEntity) o;
+        Questionscenario that = (Questionscenario) o;
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
@@ -50,12 +50,12 @@ public class AchievementEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "achievementByAchievementId")
-    public Collection<AchievementrecordEntity> getAchievementrecordsById() {
-        return achievementrecordsById;
+    @OneToMany(mappedBy = "questionscenarioByScenarioId")
+    public Collection<Question> getQuestionsById() {
+        return questionsById;
     }
 
-    public void setAchievementrecordsById(Collection<AchievementrecordEntity> achievementrecordsById) {
-        this.achievementrecordsById = achievementrecordsById;
+    public void setQuestionsById(Collection<Question> questionsById) {
+        this.questionsById = questionsById;
     }
 }

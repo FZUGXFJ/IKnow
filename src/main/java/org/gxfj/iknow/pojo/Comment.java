@@ -5,18 +5,19 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "answer", schema = "iknow_dev", catalog = "")
-public class AnswerEntity {
+@Table(name = "comment", schema = "iknow_dev", catalog = "")
+public class Comment {
     private int id;
     private int userId;
     private String content;
-    private int questionId;
+    private int answerId;
     private Date date;
     private byte isDelete;
-    private UserEntity userByUserId;
-    private QuestionEntity questionByQuestionId;
-    private Collection<ApprovalanswerEntity> approvalanswersById;
-    private Collection<OppositionanswerEntity> oppositionanswersById;
+    private Collection<Approvalcomment> approvalcommentsById;
+    private Collection<Approvalreply> approvalrepliesById;
+    private User userByUserId;
+    private User userByAnswerId;
+    private Collection<Reply> repliesById;
 
     @Id
     @Column(name = "id")
@@ -49,13 +50,13 @@ public class AnswerEntity {
     }
 
     @Basic
-    @Column(name = "questionID")
-    public int getQuestionId() {
-        return questionId;
+    @Column(name = "answerID")
+    public int getAnswerId() {
+        return answerId;
     }
 
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
+    public void setAnswerId(int answerId) {
+        this.answerId = answerId;
     }
 
     @Basic
@@ -83,11 +84,11 @@ public class AnswerEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AnswerEntity that = (AnswerEntity) o;
+        Comment that = (Comment) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (questionId != that.questionId) return false;
+        if (answerId != that.answerId) return false;
         if (isDelete != that.isDelete) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
@@ -100,47 +101,56 @@ public class AnswerEntity {
         int result = id;
         result = 31 * result + userId;
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + questionId;
+        result = 31 * result + answerId;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (int) isDelete;
         return result;
     }
 
+    @OneToMany(mappedBy = "commentByCommentId")
+    public Collection<Approvalcomment> getApprovalcommentsById() {
+        return approvalcommentsById;
+    }
+
+    public void setApprovalcommentsById(Collection<Approvalcomment> approvalcommentsById) {
+        this.approvalcommentsById = approvalcommentsById;
+    }
+
+    @OneToMany(mappedBy = "commentByCommentId")
+    public Collection<Approvalreply> getApprovalrepliesById() {
+        return approvalrepliesById;
+    }
+
+    public void setApprovalrepliesById(Collection<Approvalreply> approvalrepliesById) {
+        this.approvalrepliesById = approvalrepliesById;
+    }
+
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 
     @ManyToOne
-    @JoinColumn(name = "questionID", referencedColumnName = "id", nullable = false)
-    public QuestionEntity getQuestionByQuestionId() {
-        return questionByQuestionId;
+    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
+    public User getUserByAnswerId() {
+        return userByAnswerId;
     }
 
-    public void setQuestionByQuestionId(QuestionEntity questionByQuestionId) {
-        this.questionByQuestionId = questionByQuestionId;
+    public void setUserByAnswerId(User userByAnswerId) {
+        this.userByAnswerId = userByAnswerId;
     }
 
-    @OneToMany(mappedBy = "answerByAnswerId")
-    public Collection<ApprovalanswerEntity> getApprovalanswersById() {
-        return approvalanswersById;
+    @OneToMany(mappedBy = "commentByCommentId")
+    public Collection<Reply> getRepliesById() {
+        return repliesById;
     }
 
-    public void setApprovalanswersById(Collection<ApprovalanswerEntity> approvalanswersById) {
-        this.approvalanswersById = approvalanswersById;
-    }
-
-    @OneToMany(mappedBy = "answerByAnswerId")
-    public Collection<OppositionanswerEntity> getOppositionanswersById() {
-        return oppositionanswersById;
-    }
-
-    public void setOppositionanswersById(Collection<OppositionanswerEntity> oppositionanswersById) {
-        this.oppositionanswersById = oppositionanswersById;
+    public void setRepliesById(Collection<Reply> repliesById) {
+        this.repliesById = repliesById;
     }
 }

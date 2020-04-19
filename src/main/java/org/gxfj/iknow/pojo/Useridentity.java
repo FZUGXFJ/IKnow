@@ -5,7 +5,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "useridentity", schema = "iknow_dev", catalog = "")
-public class UseridentityEntity {
+public class Useridentity {
     private int id;
     private int userId;
     private int schoolId;
@@ -15,11 +15,11 @@ public class UseridentityEntity {
     private Integer jobNum;
     private String name;
     private String type;
-    private Collection<UserEntity> usersById;
-    private UserEntity userByUserId;
-    private SchoolEntity schoolBySchoolId;
-    private CollegeEntity collegeByCollegeId;
-    private MajorEntity majorByMajorId;
+    private Collection<User> usersById;
+    private User userByUserId;
+    private School schoolBySchoolId;
+    private College collegeByCollegeId;
+    private Major majorByMajorId;
 
     @Id
     @Column(name = "id")
@@ -116,7 +116,7 @@ public class UseridentityEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UseridentityEntity that = (UseridentityEntity) o;
+        Useridentity that = (Useridentity) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
@@ -146,51 +146,51 @@ public class UseridentityEntity {
     }
 
     @OneToMany(mappedBy = "useridentityByIdentityId")
-    public Collection<UserEntity> getUsersById() {
+    public Collection<User> getUsersById() {
         return usersById;
     }
 
-    public void setUsersById(Collection<UserEntity> usersById) {
+    public void setUsersById(Collection<User> usersById) {
         this.usersById = usersById;
     }
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 
     @ManyToOne
     @JoinColumn(name = "schoolID", referencedColumnName = "id", nullable = false)
-    public SchoolEntity getSchoolBySchoolId() {
+    public School getSchoolBySchoolId() {
         return schoolBySchoolId;
     }
 
-    public void setSchoolBySchoolId(SchoolEntity schoolBySchoolId) {
+    public void setSchoolBySchoolId(School schoolBySchoolId) {
         this.schoolBySchoolId = schoolBySchoolId;
     }
 
     @ManyToOne
     @JoinColumn(name = "collegeID", referencedColumnName = "id", nullable = false)
-    public CollegeEntity getCollegeByCollegeId() {
+    public College getCollegeByCollegeId() {
         return collegeByCollegeId;
     }
 
-    public void setCollegeByCollegeId(CollegeEntity collegeByCollegeId) {
+    public void setCollegeByCollegeId(College collegeByCollegeId) {
         this.collegeByCollegeId = collegeByCollegeId;
     }
 
     @ManyToOne
     @JoinColumn(name = "majorID", referencedColumnName = "id")
-    public MajorEntity getMajorByMajorId() {
+    public Major getMajorByMajorId() {
         return majorByMajorId;
     }
 
-    public void setMajorByMajorId(MajorEntity majorByMajorId) {
+    public void setMajorByMajorId(Major majorByMajorId) {
         this.majorByMajorId = majorByMajorId;
     }
 }

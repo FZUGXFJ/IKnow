@@ -5,15 +5,15 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "questiontype", schema = "iknow_dev", catalog = "")
-public class QuestiontypeEntity {
+public class Questiontype {
     private int id;
     private int categoryId;
     private int subjectId;
     private int majorId;
-    private Collection<QuestionEntity> questionsById;
-    private CategoriestypeEntity categoriestypeByCategoryId;
-    private SubjecttypeEntity subjecttypeBySubjectId;
-    private MajortypeEntity majortypeByMajorId;
+    private Collection<Question> questionsById;
+    private Categoriestype categoriestypeByCategoryId;
+    private Subjecttype subjecttypeBySubjectId;
+    private Majortype majortypeByMajorId;
 
     @Id
     @Column(name = "id")
@@ -60,7 +60,7 @@ public class QuestiontypeEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        QuestiontypeEntity that = (QuestiontypeEntity) o;
+        Questiontype that = (Questiontype) o;
 
         if (id != that.id) return false;
         if (categoryId != that.categoryId) return false;
@@ -80,41 +80,41 @@ public class QuestiontypeEntity {
     }
 
     @OneToMany(mappedBy = "questiontypeByTypeId")
-    public Collection<QuestionEntity> getQuestionsById() {
+    public Collection<Question> getQuestionsById() {
         return questionsById;
     }
 
-    public void setQuestionsById(Collection<QuestionEntity> questionsById) {
+    public void setQuestionsById(Collection<Question> questionsById) {
         this.questionsById = questionsById;
     }
 
     @ManyToOne
     @JoinColumn(name = "categoryID", referencedColumnName = "id", nullable = false)
-    public CategoriestypeEntity getCategoriestypeByCategoryId() {
+    public Categoriestype getCategoriestypeByCategoryId() {
         return categoriestypeByCategoryId;
     }
 
-    public void setCategoriestypeByCategoryId(CategoriestypeEntity categoriestypeByCategoryId) {
+    public void setCategoriestypeByCategoryId(Categoriestype categoriestypeByCategoryId) {
         this.categoriestypeByCategoryId = categoriestypeByCategoryId;
     }
 
     @ManyToOne
     @JoinColumn(name = "subjectID", referencedColumnName = "id", nullable = false)
-    public SubjecttypeEntity getSubjecttypeBySubjectId() {
+    public Subjecttype getSubjecttypeBySubjectId() {
         return subjecttypeBySubjectId;
     }
 
-    public void setSubjecttypeBySubjectId(SubjecttypeEntity subjecttypeBySubjectId) {
+    public void setSubjecttypeBySubjectId(Subjecttype subjecttypeBySubjectId) {
         this.subjecttypeBySubjectId = subjecttypeBySubjectId;
     }
 
     @ManyToOne
     @JoinColumn(name = "majorID", referencedColumnName = "id", nullable = false)
-    public MajortypeEntity getMajortypeByMajorId() {
+    public Majortype getMajortypeByMajorId() {
         return majortypeByMajorId;
     }
 
-    public void setMajortypeByMajorId(MajortypeEntity majortypeByMajorId) {
+    public void setMajortypeByMajorId(Majortype majortypeByMajorId) {
         this.majortypeByMajorId = majortypeByMajorId;
     }
 }

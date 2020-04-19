@@ -5,13 +5,13 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "subjecttype", schema = "iknow_dev", catalog = "")
-public class SubjecttypeEntity {
+public class Subjecttype {
     private int id;
     private String name;
     private int categoryId;
-    private Collection<MajortypeEntity> majortypesById;
-    private Collection<QuestiontypeEntity> questiontypesById;
-    private CategoriestypeEntity categoriestypeByCategoryId;
+    private Collection<Majortype> majortypesById;
+    private Collection<Questiontype> questiontypesById;
+    private Categoriestype categoriestypeByCategoryId;
 
     @Id
     @Column(name = "id")
@@ -48,7 +48,7 @@ public class SubjecttypeEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SubjecttypeEntity that = (SubjecttypeEntity) o;
+        Subjecttype that = (Subjecttype) o;
 
         if (id != that.id) return false;
         if (categoryId != that.categoryId) return false;
@@ -66,30 +66,30 @@ public class SubjecttypeEntity {
     }
 
     @OneToMany(mappedBy = "subjecttypeBySubjectId")
-    public Collection<MajortypeEntity> getMajortypesById() {
+    public Collection<Majortype> getMajortypesById() {
         return majortypesById;
     }
 
-    public void setMajortypesById(Collection<MajortypeEntity> majortypesById) {
+    public void setMajortypesById(Collection<Majortype> majortypesById) {
         this.majortypesById = majortypesById;
     }
 
     @OneToMany(mappedBy = "subjecttypeBySubjectId")
-    public Collection<QuestiontypeEntity> getQuestiontypesById() {
+    public Collection<Questiontype> getQuestiontypesById() {
         return questiontypesById;
     }
 
-    public void setQuestiontypesById(Collection<QuestiontypeEntity> questiontypesById) {
+    public void setQuestiontypesById(Collection<Questiontype> questiontypesById) {
         this.questiontypesById = questiontypesById;
     }
 
     @ManyToOne
     @JoinColumn(name = "categoryID", referencedColumnName = "id", nullable = false)
-    public CategoriestypeEntity getCategoriestypeByCategoryId() {
+    public Categoriestype getCategoriestypeByCategoryId() {
         return categoriestypeByCategoryId;
     }
 
-    public void setCategoriestypeByCategoryId(CategoriestypeEntity categoriestypeByCategoryId) {
+    public void setCategoriestypeByCategoryId(Categoriestype categoriestypeByCategoryId) {
         this.categoriestypeByCategoryId = categoriestypeByCategoryId;
     }
 }

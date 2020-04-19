@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "browsinghistory", schema = "iknow_dev", catalog = "")
-public class BrowsinghistoryEntity {
+@Table(name = "approvalreply", schema = "iknow_dev", catalog = "")
+public class Approvalreply {
     private int id;
     private Date date;
     private int userId;
-    private int questionId;
-    private UserEntity userByUserId;
-    private QuestionEntity questionByQuestionId;
+    private int commentId;
+    private User userByUserId;
+    private Comment commentByCommentId;
 
     @Id
     @Column(name = "id")
@@ -44,13 +44,13 @@ public class BrowsinghistoryEntity {
     }
 
     @Basic
-    @Column(name = "questionID")
-    public int getQuestionId() {
-        return questionId;
+    @Column(name = "commentID")
+    public int getCommentId() {
+        return commentId;
     }
 
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
     }
 
     @Override
@@ -58,11 +58,11 @@ public class BrowsinghistoryEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BrowsinghistoryEntity that = (BrowsinghistoryEntity) o;
+        Approvalreply that = (Approvalreply) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (questionId != that.questionId) return false;
+        if (commentId != that.commentId) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
@@ -73,27 +73,27 @@ public class BrowsinghistoryEntity {
         int result = id;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + userId;
-        result = 31 * result + questionId;
+        result = 31 * result + commentId;
         return result;
     }
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
     }
 
     @ManyToOne
-    @JoinColumn(name = "questionID", referencedColumnName = "id", nullable = false)
-    public QuestionEntity getQuestionByQuestionId() {
-        return questionByQuestionId;
+    @JoinColumn(name = "commentID", referencedColumnName = "id", nullable = false)
+    public Comment getCommentByCommentId() {
+        return commentByCommentId;
     }
 
-    public void setQuestionByQuestionId(QuestionEntity questionByQuestionId) {
-        this.questionByQuestionId = questionByQuestionId;
+    public void setCommentByCommentId(Comment commentByCommentId) {
+        this.commentByCommentId = commentByCommentId;
     }
 }

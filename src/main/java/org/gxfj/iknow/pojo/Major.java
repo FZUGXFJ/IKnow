@@ -4,12 +4,13 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "school", schema = "iknow_dev", catalog = "")
-public class SchoolEntity {
+@Table(name = "major", schema = "iknow_dev", catalog = "")
+public class Major {
     private int id;
     private String name;
-    private Collection<CollegeEntity> collegesById;
-    private Collection<UseridentityEntity> useridentitiesById;
+    private int collegeId;
+    private College collegeByCollegeId;
+    private Collection<Useridentity> useridentitiesById;
 
     @Id
     @Column(name = "id")
@@ -31,14 +32,25 @@ public class SchoolEntity {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "collegeID")
+    public int getCollegeId() {
+        return collegeId;
+    }
+
+    public void setCollegeId(int collegeId) {
+        this.collegeId = collegeId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SchoolEntity that = (SchoolEntity) o;
+        Major that = (Major) o;
 
         if (id != that.id) return false;
+        if (collegeId != that.collegeId) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
@@ -48,24 +60,26 @@ public class SchoolEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + collegeId;
         return result;
     }
 
-    @OneToMany(mappedBy = "schoolBySchoolId")
-    public Collection<CollegeEntity> getCollegesById() {
-        return collegesById;
+    @ManyToOne
+    @JoinColumn(name = "collegeID", referencedColumnName = "id", nullable = false)
+    public College getCollegeByCollegeId() {
+        return collegeByCollegeId;
     }
 
-    public void setCollegesById(Collection<CollegeEntity> collegesById) {
-        this.collegesById = collegesById;
+    public void setCollegeByCollegeId(College collegeByCollegeId) {
+        this.collegeByCollegeId = collegeByCollegeId;
     }
 
-    @OneToMany(mappedBy = "schoolBySchoolId")
-    public Collection<UseridentityEntity> getUseridentitiesById() {
+    @OneToMany(mappedBy = "majorByMajorId")
+    public Collection<Useridentity> getUseridentitiesById() {
         return useridentitiesById;
     }
 
-    public void setUseridentitiesById(Collection<UseridentityEntity> useridentitiesById) {
+    public void setUseridentitiesById(Collection<Useridentity> useridentitiesById) {
         this.useridentitiesById = useridentitiesById;
     }
 }

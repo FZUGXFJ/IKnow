@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "level", schema = "iknow_dev", catalog = "")
-public class LevelEntity {
+public class Level {
     private int id;
     private int level;
     private int expTopLimit;
@@ -55,7 +55,7 @@ public class LevelEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LevelEntity that = (LevelEntity) o;
+        Level that = (Level) o;
 
         if (id != that.id) return false;
         if (level != that.level) return false;

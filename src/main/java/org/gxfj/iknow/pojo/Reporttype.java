@@ -5,10 +5,10 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "reporttype", schema = "iknow_dev", catalog = "")
-public class ReporttypeEntity {
+public class Reporttype {
     private int id;
     private String type;
-    private Collection<ReportEntity> reportsById;
+    private Collection<Report> reportsById;
 
     @Id
     @Column(name = "id")
@@ -35,7 +35,7 @@ public class ReporttypeEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ReporttypeEntity that = (ReporttypeEntity) o;
+        Reporttype that = (Reporttype) o;
 
         if (id != that.id) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
@@ -51,11 +51,11 @@ public class ReporttypeEntity {
     }
 
     @OneToMany(mappedBy = "reporttypeByTypeId")
-    public Collection<ReportEntity> getReportsById() {
+    public Collection<Report> getReportsById() {
         return reportsById;
     }
 
-    public void setReportsById(Collection<ReportEntity> reportsById) {
+    public void setReportsById(Collection<Report> reportsById) {
         this.reportsById = reportsById;
     }
 }

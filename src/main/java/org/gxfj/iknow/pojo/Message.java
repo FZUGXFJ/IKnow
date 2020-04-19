@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "collectionproblem", schema = "iknow_dev", catalog = "")
-public class CollectionproblemEntity {
+@Table(name = "message", schema = "iknow_dev", catalog = "")
+public class Message {
     private int id;
     private Date date;
     private int userId;
-    private int questionId;
-    private UserEntity userByUserId;
-    private QuestionEntity questionByQuestionId;
+    private byte isRead;
+    private String content;
+    private User userByUserId;
 
     @Id
     @Column(name = "id")
@@ -44,13 +44,23 @@ public class CollectionproblemEntity {
     }
 
     @Basic
-    @Column(name = "questionID")
-    public int getQuestionId() {
-        return questionId;
+    @Column(name = "isRead")
+    public byte getIsRead() {
+        return isRead;
     }
 
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
+    public void setIsRead(byte isRead) {
+        this.isRead = isRead;
+    }
+
+    @Basic
+    @Column(name = "content")
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override
@@ -58,12 +68,13 @@ public class CollectionproblemEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CollectionproblemEntity that = (CollectionproblemEntity) o;
+        Message that = (Message) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (questionId != that.questionId) return false;
+        if (isRead != that.isRead) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (content != null ? !content.equals(that.content) : that.content != null) return false;
 
         return true;
     }
@@ -73,27 +84,18 @@ public class CollectionproblemEntity {
         int result = id;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + userId;
-        result = 31 * result + questionId;
+        result = 31 * result + (int) isRead;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
+    public User getUserByUserId() {
         return userByUserId;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
+    public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "questionID", referencedColumnName = "id", nullable = false)
-    public QuestionEntity getQuestionByQuestionId() {
-        return questionByQuestionId;
-    }
-
-    public void setQuestionByQuestionId(QuestionEntity questionByQuestionId) {
-        this.questionByQuestionId = questionByQuestionId;
     }
 }
