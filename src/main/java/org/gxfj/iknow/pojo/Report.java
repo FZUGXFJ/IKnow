@@ -1,54 +1,40 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "report", schema = "iknow_dev", catalog = "")
 public class Report {
-    private int id;
-    private int userId;
-    private int type;
+    private Integer id;
+    private Integer type;
     private String description;
-    private int typeId;
-    private Date date;
-    private int reasonId;
+    private Timestamp date;
     private User userByUserId;
     private Reporttype reporttypeByTypeId;
     private Reportreason reportreasonByReasonId;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "userID")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "type")
-    public int getType() {
+    @Column(name = "type", nullable = false)
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = true, length = -1)
     public String getDescription() {
         return description;
     }
@@ -58,33 +44,13 @@ public class Report {
     }
 
     @Basic
-    @Column(name = "typeID")
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
-
-    @Basic
-    @Column(name = "date")
-    public Date getDate() {
+    @Column(name = "date", nullable = false)
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
-    }
-
-    @Basic
-    @Column(name = "reasonID")
-    public int getReasonId() {
-        return reasonId;
-    }
-
-    public void setReasonId(int reasonId) {
-        this.reasonId = reasonId;
     }
 
     @Override
@@ -92,28 +58,22 @@ public class Report {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Report that = (Report) o;
+        Report report = (Report) o;
 
-        if (id != that.id) return false;
-        if (userId != that.userId) return false;
-        if (type != that.type) return false;
-        if (typeId != that.typeId) return false;
-        if (reasonId != that.reasonId) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (id != null ? !id.equals(report.id) : report.id != null) return false;
+        if (type != null ? !type.equals(report.type) : report.type != null) return false;
+        if (description != null ? !description.equals(report.description) : report.description != null) return false;
+        if (date != null ? !date.equals(report.date) : report.date != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + userId;
-        result = 31 * result + type;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + typeId;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + reasonId;
         return result;
     }
 

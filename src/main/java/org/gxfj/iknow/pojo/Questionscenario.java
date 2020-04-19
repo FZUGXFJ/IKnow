@@ -4,24 +4,23 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "questionscenario", schema = "iknow_dev", catalog = "")
 public class Questionscenario {
-    private int id;
+    private Integer id;
     private String name;
     private Collection<Question> questionsById;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 255)
     public String getName() {
         return name;
     }
@@ -37,7 +36,7 @@ public class Questionscenario {
 
         Questionscenario that = (Questionscenario) o;
 
-        if (id != that.id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
@@ -45,7 +44,7 @@ public class Questionscenario {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }

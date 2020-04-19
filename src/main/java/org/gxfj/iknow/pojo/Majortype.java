@@ -4,26 +4,24 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "majortype", schema = "iknow_dev", catalog = "")
 public class Majortype {
-    private int id;
+    private Integer id;
     private String name;
-    private int subjectId;
     private Subjecttype subjecttypeBySubjectId;
     private Collection<Questiontype> questiontypesById;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 20)
     public String getName() {
         return name;
     }
@@ -32,35 +30,23 @@ public class Majortype {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "subjectID")
-    public int getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Majortype that = (Majortype) o;
+        Majortype majortype = (Majortype) o;
 
-        if (id != that.id) return false;
-        if (subjectId != that.subjectId) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (id != null ? !id.equals(majortype.id) : majortype.id != null) return false;
+        if (name != null ? !name.equals(majortype.name) : majortype.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + subjectId;
         return result;
     }
 

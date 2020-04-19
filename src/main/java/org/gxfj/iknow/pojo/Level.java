@@ -1,48 +1,54 @@
 package org.gxfj.iknow.pojo;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
-@Table(name = "level")
 public class Level {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer level;
     private Integer expTopLimit;
     private Integer expBotLimit;
 
-    public int getId() {
+    @Id
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getLevel() {
+    @Basic
+    @Column(name = "level", nullable = false)
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
-    public int getExpTopLimit() {
+    @Basic
+    @Column(name = "expTopLimit", nullable = false)
+    public Integer getExpTopLimit() {
         return expTopLimit;
     }
 
-    public void setExpTopLimit(int expTopLimit) {
+    public void setExpTopLimit(Integer expTopLimit) {
         this.expTopLimit = expTopLimit;
     }
 
-    public int getExpBotLimit() {
+    @Basic
+    @Column(name = "expBotLimit", nullable = false)
+    public Integer getExpBotLimit() {
         return expBotLimit;
     }
 
-    public void setExpBotLimit(int expBotLimit) {
+    public void setExpBotLimit(Integer expBotLimit) {
         this.expBotLimit = expBotLimit;
     }
 
@@ -51,22 +57,22 @@ public class Level {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Level that = (Level) o;
+        Level level1 = (Level) o;
 
-        if (id != that.id) return false;
-        if (level != that.level) return false;
-        if (expTopLimit != that.expTopLimit) return false;
-        if (expBotLimit != that.expBotLimit) return false;
+        if (id != null ? !id.equals(level1.id) : level1.id != null) return false;
+        if (level != null ? !level.equals(level1.level) : level1.level != null) return false;
+        if (expTopLimit != null ? !expTopLimit.equals(level1.expTopLimit) : level1.expTopLimit != null) return false;
+        if (expBotLimit != null ? !expBotLimit.equals(level1.expBotLimit) : level1.expBotLimit != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + level;
-        result = 31 * result + expTopLimit;
-        result = 31 * result + expBotLimit;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (level != null ? level.hashCode() : 0);
+        result = 31 * result + (expTopLimit != null ? expTopLimit.hashCode() : 0);
+        result = 31 * result + (expBotLimit != null ? expBotLimit.hashCode() : 0);
         return result;
     }
 }

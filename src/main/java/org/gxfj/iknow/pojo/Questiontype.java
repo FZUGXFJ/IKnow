@@ -4,55 +4,21 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "questiontype", schema = "iknow_dev", catalog = "")
 public class Questiontype {
-    private int id;
-    private int categoryId;
-    private int subjectId;
-    private int majorId;
+    private Integer id;
     private Collection<Question> questionsById;
     private Categoriestype categoriestypeByCategoryId;
     private Subjecttype subjecttypeBySubjectId;
     private Majortype majortypeByMajorId;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "categoryID")
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    @Basic
-    @Column(name = "subjectID")
-    public int getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
-    }
-
-    @Basic
-    @Column(name = "majorID")
-    public int getMajorId() {
-        return majorId;
-    }
-
-    public void setMajorId(int majorId) {
-        this.majorId = majorId;
     }
 
     @Override
@@ -62,21 +28,14 @@ public class Questiontype {
 
         Questiontype that = (Questiontype) o;
 
-        if (id != that.id) return false;
-        if (categoryId != that.categoryId) return false;
-        if (subjectId != that.subjectId) return false;
-        if (majorId != that.majorId) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + categoryId;
-        result = 31 * result + subjectId;
-        result = 31 * result + majorId;
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 
     @OneToMany(mappedBy = "questiontypeByTypeId")

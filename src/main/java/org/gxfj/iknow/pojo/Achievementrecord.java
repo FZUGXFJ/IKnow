@@ -4,53 +4,30 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "achievementrecord", schema = "iknow_dev", catalog = "")
 public class Achievementrecord {
-    private int id;
+    private Integer id;
     private Date date;
-    private int userId;
-    private int achievementId;
     private User userByUserId;
     private Achievement achievementByAchievementId;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     public Date getDate() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    @Basic
-    @Column(name = "userID")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "achievementID")
-    public int getAchievementId() {
-        return achievementId;
-    }
-
-    public void setAchievementId(int achievementId) {
-        this.achievementId = achievementId;
     }
 
     @Override
@@ -60,9 +37,7 @@ public class Achievementrecord {
 
         Achievementrecord that = (Achievementrecord) o;
 
-        if (id != that.id) return false;
-        if (userId != that.userId) return false;
-        if (achievementId != that.achievementId) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
@@ -70,10 +45,8 @@ public class Achievementrecord {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + userId;
-        result = 31 * result + achievementId;
         return result;
     }
 
