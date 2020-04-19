@@ -41,7 +41,7 @@
                 <prop key="hibernate.jdbc.batch_size">50</prop>
             </props>
         </property>
-        <property name="packagesToScan" value="org.gxfj.iknow.pojo_tmp" />
+        <property name="packagesToScan" value="org.gxfj.iknow.pojo" />
     </bean>
 
 </beans>

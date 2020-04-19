@@ -1,6 +1,6 @@
 package org.gxfj.iknow.dao;
 
-        import org.gxfj.iknow.pojo_tmp.User;
+import org.gxfj.iknow.pojo.User;
 
 
 public interface UserDAO {
