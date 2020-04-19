@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
@@ -19,13 +19,11 @@
             <tr>
                 <td style="width: 33%"><i class="fas fa-angle-left fa-6x" style="margin-left: 10%"></i></td>
                 <td style="width: 34%"><h1 style="text-align: center;font-size: 3em;margin-top: 5%">用户登录</h1></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;text-align:right;"><a class="nav-link" style="font-size: 3em;margin-top: 5%" href="logon.html">注册</a></td>
             </tr>
         </table>
     </div>
-    <figure class="figure">
-        <img src="../img/logo.png" class="figure-img img-fluid rounded" style="width: 100%" alt="logo">
-    </figure>
+    <img src="../img/logo.png" class="figure-img img-fluid rounded" style="width: 100%" alt="logo">
     <div id="choose">
         <span v-bind:class="{selected:useEmail}" v-on:click="useEmail=!useEmail">免密码登录</span>
         <span v-bind:class="{selected:!useEmail}" v-on:click="useEmail=!useEmail">密码登录</span>
@@ -37,8 +35,13 @@
             <br><br>
             <table>
                 <tr>
-                    <td style="width: 60%;text-align: left"><input type="number" class="form-control" size="12" aria-label="验证码" style="display: inline"></td>
-                    <td style="width: 40%"><button type="button" class="btn btn-link" style="font-size: 3em">获取验证码</button>
+                    <td style="width: 60%;text-align: left">
+                        <input type="number" class="form-control" size="12" aria-label="验证码" style="display: inline">
+                    </td>
+                    <td style="width: 40%">
+                        <button class="btn btn-link" style="font-size: 2em" v-on:click="timeOut()" v-if="!verify">获取验证码</button>
+                        <button class="btn btn-link" disabled="" style="font-size: 2em;" v-on:click="verify=!verify" v-else="">重新发送({{timeout}})</button>
+                    </td>
                 </tr>
             </table>
             <br>
@@ -49,12 +52,10 @@
             </div>
             <br>
             <button class="btn btn-info" style="font-size: 3em;width: 80%">登录</button>
-            <br>
-            <span style="font-size: 2em">未注册的邮箱登陆后自动注册</span>
         </div>
         <div style="text-align: center" v-else>
             <br>
-                <input type="text" placeholder="账号" class="form-control" size="28" aria-label="账号">
+                <input type="text" placeholder="用户名" class="form-control" size="28" aria-label="用户名">
             <br><br>
                 <input type="password" placeholder="密码" class="form-control" size="28" aria-label="密码">
             <br><br>
@@ -65,7 +66,9 @@
                         <i class="fas fa-check-circle fa-2x" v-on:click="isRmb=!isRmb" v-else></i>
                         <span style="font-size: 2em">记住我</span>
                     </td>
-                    <td style="width: 50%;text-align: right"><span style="font-size: 2em;margin-right: 5%"><a href="">忘记密码？</a></span></td>
+                    <td style="width: 50%;text-align: right">
+                        <span style="font-size: 2em;margin-right: 5%"><a href="">忘记密码？</a></span>
+                    </td>
                 </tr>
             </table>
             <br>
@@ -78,7 +81,22 @@
         el:"#login",
         data:{
             useEmail:true,
-            isRmb:false
+            isRmb:false,
+            timeout:60,
+            verify:false
+        },
+        methods:{
+            timeOut:function () {
+                this.verify = true;
+                let timer = setInterval(function () {
+                    login.timeout--;
+                    if (login.timeout === 0) {
+                        clearInterval(timer);
+                        login.verify = false;
+                        login.timeout = 60;
+                    }
+                }, 1000);
+            }
         }
     });
 </script>
