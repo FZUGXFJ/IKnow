@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "message", schema = "iknow_dev", catalog = "")
-public class Message {
+@Table(name = "approvalcomment", schema = "iknow_dev", catalog = "")
+public class Approvalcomment {
     private int id;
     private Date date;
     private int userId;
-    private byte isRead;
-    private String content;
+    private int commentId;
     private User userByUserId;
+    private Comment commentByCommentId;
 
     @Id
     @Column(name = "id")
@@ -44,23 +44,13 @@ public class Message {
     }
 
     @Basic
-    @Column(name = "isRead")
-    public byte getIsRead() {
-        return isRead;
+    @Column(name = "commentID")
+    public int getCommentId() {
+        return commentId;
     }
 
-    public void setIsRead(byte isRead) {
-        this.isRead = isRead;
-    }
-
-    @Basic
-    @Column(name = "content")
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
     }
 
     @Override
@@ -68,13 +58,12 @@ public class Message {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Message that = (Message) o;
+        Approvalcomment that = (Approvalcomment) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (isRead != that.isRead) return false;
+        if (commentId != that.commentId) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
 
         return true;
     }
@@ -84,8 +73,7 @@ public class Message {
         int result = id;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + userId;
-        result = 31 * result + (int) isRead;
-        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + commentId;
         return result;
     }
 
@@ -97,5 +85,15 @@ public class Message {
 
     public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "commentID", referencedColumnName = "id", nullable = false)
+    public Comment getCommentByCommentId() {
+        return commentByCommentId;
+    }
+
+    public void setCommentByCommentId(Comment commentByCommentId) {
+        this.commentByCommentId = commentByCommentId;
     }
 }

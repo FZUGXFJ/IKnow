@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "school", schema = "iknow_dev", catalog = "")
-public class School {
+@Table(name = "categoriestype", schema = "iknow_dev", catalog = "")
+public class Categoriestype {
     private int id;
     private String name;
-    private Collection<College> collegesById;
-    private Collection<Useridentity> useridentitiesById;
+    private Collection<Questiontype> questiontypesById;
+    private Collection<Subjecttype> subjecttypesById;
 
     @Id
     @Column(name = "id")
@@ -36,7 +36,7 @@ public class School {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        School that = (School) o;
+        Categoriestype that = (Categoriestype) o;
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
@@ -51,21 +51,21 @@ public class School {
         return result;
     }
 
-    @OneToMany(mappedBy = "schoolBySchoolId")
-    public Collection<College> getCollegesById() {
-        return collegesById;
+    @OneToMany(mappedBy = "categoriestypeByCategoryId")
+    public Collection<Questiontype> getQuestiontypesById() {
+        return questiontypesById;
     }
 
-    public void setCollegesById(Collection<College> collegesById) {
-        this.collegesById = collegesById;
+    public void setQuestiontypesById(Collection<Questiontype> questiontypesById) {
+        this.questiontypesById = questiontypesById;
     }
 
-    @OneToMany(mappedBy = "schoolBySchoolId")
-    public Collection<Useridentity> getUseridentitiesById() {
-        return useridentitiesById;
+    @OneToMany(mappedBy = "categoriestypeByCategoryId")
+    public Collection<Subjecttype> getSubjecttypesById() {
+        return subjecttypesById;
     }
 
-    public void setUseridentitiesById(Collection<Useridentity> useridentitiesById) {
-        this.useridentitiesById = useridentitiesById;
+    public void setSubjecttypesById(Collection<Subjecttype> subjecttypesById) {
+        this.subjecttypesById = subjecttypesById;
     }
 }

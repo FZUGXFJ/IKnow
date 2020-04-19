@@ -4,13 +4,14 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "majortype", schema = "iknow_dev", catalog = "")
-public class Majortype {
+@Table(name = "subjecttype", schema = "iknow_dev", catalog = "")
+public class Subjecttype {
     private int id;
     private String name;
-    private int subjectId;
-    private Subjecttype subjecttypeBySubjectId;
+    private int categoryId;
+    private Collection<Majortype> majortypesById;
     private Collection<Questiontype> questiontypesById;
+    private Categoriestype categoriestypeByCategoryId;
 
     @Id
     @Column(name = "id")
@@ -33,13 +34,13 @@ public class Majortype {
     }
 
     @Basic
-    @Column(name = "subjectID")
-    public int getSubjectId() {
-        return subjectId;
+    @Column(name = "categoryID")
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
@@ -47,10 +48,10 @@ public class Majortype {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Majortype that = (Majortype) o;
+        Subjecttype that = (Subjecttype) o;
 
         if (id != that.id) return false;
-        if (subjectId != that.subjectId) return false;
+        if (categoryId != that.categoryId) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
@@ -60,26 +61,35 @@ public class Majortype {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + subjectId;
+        result = 31 * result + categoryId;
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "subjectID", referencedColumnName = "id", nullable = false)
-    public Subjecttype getSubjecttypeBySubjectId() {
-        return subjecttypeBySubjectId;
+    @OneToMany(mappedBy = "subjecttypeBySubjectId")
+    public Collection<Majortype> getMajortypesById() {
+        return majortypesById;
     }
 
-    public void setSubjecttypeBySubjectId(Subjecttype subjecttypeBySubjectId) {
-        this.subjecttypeBySubjectId = subjecttypeBySubjectId;
+    public void setMajortypesById(Collection<Majortype> majortypesById) {
+        this.majortypesById = majortypesById;
     }
 
-    @OneToMany(mappedBy = "majortypeByMajorId")
+    @OneToMany(mappedBy = "subjecttypeBySubjectId")
     public Collection<Questiontype> getQuestiontypesById() {
         return questiontypesById;
     }
 
     public void setQuestiontypesById(Collection<Questiontype> questiontypesById) {
         this.questiontypesById = questiontypesById;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "categoryID", referencedColumnName = "id", nullable = false)
+    public Categoriestype getCategoriestypeByCategoryId() {
+        return categoriestypeByCategoryId;
+    }
+
+    public void setCategoriestypeByCategoryId(Categoriestype categoriestypeByCategoryId) {
+        this.categoriestypeByCategoryId = categoriestypeByCategoryId;
     }
 }

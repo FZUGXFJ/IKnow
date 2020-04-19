@@ -3,49 +3,74 @@ package org.gxfj.iknow.pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "level")
+@Table(name = "level", schema = "iknow_dev", catalog = "")
 public class Level {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-  private Integer level;
-  private Integer expTopLimit;
-  private Integer expBotLimit;
+    private int id;
+    private int level;
+    private int expTopLimit;
+    private int expBotLimit;
 
+    @Id
+    @Column(name = "id")
+    public int getId() {
+        return id;
+    }
 
-  public long getId() {
-    return id;
-  }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+    @Basic
+    @Column(name = "level")
+    public int getLevel() {
+        return level;
+    }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
-  public long getLevel() {
-    return level;
-  }
+    @Basic
+    @Column(name = "expTopLimit")
+    public int getExpTopLimit() {
+        return expTopLimit;
+    }
 
-  public void setLevel(Integer level) {
-    this.level = level;
-  }
+    public void setExpTopLimit(int expTopLimit) {
+        this.expTopLimit = expTopLimit;
+    }
 
+    @Basic
+    @Column(name = "expBotLimit")
+    public int getExpBotLimit() {
+        return expBotLimit;
+    }
 
-  public long getExpTopLimit() {
-    return expTopLimit;
-  }
+    public void setExpBotLimit(int expBotLimit) {
+        this.expBotLimit = expBotLimit;
+    }
 
-  public void setExpTopLimit(Integer expTopLimit) {
-    this.expTopLimit = expTopLimit;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Level that = (Level) o;
 
-  public long getExpBotLimit() {
-    return expBotLimit;
-  }
+        if (id != that.id) return false;
+        if (level != that.level) return false;
+        if (expTopLimit != that.expTopLimit) return false;
+        if (expBotLimit != that.expBotLimit) return false;
 
-  public void setExpBotLimit(Integer expBotLimit) {
-    this.expBotLimit = expBotLimit;
-  }
+        return true;
+    }
 
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + level;
+        result = 31 * result + expTopLimit;
+        result = 31 * result + expBotLimit;
+        return result;
+    }
 }

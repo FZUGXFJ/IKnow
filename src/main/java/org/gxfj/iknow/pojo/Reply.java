@@ -1,78 +1,138 @@
 package org.gxfj.iknow.pojo;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "reply", schema = "iknow_dev", catalog = "")
 public class Reply {
+    private int id;
+    private int userId;
+    private String content;
+    private int commentId;
+    private Date date;
+    private int count;
+    private byte isDelete;
+    private User userByUserId;
+    private Comment commentByCommentId;
 
-  private Integer id;
-  private Integer userId;
-  private String content;
-  private Integer commentId;
-  private Timestamp date;
-  private Integer count;
-  private Integer isDelete;
+    @Id
+    @Column(name = "id")
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public long getId() {
-    return id;
-  }
+    @Basic
+    @Column(name = "userID")
+    public int getUserId() {
+        return userId;
+    }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
+    @Basic
+    @Column(name = "content")
+    public String getContent() {
+        return content;
+    }
 
-  public long getUserId() {
-    return userId;
-  }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
+    @Basic
+    @Column(name = "commentID")
+    public int getCommentId() {
+        return commentId;
+    }
 
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
+    }
 
-  public String getContent() {
-    return content;
-  }
+    @Basic
+    @Column(name = "date")
+    public Date getDate() {
+        return date;
+    }
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
+    @Basic
+    @Column(name = "count")
+    public int getCount() {
+        return count;
+    }
 
-  public long getCommentId() {
-    return commentId;
-  }
+    public void setCount(int count) {
+        this.count = count;
+    }
 
-  public void setCommentId(Integer commentId) {
-    this.commentId = commentId;
-  }
+    @Basic
+    @Column(name = "isDelete")
+    public byte getIsDelete() {
+        return isDelete;
+    }
 
+    public void setIsDelete(byte isDelete) {
+        this.isDelete = isDelete;
+    }
 
-  public Timestamp getDate() {
-    return date;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-  public void setDate(Timestamp date) {
-    this.date = date;
-  }
+        Reply that = (Reply) o;
 
+        if (id != that.id) return false;
+        if (userId != that.userId) return false;
+        if (commentId != that.commentId) return false;
+        if (count != that.count) return false;
+        if (isDelete != that.isDelete) return false;
+        if (content != null ? !content.equals(that.content) : that.content != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
-  public long getCount() {
-    return count;
-  }
+        return true;
+    }
 
-  public void setCount(Integer count) {
-    this.count = count;
-  }
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + userId;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + commentId;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + count;
+        result = 31 * result + (int) isDelete;
+        return result;
+    }
 
+    @ManyToOne
+    @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
+    public User getUserByUserId() {
+        return userByUserId;
+    }
 
-  public long getIsDelete() {
-    return isDelete;
-  }
+    public void setUserByUserId(User userByUserId) {
+        this.userByUserId = userByUserId;
+    }
 
-  public void setIsDelete(Integer isDelete) {
-    this.isDelete = isDelete;
-  }
+    @ManyToOne
+    @JoinColumn(name = "commentID", referencedColumnName = "id", nullable = false)
+    public Comment getCommentByCommentId() {
+        return commentByCommentId;
+    }
 
+    public void setCommentByCommentId(Comment commentByCommentId) {
+        this.commentByCommentId = commentByCommentId;
+    }
 }

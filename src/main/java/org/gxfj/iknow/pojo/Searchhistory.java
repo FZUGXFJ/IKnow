@@ -4,12 +4,11 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "message", schema = "iknow_dev", catalog = "")
-public class Message {
+@Table(name = "searchhistory", schema = "iknow_dev", catalog = "")
+public class Searchhistory {
     private int id;
     private Date date;
     private int userId;
-    private byte isRead;
     private String content;
     private User userByUserId;
 
@@ -44,16 +43,6 @@ public class Message {
     }
 
     @Basic
-    @Column(name = "isRead")
-    public byte getIsRead() {
-        return isRead;
-    }
-
-    public void setIsRead(byte isRead) {
-        this.isRead = isRead;
-    }
-
-    @Basic
     @Column(name = "content")
     public String getContent() {
         return content;
@@ -68,11 +57,10 @@ public class Message {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Message that = (Message) o;
+        Searchhistory that = (Searchhistory) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (isRead != that.isRead) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
 
@@ -84,7 +72,6 @@ public class Message {
         int result = id;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + userId;
-        result = 31 * result + (int) isRead;
         result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
     }

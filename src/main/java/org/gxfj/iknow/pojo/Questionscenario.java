@@ -4,12 +4,11 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "school", schema = "iknow_dev", catalog = "")
-public class School {
+@Table(name = "questionscenario", schema = "iknow_dev", catalog = "")
+public class Questionscenario {
     private int id;
     private String name;
-    private Collection<College> collegesById;
-    private Collection<Useridentity> useridentitiesById;
+    private Collection<Question> questionsById;
 
     @Id
     @Column(name = "id")
@@ -36,7 +35,7 @@ public class School {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        School that = (School) o;
+        Questionscenario that = (Questionscenario) o;
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
@@ -51,21 +50,12 @@ public class School {
         return result;
     }
 
-    @OneToMany(mappedBy = "schoolBySchoolId")
-    public Collection<College> getCollegesById() {
-        return collegesById;
+    @OneToMany(mappedBy = "questionscenarioByScenarioId")
+    public Collection<Question> getQuestionsById() {
+        return questionsById;
     }
 
-    public void setCollegesById(Collection<College> collegesById) {
-        this.collegesById = collegesById;
-    }
-
-    @OneToMany(mappedBy = "schoolBySchoolId")
-    public Collection<Useridentity> getUseridentitiesById() {
-        return useridentitiesById;
-    }
-
-    public void setUseridentitiesById(Collection<Useridentity> useridentitiesById) {
-        this.useridentitiesById = useridentitiesById;
+    public void setQuestionsById(Collection<Question> questionsById) {
+        this.questionsById = questionsById;
     }
 }

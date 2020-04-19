@@ -1,78 +1,149 @@
 package org.gxfj.iknow.pojo;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "report", schema = "iknow_dev", catalog = "")
 public class Report {
+    private int id;
+    private int userId;
+    private int type;
+    private String description;
+    private int typeId;
+    private Date date;
+    private int reasonId;
+    private User userByUserId;
+    private Reporttype reporttypeByTypeId;
+    private Reportreason reportreasonByReasonId;
 
-  private Integer id;
-  private Integer userId;
-  private Integer type;
-  private String description;
-  private Integer typeId;
-  private Timestamp date;
-  private Integer reasonId;
+    @Id
+    @Column(name = "id")
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public long getId() {
-    return id;
-  }
+    @Basic
+    @Column(name = "userID")
+    public int getUserId() {
+        return userId;
+    }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
+    @Basic
+    @Column(name = "type")
+    public int getType() {
+        return type;
+    }
 
-  public long getUserId() {
-    return userId;
-  }
+    public void setType(int type) {
+        this.type = type;
+    }
 
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public long getType() {
-    return type;
-  }
+    @Basic
+    @Column(name = "typeID")
+    public int getTypeId() {
+        return typeId;
+    }
 
-  public void setType(Integer type) {
-    this.type = type;
-  }
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
 
+    @Basic
+    @Column(name = "date")
+    public Date getDate() {
+        return date;
+    }
 
-  public String getInt() {
-    return description;
-  }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-  public void setInt(String description) {
-    this.description = description;
-  }
+    @Basic
+    @Column(name = "reasonID")
+    public int getReasonId() {
+        return reasonId;
+    }
 
+    public void setReasonId(int reasonId) {
+        this.reasonId = reasonId;
+    }
 
-  public long getTypeId() {
-    return typeId;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-  public void setTypeId(Integer typeId) {
-    this.typeId = typeId;
-  }
+        Report that = (Report) o;
 
+        if (id != that.id) return false;
+        if (userId != that.userId) return false;
+        if (type != that.type) return false;
+        if (typeId != that.typeId) return false;
+        if (reasonId != that.reasonId) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
-  public Timestamp getDate() {
-    return date;
-  }
+        return true;
+    }
 
-  public void setDate(Timestamp date) {
-    this.date = date;
-  }
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + userId;
+        result = 31 * result + type;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + typeId;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + reasonId;
+        return result;
+    }
 
+    @ManyToOne
+    @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
+    public User getUserByUserId() {
+        return userByUserId;
+    }
 
-  public long getReasonId() {
-    return reasonId;
-  }
+    public void setUserByUserId(User userByUserId) {
+        this.userByUserId = userByUserId;
+    }
 
-  public void setReasonId(Integer reasonId) {
-    this.reasonId = reasonId;
-  }
+    @ManyToOne
+    @JoinColumn(name = "typeID", referencedColumnName = "id", nullable = false)
+    public Reporttype getReporttypeByTypeId() {
+        return reporttypeByTypeId;
+    }
 
+    public void setReporttypeByTypeId(Reporttype reporttypeByTypeId) {
+        this.reporttypeByTypeId = reporttypeByTypeId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "reasonID", referencedColumnName = "id", nullable = false)
+    public Reportreason getReportreasonByReasonId() {
+        return reportreasonByReasonId;
+    }
+
+    public void setReportreasonByReasonId(Reportreason reportreasonByReasonId) {
+        this.reportreasonByReasonId = reportreasonByReasonId;
+    }
 }

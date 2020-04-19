@@ -1,98 +1,217 @@
 package org.gxfj.iknow.pojo;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Date;
 
+@Entity
+@Table(name = "question", schema = "iknow_dev", catalog = "")
 public class Question {
+    private int id;
+    private int userId;
+    private String title;
+    private String content;
+    private int typeId;
+    private int stateId;
+    private int scenarioId;
+    private Date date;
+    private byte isDelete;
+    private Collection<Answer> answersById;
+    private Collection<Browsinghistory> browsinghistoriesById;
+    private Collection<Collectionproblem> collectionproblemsById;
+    private User userByUserId;
+    private Questiontype questiontypeByTypeId;
+    private Questionstate questionstateByStateId;
+    private Questionscenario questionscenarioByScenarioId;
 
-  private Integer id;
-  private Integer userId;
-  private String title;
-  private String content;
-  private Integer typeId;
-  private Integer stateId;
-  private Integer scenarioId;
-  private Timestamp date;
-  private Integer isDelete;
+    @Id
+    @Column(name = "id")
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public long getId() {
-    return id;
-  }
+    @Basic
+    @Column(name = "userID")
+    public int getUserId() {
+        return userId;
+    }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
+    @Basic
+    @Column(name = "title")
+    public String getTitle() {
+        return title;
+    }
 
-  public long getUserId() {
-    return userId;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
+    @Basic
+    @Column(name = "content")
+    public String getContent() {
+        return content;
+    }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    @Basic
+    @Column(name = "typeID")
+    public int getTypeId() {
+        return typeId;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
 
+    @Basic
+    @Column(name = "stateID")
+    public int getStateId() {
+        return stateId;
+    }
 
-  public String getContent() {
-    return content;
-  }
+    public void setStateId(int stateId) {
+        this.stateId = stateId;
+    }
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+    @Basic
+    @Column(name = "scenarioID")
+    public int getScenarioId() {
+        return scenarioId;
+    }
 
+    public void setScenarioId(int scenarioId) {
+        this.scenarioId = scenarioId;
+    }
 
-  public long getTypeId() {
-    return typeId;
-  }
+    @Basic
+    @Column(name = "date")
+    public Date getDate() {
+        return date;
+    }
 
-  public void setTypeId(Integer typeId) {
-    this.typeId = typeId;
-  }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
+    @Basic
+    @Column(name = "isDelete")
+    public byte getIsDelete() {
+        return isDelete;
+    }
 
-  public long getStateId() {
-    return stateId;
-  }
+    public void setIsDelete(byte isDelete) {
+        this.isDelete = isDelete;
+    }
 
-  public void setStateId(Integer stateId) {
-    this.stateId = stateId;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Question that = (Question) o;
 
-  public long getScenarioId() {
-    return scenarioId;
-  }
+        if (id != that.id) return false;
+        if (userId != that.userId) return false;
+        if (typeId != that.typeId) return false;
+        if (stateId != that.stateId) return false;
+        if (scenarioId != that.scenarioId) return false;
+        if (isDelete != that.isDelete) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (content != null ? !content.equals(that.content) : that.content != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
-  public void setScenarioId(Integer scenarioId) {
-    this.scenarioId = scenarioId;
-  }
+        return true;
+    }
 
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + userId;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + typeId;
+        result = 31 * result + stateId;
+        result = 31 * result + scenarioId;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (int) isDelete;
+        return result;
+    }
 
-  public Timestamp getDate() {
-    return date;
-  }
+    @OneToMany(mappedBy = "questionByQuestionId")
+    public Collection<Answer> getAnswersById() {
+        return answersById;
+    }
 
-  public void setDate(Timestamp date) {
-    this.date = date;
-  }
+    public void setAnswersById(Collection<Answer> answersById) {
+        this.answersById = answersById;
+    }
 
+    @OneToMany(mappedBy = "questionByQuestionId")
+    public Collection<Browsinghistory> getBrowsinghistoriesById() {
+        return browsinghistoriesById;
+    }
 
-  public long getIsDelete() {
-    return isDelete;
-  }
+    public void setBrowsinghistoriesById(Collection<Browsinghistory> browsinghistoriesById) {
+        this.browsinghistoriesById = browsinghistoriesById;
+    }
 
-  public void setIsDelete(Integer isDelete) {
-    this.isDelete = isDelete;
-  }
+    @OneToMany(mappedBy = "questionByQuestionId")
+    public Collection<Collectionproblem> getCollectionproblemsById() {
+        return collectionproblemsById;
+    }
 
+    public void setCollectionproblemsById(Collection<Collectionproblem> collectionproblemsById) {
+        this.collectionproblemsById = collectionproblemsById;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
+    public User getUserByUserId() {
+        return userByUserId;
+    }
+
+    public void setUserByUserId(User userByUserId) {
+        this.userByUserId = userByUserId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "typeID", referencedColumnName = "id", nullable = false)
+    public Questiontype getQuestiontypeByTypeId() {
+        return questiontypeByTypeId;
+    }
+
+    public void setQuestiontypeByTypeId(Questiontype questiontypeByTypeId) {
+        this.questiontypeByTypeId = questiontypeByTypeId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "stateID", referencedColumnName = "id", nullable = false)
+    public Questionstate getQuestionstateByStateId() {
+        return questionstateByStateId;
+    }
+
+    public void setQuestionstateByStateId(Questionstate questionstateByStateId) {
+        this.questionstateByStateId = questionstateByStateId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "scenarioID", referencedColumnName = "id", nullable = false)
+    public Questionscenario getQuestionscenarioByScenarioId() {
+        return questionscenarioByScenarioId;
+    }
+
+    public void setQuestionscenarioByScenarioId(Questionscenario questionscenarioByScenarioId) {
+        this.questionscenarioByScenarioId = questionscenarioByScenarioId;
+    }
 }
