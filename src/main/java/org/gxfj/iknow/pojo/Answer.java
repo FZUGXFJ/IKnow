@@ -1,45 +1,32 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
-@Table(name = "answer", schema = "iknow_dev", catalog = "")
 public class Answer {
-    private int id;
-    private int userId;
+    private Integer id;
     private String content;
-    private int questionId;
-    private Date date;
-    private byte isDelete;
+    private Timestamp date;
+    private Byte isDelete;
     private User userByUserId;
     private Question questionByQuestionId;
     private Collection<Approvalanswer> approvalanswersById;
     private Collection<Oppositionanswer> oppositionanswersById;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "userID")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "content")
+    @Column(name = "content", nullable = false, length = -1)
     public String getContent() {
         return content;
     }
@@ -49,32 +36,22 @@ public class Answer {
     }
 
     @Basic
-    @Column(name = "questionID")
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
-
-    @Basic
-    @Column(name = "date")
-    public Date getDate() {
+    @Column(name = "date", nullable = false)
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
     @Basic
-    @Column(name = "isDelete")
-    public byte getIsDelete() {
+    @Column(name = "isDelete", nullable = false)
+    public Byte getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(byte isDelete) {
+    public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
     }
 
@@ -83,26 +60,22 @@ public class Answer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Answer that = (Answer) o;
+        Answer answer = (Answer) o;
 
-        if (id != that.id) return false;
-        if (userId != that.userId) return false;
-        if (questionId != that.questionId) return false;
-        if (isDelete != that.isDelete) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (id != null ? !id.equals(answer.id) : answer.id != null) return false;
+        if (content != null ? !content.equals(answer.content) : answer.content != null) return false;
+        if (date != null ? !date.equals(answer.date) : answer.date != null) return false;
+        if (isDelete != null ? !isDelete.equals(answer.isDelete) : answer.isDelete != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + userId;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + questionId;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (int) isDelete;
+        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
         return result;
     }
 

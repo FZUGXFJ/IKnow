@@ -4,13 +4,8 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "useridentity", schema = "iknow_dev", catalog = "")
 public class Useridentity {
-    private int id;
-    private int userId;
-    private int schoolId;
-    private int collegeId;
-    private Integer majorId;
+    private Integer id;
     private Integer studentNum;
     private Integer jobNum;
     private String name;
@@ -22,57 +17,17 @@ public class Useridentity {
     private Major majorByMajorId;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "userID")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "schoolID")
-    public int getSchoolId() {
-        return schoolId;
-    }
-
-    public void setSchoolId(int schoolId) {
-        this.schoolId = schoolId;
-    }
-
-    @Basic
-    @Column(name = "collegeID")
-    public int getCollegeId() {
-        return collegeId;
-    }
-
-    public void setCollegeId(int collegeId) {
-        this.collegeId = collegeId;
-    }
-
-    @Basic
-    @Column(name = "majorID")
-    public Integer getMajorId() {
-        return majorId;
-    }
-
-    public void setMajorId(Integer majorId) {
-        this.majorId = majorId;
-    }
-
-    @Basic
-    @Column(name = "studentNum")
+    @Column(name = "studentNum", nullable = true)
     public Integer getStudentNum() {
         return studentNum;
     }
@@ -82,7 +37,7 @@ public class Useridentity {
     }
 
     @Basic
-    @Column(name = "jobNum")
+    @Column(name = "jobNum", nullable = true)
     public Integer getJobNum() {
         return jobNum;
     }
@@ -92,7 +47,7 @@ public class Useridentity {
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 32)
     public String getName() {
         return name;
     }
@@ -102,7 +57,7 @@ public class Useridentity {
     }
 
     @Basic
-    @Column(name = "type")
+    @Column(name = "type", nullable = false, length = 255)
     public String getType() {
         return type;
     }
@@ -118,11 +73,7 @@ public class Useridentity {
 
         Useridentity that = (Useridentity) o;
 
-        if (id != that.id) return false;
-        if (userId != that.userId) return false;
-        if (schoolId != that.schoolId) return false;
-        if (collegeId != that.collegeId) return false;
-        if (majorId != null ? !majorId.equals(that.majorId) : that.majorId != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (studentNum != null ? !studentNum.equals(that.studentNum) : that.studentNum != null) return false;
         if (jobNum != null ? !jobNum.equals(that.jobNum) : that.jobNum != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
@@ -133,11 +84,7 @@ public class Useridentity {
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + userId;
-        result = 31 * result + schoolId;
-        result = 31 * result + collegeId;
-        result = 31 * result + (majorId != null ? majorId.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (studentNum != null ? studentNum.hashCode() : 0);
         result = 31 * result + (jobNum != null ? jobNum.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);

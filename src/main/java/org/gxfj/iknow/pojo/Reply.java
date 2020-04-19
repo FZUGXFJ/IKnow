@@ -1,43 +1,30 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "reply", schema = "iknow_dev", catalog = "")
 public class Reply {
-    private int id;
-    private int userId;
+    private Integer id;
     private String content;
-    private int commentId;
-    private Date date;
-    private int count;
-    private byte isDelete;
+    private Timestamp date;
+    private Integer count;
+    private Byte isDelete;
     private User userByUserId;
     private Comment commentByCommentId;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "userID")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "content")
+    @Column(name = "content", nullable = false, length = -1)
     public String getContent() {
         return content;
     }
@@ -47,42 +34,32 @@ public class Reply {
     }
 
     @Basic
-    @Column(name = "commentID")
-    public int getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(int commentId) {
-        this.commentId = commentId;
-    }
-
-    @Basic
-    @Column(name = "date")
-    public Date getDate() {
+    @Column(name = "date", nullable = false)
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
     @Basic
-    @Column(name = "count")
-    public int getCount() {
+    @Column(name = "count", nullable = false)
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
     @Basic
-    @Column(name = "isDelete")
-    public byte getIsDelete() {
+    @Column(name = "isDelete", nullable = false)
+    public Byte getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(byte isDelete) {
+    public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
     }
 
@@ -91,28 +68,24 @@ public class Reply {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Reply that = (Reply) o;
+        Reply reply = (Reply) o;
 
-        if (id != that.id) return false;
-        if (userId != that.userId) return false;
-        if (commentId != that.commentId) return false;
-        if (count != that.count) return false;
-        if (isDelete != that.isDelete) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (id != null ? !id.equals(reply.id) : reply.id != null) return false;
+        if (content != null ? !content.equals(reply.content) : reply.content != null) return false;
+        if (date != null ? !date.equals(reply.date) : reply.date != null) return false;
+        if (count != null ? !count.equals(reply.count) : reply.count != null) return false;
+        if (isDelete != null ? !isDelete.equals(reply.isDelete) : reply.isDelete != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + userId;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + commentId;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + count;
-        result = 31 * result + (int) isDelete;
+        result = 31 * result + (count != null ? count.hashCode() : 0);
+        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
         return result;
     }
 

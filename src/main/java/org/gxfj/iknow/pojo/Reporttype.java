@@ -4,24 +4,23 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "reporttype", schema = "iknow_dev", catalog = "")
 public class Reporttype {
-    private int id;
+    private Integer id;
     private String type;
     private Collection<Report> reportsById;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "type")
+    @Column(name = "type", nullable = false, length = 255)
     public String getType() {
         return type;
     }
@@ -37,7 +36,7 @@ public class Reporttype {
 
         Reporttype that = (Reporttype) o;
 
-        if (id != that.id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
 
         return true;
@@ -45,7 +44,7 @@ public class Reporttype {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }

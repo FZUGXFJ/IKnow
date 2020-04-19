@@ -4,24 +4,23 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "userstate", schema = "iknow_dev", catalog = "")
 public class Userstate {
-    private int id;
+    private Integer id;
     private String state;
     private Collection<User> usersById;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "state")
+    @Column(name = "state", nullable = false, length = 255)
     public String getState() {
         return state;
     }
@@ -35,17 +34,17 @@ public class Userstate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Userstate that = (Userstate) o;
+        Userstate userstate = (Userstate) o;
 
-        if (id != that.id) return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
+        if (id != null ? !id.equals(userstate.id) : userstate.id != null) return false;
+        if (state != null ? !state.equals(userstate.state) : userstate.state != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (state != null ? state.hashCode() : 0);
         return result;
     }

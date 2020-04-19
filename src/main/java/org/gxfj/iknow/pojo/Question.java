@@ -1,21 +1,16 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
-@Table(name = "question", schema = "iknow_dev", catalog = "")
 public class Question {
-    private int id;
-    private int userId;
+    private Integer id;
     private String title;
     private String content;
-    private int typeId;
-    private int stateId;
-    private int scenarioId;
-    private Date date;
-    private byte isDelete;
+    private Timestamp date;
+    private Byte isDelete;
     private Collection<Answer> answersById;
     private Collection<Browsinghistory> browsinghistoriesById;
     private Collection<Collectionproblem> collectionproblemsById;
@@ -25,27 +20,17 @@ public class Question {
     private Questionscenario questionscenarioByScenarioId;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "userID")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "title")
+    @Column(name = "title", nullable = false, length = 30)
     public String getTitle() {
         return title;
     }
@@ -55,7 +40,7 @@ public class Question {
     }
 
     @Basic
-    @Column(name = "content")
+    @Column(name = "content", nullable = false, length = -1)
     public String getContent() {
         return content;
     }
@@ -65,52 +50,22 @@ public class Question {
     }
 
     @Basic
-    @Column(name = "typeID")
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
-
-    @Basic
-    @Column(name = "stateID")
-    public int getStateId() {
-        return stateId;
-    }
-
-    public void setStateId(int stateId) {
-        this.stateId = stateId;
-    }
-
-    @Basic
-    @Column(name = "scenarioID")
-    public int getScenarioId() {
-        return scenarioId;
-    }
-
-    public void setScenarioId(int scenarioId) {
-        this.scenarioId = scenarioId;
-    }
-
-    @Basic
-    @Column(name = "date")
-    public Date getDate() {
+    @Column(name = "date", nullable = false)
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
     @Basic
-    @Column(name = "isDelete")
-    public byte getIsDelete() {
+    @Column(name = "isDelete", nullable = false)
+    public Byte getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(byte isDelete) {
+    public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
     }
 
@@ -119,32 +74,24 @@ public class Question {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Question that = (Question) o;
+        Question question = (Question) o;
 
-        if (id != that.id) return false;
-        if (userId != that.userId) return false;
-        if (typeId != that.typeId) return false;
-        if (stateId != that.stateId) return false;
-        if (scenarioId != that.scenarioId) return false;
-        if (isDelete != that.isDelete) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (id != null ? !id.equals(question.id) : question.id != null) return false;
+        if (title != null ? !title.equals(question.title) : question.title != null) return false;
+        if (content != null ? !content.equals(question.content) : question.content != null) return false;
+        if (date != null ? !date.equals(question.date) : question.date != null) return false;
+        if (isDelete != null ? !isDelete.equals(question.isDelete) : question.isDelete != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + userId;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + typeId;
-        result = 31 * result + stateId;
-        result = 31 * result + scenarioId;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (int) isDelete;
+        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
         return result;
     }
 

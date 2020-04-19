@@ -1,56 +1,33 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "collectionproblem", schema = "iknow_dev", catalog = "")
 public class Collectionproblem {
-    private int id;
-    private Date date;
-    private int userId;
-    private int questionId;
+    private Integer id;
+    private Timestamp date;
     private User userByUserId;
     private Question questionByQuestionId;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "date")
-    public Date getDate() {
+    @Column(name = "date", nullable = false)
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
-    }
-
-    @Basic
-    @Column(name = "userID")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "questionID")
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
     }
 
     @Override
@@ -60,9 +37,7 @@ public class Collectionproblem {
 
         Collectionproblem that = (Collectionproblem) o;
 
-        if (id != that.id) return false;
-        if (userId != that.userId) return false;
-        if (questionId != that.questionId) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
@@ -70,10 +45,8 @@ public class Collectionproblem {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + userId;
-        result = 31 * result + questionId;
         return result;
     }
 

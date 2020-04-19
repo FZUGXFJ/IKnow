@@ -4,24 +4,23 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "reportreason", schema = "iknow_dev", catalog = "")
 public class Reportreason {
-    private int id;
+    private Integer id;
     private String content;
     private Collection<Report> reportsById;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "content")
+    @Column(name = "content", nullable = false, length = 255)
     public String getContent() {
         return content;
     }
@@ -37,7 +36,7 @@ public class Reportreason {
 
         Reportreason that = (Reportreason) o;
 
-        if (id != that.id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
 
         return true;
@@ -45,7 +44,7 @@ public class Reportreason {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
     }

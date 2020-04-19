@@ -4,43 +4,31 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "subjecttype", schema = "iknow_dev", catalog = "")
 public class Subjecttype {
-    private int id;
+    private Integer id;
     private String name;
-    private int categoryId;
     private Collection<Majortype> majortypesById;
     private Collection<Questiontype> questiontypesById;
     private Categoriestype categoriestypeByCategoryId;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 20)
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Basic
-    @Column(name = "categoryID")
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
     }
 
     @Override
@@ -50,8 +38,7 @@ public class Subjecttype {
 
         Subjecttype that = (Subjecttype) o;
 
-        if (id != that.id) return false;
-        if (categoryId != that.categoryId) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
@@ -59,9 +46,8 @@ public class Subjecttype {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + categoryId;
         return result;
     }
 

@@ -4,27 +4,25 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "college", schema = "iknow_dev", catalog = "")
 public class College {
-    private int id;
+    private Integer id;
     private String name;
-    private int schoolId;
     private School schoolBySchoolId;
     private Collection<Major> majorsById;
     private Collection<Useridentity> useridentitiesById;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 20)
     public String getName() {
         return name;
     }
@@ -33,35 +31,23 @@ public class College {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "schoolID")
-    public int getSchoolId() {
-        return schoolId;
-    }
-
-    public void setSchoolId(int schoolId) {
-        this.schoolId = schoolId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        College that = (College) o;
+        College college = (College) o;
 
-        if (id != that.id) return false;
-        if (schoolId != that.schoolId) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (id != null ? !id.equals(college.id) : college.id != null) return false;
+        if (name != null ? !name.equals(college.name) : college.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + schoolId;
         return result;
     }
 
