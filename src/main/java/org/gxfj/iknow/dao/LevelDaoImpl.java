@@ -1,13 +1,14 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.Level;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
-@Repository("userDAO")
-public class UserDAOImpl implements UserDAO {
+@Repository("LevelDAO")
+public class LevelDaoImpl implements LevelDAO {
 
     private HibernateTemplate ht = null;
 
@@ -25,18 +26,11 @@ public class UserDAOImpl implements UserDAO {
         return ht;
     }
 
-    @Override
-    public void add() {
-
+    public Level get(Integer id) {
+        return getHibernateTemplate().get(Level.class,id);
     }
 
-    @Override
-    public void get() {
-
-    }
-
-    @Override
-    public void update() {
-
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 }

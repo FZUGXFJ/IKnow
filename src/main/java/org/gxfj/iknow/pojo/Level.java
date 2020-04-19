@@ -1,17 +1,19 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
-@Table(name = "level", schema = "iknow_dev", catalog = "")
+@Table(name = "level")
 public class Level {
-    private int id;
-    private int level;
-    private int expTopLimit;
-    private int expBotLimit;
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private Integer level;
+    private Integer expTopLimit;
+    private Integer expBotLimit;
+
     public int getId() {
         return id;
     }
@@ -20,8 +22,6 @@ public class Level {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "level")
     public int getLevel() {
         return level;
     }
@@ -30,8 +30,6 @@ public class Level {
         this.level = level;
     }
 
-    @Basic
-    @Column(name = "expTopLimit")
     public int getExpTopLimit() {
         return expTopLimit;
     }
@@ -40,8 +38,6 @@ public class Level {
         this.expTopLimit = expTopLimit;
     }
 
-    @Basic
-    @Column(name = "expBotLimit")
     public int getExpBotLimit() {
         return expBotLimit;
     }
