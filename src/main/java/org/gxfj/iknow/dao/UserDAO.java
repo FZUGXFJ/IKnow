@@ -1,11 +1,13 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.User;
+
 public interface UserDAO {
 
-    public void add();
+    public void add(User bean);
 
-    public void get();
+    public User get(Integer id);
 
-    public void update();
+    public void update(User bean);
 
 }
