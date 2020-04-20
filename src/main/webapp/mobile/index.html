@@ -1,17 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
-    <link rel="stylesheet" type="text/css" href="/css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" href="../css/mobile/mobile_index.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 </head>
 <body>
+<div id="homePage">
+    <div id="header">
+        <table>
+            <tr>
+                <td style="width: 5%"></td>
+                <td style="width: 75%">
+                    <div id="searchBox">
+                        <i class="fas fa-search fa-4x" style="color: #acacac"></i>
+                        <span id="recSearch">@IKnow发布啦</span>
+                    </div>
+                </td>
+                <td style="width: 20%;text-align: center">
+                    <i class="fas fa-user-circle fa-7x" style="color: #12eee7"></i>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table>
+            <tr>
+                <td class="select" v-bind:class="{selected:recommendPage}" v-on:click="recommendPage=!recommendPage"><h1>推荐</h1></td>
+                <td class="select" v-bind:class="{selected:!recommendPage}" v-on:click="recommendPage=!recommendPage"><h1>分区</h1></td>
+            </tr>
+        </table>
+    </div>
+    <div id="recommendPage" v-if="recommendPage">
+        <div class="item" v-for="recommend in recommends">
+            <div class="splitBox"></div>
+            <div class="itemBody">
+                <h1 class="questionTitle"><b>{{recommend.questionTitle}}</b></h1>
+                <br>
+                <div class="userInf">
+                    <table>
+                        <tr>
+                            <td style="width: 70%">
+                                <span class="headPortrait" style="border-radius: 100%" v-html="recommend.userInf.headPortrait">
 
+                                </span>
+                                <span class="username">{{recommend.userInf.username}}</span>
+                                <span class="identity"></span>
+                            </td>
+                            <td style="width: 30%;text-align: right">
+                                <span class="lb"><b>&nbsp;&nbsp;LV{{recommend.userInf.level}}</b></span>
+                                <span class="lb">
+                                    <i class="fas fa-certificate fa-1x" style="color: #12eee7"></i>
+                                    <b>{{recommend.userInf.badgeNum}}</b>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <div class="answerInf">
+                    <p class="answerView" v-html="recommend.answerInf.answerView"></p>
+                    <br>
+                    <table>
+                        <tr>
+                            <td style="width: 80%;font-size: 2em;opacity: 0.5">
+                                {{recommend.answerInf.approve}}赞同-{{recommend.answerInf.comment}}评论
+                            </td>
+                            <td style="width: 20%;text-align: right;">
+                                <div class="dropdown">
+                                    <button class="hide" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h fa-2x" style="opacity: 0.5"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size: 2em;">
+                                        <a class="dropdown-item" href="#">不感兴趣</a>
+                                        <a class="dropdown-item" href="#">举报</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="add">
+            <i class="fas fa-plus fa-4x" style="color: #12eee7"></i>
+        </div>
+    </div>
+    <div id="partitionPage" v-else></div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover({
+            trigger: 'focus'
+        })
+    });
+    let homePage = new Vue({
+        el:"#homePage",
+        data:{
+            recommends:[
+                {
+                    questionTitle:"这个问题怎么解？",
+                    userInf:{
+                        headPortrait:"<i class='fas fa-user-circle fa-3x'></i>",
+                        username:"飞天",
+                        level:29,
+                        badgeNum:20
+                    },
+                    answerInf:{
+                        answerView:"应该这样解决",
+                        approve:10,
+                        comment:10
+                    }
+                },{
+                    questionTitle:"这个问题怎么解？",
+                    userInf:{
+                        headPortrait:"<i class='fas fa-user-circle fa-3x'></i>",
+                        username:"银河",
+                        level:29,
+                        badgeNum:20
+                    },
+                    answerInf:{
+                        answerView:"应该这样解决",
+                        approve:10,
+                        comment:10
+                    }
+                },
+            ],
+            recommendPage:true
+        },
+        methods:{
+
+        }
+    });
+</script>
 </body>
 </html>

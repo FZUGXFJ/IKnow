@@ -70,14 +70,14 @@
 #logo{
     width:119px;
     height: 50px;
-    background:url("../img/LOGO透明 (1).png");
+    background:url("../../img/LOGO透明 (1).png");
     border-style: none;
 }
 #search{
     margin-top: 5px;
     height: 35px;
     width: 35px;
-    background: url("../img/search.PNG");
+    background: url("../../img/search.PNG");
     border-style: none;
 }
 #logoContext{
@@ -256,7 +256,7 @@ placeholder{
     width: 70px;
     float: left;
     margin-left: 110px;
-    background: url("../img/微信.PNG");
+    background: url("../../img/微信.PNG");
     border-style: none;
 }
 #qq{
@@ -264,7 +264,7 @@ placeholder{
     width: 70px;
     float: left;
     margin-left: 50px;
-    background: url("../img/qq.PNG");
+    background: url("../../img/qq.PNG");
     border-style: none;
 }
 #socialLogin{
