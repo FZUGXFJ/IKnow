@@ -1,0 +1,37 @@
+div{
+    width: 100%;
+}
+table{
+    width: 100%;
+}
+#header{
+    background-color: white;
+    padding: 1em 3em;
+    box-shadow: 0 10px 10px #d6d6d6;
+}
+#middle{
+    width: 80%;
+    margin: 0 auto;
+}
+#addQuestion{
+    height: 8em;
+    box-shadow: 0 0 10px #d6d6d6;
+    padding-top: 2.5em;
+    padding-left: 3em;
+    border-radius: 0.5em;
+}
+#separator{
+    opacity: 0.1;
+    background-color: #acacac;
+    height: 0.3em;
+}
+#recQuestions{
+    width: 90%;
+    margin: 0 auto;
+}
+.item{
+    margin-top: 3em;
+    box-shadow: 0 0 10px #d6d6d6;
+    padding: 2em 3em;
+    border-radius: 1em;
+}

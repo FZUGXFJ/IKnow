@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>添加</title>
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/question/add.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+</head>
+<body>
+<div id="container">
+    <div id="header">
+        <i class="fas fa-times fa-4x"></i>
+    </div>
+    <br><br>
+    <div id="middle">
+        <h1>HI~</h1><br>
+        <span v-html="headPortrait"></span>
+        <span style="font-size: 2.5em;padding-left: 1em;opacity: 0.5">{{message}}</span>
+        <br><br><br>
+        <div id="addQuestion">
+            <div style="font-size: 2.5em">
+                <i class="fas fa-question-circle" style="color: #12eee7"></i>
+                <span style="padding-left: 1em">提个问题吧</span>
+            </div>
+        </div>
+    </div>
+    <br><br><br>
+    <div id="separator"></div>
+    <div id="recQuestions">
+        <div class="item" v-for="recQuestion in recQuestions">
+            <span v-html="recQuestion.headPortrait"></span>
+            <span style="font-size: 2em;padding-left: 1em;opacity: 0.5">试试帮他解答</span>
+            <br><br>
+            <h1 style="font-size: 3em"><b>{{recQuestion.title}}</b></h1>
+            <br>
+            <table>
+                <tr>
+                    <td style="width: 50%;font-size: 2em;opacity: 0.5">{{recQuestion.collectCount}}人收藏</td>
+                    <td style="width: 50%;color: #12eee7;font-size: 2em;text-align: right"><i class="fas fa-edit"></i>&nbsp;写回答</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    let add = new Vue({
+        el:"#container",
+        data:{
+            headPortrait:"<i class='fas fa-user-circle fa-3x' style='color: #12eee7'></i>",
+            message:"今天也要继续开心呀",
+            recQuestions:[
+                {
+                    headPortrait:"<i class='fas fa-user-circle fa-3x' style='color: #12eee7'></i>",
+                    title:"怎么用爬虫爬取数据呢？",
+                    collectCount:534,
+                }
+            ]
+        },
+        methods:{
+
+        }
+    });
+</script>
+</body>
+</html>
