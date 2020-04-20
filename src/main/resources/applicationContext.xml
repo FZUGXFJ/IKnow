@@ -15,7 +15,13 @@
 
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:db.properties"/>
+        <property name="locations">
+            <list>
+                <value>classpath:db.properties</value>
+                <value>classpath:mail.properties</value>
+            </list>
+
+        </property>
         <property name="fileEncoding" value="utf-8" />
     </bean>
 
