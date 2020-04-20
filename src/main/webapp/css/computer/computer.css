@@ -188,10 +188,44 @@ body{
     margin-top: 10px;
     margin-left: 40px;
 }
+#userUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#pswUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
 #account{
     height:80px ;
 }
 #identifyCode{
+     margin-left: 40px;
+     height: 40px;
+     color: lightgrey;
+     font-size: 22px;
+     border-style: none;
+     float: left;
+     width:220px;
+
+ }
+#psw{
+    margin-left: 40px;
+    height: 40px;
+    color: lightgrey;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:220px;
+
+}
+#user_id{
     margin-left: 40px;
     height: 40px;
     color: lightgrey;
@@ -202,6 +236,14 @@ body{
 
 }
 #identifyDiv{
+    height: 40px;
+    margin-top: 40px;
+}
+#password{
+    height: 40px;
+    margin-top: 40px;
+}
+#userID{
     height: 40px;
     margin-top: 40px;
 }
@@ -283,7 +325,7 @@ placeholder{
     border-radius: 10px;
     border-style: none;
     background: cornflowerblue;
-    padding-left: 110px;
+    padding-left: 42%;
     color: white;
 }
 #loginBut1{
@@ -291,7 +333,7 @@ placeholder{
     border-radius: 10px;
     border-style: none;
     background: cornflowerblue;
-    padding-left: 110px;
+    padding-left: 42%;
     color: white;
 }
 #loginButDiv{
