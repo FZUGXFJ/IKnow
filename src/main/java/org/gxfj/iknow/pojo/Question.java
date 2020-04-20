@@ -18,6 +18,8 @@ public class Question {
     private Questiontype questiontypeByTypeId;
     private Questionstate questionstateByStateId;
     private Questionscenario questionscenarioByScenarioId;
+    private Byte isAnonymous;
+    private Answer answerByAdoptId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -160,5 +162,25 @@ public class Question {
 
     public void setQuestionscenarioByScenarioId(Questionscenario questionscenarioByScenarioId) {
         this.questionscenarioByScenarioId = questionscenarioByScenarioId;
+    }
+
+    @Basic
+    @Column(name = "isAnonymous", nullable = false)
+    public Byte getIsAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setIsAnonymous(Byte isAnonymous) {
+        this.isAnonymous = isAnonymous;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "adoptID", referencedColumnName = "id", nullable = false)
+    public Answer getAnswerByAdoptId() {
+        return answerByAdoptId;
+    }
+
+    public void setAnswerByAdoptId(Answer answerByAdoptId) {
+        this.answerByAdoptId = answerByAdoptId;
     }
 }

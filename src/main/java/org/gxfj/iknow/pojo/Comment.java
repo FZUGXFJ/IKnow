@@ -15,6 +15,7 @@ public class Comment {
     private User userByUserId;
     private User userByAnswerId;
     private Collection<Reply> repliesById;
+    private Integer count;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -125,5 +126,15 @@ public class Comment {
 
     public void setRepliesById(Collection<Reply> repliesById) {
         this.repliesById = repliesById;
+    }
+
+    @Basic
+    @Column(name = "count", nullable = false)
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }
