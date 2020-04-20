@@ -1,10 +1,13 @@
+body{
+    height: 1000px;
+}
 .navigation{
     height: 70px;
     background: aliceblue;
     border-radius: 10px;
 }
 #logoBut{
-    margin-left: 350px;
+    margin-left: 300px;
     width:200px;
     float: left;
     margin-top: 10px;
@@ -42,7 +45,7 @@
     border-color: aqua;
     border-radius: 5px;
     color: white;
-    background-color: aqua;
+
 }
 #searchImg{
     float: left;
@@ -73,6 +76,7 @@
     background:url("../../img/LOGO透明 (1).png");
     border-style: none;
 }
+
 #search{
     margin-top: 5px;
     height: 35px;
@@ -86,17 +90,20 @@
     background: aliceblue;
 }
 #logoIn{
-    margin-left: 780px;
+    position: absolute;
+    left: 46%;
     height:80px;
     width: 240px;
     background: aliceblue;
 }
 #login{
-    margin-left: 685px;
+    position: absolute;
+    left: 40%;
     width: 430px;
     height: 550px;
     background-color: white;
     margin-top: 30px;
+    margin-bottom: 50px;
 }
 #free{
     background-color: white;
@@ -296,4 +303,7 @@ placeholder{
     width: 335px;
     margin-left: 45px;
     border-radius: 10px;
+}
+.nav-item{
+    margin-right: 50px;
 }
