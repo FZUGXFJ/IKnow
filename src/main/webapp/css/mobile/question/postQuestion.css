@@ -1,0 +1,51 @@
+div{
+    width: 100%;
+}
+table{
+    width: 100%;
+}
+#header{
+    background-color: white;
+    padding: 1em 3em;
+    box-shadow: 0 10px 10px #d6d6d6;
+}
+#questionTitle{
+    font-size: 2.5em;
+    padding-left: 0.5em;
+    border: 0;
+    width: 100%;
+    opacity: 0.5;
+}
+#container{
+    width: 90%;
+    margin: 0 auto;
+}
+#alert{
+    background-color: #ededed;
+    padding: 1.5em;
+    border-radius: 0.5em;
+    opacity: 0.5;
+}
+.item{
+    color: #12eee7;
+    padding-right: 0.5em;
+}
+#editor{
+    font-size: 2.5em;
+    opacity: 0.5;
+}
+.separator{
+    opacity: 0.5;
+    background-color: #acacac;
+    height: 0.2em;
+}
+#choseClassification{
+
+}
+.classificationName{
+    font-size: 2em;
+    width: 30%;
+}
+.classificationSelect{
+    width: 70%;
+}
