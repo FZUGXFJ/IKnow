@@ -11,7 +11,7 @@ public class Oppositionanswer {
     private Answer answerByAnswerId;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }

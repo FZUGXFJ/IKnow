@@ -14,12 +14,13 @@ public class Answer {
     private Question questionByQuestionId;
     private Collection<Approvalanswer> approvalanswersById;
     private Collection<Oppositionanswer> oppositionanswersById;
+    private Collection<Comment> commentsById;
     private Byte isAnonymous;
     private Integer approvalCount;
     private Byte isRoof;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -118,6 +119,15 @@ public class Answer {
 
     public void setOppositionanswersById(Collection<Oppositionanswer> oppositionanswersById) {
         this.oppositionanswersById = oppositionanswersById;
+    }
+
+    @OneToMany(mappedBy = "answerByAnswerId")
+    public Collection<Comment> getCommentsById() {
+        return commentsById;
+    }
+
+    public void setCommentsById(Collection<Comment> commentsById) {
+        this.commentsById = commentsById;
     }
 
     @Basic

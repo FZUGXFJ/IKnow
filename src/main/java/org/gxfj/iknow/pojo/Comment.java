@@ -13,7 +13,7 @@ public class Comment {
     private Collection<Approvalcomment> approvalcommentsById;
     private Collection<Approvalreply> approvalrepliesById;
     private User userByUserId;
-    private User userByAnswerId;
+    private Answer answerByAnswerId;
     private Collection<Reply> repliesById;
     private Integer count;
 
@@ -111,12 +111,12 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
-    public User getUserByAnswerId() {
-        return userByAnswerId;
+    public Answer getUserByAnswerId() {
+        return answerByAnswerId;
     }
 
-    public void setUserByAnswerId(User userByAnswerId) {
-        this.userByAnswerId = userByAnswerId;
+    public void setUserByAnswerId(Answer userByAnswerId) {
+        this.answerByAnswerId = userByAnswerId;
     }
 
     @OneToMany(mappedBy = "commentByCommentId")

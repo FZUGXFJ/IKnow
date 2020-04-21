@@ -11,7 +11,7 @@ public class Majortype {
     private Collection<Questiontype> questiontypesById;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
