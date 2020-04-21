@@ -17,6 +17,16 @@ public class Comment {
     private Collection<Reply> repliesById;
     private Integer count;
 
+    @ManyToOne
+    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
+    public Answer getAnswerByAnswerId() {
+        return answerByAnswerId;
+    }
+
+    public void setAnswerByAnswerId(Answer answerByAnswerId) {
+        this.answerByAnswerId = answerByAnswerId;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     public Integer getId() {
