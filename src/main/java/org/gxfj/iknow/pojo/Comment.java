@@ -13,8 +13,19 @@ public class Comment {
     private Collection<Approvalcomment> approvalcommentsById;
     private Collection<Approvalreply> approvalrepliesById;
     private User userByUserId;
-    private User userByAnswerId;
+    private Answer answerByAnswerId;
     private Collection<Reply> repliesById;
+    private Integer count;
+
+    @ManyToOne
+    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
+    public Answer getAnswerByAnswerId() {
+        return answerByAnswerId;
+    }
+
+    public void setAnswerByAnswerId(Answer answerByAnswerId) {
+        this.answerByAnswerId = answerByAnswerId;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -108,15 +119,6 @@ public class Comment {
         this.userByUserId = userByUserId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
-    public User getUserByAnswerId() {
-        return userByAnswerId;
-    }
-
-    public void setUserByAnswerId(User userByAnswerId) {
-        this.userByAnswerId = userByAnswerId;
-    }
 
     @OneToMany(mappedBy = "commentByCommentId")
     public Collection<Reply> getRepliesById() {
@@ -125,5 +127,15 @@ public class Comment {
 
     public void setRepliesById(Collection<Reply> repliesById) {
         this.repliesById = repliesById;
+    }
+
+    @Basic
+    @Column(name = "count", nullable = false)
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }

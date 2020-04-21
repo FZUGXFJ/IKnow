@@ -10,7 +10,7 @@ public class Userstate {
     private Collection<User> usersById;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }

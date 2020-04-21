@@ -14,9 +14,13 @@ public class Answer {
     private Question questionByQuestionId;
     private Collection<Approvalanswer> approvalanswersById;
     private Collection<Oppositionanswer> oppositionanswersById;
+    private Collection<Comment> commentsById;
+    private Byte isAnonymous;
+    private Integer approvalCount;
+    private Byte isRoof;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -115,5 +119,44 @@ public class Answer {
 
     public void setOppositionanswersById(Collection<Oppositionanswer> oppositionanswersById) {
         this.oppositionanswersById = oppositionanswersById;
+    }
+
+    @OneToMany(mappedBy = "answerByAnswerId")
+    public Collection<Comment> getCommentsById() {
+        return commentsById;
+    }
+
+    public void setCommentsById(Collection<Comment> commentsById) {
+        this.commentsById = commentsById;
+    }
+
+    @Basic
+    @Column(name = "isAnonymous", nullable = false)
+    public Byte getIsAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setIsAnonymous(Byte isAnonymous) {
+        this.isAnonymous = isAnonymous;
+    }
+
+    @Basic
+    @Column(name = "approvalCount", nullable = false)
+    public Integer getApprovalCount() {
+        return approvalCount;
+    }
+
+    public void setApprovalCount(Integer approvalCount) {
+        this.approvalCount = approvalCount;
+    }
+
+    @Basic
+    @Column(name = "isRoof", nullable = false)
+    public Byte getIsRoof() {
+        return isRoof;
+    }
+
+    public void setIsRoof(Byte isRoof) {
+        this.isRoof = isRoof;
     }
 }

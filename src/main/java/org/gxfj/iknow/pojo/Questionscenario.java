@@ -10,7 +10,7 @@ public class Questionscenario {
     private Collection<Question> questionsById;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }

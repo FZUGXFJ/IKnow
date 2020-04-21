@@ -17,7 +17,7 @@ public class Useridentity {
     private Major majorByMajorId;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }

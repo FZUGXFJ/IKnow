@@ -12,7 +12,7 @@ public class College {
     private Collection<Useridentity> useridentitiesById;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }

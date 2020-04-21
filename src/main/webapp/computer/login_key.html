@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>密码登录</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
-    <link rel="stylesheet" type="text/css" href="../css/computer.css">
+    <link rel="stylesheet" type="text/css" href="../css/computer/computer.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -14,22 +14,41 @@
     <script type="text/javascript" src="../js/computer.js"></script>
 </head>
 <body style="background-color: aliceblue">
-<div class="navigation">
-    <div id="logoBut"><input id="logo" type="submit" value=""></div>
-    <div class="navigationPart"><form action="" method=""><input class="button" id="homepage" type="button" onclick="" value="首 页"></form></div>
-    <div class="navigationPart"><form action="" method=""><input class="button" id="qa" type="button" onclick="" value="问 答"></form></div>
-    <div class="navigationPart"><form action="" method=""><input class="button" id="login-logon" type="button" onclick="" value="登 录丨注 册"></form></div>
-    <div id="input"><form action="" method=""><input id="question"  placeholder="请输入您的问题" class="text-input" type="text" onclick="" value=""></form></div>
-    <div id="searchImg"><form action="" method=""><input id="search" type="submit" value=""></form></div>
-    <div id="select">
-        <form action="" method="">
-            <select id="selectType" name="type">
-                <option value="按题目查找">按题目查找</option>
-                <option value="按回答查找">按回答查找</option>
-            </select>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#" style="margin-left: 250PX"><img src="../img/LOGO透明%20(1).png"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active" style="margin-left: 10px">
+                <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">问答</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">登录</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">注册</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
+            <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
         </form>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown" style="margin-left: 10PX">
+                <select class="form-control form-control-lg">
+                    <option>按题目查找</option>
+                    <option>按回答查找</option>
+                </select>
+            </li>
+        </ul>
     </div>
-</div>
+</nav>
 <div id="logoContext">
     <img id="logoIn" src="../img/LOGO1.png">
 </div>
@@ -40,21 +59,17 @@
     </div>
     <div id="loginUnderline1"></div>
     <div id="account">
-        <form action="" method="">
             <input id="email1" type="email" placeholder="请输入您的邮箱" value="">
             <select id="emailSelect1">
                 <option value="@qq.com">@qq.com</option>
                 <option value="@sina.cn">@sina.cn</option>
             </select>
-        </form>
     </div>
     <div id="emailUnderline"></div>
     <div id="keyDiv"><form action="" method=""><input type="password" placeholder="请输入您的密码" id="keyInput"></form></div>
     <div id="codeUnderline"></div>
     <div id="loginButDiv">
-        <form action="" method="">
-            <input type="submit" value="登录/注册" id="loginBut1">
-        </form>
+            <input type="submit" value="登录" id="loginBut1">
     </div>
     <div id="tipText">
         <form><input type="checkbox" value="" id="check1">是否同意《IKnow协议》、《隐私保护指引》 </form>

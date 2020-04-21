@@ -16,6 +16,7 @@ public class User {
     private Timestamp date;
     private Integer badgeNum;
     private Integer exp;
+    private String head;
     private Collection<Achievementrecord> achievementrecordsById;
     private Collection<Answer> answersById;
     private Collection<Approvalanswer> approvalanswersById;
@@ -24,7 +25,6 @@ public class User {
     private Collection<Browsinghistory> browsinghistoriesById;
     private Collection<Collectionproblem> collectionproblemsById;
     private Collection<Comment> commentsById;
-    private Collection<Comment> commentsById_0;
     private Collection<Message> messagesById;
     private Collection<Oppositionanswer> oppositionanswersById;
     private Collection<Question> questionsById;
@@ -36,7 +36,7 @@ public class User {
     private Collection<Useridentity> useridentitiesById;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -134,6 +134,17 @@ public class User {
     public void setExp(Integer exp) {
         this.exp = exp;
     }
+
+    @Basic
+    @Column(name = "head", nullable = false)
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        this.head = head;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -241,15 +252,6 @@ public class User {
 
     public void setCommentsById(Collection<Comment> commentsById) {
         this.commentsById = commentsById;
-    }
-
-    @OneToMany(mappedBy = "userByAnswerId")
-    public Collection<Comment> getCommentsById_0() {
-        return commentsById_0;
-    }
-
-    public void setCommentsById_0(Collection<Comment> commentsById_0) {
-        this.commentsById_0 = commentsById_0;
     }
 
     @OneToMany(mappedBy = "userByUserId")
