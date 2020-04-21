@@ -119,15 +119,6 @@ public class Comment {
         this.userByUserId = userByUserId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
-    public Answer getUserByAnswerId() {
-        return answerByAnswerId;
-    }
-
-    public void setUserByAnswerId(Answer userByAnswerId) {
-        this.answerByAnswerId = userByAnswerId;
-    }
 
     @OneToMany(mappedBy = "commentByCommentId")
     public Collection<Reply> getRepliesById() {
