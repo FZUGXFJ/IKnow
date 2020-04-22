@@ -41,4 +41,35 @@ public class UserDAOImpl implements UserDAO {
     public void update(User bean) {
         getHibernateTemplate().update(bean);
     }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public boolean hasUserId(Integer id) {
+        User user = new User();
+        user.setId(id);
+        return getHibernateTemplate().findByExample(user).size() != 0;
+    }
+
+    @Override
+    public boolean hasUsername(String username) {
+        User user = new User();
+        user.setName(username);
+        return getHibernateTemplate().findByExample(user).size() != 0;
+    }
+
+    @Override
+    public boolean hasUserEmail(String email) {
+        User user = new User();
+        user.setEmail(email);
+        return getHibernateTemplate().findByExample(user).size() != 0;
+    }
 }
