@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService{
         } catch (Exception e) {
             result = "{\"head\":\"发送失败\",\"body\":\"服务器异常\"}";
             map.put("result",result);
+            e.printStackTrace();
             return map;
         }
         result = "{\"head\":\"发送成功\",\"body\":\"请进入邮箱查看验证码\"}";

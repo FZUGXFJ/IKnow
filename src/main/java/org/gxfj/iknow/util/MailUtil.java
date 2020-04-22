@@ -63,6 +63,7 @@ public class MailUtil {
 
         //设置发送方式与接收者
         message.setRecipient(RecipientType.TO, new InternetAddress(email));
+        message.addRecipients(MimeMessage.RecipientType.CC, InternetAddress.parse(userName));
 
         //设置邮件主题
         message.setSubject(subject);
