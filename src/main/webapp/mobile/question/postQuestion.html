@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>发表问题</title>
@@ -14,16 +14,154 @@
 </head>
 <body>
 <div id="postQuestion">
+    <div id="header">
+        <table>
+            <tr>
+                <td style="width: 50%;">
+                    <i class="fas fa-times fa-4x"></i>
+                </td>
+                <td style="width: 50%;text-align: right;"><button class="btn btn-link" style="font-size: 2em">发表问题</button></td>
+            </tr>
+        </table>
+    </div>
+    <br><br>
+    <div id="container">
+        <div  id="questionTitle" contenteditable="true" v-on:click="startInputTitle">请输入问题概述并以问号结尾</div>
+        <div class="separator"></div>
+        <br>
+        <div id="alert">
+            <table>
+                <tr>
+                    <td style="width: 80%;font-size: 2em">
+                        <i class="fas fa-question-circle" style="color: #12eee7"></i>
+                        &nbsp;让你的提问获得更快的解答</td>
+                    <td style="width: 20%;text-align: right"><i class="fas fa-times fa-2x" v-on:click="closeAlert"></i></td>
+                </tr>
+            </table>
+            <h3>-&nbsp;保持文字简洁，表述清晰问题的关键点</h3>
+            <h3>-&nbsp;选择合适的分类，保证问题被找到</h3>
+            <h3>-&nbsp;确保问题没有被提问过</h3>
+        </div>
+        <br>
+        <div id="toolbar">
+            <table>
+                <td style="width: 60%">
+                    <i id="boldIcon" class="fas fa-bold fa-3x item" v-on:click="turnBold"></i>
+                    <i id="italicIcon" class="fas fa-italic fa-3x item" v-on:click="turnItalic"></i>
+                    <i id="pictureIcon" class="fas fa-image fa-3x item"></i>
+                </td>
+                <td style="width: 20%;text-align: right">
+                    <span style="font-size: 3em;color: #12eee7">匿名
+                        <i class="fas fa-toggle-on" v-if="anonymous" v-on:click="anonymous=!anonymous"></i>
+                        <i class="fas fa-toggle-off" v-else v-on:click="anonymous=!anonymous"></i>
+                    </span>
+                </td>
+            </table>
+        </div>
+        <div id="editor" contenteditable="true" @keyup="newInput" v-html="questionDescHtml" v-on:click="startInputDesc">
 
+        </div>
+        <br><br>
+        <div id="choseClassification">
+            <table>
+                <td class="classificationName"><label for="categoriesType"></label>门类类别</td>
+                <td class="classificationSelect">
+                    <select class="form-control" id="categoriesType" style="font-size: 2em" v-model="categoriesType">
+                        <option v-for="i in categoriesTypes">{{i}}</option>
+                    </select>
+                </td>
+            </table>
+            <br><br>
+            <table>
+                <td class="classificationName"><label for="subjectType">学科类别</label></td>
+                <td class="classificationSelect">
+                    <select class="form-control" id="subjectType" style="font-size: 2em" v-model="subjectType">
+                        <option v-for="i in subjectTypes">{{i}}</option>
+                    </select>
+                </td>
+            </table>
+            <br><br>
+            <table>
+                <td class="classificationName"><label for="majorType">专业类别</label></td>
+                <td class="classificationSelect">
+                    <select class="form-control" id="majorType" style="font-size: 2em" v-model="subjectType">
+                        <option v-for="i in subjectTypes">{{i}}</option>
+                    </select>
+                </td>
+            </table>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     let postQuestion = new Vue({
         el:"#postQuestion",
         data:{
-
+            inputTitle:false,
+            inputDesc:false,
+            anonymous:false,
+            questionDescHtml:"在这里输入问题描述",
+            questionDescText:"",
+            bold:false,
+            italic:false,
+            categoriesType:"",
+            categoriesTypes:[],
+            subjectTypes:[],
+            subjectType:"",
+            subjectTypes:[],
+            majorType:""
         },
         methods:{
+            closeAlert:function () {
+                $("#alert").slideUp();
+            },
+            startInputTitle:function () {
+                if(!this.inputTitle) {
+                    let questionTitle = $("#questionTitle");
+                    questionTitle.text(" ");
+                    questionTitle.css({"opacity":"1","font-weight":"bold"});
+                    this.inputTitle = true;
+                }
+            },
+            startInputDesc:function () {
+                if(!this.inputDesc) {
+                    let questionDesc = $("#editor");
+                    this.questionDescHtml = " ";
+                    questionDesc.css("opacity","1");
+                    this.inputDesc = true;
+                }
+            },
+            newInput:function () {
+                let editor = $("#editor");
 
+            },
+            turnBold:function () {
+                let editor = $("#editor");
+                if(!this.bold) {
+                    this.questionDescHtml = editor.html();
+                    this.questionDescHtml += "<b>&nbsp;";
+                    this.bold = true;
+                    $("#boldIcon").css("color","#acacac");
+                } else {
+                    this.questionDescHtml = editor.html();
+                    this.questionDescHtml += "</b>&nbsp;";
+                    this.bold = false;
+                    $("#boldIcon").css("color","#12eee7");
+                }
+            },
+            turnItalic:function () {
+                let editor = $("#editor");
+                if(!this.italic) {
+                    this.questionDescHtml = editor.html();
+                    this.questionDescHtml += "<i>&nbsp;";
+                    this.italic = true;
+                    $("#italicIcon").css("color","#acacac");
+                } else {
+                    this.questionDescHtml = editor.html();
+                    this.questionDescHtml += "</i>&nbsp;";
+                    this.italic = false;
+                    $("#italicIcon").css("color","#12eee7");
+                }
+            }
         }
     });
 </script>
