@@ -4,15 +4,29 @@ div{
 table{
     width: 100%;
 }
+img{
+    width: 100%;
+}
 #logonArea{
     width: 80%;
     margin: 5% auto;
     text-align: center;
 }
 #logonArea input{
-    font-size: 3em;
+    font-size: 1em;
     padding: 0 5%;
 }
 #logonArea i{
     color: #acacac;
+}
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
+}
+#alert{
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+    display: none;
 }

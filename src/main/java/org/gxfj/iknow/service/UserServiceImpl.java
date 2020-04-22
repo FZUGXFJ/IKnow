@@ -3,14 +3,16 @@ package org.gxfj.iknow.service;
 import org.gxfj.iknow.dao.UserDAO;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.pojo.Userstate;
+import org.gxfj.iknow.util.MailUtil;
 import org.gxfj.iknow.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Administrator
@@ -21,11 +23,23 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private MailUtil mailUtil;
 
     @Override
-    public String logon(String username, String password, String email) {
+    public Map<String,Object> logon(String username, String password, String email, String verifyCode) {
+        Map<String,Object> resultMap = new HashMap<>(16);
         User user = new User();
+        if (userDAO.hasUsername(username)) {
+            resultMap.put("value",1);
+            return resultMap;
+        }
+        if (userDAO.hasUserEmail(email)) {
+            resultMap.put("value",2);
+            return resultMap;
+        }
         user.setName(username);
+        //使用md5加密
         user.setPasswd(SecurityUtil.md5(password));
         user.setEmail(email);
         /*默认信息*/
@@ -46,6 +60,31 @@ public class UserServiceImpl implements UserService{
         //初始头像
         user.setHead("<i class='fas fa-user-circle'></i>");
         userDAO.add(user);
-        return "success";
+        resultMap.put("value",0);
+        resultMap.put("result","注册成功");
+        resultMap.put("user",user);
+        return resultMap;
+    }
+
+    @Override
+    public Map<String,String> sendVerifyCode(String email) {
+        Map<String,String> map = new HashMap<>();
+        String subject = "IKnow验证邮件";
+        String verifyCode = SecurityUtil.generatorVerifyCode(6);
+        map.put("verifyCode",verifyCode);
+        String content = "您的验证码是<h1>" +
+                verifyCode +
+                "</h1>请在15分钟内完成验证";
+        String result;
+        try {
+            mailUtil.sendMail(email,subject,content);
+        } catch (Exception e) {
+            result = "{\"head\":\"发送失败\",\"body\":\"服务器异常\"}";
+            map.put("result",result);
+            return map;
+        }
+        result = "{\"head\":\"发送成功\",\"body\":\"请进入邮箱查看验证码\"}";
+        map.put("result",result);
+        return map;
     }
 }

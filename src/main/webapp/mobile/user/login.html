@@ -23,7 +23,6 @@
             </tr>
         </table>
     </div>
-<!--    <img src="/img/LOGO.png" class="figure-img img-fluid rounded" style="width: 100%" alt="logo">-->
     <img src="../../img/LOGO.png" class="figure-img img-fluid rounded" style="width: 100%" alt="logo">
     <div id="choose">
         <span v-bind:class="{selected:useEmail}" v-on:click="useEmail=!useEmail">免密码登录</span>
@@ -41,7 +40,7 @@
                     </td>
                     <td style="width: 40%">
                         <button class="btn btn-link" style="font-size: 2em" v-on:click="timeOut()" v-if="!verify">获取验证码</button>
-                        <button class="btn btn-link" disabled="" style="font-size: 2em;" v-on:click="verify=!verify" v-else="">重新发送({{timeout}})</button>
+                        <button class="btn btn-link" disabled="disabled" style="font-size: 2em;"  v-else>重新发送({{timeout}})</button>
                     </td>
                 </tr>
             </table>

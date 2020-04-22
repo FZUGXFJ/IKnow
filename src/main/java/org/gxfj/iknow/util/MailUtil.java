@@ -32,15 +32,19 @@ public class MailUtil {
 
         Properties props = new Properties();
         //设置发送的协议
-        props.setProperty("mail.transport.protocol", "SMTP");//普通SMTP
+        //普通SMTP
+        props.setProperty("mail.transport.protocol", "SMTP");
         //设置发送邮件的服务器
 //        props.setProperty("mail.host", "localhost");//本地
 //        props.setProperty("mail.host", "smtp.qq.com"); //// 设置QQ邮件服务器
-        props.setProperty("mail.host", "smtp.163.com");//163邮箱
-        props.setProperty("mail.smtp.auth", "true");// 指定验证为true
+        //163邮箱
+        props.setProperty("mail.host", "smtp.163.com");
+        // 指定验证为true
+        props.setProperty("mail.smtp.auth", "true");
 
         // 创建验证器
         Authenticator auth = new Authenticator() {
+            @Override
             public PasswordAuthentication getPasswordAuthentication() {
                 //设置发送人的帐号和密码
                 return new PasswordAuthentication(userName, password);

@@ -10,4 +10,13 @@ public interface UserDAO {
 
     public void update(User bean);
 
+    public User getUserByUsername(String username);
+
+    public User getUserByEmail(String email);
+
+    public boolean hasUserId(Integer id);
+
+    public boolean hasUsername(String username);
+
+    public boolean hasUserEmail(String email);
 }
