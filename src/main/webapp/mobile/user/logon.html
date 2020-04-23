@@ -72,24 +72,24 @@
 </div>
 <script type="text/javascript">
     let logon=new Vue({
-       el:"#logon",
-       data:{
-           agree:false,
-           verify:false,
-           doLogon:false,
-           timeout:60,
-           emailError:false,
-           emailErrorMsg:"",
-           usernameError:false,
-           usernameErrorMsg:"",
-           passwordError:false,
-           passwordErrorMsg:"",
-           verifyCodeError:false,
-           verifyCodeErrorMsg:"",
-           agreeError:false,
-           agreeErrorMsg:"",
-           alertMsg:{head:"",body:""},
-       },
+        el:"#logon",
+        data:{
+            agree:false,
+            verify:false,
+            doLogon:false,
+            timeout:60,
+            emailError:false,
+            emailErrorMsg:"",
+            usernameError:false,
+            usernameErrorMsg:"",
+            passwordError:false,
+            passwordErrorMsg:"",
+            verifyCodeError:false,
+            verifyCodeErrorMsg:"",
+            agreeError:false,
+            agreeErrorMsg:"",
+            alertMsg:{head:"",body:""},
+        },
         methods:{
             launch:function () {
                 let email = $("#email");
