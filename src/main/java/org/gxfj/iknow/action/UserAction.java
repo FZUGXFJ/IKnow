@@ -1,7 +1,9 @@
 package org.gxfj.iknow.action;
 
 import com.opensymphony.xwork2.ActionContext;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
+import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.UserServiceImpl;
 import org.gxfj.iknow.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ public class UserAction {
     String email;
     String password;
     String verifyCode;
+    boolean remember;
     @Autowired
     UserServiceImpl userService;
     @Autowired
@@ -32,49 +34,70 @@ public class UserAction {
     private InputStream inputStream;
     private final String EMAIL = "email";
     private final String VERIFY_CODE = "verifyCode";
+    private final String SUCCESS = "success";
 
     public InputStream getInputStream() {
         return inputStream;
     }
 
-    void login() {
-
+    public String passwordLogin() {
+        User loginInf = new User();
+        loginInf.setEmail(email);
+        loginInf.setPasswd(password);
+        User user = userService.loginByPassword(loginInf);
+        if (user != null) {
+            ActionContext.getContext().getSession().put("user",user);
+            inputStream = new ByteArrayInputStream("{\"response\":0}".getBytes(StandardCharsets.UTF_8));
+        } else {
+            inputStream = new ByteArrayInputStream("{\"response\":1}".getBytes(StandardCharsets.UTF_8));
+        }
+        return SUCCESS;
     }
 
-    public String logon() throws Exception {
+    public String emailLogin() {
+        User loginInf = new User();
+        loginInf.setEmail(email);
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        Map<String,Object> result = userService.loginByNoPassword(email,(String)session.get(EMAIL), verifyCode,(String) session.get(VERIFY_CODE));
+        User user = (User) result.get("user");
+        if (user != null) {
+            ActionContext.getContext().getSession().put("user",user);
+            inputStream = new ByteArrayInputStream("{\"response\":0}".getBytes(StandardCharsets.UTF_8));
+        } else {
+            String response = "{\"response\":" + result.get("value") + "}";
+            inputStream = new ByteArrayInputStream(response.getBytes(StandardCharsets.UTF_8));
+        }
+        return SUCCESS;
+    }
+
+    public String logon() {
         Map<String,Object> session = ActionContext.getContext().getSession();
         String result = null;
         if (session.get(VERIFY_CODE) == null || !verifyCode.equals(session.get(VERIFY_CODE))) {
             result = "{\"response\":3}";
             inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            return "success";
+            return SUCCESS;
         } else if (session.get(EMAIL) == null || !email.equals(session.get(EMAIL))) {
             result = "{\"response\":4}";
             inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            return "success";
+            return SUCCESS;
         }
         Map<String,Object> resultMap = userService.logon(username,password,email,verifyCode);
         if ((Integer) resultMap.get("value") == 0) {
             session.put("user",resultMap.get("user"));
-            result = "{\"response\":0}";
-            inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-        } else if ((Integer) resultMap.get("value") == 1) {
-            result = "{\"response\":1}";
-            inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-        } else if ((Integer) resultMap.get("value") == 2) {
-            result = "{\"response\":2}";
-            inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
         }
-        return "success";
+        result = "{\"response\":" + resultMap.get("value") + "}";
+        inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
     }
 
-    public String sendEmail() throws Exception {
+    public String sendEmail() {
         Map<String,Object> session = ActionContext.getContext().getSession();
         Map<String,String> resultMap = userService.sendVerifyCode(email);
         session.put(EMAIL,email);
         session.put(VERIFY_CODE,resultMap.get("verifyCode"));
         inputStream = new ByteArrayInputStream(resultMap.get("result").getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return SUCCESS;
     }
 
     public String getUsername() {

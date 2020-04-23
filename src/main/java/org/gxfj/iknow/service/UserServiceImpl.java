@@ -88,4 +88,33 @@ public class UserServiceImpl implements UserService{
         map.put("result",result);
         return map;
     }
+
+    @Override
+    public User loginByPassword(User loginInf) {
+        User user = userDAO.getUserByEmail(loginInf.getEmail());
+        if (SecurityUtil.md5Compare(loginInf.getPasswd(),user.getPasswd())) {
+            return user;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Map<String,Object> loginByNoPassword(String email, String sessionEmail, String verifyCode, String sessionVerifyCode) {
+        Map<String,Object> result = new HashMap<>(16);
+        if (!email.equals(sessionEmail)) {
+            result.put("value",1);
+        } else if (!verifyCode.equals(sessionVerifyCode)) {
+            result.put("value",2);
+        } else {
+            User user = userDAO.getUserByEmail(email);
+            if (user == null) {
+                result.put("value",3);
+            } else {
+                result.put("value",0);
+                result.put("user",user);
+            }
+        }
+        return result;
+    }
 }

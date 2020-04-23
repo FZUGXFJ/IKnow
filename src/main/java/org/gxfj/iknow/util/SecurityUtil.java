@@ -1,6 +1,7 @@
 package org.gxfj.iknow.util;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 
 import java.util.Random;
 
