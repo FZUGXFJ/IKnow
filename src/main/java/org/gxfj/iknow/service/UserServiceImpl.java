@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.alibaba.fastjson.JSONObject;
 import org.gxfj.iknow.dao.UserDAO;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.pojo.Userstate;
@@ -19,7 +20,7 @@ import java.util.Map;
  */
 @Service("userService")
 @Transactional(readOnly = false)
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl<result> implements UserService{
 
     @Autowired
     private UserDAO userDAO;
@@ -115,6 +116,22 @@ public class UserServiceImpl implements UserService{
                 result.put("user",user);
             }
         }
+        return result;
+    }
+
+    @Override
+    public String getUserInf(User userInf) {
+        Integer resultCode;
+        String result;
+        if(userInf==null) {
+            resultCode=1;
+        }
+        else {
+            resultCode=0;
+        }
+        result="{\"resultCode\" :\""+resultCode+"\", \"userInf\": { \"head\": \""+userInf.getHead()+
+                "\",\"username\":\" "+userInf.getName()+"\",\"gender\": \""+userInf.getGender()+
+                "\",\"introduction\":\" "+userInf.getIntroduction()+"\"},}";
         return result;
     }
 }

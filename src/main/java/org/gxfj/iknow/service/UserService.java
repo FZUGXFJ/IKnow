@@ -43,4 +43,11 @@ public interface UserService {
      * @return 消息集合
      */
     public Map<String,Object> loginByNoPassword(String email,String sessionEmail,String verifyCode,String sessionVerifyCode);
+
+    /**
+     *查看用户信息
+     * @param userInf 用户信息
+     * @return user, resultCode：响应数据码，0表示成功，1表示用户未登录
+     */
+    public String getUserInf(User userInf);
 }

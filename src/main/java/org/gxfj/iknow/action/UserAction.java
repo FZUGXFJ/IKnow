@@ -100,6 +100,14 @@ public class UserAction {
         return SUCCESS;
     }
 
+    public  String userInf(){
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        String result=userService.getUserInf((User) session.get("user"));
+        inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+
     public String getUsername() {
         return username;
     }
