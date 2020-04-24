@@ -25,7 +25,7 @@
             </global-exception-mappings>
         </package>
 
-        <package name="user" namespace="/user" extends="struts-default">
+        <package name="user" namespace="/user" extends="default">
             <action name="sendEmail" class="org.gxfj.iknow.action.UserAction" method="sendEmail">
                 <result name="success" type="stream">
                     <param name="contentType">application/json;charset=utf-8</param>
@@ -63,4 +63,11 @@
                 </result>
             </action>
         </package>
+
+    <package name="question" namespace="/question" extends="default">
+        <action name="addQuestion" class="org.gxfj.iknow.action.QeustionAction" method="addQuestion">
+            <param name="contentType">application/json;charset=utf-8</param>
+            <param name="inputName">inputStream</param>
+        </action>
+    </package>
 </struts>
