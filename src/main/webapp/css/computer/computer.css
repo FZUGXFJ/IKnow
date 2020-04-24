@@ -156,6 +156,7 @@ body{
     margin-top: 3px;
     margin-left: 145px;
 }
+
 #email{
     border-style: none;
     margin-left: 40px;
@@ -209,6 +210,13 @@ body{
     margin-top: 10px;
     margin-left: 40px;
 }
+#IDUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
 #pswUnderline{
     height: 3px;
     width: 350px;
@@ -219,6 +227,9 @@ body{
 #account{
     height:80px ;
     width: 390px;
+}
+#ID{
+    height:80px ;
 }
 #identifyCode{
      margin-left: 40px;
@@ -266,7 +277,20 @@ body{
     height: 40px;
     margin-top: 40px;
 }
+#ID{
+    height: 40px;
+    margin-top: 40px;
+}
 #keyInput{
+    margin-left: 40px;
+    height: 40px;
+    color: lightgrey;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:340px;
+}
+#IDnum{
     margin-left: 40px;
     height: 40px;
     color: lightgrey;
