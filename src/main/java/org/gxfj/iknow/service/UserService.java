@@ -47,7 +47,18 @@ public interface UserService {
     /**
      *查看用户信息
      * @param userInf 用户信息
-     * @return user, resultCode：响应数据码，0表示成功，1表示用户未登录
+     * @return json数据 user, resultCode：响应数据码，0表示成功，1表示用户未登录
      */
     public String getUserInf(User userInf);
+
+    /**
+     *修改用户信息
+     * @param head 新头像
+     * @param username 新用户名
+     * @param gender 新性别
+     * @param introduction 新介绍信息
+     * @param userinf 旧的用户信息
+     * @return json数据 resultCode：响应数据码，0表示修改成功，1表示用户名已占用
+     */
+    public String editUserInf(String head,String username,String gender,String introduction,User userinf);
 }

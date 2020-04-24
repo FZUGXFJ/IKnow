@@ -138,4 +138,17 @@ public class UserServiceImpl<result> implements UserService{
         }
         return result;
     }
+
+    @Override
+    public String editUserInf(String head, String username, String gender, String introduction,User userInf) {
+        if (userDAO.hasUsername(username)){
+            return "{\"resultCode\":0}";
+        }
+        userInf.setHead(head);
+        userInf.setGender(gender);
+        userInf.setName(username);
+        userInf.setIntroduction(introduction);
+        userDAO.update(userInf);
+        return "{\"resultCode\":0}";
+    }
 }
