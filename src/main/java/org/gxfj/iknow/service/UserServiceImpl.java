@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.alibaba.fastjson.JSONObject;
 import org.gxfj.iknow.dao.UserDAO;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.pojo.Userstate;
@@ -19,7 +20,7 @@ import java.util.Map;
  */
 @Service("userService")
 @Transactional(readOnly = false)
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl<result> implements UserService{
 
     @Autowired
     private UserDAO userDAO;
@@ -116,5 +117,38 @@ public class UserServiceImpl implements UserService{
             }
         }
         return result;
+    }
+
+    @Override
+    public String getUserInf(User userInf) {
+        String result;
+        if(userInf==null) {
+            return "{\"resultCode\":1}";
+        }
+        else {
+            if (userInf.getIntroduction() == null) {
+                result = "{\"resultCode\" :" + 0 + ", \"userInf\": { \"head\": \"" + userInf.getHead() +
+                        "\",\"username\":\" " + userInf.getName() + "\",\"gender\": \"" + userInf.getGender() +
+                        "\",\"introduction\":" + userInf.getIntroduction() + "}}";
+            } else {
+                result = "{\"resultCode\" :" + 0 + ", \"userInf\": { \"head\": \"" + userInf.getHead() +
+                        "\",\"username\":\" " + userInf.getName() + "\",\"gender\": \"" + userInf.getGender() +
+                        "\",\"introduction\":\" " + userInf.getIntroduction() + "\"}}";
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String editUserInf(String head, String username, String gender, String introduction,User userInf) {
+        if (userDAO.hasUsername(username)){
+            return "{\"resultCode\":0}";
+        }
+        userInf.setHead(head);
+        userInf.setGender(gender);
+        userInf.setName(username);
+        userInf.setIntroduction(introduction);
+        userDAO.update(userInf);
+        return "{\"resultCode\":0}";
     }
 }

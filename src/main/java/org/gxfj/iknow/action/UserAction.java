@@ -4,6 +4,7 @@ import com.opensymphony.xwork2.ActionContext;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.service.UserService;
 import org.gxfj.iknow.service.UserServiceImpl;
 import org.gxfj.iknow.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,13 @@ public class UserAction {
     String email;
     String password;
     String verifyCode;
+    String head;
+    String gender;
+    String introduction;
     boolean remember;
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
+
     @Autowired
     MailUtil mailUtil;
     private InputStream inputStream;
@@ -100,6 +105,21 @@ public class UserAction {
         return SUCCESS;
     }
 
+    public String userInf(){
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        String result=userService.getUserInf((User) session.get("user"));
+        inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+    public String editInf(){
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        String result=userService.getUserInf((User) session.get("user"));
+        inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+
     public String getUsername() {
         return username;
     }
@@ -132,4 +152,23 @@ public class UserAction {
         this.verifyCode = verifyCode;
     }
 
+    public String getHead(){ return head; }
+
+    public void setHead(String head){ this.head=head;}
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
 }
