@@ -17,7 +17,7 @@
 <div id="login">
     <div id="title">
         <table>
-            <td style="width: 33%"><i class="fas fa-chevron-left"></i></td>
+            <td style="width: 33%"><i class="fas fa-chevron-left" style="padding-right: 1em" @click="back"></i></td>
             <td style="width: 34%;text-align: center">用户登录</td>
             <td style="width: 33%;text-align: right"><a href="logon.html">注册</a></td>
         </table>
@@ -248,6 +248,9 @@
                     }
                 }
             },
+        },
+        back:function () {
+            window.history.back();
         }
     });
 </script>

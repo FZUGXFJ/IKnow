@@ -59,7 +59,7 @@ public class UserServiceImpl<result> implements UserService{
         //初始用户状态为正常
         user.setUserstateByStateId(userstate);
         //初始头像
-        user.setHead("<i class='fas fa-user-circle'></i>");
+        user.setHead("1.jpg");
         userDAO.add(user);
         resultMap.put("value",0);
         resultMap.put("result","注册成功");
@@ -127,13 +127,13 @@ public class UserServiceImpl<result> implements UserService{
         }
         else {
             if (userInf.getIntroduction() == null) {
-                result = "{\"resultCode\" :" + 0 + ", \"userInf\": { \"head\": \"" + userInf.getHead() +
-                        "\",\"username\":\" " + userInf.getName() + "\",\"gender\": \"" + userInf.getGender() +
+                result = "{\"resultCode\":0,\"userInf\": {\"head\":\"" + userInf.getHead() +
+                        "\",\"username\":\"" + userInf.getName() + "\",\"gender\":\"" + userInf.getGender() +
                         "\",\"introduction\":" + userInf.getIntroduction() + "}}";
             } else {
-                result = "{\"resultCode\" :" + 0 + ", \"userInf\": { \"head\": \"" + userInf.getHead() +
-                        "\",\"username\":\" " + userInf.getName() + "\",\"gender\": \"" + userInf.getGender() +
-                        "\",\"introduction\":\" " + userInf.getIntroduction() + "\"}}";
+                result = "{\"resultCode\":0,\"userInf\": { \"head\": \"" + userInf.getHead() +
+                        "\",\"username\":\"" + userInf.getName() + "\",\"gender\":\"" + userInf.getGender() +
+                        "\",\"introduction\":\"" + userInf.getIntroduction() + "\"}}";
             }
         }
         return result;
@@ -141,8 +141,8 @@ public class UserServiceImpl<result> implements UserService{
 
     @Override
     public String editUserInf(String head, String username, String gender, String introduction,User userInf) {
-        if (userDAO.hasUsername(username)){
-            return "{\"resultCode\":0}";
+        if (!username.equals(userInf.getName()) && userDAO.hasUsername(username)) {
+            return "{\"resultCode\":1}";
         }
         userInf.setHead(head);
         userInf.setGender(gender);
