@@ -91,7 +91,7 @@ body{
 }
 #logoIn{
     position: absolute;
-    left: 46%;
+    left: 44%;
     height:80px;
     width: 240px;
     background: aliceblue;
@@ -106,9 +106,19 @@ body{
     margin-top: 30px;
     margin-bottom: 50px;
 }
+#logon{
+    position: absolute;
+    left: 40%;
+    width: 430px;
+    height: 650px;
+    background-color: white;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
 #free{
     background-color: white;
     border-style: none;
+    color:black;
     font-size: 22px;
     font-weight: 100;
 }
@@ -116,6 +126,7 @@ body{
     background-color: white;
     border-style: none;
     font-size: 22px;
+    color:black;
     font-weight: 100;
 }
 #freeLogin{
@@ -133,17 +144,17 @@ body{
 }
 #loginUnderline{
     height: 3px;
-    width: 100px;
+    width: 95px;
     background-color: aqua;
-    margin-top: 5px;
+    margin-top: 3px;
     margin-left: 40px;
 }
 #loginUnderline1{
     height: 3px;
-    width: 100px;
+    width: 95px;
     background-color: aqua;
-    margin-top: 5px;
-    margin-left: 160px;
+    margin-top: 3px;
+    margin-left: 145px;
 }
 #email{
     border-style: none;
