@@ -121,25 +121,21 @@ public class UserServiceImpl<result> implements UserService{
 
     @Override
     public String getUserInf(User userInf) {
-        Integer resultCode;
         String result;
         if(userInf==null) {
-            resultCode=1;
+            return "{\"resultCode\":1}";
         }
         else {
-            resultCode=0;
+            if (userInf.getIntroduction() == null) {
+                result = "{\"resultCode\" :" + 0 + ", \"userInf\": { \"head\": \"" + userInf.getHead() +
+                        "\",\"username\":\" " + userInf.getName() + "\",\"gender\": \"" + userInf.getGender() +
+                        "\",\"introduction\":" + userInf.getIntroduction() + "}}";
+            } else {
+                result = "{\"resultCode\" :" + 0 + ", \"userInf\": { \"head\": \"" + userInf.getHead() +
+                        "\",\"username\":\" " + userInf.getName() + "\",\"gender\": \"" + userInf.getGender() +
+                        "\",\"introduction\":\" " + userInf.getIntroduction() + "\"}}";
+            }
         }
-        if(userInf.getIntroduction()==null){
-            result="{\"resultCode\" :"+resultCode+", \"userInf\": { \"head\": \""+userInf.getHead()+
-                    "\",\"username\":\" "+userInf.getName()+"\",\"gender\": \""+userInf.getGender()+
-                    "\",\"introduction\":"+userInf.getIntroduction()+"}}";
-        }
-        else{
-            result="{\"resultCode\" :"+resultCode+", \"userInf\": { \"head\": \""+userInf.getHead()+
-                    "\",\"username\":\" "+userInf.getName()+"\",\"gender\": \""+userInf.getGender()+
-                    "\",\"introduction\":\" "+userInf.getIntroduction()+"\"}}";
-        }
-
         return result;
     }
 }
