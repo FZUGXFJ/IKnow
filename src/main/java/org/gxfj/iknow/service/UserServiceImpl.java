@@ -129,9 +129,17 @@ public class UserServiceImpl<result> implements UserService{
         else {
             resultCode=0;
         }
-        result="{\"resultCode\" :\""+resultCode+"\", \"userInf\": { \"head\": \""+userInf.getHead()+
-                "\",\"username\":\" "+userInf.getName()+"\",\"gender\": \""+userInf.getGender()+
-                "\",\"introduction\":\" "+userInf.getIntroduction()+"\"},}";
+        if(userInf.getIntroduction()==null){
+            result="{\"resultCode\" :"+resultCode+", \"userInf\": { \"head\": \""+userInf.getHead()+
+                    "\",\"username\":\" "+userInf.getName()+"\",\"gender\": \""+userInf.getGender()+
+                    "\",\"introduction\":"+userInf.getIntroduction()+"}}";
+        }
+        else{
+            result="{\"resultCode\" :"+resultCode+", \"userInf\": { \"head\": \""+userInf.getHead()+
+                    "\",\"username\":\" "+userInf.getName()+"\",\"gender\": \""+userInf.getGender()+
+                    "\",\"introduction\":\" "+userInf.getIntroduction()+"\"}}";
+        }
+
         return result;
     }
 }
