@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../../css/global.css">
     <link rel="stylesheet" type="text/css" href="../../css/mobile/user/login.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
@@ -16,63 +17,72 @@
 <div id="login">
     <div id="title">
         <table>
-            <tr>
-                <td style="width: 33%"><i class="fas fa-angle-left fa-6x" style="margin-left: 10%"></i></td>
-                <td style="width: 34%"><h1 style="text-align: center;font-size: 3em;margin-top: 5%">用户登录</h1></td>
-                <td style="width: 33%;text-align:right;"><a class="nav-link" style="font-size: 3em;margin-top: 5%" href="logon.html">注册</a></td>
-            </tr>
+            <td style="width: 33%"><i class="fas fa-chevron-left"></i></td>
+            <td style="width: 34%;text-align: center">用户登录</td>
+            <td style="width: 33%;text-align: right"><a href="logon.html">注册</a></td>
         </table>
     </div>
     <img src="../../img/LOGO.png" class="figure-img img-fluid rounded" style="width: 100%" alt="logo">
+    <div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <br>
     <div id="choose">
-        <span v-bind:class="{selected:useEmail}" v-on:click="useEmail=!useEmail">免密码登录</span>
-        <span v-bind:class="{selected:!useEmail}" v-on:click="useEmail=!useEmail">密码登录</span>
+        <span v-bind:class="{selected:useEmail}" @click="useEmail=!useEmail">免密码登录</span>
+        <span v-bind:class="{selected:!useEmail}" @click="useEmail=!useEmail">密码登录</span>
     </div>
     <div id="inputArea">
         <div style="text-align: center" v-if="useEmail">
             <br>
-            <input type="email" placeholder="邮箱" class="form-control" size="28" aria-label="邮箱">
-            <br><br>
+            <div class="errorMessage" v-if="emailError">{{emailErrorMsg}}</div>
+            <input id="email" type="email" placeholder="邮箱" class="form-control" size="28" aria-label="邮箱">
+            <br>
+            <div class="errorMessage" v-if="verifyCodeError">{{verifyCodeErrorMsg}}</div>
             <table>
                 <tr>
                     <td style="width: 60%;text-align: left">
-                        <input type="number" class="form-control" size="12" aria-label="验证码" style="display: inline">
+                        <input type="number" id="verifyCode" class="form-control" aria-label="验证码" @keyup="validateVerify">
                     </td>
                     <td style="width: 40%">
-                        <button class="btn btn-link" style="font-size: 2em" v-on:click="timeOut()" v-if="!verify">获取验证码</button>
-                        <button class="btn btn-link" disabled="disabled" style="font-size: 2em;"  v-else>重新发送({{timeout}})</button>
+                        <button class="btn btn-link" @click="getVerifyCode()" v-if="!verify">获取验证码</button>
+                        <button class="btn btn-link" disabled="disabled" v-else>重新发送({{timeout}})</button>
                     </td>
                 </tr>
             </table>
             <br>
             <div style="text-align: left">
-                <i class="fas fa-circle fa-2x" v-on:click="isRmb=!isRmb" v-if="!isRmb"></i>
-                <i class="fas fa-check-circle fa-2x" v-on:click="isRmb=!isRmb" v-else></i>
-                <span style="font-size: 2em">记住我</span>
+                <i class="fas fa-circle" @click="isRmb=!isRmb" v-if="!isRmb"></i>
+                <i class="fas fa-check-circle" @click="isRmb=!isRmb" v-else></i>
+                <span style="font-size: 1em">记住我</span>
             </div>
             <br>
-            <button class="btn btn-info" style="font-size: 3em;width: 80%">登录</button>
+            <button class="btn btn-info" style="font-size: 1em;width: 80%" @click="validator()">登录</button>
         </div>
         <div style="text-align: center" v-else>
             <br>
-                <input type="text" placeholder="用户名" class="form-control" size="28" aria-label="用户名">
-            <br><br>
-                <input type="password" placeholder="密码" class="form-control" size="28" aria-label="密码">
-            <br><br>
+            <div class="errorMessage" v-if="emailError1">{{emailErrorMsg1}}</div>
+            <input id="email1" type="email" placeholder="邮箱" class="form-control" aria-label="邮箱">
+            <br>
+            <div class="errorMessage" v-if="passwordError">{{passwordErrorMsg}}</div>
+            <input id="password" type="password" placeholder="密码" class="form-control" size="20" maxlength="20" aria-label="密码">
+            <br>
             <table>
                 <tr>
                     <td style="width: 50%;text-align: left">
-                        <i class="fas fa-circle fa-2x" v-on:click="isRmb=!isRmb" v-if="!isRmb"></i>
-                        <i class="fas fa-check-circle fa-2x" v-on:click="isRmb=!isRmb" v-else></i>
-                        <span style="font-size: 2em">记住我</span>
+                        <i class="fas fa-circle" v-on:click="isRmb=!isRmb" v-if="!isRmb"></i>
+                        <i class="fas fa-check-circle" v-on:click="isRmb=!isRmb" v-else></i>
+                        <span>记住我</span>
                     </td>
                     <td style="width: 50%;text-align: right">
-                        <span style="font-size: 2em;margin-right: 5%"><a href="">忘记密码？</a></span>
+                        <span style="font-size: 1em;margin-right: 5%"><a href="">忘记密码？</a></span>
                     </td>
                 </tr>
             </table>
             <br>
-            <button class="btn btn-info" style="font-size: 3em;width: 80%">登录</button>
+            <button class="btn btn-info" style="font-size: 1em;width: 80%" @click="validator()">登录</button>
         </div>
     </div>
 </div>
@@ -83,10 +93,92 @@
             useEmail:true,
             isRmb:false,
             timeout:60,
-            verify:false
+            verify:false,
+            emailError:false,
+            emailErrorMsg:"",
+            emailError1:false,
+            emailErrorMsg1:"",
+            passwordError:false,
+            passwordErrorMsg:"",
+            verifyCodeError:false,
+            verifyCodeErrorMsg:"",
+            alertMsg:{head:"",body:""},
         },
         methods:{
-            timeOut:function () {
+            validateVerify:function () {
+                let verifyCode = $("#verifyCode");
+                let val = verifyCode.val();
+                val.length > 6 ? verifyCode.val(val.slice(0,6)) : "";
+            },
+            loginByEmail:function (email,verifyCode) {
+                $.ajax({
+                    url:"../../user/emailLogin.action",
+                    type:"POST",
+                    data:{
+                        email:email,
+                        verifyCode:verifyCode
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            login.alertMsg.head = "登录成功";
+                            login.alertMsg.body = "登录成功";
+                            $("#alert").slideDown();
+                        } else if (result.response === 1) {
+                            login.alertMsg.head = "登录失败";
+                            login.alertMsg.body = "邮箱已修改，请重新发送验证码";
+                            $("#alert").slideDown();
+                        } else if (result.response === 2) {
+                            login.alertMsg.head = "登录失败";
+                            login.alertMsg.body = "验证码错误";
+                            $("#alert").slideDown();
+                        } else if (result.response === 3) {
+                            login.alertMsg.head = "登录失败";
+                            login.alertMsg.body = "该邮箱未注册";
+                            $("#alert").slideDown();
+                        }
+                    },
+                    error:function (e) {
+                        alert("服务器异常");
+                    }
+                });
+            },
+            loginByPassword:function (email,password) {
+                $.ajax({
+                    url:"../../user/passwordLogin.action",
+                    type:"POST",
+                    data:{
+                        email:email,
+                        password:password
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            login.alertMsg.head = "登录成功";
+                            login.alertMsg.body = "登录成功";
+                            $("#alert").slideDown();
+                        } else if (result.response === 1) {
+                            login.alertMsg.head = "登录失败";
+                            login.alertMsg.body = "邮箱或密码错误";
+                            $("#alert").slideDown();
+                        }
+                    },
+                    error:function (e) {
+                        alert("服务器异常");
+                    }
+                });
+            },
+            getVerifyCode:function () {
+                let email = $("#email");
+                let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if (!emailRegex.test(email.val())) {
+                    this.emailError = true;
+                    this.emailErrorMsg = "邮箱格式错误，请重新输入";
+                    return;
+                } else {
+                    this.emailError = false;
+                }
+                email.attr("disabled",true);
                 this.verify = true;
                 let timer = setInterval(function () {
                     login.timeout--;
@@ -94,9 +186,68 @@
                         clearInterval(timer);
                         login.verify = false;
                         login.timeout = 60;
+                        email.attr("disabled",false);
                     }
                 }, 1000);
-            }
+                $.ajax({
+                    url:"../../user/sendEmail.action",
+                    type:"POST",
+                    data:{
+                        email:email.val(),
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        login.alertMsg = result;
+                        $("#alert").slideDown();
+                    },
+                    error:function (e) {
+                        alert("邮件发送失败");
+                    }
+                });
+            },
+            closeAlert:function () {
+                $("#alert").slideUp();
+            },
+            validator:function () {
+                let email = $("#email").val();
+                let email1 = $("#email1").val();
+                let password = $("#password").val();
+                let verifyCode = $("#verifyCode").val();
+                let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if (this.useEmail) {
+                    if (!emailRegex.test(email)) {
+                        this.emailError = true;
+                        this.emailErrorMsg = "邮箱格式错误，请重新输入";
+                    } else {
+                        this.emailError = false;
+                    }
+                    if (verifyCode.length === 0) {
+                        this.verifyCodeError = true;
+                        this.verifyCodeErrorMsg = "验证码为空";
+                    } else {
+                        this.verifyCodeError = false;
+                    }
+                    if (!this.emailError && !this.verifyCodeError) {
+                        this.loginByEmail(email,verifyCode);
+                    }
+                } else {
+                    if (!emailRegex.test(email1) && !this.useEmail) {
+                        this.emailError1 = true;
+                        this.emailErrorMsg1 = "邮箱格式错误，请重新输入";
+                    }else {
+                        this.emailError1 = false;
+                    }
+                    if (password.length === 0) {
+                        this.passwordError = true;
+                        this.passwordErrorMsg = "密码为空"
+                    } else {
+                        this.passwordError = false;
+                    }
+                    if (!this.emailError && !this.passwordError) {
+                        this.loginByPassword(email1,password);
+                    }
+                }
+            },
         }
     });
 </script>

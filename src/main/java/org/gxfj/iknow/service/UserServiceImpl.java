@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.alibaba.fastjson.JSONObject;
 import org.gxfj.iknow.dao.UserDAO;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.pojo.Userstate;
@@ -19,7 +20,7 @@ import java.util.Map;
  */
 @Service("userService")
 @Transactional(readOnly = false)
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl<result> implements UserService{
 
     @Autowired
     private UserDAO userDAO;
@@ -81,10 +82,73 @@ public class UserServiceImpl implements UserService{
         } catch (Exception e) {
             result = "{\"head\":\"发送失败\",\"body\":\"服务器异常\"}";
             map.put("result",result);
+            e.printStackTrace();
             return map;
         }
         result = "{\"head\":\"发送成功\",\"body\":\"请进入邮箱查看验证码\"}";
         map.put("result",result);
         return map;
+    }
+
+    @Override
+    public User loginByPassword(User loginInf) {
+        User user = userDAO.getUserByEmail(loginInf.getEmail());
+        if (SecurityUtil.md5Compare(loginInf.getPasswd(),user.getPasswd())) {
+            return user;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Map<String,Object> loginByNoPassword(String email, String sessionEmail, String verifyCode, String sessionVerifyCode) {
+        Map<String,Object> result = new HashMap<>(16);
+        if (!email.equals(sessionEmail)) {
+            result.put("value",1);
+        } else if (!verifyCode.equals(sessionVerifyCode)) {
+            result.put("value",2);
+        } else {
+            User user = userDAO.getUserByEmail(email);
+            if (user == null) {
+                result.put("value",3);
+            } else {
+                result.put("value",0);
+                result.put("user",user);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String getUserInf(User userInf) {
+        String result;
+        if(userInf==null) {
+            return "{\"resultCode\":1}";
+        }
+        else {
+            if (userInf.getIntroduction() == null) {
+                result = "{\"resultCode\" :" + 0 + ", \"userInf\": { \"head\": \"" + userInf.getHead() +
+                        "\",\"username\":\" " + userInf.getName() + "\",\"gender\": \"" + userInf.getGender() +
+                        "\",\"introduction\":" + userInf.getIntroduction() + "}}";
+            } else {
+                result = "{\"resultCode\" :" + 0 + ", \"userInf\": { \"head\": \"" + userInf.getHead() +
+                        "\",\"username\":\" " + userInf.getName() + "\",\"gender\": \"" + userInf.getGender() +
+                        "\",\"introduction\":\" " + userInf.getIntroduction() + "\"}}";
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String editUserInf(String head, String username, String gender, String introduction,User userInf) {
+        if (userDAO.hasUsername(username)){
+            return "{\"resultCode\":0}";
+        }
+        userInf.setHead(head);
+        userInf.setGender(gender);
+        userInf.setName(username);
+        userInf.setIntroduction(introduction);
+        userDAO.update(userInf);
+        return "{\"resultCode\":0}";
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("userDAO")
 public class UserDAOImpl implements UserDAO {
 
@@ -44,12 +46,26 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByUsername(String username) {
-        return null;
+        User example = new User();
+        example.setName(username);
+        List<User> list = getHibernateTemplate().findByExample(example);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return null;
+        User example = new User();
+        example.setEmail(email);
+        List<User> list = getHibernateTemplate().findByExample(example);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
     }
 
     @Override

@@ -1,0 +1,49 @@
+div{
+    width: 100%;
+}
+table{
+    width: 100%;
+}
+#header{
+    padding: 0.5em 0;
+    box-shadow: 0 0.3em 0.2em #d6d6d6;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+    background-color: white;
+}
+#questionInf{
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 2em;
+    padding-bottom: 0.5em;
+}
+.separator{
+    height: 0.5em;
+    background-color: #acacac;
+    opacity: 0.1;
+    margin-bottom: 0.5em;
+}
+#answerList{
+    width: 90%;
+    margin: 0 auto;
+}
+.noBorder{
+    background-color: white;
+    border: 0;
+}
+#line{
+    height: 0.1em;
+    background-color: black;
+    opacity: 0.1;
+    margin: 1em auto;
+}
+.headPortrait{
+    border-radius: 100%;
+    overflow: hidden;
+    color: #12eee7;
+}
+.lb{
+    color: #12eee7;
+    padding-left: 2%;
+}

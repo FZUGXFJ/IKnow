@@ -1,5 +1,6 @@
 #title{
     width: 100%;
+    padding: 0.5em 1em;
 }
 label{
     font-size: 3em;
@@ -8,15 +9,15 @@ div{
     width: 100%;
 }
 #choose{
-    padding: 0 5%;
+    padding: 0 1em;
 }
 #choose span{
-    font-size: 3em;
+    font-size: 1em;
     margin-left: 2%;
     padding: 2%;
 }
 .selected{
-    border-bottom: #6affe1 solid 10px;
+    border-bottom: #6affe1 solid 0.1em;
 }
 #inputArea{
     width: 80%;
@@ -26,9 +27,20 @@ table{
     width: 100%;
 }
 #inputArea input{
-    font-size: 3em;
+    font-size: 1em;
     padding: 0 5%;
 }
 #inputArea i{
     color: #acacac;
+}
+#alert{
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+    display: none;
+}
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
 }

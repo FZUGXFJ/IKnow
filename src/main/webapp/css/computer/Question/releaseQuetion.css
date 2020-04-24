@@ -1,0 +1,30 @@
+#contain{
+    width: 75%;
+    height: 50%;
+    margin-left: 13%;
+    margin-top: 3%;
+}
+.con1{
+    width: 74%;
+    height: 100%;
+    float: left;
+    background-color: white;
+}
+.con2{
+    width: 25%;
+    height: 78%;
+    float: left;
+    background-color: white;
+    margin-left: 1%;
+}
+.con3{
+    width: 25%;
+    height: 20%;
+    float: left;
+    background-color: white;
+    margin-left: 1%;
+    margin-top: 1%;
+}
+.form-control{
+    resize: none;
+}
