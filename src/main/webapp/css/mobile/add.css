@@ -6,18 +6,17 @@ table{
 }
 #header{
     background-color: white;
-    padding: 1em 3em;
-    box-shadow: 0 10px 10px #d6d6d6;
+    padding: 1em 1em;
+    box-shadow: 0 0.2em 0.2em #d6d6d6;
 }
 #middle{
     width: 80%;
     margin: 0 auto;
 }
 #addQuestion{
-    height: 8em;
-    box-shadow: 0 0 10px #d6d6d6;
-    padding-top: 2.5em;
-    padding-left: 3em;
+    height: 3em;
+    box-shadow: 0 0 0.5em #d6d6d6;
+    padding: 1em 1em;
     border-radius: 0.5em;
 }
 #separator{
@@ -30,8 +29,7 @@ table{
     margin: 0 auto;
 }
 .item{
-    margin-top: 3em;
     box-shadow: 0 0 10px #d6d6d6;
-    padding: 2em 3em;
-    border-radius: 1em;
+    padding: 1em 1em;
+    border-radius: 0.5em;
 }

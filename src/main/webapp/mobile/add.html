@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>添加</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/mobile/add.css">
@@ -15,36 +16,36 @@
 <body>
 <div id="container">
     <div id="header">
-        <i class="fas fa-times fa-4x"></i>
+        <i class="fas fa-times" style="color: #acacac;font-size: 1.3em"></i>
     </div>
-    <br><br>
+    <br>
     <div id="middle">
-        <h1>HI~</h1><br>
+        <h3>HI~</h3>
         <span v-html="headPortrait"></span>
-        <span style="font-size: 2.5em;padding-left: 1em;opacity: 0.5">{{message}}</span>
-        <br><br><br>
+        <span style="opacity: 0.5">{{message}}</span>
+        <br><br>
         <div id="addQuestion">
-            <div style="font-size: 2.5em">
+            <div>
                 <i class="fas fa-question-circle" style="color: #12eee7"></i>
-                <span style="padding-left: 1em">提个问题吧</span>
+                <span>提个问题吧</span>
             </div>
         </div>
     </div>
-    <br><br><br>
+    <br>
     <div id="separator"></div>
+    <br>
     <div id="recQuestions">
-        <div class="item" v-for="recQuestion in recQuestions">
-            <span v-html="recQuestion.headPortrait"></span>
-            <span style="font-size: 2em;padding-left: 1em;opacity: 0.5">试试帮他解答</span>
-            <br><br>
-            <h1 style="font-size: 3em"><b>{{recQuestion.title}}</b></h1>
+        <div v-for="recQuestion in recQuestions">
+            <div class="item">
+                <span style="opacity: 0.5"><span v-html="recQuestion.headPortrait"></span>&nbsp;试试帮他解答</span>
+                <br>
+                <span><b>{{recQuestion.title}}</b></span>
+                <table>
+                    <td style="width: 50%;opacity: 0.5;font-size: 0.8em">{{recQuestion.collectCount}}人收藏</td>
+                    <td style="width: 50%;color: #12eee7;text-align: right;font-size: 0.8em"><i class="fas fa-edit"></i>&nbsp;写回答</td>
+                </table>
+            </div>
             <br>
-            <table>
-                <tr>
-                    <td style="width: 50%;font-size: 2em;opacity: 0.5">{{recQuestion.collectCount}}人收藏</td>
-                    <td style="width: 50%;color: #12eee7;font-size: 2em;text-align: right"><i class="fas fa-edit"></i>&nbsp;写回答</td>
-                </tr>
-            </table>
         </div>
     </div>
 </div>
@@ -52,14 +53,27 @@
     let add = new Vue({
         el:"#container",
         data:{
-            headPortrait:"<i class='fas fa-user-circle fa-3x' style='color: #12eee7'></i>",
+            questions:[
+                {
+
+                }
+            ],
+            headPortrait:"<i class='fas fa-user-circle' style='color: #12eee7'></i>",
             message:"今天也要继续开心呀",
             recQuestions:[
                 {
-                    headPortrait:"<i class='fas fa-user-circle fa-3x' style='color: #12eee7'></i>",
+                    headPortrait:"<i class='fas fa-user-circle' style='color: #12eee7'></i>",
+                    title:"Spring的依赖注入是什么原理呢？",
+                    collectCount:777,
+                },{
+                    headPortrait:"<i class='fas fa-user-circle' style='color: #12eee7'></i>",
                     title:"怎么用爬虫爬取数据呢？",
                     collectCount:534,
-                }
+                },{
+                    headPortrait:"<i class='fas fa-user-circle' style='color: #12eee7'></i>",
+                    title:"如何统一四大基本作用力？",
+                    collectCount:8343,
+                },
             ]
         },
         methods:{
