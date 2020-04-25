@@ -65,7 +65,7 @@
         </package>
 
     <package name="question" namespace="/question" extends="default">
-        <action name="addQuestion" class="org.gxfj.iknow.action.QuestionAction" method="addQuestion">
+        <action name="postQuestion" class="org.gxfj.iknow.action.QuestionAction" method="postQuestion">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>

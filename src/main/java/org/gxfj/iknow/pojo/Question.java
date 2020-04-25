@@ -3,13 +3,14 @@ package org.gxfj.iknow.pojo;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 public class Question {
     private Integer id;
     private String title;
     private String content;
-    private Timestamp date;
+    private Date date;
     private Byte isDelete;
     private Collection<Answer> answersById;
     private Collection<Browsinghistory> browsinghistoriesById;
@@ -53,11 +54,11 @@ public class Question {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
