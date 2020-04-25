@@ -23,12 +23,12 @@ import java.util.Map;
 @Controller
 @Scope("prototype")
 public class QuestionAction {
-    private String title;
-    private String context;
-    private String categoryType;
-    private String subjectType;
-    private String majorType;
-    private String isAnonymous;
+    private String questionTitle;
+    private String questionContent;
+    private Integer categoriesType;
+    private Integer subjectType;
+    private Integer majorType;
+    private Byte isAnonymous;
     private InputStream inputStream;
     @Autowired
     QuestionService questionService;
@@ -43,27 +43,22 @@ public class QuestionAction {
     }
 
 
-    final static private int responseNum = 12;
-    public String addQuestion() {
+    final static private int RESPONSE_NUM = 20;
+    public String postQuestion() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(responseNum);
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get("user");
 
         if (user == null) {
             response.put("resultCode",ResultEnum.UN_LOGIN);
         }
-        else if (title == null || context == null || categoryType == null || subjectType == null
+        else if (questionTitle == null || questionContent == null || categoriesType == null || subjectType == null
             || majorType == null || isAnonymous == null) {
             response.put("resultCode",ResultEnum.MISS_QUESTION_INF);
         }
         else {
-
-            Question question = new Question();
-            question.setUserByUserId(user);
-            question.setTitle(title);
-            question.setContent(context);
-            //TODO 解决Question的构建
-            question.setQuestiontypeByTypeId();
+            questionService.postQuestion(user, questionTitle, questionContent, categoriesType, subjectType, majorType
+                    , isAnonymous);
             response.put("resultCode",ResultEnum.SUCCESS);
         }
 
@@ -71,5 +66,13 @@ public class QuestionAction {
         return "SUCCESS";
     }
 
+    public String questionType() {
+        Map<String, Object> response = questionService.getQuestionType();
+
+        response.put("resultCode",ResultEnum.SUCCESS);
+        System.out.println(JSON.toJSONString(response));
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "SUCCESS";
+    }
 
 }

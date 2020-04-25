@@ -1,12 +1,12 @@
 package org.gxfj.iknow.service;
 
-import org.gxfj.iknow.dao.QuestionDAO;
-import org.gxfj.iknow.dao.QuestionTypeDAO;
+import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.security.auth.Subject;
+import java.util.*;
 
 
 /**
@@ -18,9 +18,15 @@ public class QuestionServiceImpl implements QuestionService{
     QuestionDAO questionDAO;
     @Autowired
     QuestionTypeDAO questionTypeDAO;
+    @Autowired
+    CategoriesTypeDAO categoriesTypeDAO;
+    @Autowired
+    SubjectTypeDAO subjectTypeDAO;
+    @Autowired
+    MajorTypeDAO majorTypeDAO;
 
     @Override
-    public Question postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
+    public void postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
             , Integer majorType, Byte isAnonymous) {
         Question question = new Question();
         Questiontype questiontype = questionTypeDAO.get(categoryType,subjectType,majorType);
@@ -46,6 +52,53 @@ public class QuestionServiceImpl implements QuestionService{
 
         questionDAO.add(question);
 
-        return null;
+    }
+
+    final static private int MAP_NUM = 20;
+
+    @Override
+    public Map<String, Object> getQuestionType() {
+        Map<String, Object> questionType= new HashMap<>(MAP_NUM);
+
+        //查询到的所有门类
+        List<Categoriestype> categoriestypeList = categoriesTypeDAO.list();
+        //JSON中数组
+        List<Map<String, Object>> categoriesTypeList = new ArrayList<>();
+        List<Map<String, Object>> subjectTypeList;
+        List<Map<String, Object>> majorTypeList;
+        //JSON中数组的成员
+        Map<String, Object> categoriesTypeMap;
+        Map<String, Object> subjectTypeMap;
+        Map<String, Object> majorTypeMap;
+
+        for (Categoriestype categoriestype: categoriestypeList) {
+            categoriesTypeMap = new HashMap<>(MAP_NUM);
+            categoriesTypeMap.put("id", categoriestype.getId());
+            categoriesTypeMap.put("name", categoriestype.getName());
+
+            subjectTypeList = new ArrayList<>();
+            for (Subjecttype subjecttype : subjectTypeDAO.list(categoriestype.getId())) {
+                subjectTypeMap = new HashMap<>(MAP_NUM);
+                subjectTypeMap.put("id", subjecttype.getId());
+                subjectTypeMap.put("name", subjecttype.getName());
+
+                majorTypeList = new ArrayList<>();
+                for (Majortype majortype : majorTypeDAO.list(subjecttype.getId())) {
+                    majorTypeMap = new HashMap<>(MAP_NUM);
+                    majorTypeMap.put("id", majortype.getId());
+                    majorTypeMap.put("name", majortype.getName());
+
+                    majorTypeList.add(majorTypeMap);
+                }
+
+                subjectTypeMap.put("majorTypes", majorTypeList);
+                subjectTypeList.add(subjectTypeMap);
+            }
+            categoriesTypeMap.put("subjectTypes", subjectTypeList);
+            categoriesTypeList.add(categoriesTypeMap);
+        }
+
+        questionType.put("categoriesTypes", categoriesTypeList);
+        return questionType;
     }
 }
