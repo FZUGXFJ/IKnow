@@ -2,13 +2,14 @@ package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 public class Report {
     private Integer id;
     private Integer type;
     private String description;
-    private Timestamp date;
+    private Date date;
     private User userByUserId;
     private Reporttype reporttypeByTypeId;
     private Reportreason reportreasonByReasonId;
@@ -45,11 +46,11 @@ public class Report {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

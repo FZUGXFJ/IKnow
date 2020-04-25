@@ -2,11 +2,12 @@ package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 public class Browsinghistory {
     private Integer id;
-    private Timestamp date;
+    private Date date;
     private User userByUserId;
     private Question questionByQuestionId;
 
@@ -22,11 +23,11 @@ public class Browsinghistory {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
