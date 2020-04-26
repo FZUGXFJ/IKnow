@@ -2,11 +2,14 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Major;
 import org.gxfj.iknow.pojo.Majortype;
+import org.gxfj.iknow.pojo.Subjecttype;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author qmbx
@@ -43,4 +46,11 @@ public class MajorTypeDAOImpl implements MajorTypeDAO {
     public void update(Majortype bean) {
         getHibernateTemplate().update(bean);
     }
+
+    @Override
+    public List<Majortype> list(Integer subjectTypeID) {
+        String hql = "FROM Majortype AS m WHERE m.subjecttypeBySubjectId.id = ?";
+        return (List<Majortype>) getHibernateTemplate().find(hql, subjectTypeID);
+    }
+
 }

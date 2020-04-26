@@ -71,5 +71,11 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="questionType" class="org.gxfj.iknow.action.QuestionAction" method="questionType">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
 </struts>

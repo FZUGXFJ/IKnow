@@ -1,167 +1,272 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="zh" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>发表问题</title>
     <link rel="stylesheet" type="text/css" href="../../css/global.css">
     <link rel="stylesheet" href="../../css/mobile/question/postQuestion.css">
+    <link rel="stylesheet" href="https://lib.baomitu.com/quill/1.3.7/quill.bubble.css">
+    <link rel="stylesheet" href="https://lib.baomitu.com/quill/1.3.7/quill.snow.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/quill/1.3.7/quill.min.js"></script>
 </head>
 <body>
 <div id="postQuestion">
     <div id="header">
         <table>
-            <tr>
-                <td style="width: 50%;">
-                    <i class="fas fa-times fa-4x"></i>
-                </td>
-                <td style="width: 50%;text-align: right;"><button class="btn btn-link" style="font-size: 2em">发表问题</button></td>
-            </tr>
+            <td style="width: 50%;"><i class="fas fa-times"></i></td>
+            <td style="width: 50%;text-align: right;"><button class="btn btn-link" @click="validator">发表问题</button></td>
         </table>
     </div>
-    <br><br>
+    <br><br><br>
+    <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <div id="container">
-        <div  id="questionTitle" contenteditable="true" v-on:click="startInputTitle">请输入问题概述并以问号结尾</div>
+        <input type="text" id="questionTitle" class="form-control" aria-label="标题" v-model="questionTitle" placeholder="请输入问题概述并以问号结尾">
         <div class="separator"></div>
         <br>
-        <div id="alert">
+        <div id="tips">
             <table>
-                <tr>
-                    <td style="width: 80%;font-size: 2em">
-                        <i class="fas fa-question-circle" style="color: #12eee7"></i>
-                        &nbsp;让你的提问获得更快的解答</td>
-                    <td style="width: 20%;text-align: right"><i class="fas fa-times fa-2x" v-on:click="closeAlert"></i></td>
-                </tr>
+                <td style="width: 80%;font-size: 1em">
+                    <i class="fas fa-question-circle" style="color: #12eee7"></i>
+                    &nbsp;让你的提问获得更快的解答</td>
+                <td style="width: 20%;text-align: right"><i class="fas fa-times" v-on:click="closeTips"></i></td>
             </table>
-            <h3>-&nbsp;保持文字简洁，表述清晰问题的关键点</h3>
-            <h3>-&nbsp;选择合适的分类，保证问题被找到</h3>
-            <h3>-&nbsp;确保问题没有被提问过</h3>
+            <h6>-&nbsp;保持文字简洁，表述清晰问题的关键点</h6>
+            <h6>-&nbsp;选择合适的分类，保证问题被找到</h6>
+            <h6>-&nbsp;确保问题没有被提问过</h6>
         </div>
         <br>
-        <div id="toolbar">
-            <table>
-                <td style="width: 60%">
-                    <i id="boldIcon" class="fas fa-bold fa-3x item" v-on:click="turnBold"></i>
-                    <i id="italicIcon" class="fas fa-italic fa-3x item" v-on:click="turnItalic"></i>
-                    <i id="pictureIcon" class="fas fa-image fa-3x item"></i>
-                </td>
-                <td style="width: 20%;text-align: right">
-                    <span style="font-size: 3em;color: #12eee7">匿名
-                        <i class="fas fa-toggle-on" v-if="anonymous" v-on:click="anonymous=!anonymous"></i>
-                        <i class="fas fa-toggle-off" v-else v-on:click="anonymous=!anonymous"></i>
-                    </span>
-                </td>
-            </table>
-        </div>
-        <div id="editor" contenteditable="true" @keyup="newInput" v-html="questionDescHtml" v-on:click="startInputDesc">
-
-        </div>
-        <br><br>
-        <div id="choseClassification">
-            <table>
-                <td class="classificationName"><label for="categoriesType"></label>门类类别</td>
-                <td class="classificationSelect">
-                    <select class="form-control" id="categoriesType" style="font-size: 2em" v-model="categoriesType">
-                        <option v-for="i in categoriesTypes">{{i}}</option>
-                    </select>
-                </td>
-            </table>
-            <br><br>
-            <table>
-                <td class="classificationName"><label for="subjectType">学科类别</label></td>
-                <td class="classificationSelect">
-                    <select class="form-control" id="subjectType" style="font-size: 2em" v-model="subjectType">
-                        <option v-for="i in subjectTypes">{{i}}</option>
-                    </select>
-                </td>
-            </table>
-            <br><br>
-            <table>
-                <td class="classificationName"><label for="majorType">专业类别</label></td>
-                <td class="classificationSelect">
-                    <select class="form-control" id="majorType" style="font-size: 2em" v-model="subjectType">
-                        <option v-for="i in subjectTypes">{{i}}</option>
-                    </select>
-                </td>
-            </table>
-        </div>
     </div>
 </div>
+<div id="contentArea">
+    <div id="toolbar">
+        <table>
+            <td style="width: 60%">
+                <button class="ql-bold">Bold</button>
+                <button class="ql-italic">Italic</button>
+                <button class="ql-underline">Underline</button>
+                <button class="ql-image"></button>
+            </td>
+            <td id="choseAnon" style="width: 20%;text-align: right">
+                    <span style="color: #444444">
+                        <i class="fas fa-toggle-on" v-if="isAnonymous" v-on:click="turnAnonymous"></i>
+                        <i class="fas fa-toggle-off" v-else v-on:click="turnAnonymous"></i>
+                        匿名
+                    </span>
+            </td>
+        </table>
+    </div>
+    <div id="editor">
+        <p></p>
+    </div>
+</div>
+<br>
+<div id="choseClassification">
+    <table>
+        <td class="classificationName"><label for="categoriesType"></label>门类类别</td>
+        <td class="classificationSelect">
+            <select class="form-control" id="categoriesType" v-model="selectedCatId" @change="categoriesTypeChange">
+                <option disabled value="0" selected>请选择门类类别</option>
+                <option v-for="obj in categoriesTypes" v-bind:value="obj.id">{{obj.name}}</option>
+            </select>
+        </td>
+    </table>
+    <br>
+    <table>
+        <td class="classificationName"><label for="subjectType">学科类别</label></td>
+        <td class="classificationSelect">
+            <select class="form-control" id="subjectType" v-model="selectedSubId" @change="subjectTypeChange">
+                <option disabled value="0" selected>请选择学科类别</option>
+                <option v-for="obj in subjectTypes" v-bind:value="obj.id">{{obj.name}}</option>
+            </select>
+        </td>
+    </table>
+    <br>
+    <table>
+        <td class="classificationName"><label for="majorType">专业类别</label></td>
+        <td class="classificationSelect">
+            <select class="form-control" id="majorType" v-model="selectedMajId">
+                <option disabled value="0" selected>请选择专业类别</option>
+                <option v-for="obj in majorTypes" v-bind:value="obj.id">{{obj.name}}</option>
+            </select>
+        </td>
+    </table>
+</div>
 <script type="text/javascript">
+    let editor = new Quill('#editor', {
+        modules: {
+            toolbar: '#toolbar'
+        },
+        theme: 'snow',
+        placeholder:"此处输入问题详情"
+    });
     let postQuestion = new Vue({
         el:"#postQuestion",
         data:{
-            inputTitle:false,
-            inputDesc:false,
-            anonymous:false,
-            questionDescHtml:"在这里输入问题描述",
-            questionDescText:"",
-            bold:false,
-            italic:false,
-            categoriesType:"",
-            categoriesTypes:[],
-            subjectTypes:[],
-            subjectType:"",
-            subjectTypes:[],
-            majorType:""
+            questionTitle:"",
+            alertMsg:{head:"",body:""}
         },
         methods:{
+            closeTips:function () {
+                $("#tips").slideUp();
+            },
+            post:function (questionTitle,questionContent,isAnonymous,categoriesType,subjectType,majorType) {
+                $.ajax({
+                    url:"../../question/postQuestion.action",
+                    type:"POST",
+                    data:{
+                        questionTitle,
+                        questionContent,
+                        isAnonymous,
+                        categoriesType,
+                        subjectType,
+                        majorType
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            alert("发布成功（这里会跳转到问题页面）")
+                        }
+                    },
+                    error:function (e) {
+                        alert("系统异常，请稍后重试");
+                    }
+                });
+            },
+            validator:function () {
+                let questionTitle = postQuestion.questionTitle.trim();
+                let questionContent = editor.container.firstChild.innerHTML;
+                let isAnonymous = choseAnon.isAnonymous ? 1 : 0;
+                let categoriesType = choseClassification.selectedCatId;
+                let subjectType = choseClassification.selectedSubId;
+                let majorType = choseClassification.selectedMajId;
+                if (questionTitle.length <= 0) {
+                    postQuestion.alertMsg.head = "问题标题不能为空";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (!questionTitle.endsWith("?") && !questionTitle.endsWith("？")) {
+                    postQuestion.alertMsg.head = "问题必须以问号结尾";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                }else if (questionTitle.length >50) {
+                    postQuestion.alertMsg.head = "问题标题不能多于50字";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (questionContent.length > 15000) {
+                    postQuestion.alertMsg.head = "问题内容不能多于15000字";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (categoriesType === "") {
+                    postQuestion.alertMsg.head = "门类分类不能为空";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (subjectType === "") {
+                    postQuestion.alertMsg.head = "科目分类不能为空";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (majorType === "") {
+                    postQuestion.alertMsg.head = "专业分类不能为空";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else {
+                    postQuestion.post(questionTitle,questionContent,isAnonymous,categoriesType,subjectType,majorType);
+                }
+            },
             closeAlert:function () {
                 $("#alert").slideUp();
-            },
-            startInputTitle:function () {
-                if(!this.inputTitle) {
-                    let questionTitle = $("#questionTitle");
-                    questionTitle.text(" ");
-                    questionTitle.css({"opacity":"1","font-weight":"bold"});
-                    this.inputTitle = true;
+            }
+        },
+    });
+    let choseAnon = new Vue({
+        el:"#choseAnon",
+        data:{
+            isAnonymous:false
+        },
+        methods:{
+            turnAnonymous : function () {
+                this.isAnonymous = !this.isAnonymous && confirm("确定要匿名吗？");
+            }
+        }
+    });
+    let choseClassification = new Vue({
+        el:"#choseClassification",
+        data:{
+            categoriesTypes:[{
+                    id:1,
+                    name:"哲学",
+                    subjectTypes:[{
+                            id:1,
+                            name:"哲学类",
+                            majorTypes:[{
+                                    id:1,
+                                    name:"哲学"
+                                },{
+                                    id:2,
+                                    name:"逻辑学"
+                                }
+                            ],
+                        }
+                    ],
+                }
+            ],
+            subjectTypes:[],
+            majorTypes:[],
+            selectedCatId:"",
+            selectedSubId:"",
+            selectedMajId:"",
+        },
+        methods:{
+            categoriesTypeChange:function () {
+                for (let i = 0;i< this.categoriesTypes.length;i++) {
+                    if (this.categoriesTypes[i].id === this.selectedCatId) {
+                        this.subjectTypes = this.categoriesTypes[i].subjectTypes;
+                    }
                 }
             },
-            startInputDesc:function () {
-                if(!this.inputDesc) {
-                    let questionDesc = $("#editor");
-                    this.questionDescHtml = " ";
-                    questionDesc.css("opacity","1");
-                    this.inputDesc = true;
-                }
-            },
-            newInput:function () {
-                let editor = $("#editor");
-
-            },
-            turnBold:function () {
-                let editor = $("#editor");
-                if(!this.bold) {
-                    this.questionDescHtml = editor.html();
-                    this.questionDescHtml += "<b>&nbsp;";
-                    this.bold = true;
-                    $("#boldIcon").css("color","#acacac");
-                } else {
-                    this.questionDescHtml = editor.html();
-                    this.questionDescHtml += "</b>&nbsp;";
-                    this.bold = false;
-                    $("#boldIcon").css("color","#12eee7");
-                }
-            },
-            turnItalic:function () {
-                let editor = $("#editor");
-                if(!this.italic) {
-                    this.questionDescHtml = editor.html();
-                    this.questionDescHtml += "<i>&nbsp;";
-                    this.italic = true;
-                    $("#italicIcon").css("color","#acacac");
-                } else {
-                    this.questionDescHtml = editor.html();
-                    this.questionDescHtml += "</i>&nbsp;";
-                    this.italic = false;
-                    $("#italicIcon").css("color","#12eee7");
+            subjectTypeChange:function () {
+                for (let i = 0;i< this.subjectTypes.length;i++) {
+                    if (this.subjectTypes[i].id === this.selectedSubId) {
+                        this.majorTypes = this.subjectTypes[i].majorTypes;
+                    }
                 }
             }
+        },
+        created:function () {
+            $.ajax({
+                url:"../../question/questionType.action",
+                type:"POST",
+                data:{
+
+                },
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        choseClassification.categoriesTypes = result.categoriesTypes;
+                    } else if (result.resultCode === 1) {
+                        alert("请先登录后再发布提问！");
+                        window.location.href = "../user/login.html";
+                    }
+                },
+                error:function (a,b,c) {
+                    postQuestion.alertMsg.head = "请求数据异常";
+                    postQuestion.alertMsg.body = "请稍后重试";
+                    $("#alert").slideDown();
+                    console.log(a);
+                    console.log(b);
+                    console.log(c);
+                }
+            });
         }
     });
 </script>

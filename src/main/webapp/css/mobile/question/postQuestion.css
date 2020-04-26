@@ -6,23 +6,24 @@ table{
 }
 #header{
     background-color: white;
-    padding: 1em 3em;
-    box-shadow: 0 10px 10px #d6d6d6;
+    padding: 0.5em 1em;
+    box-shadow: 0 0.2em 0.3em #d6d6d6;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
 }
 #questionTitle{
-    font-size: 2.5em;
-    padding-left: 0.5em;
-    border: 0;
     width: 100%;
-    opacity: 0.5;
+    font-size: 1.3em;
+    border: 0;
 }
 #container{
     width: 90%;
     margin: 0 auto;
 }
-#alert{
+#tips{
     background-color: #ededed;
-    padding: 1.5em;
+    padding: 1em;
     border-radius: 0.5em;
     opacity: 0.5;
 }
@@ -30,9 +31,9 @@ table{
     color: #12eee7;
     padding-right: 0.5em;
 }
-#editor{
-    font-size: 2.5em;
-    opacity: 0.5;
+#contentArea{
+    width: 90%;
+    margin: 0 auto;
 }
 .separator{
     opacity: 0.5;
@@ -40,12 +41,23 @@ table{
     height: 0.2em;
 }
 #choseClassification{
-
+    width: 90%;
+    margin: 0 auto;
 }
 .classificationName{
-    font-size: 2em;
     width: 30%;
 }
 .classificationSelect{
     width: 70%;
+}
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
+}
+.alert{
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+    display: none;
 }
