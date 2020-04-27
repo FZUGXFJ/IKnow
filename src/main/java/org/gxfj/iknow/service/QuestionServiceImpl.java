@@ -150,10 +150,11 @@ public class QuestionServiceImpl implements QuestionService{
         } else {
             questionMap.put("answerCount", answers.size());
         }
-
         //owner的JSON数据
         if(question.getIsAnonymous() == 1) {
-            owner = null;
+            owner.put("id",0);
+            owner.put("username","匿名用户");
+            owner.put("head","0.jpg");
         }
         else{
             owner.put("id",question.getUserByUserId().getId());
