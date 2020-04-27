@@ -36,6 +36,7 @@ public class AnswerDAOImpl implements AnswerDAO{
         return getHibernateTemplate().get(Answer.class,id);
     }
 
+
     @Override
     public void update(Answer bean) {
         getHibernateTemplate().update(bean);
@@ -46,7 +47,8 @@ public class AnswerDAOImpl implements AnswerDAO{
         List<Answer> list=getHibernateTemplate().execute(new HibernateCallback<List<Answer>>() {
             @Override
             public List<Answer> doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select * from answer where questionID='"+qid+"'").addEntity(Answer.class);
+                SQLQuery sqlQuery=session.createSQLQuery("select * from answer where " +
+                        "questionID='"+qid+"'").addEntity(Answer.class);
                 return sqlQuery.list();
             }
         });
