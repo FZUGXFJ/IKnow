@@ -233,7 +233,7 @@ public class QuestionServiceImpl implements QuestionService{
             return d_hours + "小时前";
         } else if (d_minutes > 0 && d_hours <= 0) {
             return d_minutes + "分钟前";
-        } else if (d_secend > 0 && d_minutes <= 0) {
+        } else if (d_secend >= 0 && d_minutes <= 0) {
             return "刚刚";
         } else {
             return ("数据库时间超过了当前时间！！");
