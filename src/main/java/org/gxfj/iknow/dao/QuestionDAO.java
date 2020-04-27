@@ -10,4 +10,6 @@ public interface QuestionDAO {
     public void add(Question bean);
 
     public void delete(Question bean);
+
+    public Integer getQuestionStateId(Integer questionID);
 }
