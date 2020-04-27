@@ -1,11 +1,13 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Answer;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("answerDAO")
 public class AnswerDAOImpl implements AnswerDAO{
@@ -34,8 +36,27 @@ public class AnswerDAOImpl implements AnswerDAO{
         return getHibernateTemplate().get(Answer.class,id);
     }
 
+
     @Override
     public void update(Answer bean) {
         getHibernateTemplate().update(bean);
     }
+
+    @Override
+    public List getAnswersbyQid(Integer qid) {
+        List<Answer> list=getHibernateTemplate().execute(new HibernateCallback<List<Answer>>() {
+            @Override
+            public List<Answer> doInHibernate(Session session) throws HibernateException {
+                SQLQuery sqlQuery=session.createSQLQuery("select * from answer where " +
+                        "questionID='"+qid+"'").addEntity(Answer.class);
+                return sqlQuery.list();
+            }
+        });
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list;
+        }
+    }
+
 }

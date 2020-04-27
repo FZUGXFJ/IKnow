@@ -176,7 +176,7 @@ public class Question {
     }
 
     @ManyToOne
-    @JoinColumn(name = "adoptID", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "adoptID", referencedColumnName = "id", nullable = true)
     public Answer getAnswerByAdoptId() {
         return answerByAdoptId;
     }

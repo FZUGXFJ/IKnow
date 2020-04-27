@@ -8,4 +8,6 @@ public interface CollectionProblemDAO {
     public Collectionproblem get(Integer id);
 
     public void update(Collectionproblem bean);
+
+    public Integer getCollectionCount(Integer questionID);
 }

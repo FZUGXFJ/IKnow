@@ -8,4 +8,6 @@ public interface BrowsingHistoryDAO {
     public Browsinghistory get(Integer id);
 
     public void update(Browsinghistory bean);
+
+    public Integer getBrowsingCount(Integer questionID);
 }
