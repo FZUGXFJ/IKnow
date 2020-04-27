@@ -23,6 +23,7 @@ import java.util.Map;
 @Controller
 @Scope("prototype")
 public class QuestionAction {
+    private Integer questionId;
     private String questionTitle;
     private String questionContent;
     private Integer categoriesType;
@@ -83,6 +84,13 @@ public class QuestionAction {
         return "success";
     }
 
+    public String viewQuestion() {
+        System.out.println(questionId);
+        Map<String, Object> response = questionService.getQuestion(questionId);
+        response.put("resultCode",SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
 
     public String getQuestionTitle() {
         return questionTitle;
@@ -132,4 +140,11 @@ public class QuestionAction {
         this.isAnonymous = isAnonymous;
     }
 
+    public Integer getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
+    }
 }

@@ -59,4 +59,11 @@ public class AnswerDAOImpl implements AnswerDAO{
         }
     }
 
+    @Override
+    public List<Answer> listByQuestionId(int questionId, int start, int length) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Answer WHERE questionId = ?");
+        return query.setInteger(0,questionId).setFirstResult(start).setMaxResults(length).list();
+    }
+
 }

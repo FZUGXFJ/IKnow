@@ -18,5 +18,4 @@ public interface QuestionService {
 
     public Map<String, Object>getQuestion(Integer questionId);
 
-    public String getAnswerTime(Date ms);
 }

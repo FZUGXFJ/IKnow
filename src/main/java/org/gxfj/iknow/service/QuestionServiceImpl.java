@@ -122,118 +122,125 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public Map<String, Object> getQuestion(Integer questionId){
-        Map<String, Object> question = new HashMap<>(MAP_NUM);
+        Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
 
         //根据问题id查询到的问题
-        Question question1 = questionDAO.get(questionId);
+        Question question = questionDAO.get(questionId);
         //根据问题id查询到的题主
-        User user = question1.getUserByUserId();
+        User user = question.getUserByUserId();
         //问题的回答
-        List<Answer> answers = answerDAO.getAnswersbyQid(question1.getId());
+        List<Answer> answers = answerDAO.listByQuestionId(question.getId(),0,10);
         //JSON成员
-        Map<String, Object> owner = new HashMap<>(MAP_NUM);//题主
+        //题主
+        Map<String, Object> owner = new HashMap<>(MAP_NUM);
         //JSON中的数组
-        List<Map<String, Object>> questionAnswsers = new ArrayList<>();
+        List<Map<String, Object>> questionAnswers = new ArrayList<>();
         //JSON中的数组成员
         Map<String, Object> questionAnswerMap;
 
-        question.put("isAnonymous",question1.getIsAnonymous());
-        question.put("isSolved",questionDAO.getQuestionStateId(question1.getId()));
-        question.put("title",question1.getTitle());
-        question.put("content",question1.getContent());
-        question.put("collectionCount",collectionProblemDAO.getCollectionCount(question1.getId()));
-        question.put("browsingCount",browsingHistoryDAO.getBrowsingCount(question1.getId()));
-        question.put("answerCount",answers.size());
+        questionMap.put("isAnonymous",question.getIsAnonymous());
+        questionMap.put("isSolved",questionDAO.getQuestionStateId(question.getId()));
+        questionMap.put("title",question.getTitle());
+        questionMap.put("content",question.getContent());
+        questionMap.put("collectionCount",collectionProblemDAO.getCollectionCount(question.getId()));
+        questionMap.put("browsingCount",browsingHistoryDAO.getBrowsingCount(question.getId()));
+        if (answers == null) {
+            questionMap.put("answerCount", 0);
+            answers = new ArrayList<>();
+        } else {
+            questionMap.put("answerCount", answers.size());
+        }
 
         //owner的JSON数据
-        if(question1.getIsAnonymous() == 1)
+        if(question.getIsAnonymous() == 1) {
             owner = null;
+        }
         else{
-            owner.put("id",question1.getUserByUserId().getId());
-            owner.put("username",question1.getUserByUserId().getName());
-            owner.put("userhead",question1.getUserByUserId().getHead());
+            owner.put("id",question.getUserByUserId().getId());
+            owner.put("username",question.getUserByUserId().getName());
+            owner.put("head",question.getUserByUserId().getHead());
         }
-        question.put("owner",owner);
-
-        //回答数组
-        Iterator<Answer> it = answers.iterator();//回答迭代器
-        List<Answer> its = new ArrayList<Answer>();//包含采纳回答的列表
-        int i = 10;//填充十个回答
-        if(question1.getAnswerByAdoptId() != null){//将采纳的回答放入列表第一位
-            its.add(question1.getAnswerByAdoptId());
-            i = 9;
+        questionMap.put("owner",owner);
+        //包含采纳回答的列表
+        List<Answer> nAnswers = new ArrayList<>();
+        //将采纳的回答放入列表第一位
+        if(question.getAnswerByAdoptId() != null){
+            nAnswers.add(question.getAnswerByAdoptId());
         }
-        while(i > 0 && it.hasNext()){//填充剩余的回答
-            Answer answer = it.next();
-            if(question1.getAnswerByAdoptId() != null && question1.getAnswerByAdoptId().getId() == answer.getId()){//将采纳的回答放入列表第一位
+        //填充剩余的回答
+        for(Answer answer : answers) {
+            //将采纳的回答放入列表第一位
+            if(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId())) {
                 continue;
-            }
-            else {
-                its.add(answer);
-                i--;
+            } else {
+                nAnswers.add(answer);
             }
         }
 
-        Iterator<Answer> listIt = its.iterator();//包含采纳回答的最终迭代器
-        for(int j = 0;j < 10 && listIt.hasNext();j++){
-            Answer answer = listIt.next();
+        for(Answer answer : nAnswers) {
             questionAnswerMap = new HashMap<>(MAP_NUM);
-            if(answer.getIsAnonymous() == 1) {//匿名设置
+            //匿名设置
+            if(answer.getIsAnonymous() == 1) {
                 questionAnswerMap.put("answererName","匿名用户");
                 questionAnswerMap.put("answererLevel",0);
                 questionAnswerMap.put("answererBadge",0);
                 questionAnswerMap.put("answererId",0);
                 questionAnswerMap.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
             }
-            else{//非匿名设置
+            //非匿名设置
+            else{
                 questionAnswerMap.put("answererName",answer.getUserByUserId().getName());
-                questionAnswerMap.put("answererLevel",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));////用户等级
+                ////用户等级
+                questionAnswerMap.put("answererLevel",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
                 questionAnswerMap.put("answererBadge",answer.getUserByUserId().getBadgeNum());
                 questionAnswerMap.put("answererId",answer.getUserByUserId().getId());
-                questionAnswerMap.put("answererHead",answer.getUserByUserId().getHead());
+                questionAnswerMap.put("answererHead","<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
             }
             //所有设置
             questionAnswerMap.put("answerId",answer.getId());
-            questionAnswerMap.put("answerView",answer.getContent());//回答
+            //回答
+            questionAnswerMap.put("answerView",answer.getContent());
             questionAnswerMap.put("answerApprove",answer.getApprovalCount());
-            questionAnswerMap.put("answerComment",commentDAO.getCount(answer.getId()));//回答评论数
-            if(question1.getAnswerByAdoptId() != null && question1.getAnswerByAdoptId().getId() == answer.getId()){
-                questionAnswerMap.put("answerState",1);//置顶回答的状态
+            //回答评论数
+            questionAnswerMap.put("answerComment",commentDAO.getCount(answer.getId()));
+            if(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId())){
+                //置顶回答的状态
+                questionAnswerMap.put("answerState",1);
             }else{
-                questionAnswerMap.put("answerState",0);//一般回答的状态
+                //一般回答的状态
+                questionAnswerMap.put("answerState",0);
             }
-            questionAnswerMap.put("answerTime",questionService.getAnswerTime(answer.getDate()));
+            questionAnswerMap.put("answerTime",getAnswerTime(answer.getDate()));
             questionAnswerMap.put("isAnonymous",answer.getIsAnonymous());
-            questionAnswsers.add(questionAnswerMap);
+            questionAnswers.add(questionAnswerMap);
         }
-        question.put("questionAnswsers",questionAnswsers);
-        return question;
+        questionMap.put("questionAnswers",questionAnswers);
+        return questionMap;
 
     }
 
-    @Override
-    public String getAnswerTime(Date m){
+    private String getAnswerTime(Date m){
         long ms = m.getTime();
-        long d_secend,d_minutes, d_hours, d_days,d_month,d_years;
-        long timeNow = new Date().getTime();
+        long second,minutes, hours, days,month,years;
+        long timeNow = System.currentTimeMillis();
         long d = (timeNow - ms)/1000;
-        d_years = Math.round(d / (366*24*60*60));
-        d_month = Math.round(d / (30*24*60*60));
-        d_days = Math.round(d / (24*60*60));
-        d_hours = Math.round(d / (60*60));
-        d_minutes = Math.round(d / 60);
-        d_secend = Math.round(d);
-        if (d_years > 0) {
-            return d_years + "年前";
-        } else if (d_month > 0 && d_years <= 0) {
-            return d_days + "月前";
-        } else if (d_days > 0 && d_month <= 0) {
-            return d_days + "天前";
-        } else if (d_hours > 0 && d_days <= 0) {
-            return d_hours + "小时前";
-        } else if (d_minutes > 0 && d_hours <= 0) {
-            return d_minutes + "分钟前";
-        } else if (d_secend >= 0 && d_minutes <= 0) {
+        years = Math.round(d / (366*24*60*60));
+        month = Math.round(d / (30*24*60*60));
+        days = Math.round(d / (24*60*60));
+        hours = Math.round(d / (60*60));
+        minutes = Math.round(d / 60);
+        second = Math.round(d);
+        if (years > 0) {
+            return years + "年前";
+        } else if (month > 0 && years == 0) {
+            return days + "月前";
+        } else if (days > 0 && month == 0) {
+            return days + "天前";
+        } else if (hours > 0 && days == 0) {
+            return hours + "小时前";
+        } else if (minutes > 0 && hours == 0) {
+            return minutes + "分钟前";
+        } else if (second >= 0 && minutes == 0) {
             return "刚刚";
         } else {
             return ("数据库时间超过了当前时间！！");
