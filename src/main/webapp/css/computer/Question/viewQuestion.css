@@ -1,0 +1,26 @@
+.questionContent{
+    height: 80%;
+    background: white;
+    margin-left: 15%;
+    width: 40%;
+    float: left;
+}
+.relativeQuestionDiv{
+    height: 50%;
+    background: white;
+    margin-left: 3%;
+    width: 20%;
+    float: left;
+}
+.relativeRecommendDiv{
+    height: 28%;
+    background: white;
+    margin-left: 3%;
+    margin-top: 1%;
+    width: 20%;
+    float: left;
+}
+#questionTitle{
+    margin-top: 5%;
+    margin-left:5%;
+}

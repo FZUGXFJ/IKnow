@@ -13,6 +13,7 @@
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
     <script type="text/javascript" src="../js/computer.js"></script>
+    <script src="ckeditor/ckeditor.js"></script>
 </head>
 <body style="background-color: aliceblue">
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -57,19 +58,23 @@
             <div class="form-group guo-title-div">
                 <input type="text" class=" guo-title" id="exampleFormControlInput1"  placeholder="请输入标题">
             </div>
-            <div class="form-group guo-text-div"><!--
-                <label for="exampleFormControlTextarea1">问题详情</label>-->
+            <!--<div class="form-group guo-text-div">&lt;!&ndash;
+                <label for="exampleFormControlTextarea1">问题详情</label>&ndash;&gt;
                 <textarea class="form-control guo-text" id="exampleFormControlTextarea1" rows="12" style="border-style: none" placeholder="请输入正文"></textarea>
-            </div>
+            </div>-->
             <div class="guo-rich">
-
+                <textarea  id="richText" name="rich" placeholder="请输入正文"></textarea>
             </div>
+            <script type="text/javascript">
+                 CKEDITOR.replace('rich');
+            </script>
             <div class="form-group guo-but">
                 <button type="submit" class="btn btn-primary" id="button1">发布</button>
                 <button type="submit" class="btn btn-primary" id="button2">存草稿</button>
             </div>
         </form>
     </div>
+
    <!-- <div class="con2">
         <textarea class="form-control" id="exampleFormControlTextarea2" rows="15">
             相关介绍

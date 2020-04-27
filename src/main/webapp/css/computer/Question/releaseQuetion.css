@@ -69,6 +69,16 @@
     margin-top: 40px;
     border-style: none;
 }
-guo-rich{
-    height: 20%;
+.guo-rich{
+    height: 70%;
+    width: 88%;
+    margin-left: 5%;
+    margin-top: 5%;
+}
+#richText{
+    width: 100%;
+    height: 100%;
+    border-style: solid;
+    border-color: red;
+    padding-left: 10px;
 }
