@@ -1,12 +1,9 @@
 package org.gxfj.iknow.dao;
 
-import org.gxfj.iknow.pojo.Categoriestype;
-import org.gxfj.iknow.pojo.Majortype;
-import org.gxfj.iknow.pojo.Questiontype;
-import org.gxfj.iknow.pojo.Subjecttype;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.gxfj.iknow.pojo.*;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,25 +38,18 @@ public class QuestionTypeDAOImpl implements QuestionTypeDAO{
 
     @Override
     public Questiontype get(Integer categoryTypeID, Integer subjectTypeID, Integer majorTypeID) {
-        Questiontype questiontype = new Questiontype();
-        Categoriestype categoriestype = new Categoriestype();
-        Subjecttype subjecttype = new Subjecttype();
-        Majortype majortype = new Majortype();
+        String hql = "FROM Questiontype AS q WHERE (q.categoriestypeByCategoryId.id = ?0) and (q.subjecttypeBySubjectId.id = ?1) and (q.majortypeByMajorId.id = ?2) ";
+        Query query = getSession().createQuery(hql);
+        query.setParameter("0", categoryTypeID);
+        query.setParameter("1", subjectTypeID);
+        query.setParameter("2", majorTypeID);
+        List<Questiontype> list = query.list();
 
-        categoriestype.setId(categoryTypeID);
-        subjecttype.setId(subjectTypeID);
-        majortype.setId(majorTypeID);
-        questiontype.setCategoriestypeByCategoryId(categoriestype);
-        questiontype.setSubjecttypeBySubjectId(subjecttype);
-        questiontype.setMajortypeByMajorId(majortype);
-
-        List<Questiontype> list = getHibernateTemplate().findByExample(questiontype);
-        if (list.size() != 0) {
-            return list.get(0);
-        } else {
+        if (list.isEmpty()) {
             return null;
+        } else {
+            return list.get(0);
         }
-
     }
 
     @Override
