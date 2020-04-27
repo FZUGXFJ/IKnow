@@ -214,22 +214,26 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public String getAnswerTime(Date m){
         long ms = m.getTime();
-        long d_secend,d_minutes, d_hours, d_days;
+        long d_secend,d_minutes, d_hours, d_days,d_month,d_years;
         long timeNow = new Date().getTime();
         long d = (timeNow - ms)/1000;
+        d_years = Math.round(d / (366*24*60*60));
+        d_month = Math.round(d / (30*24*60*60));
         d_days = Math.round(d / (24*60*60));
         d_hours = Math.round(d / (60*60));
         d_minutes = Math.round(d / 60);
         d_secend = Math.round(d);
-        if (d_days > 0 && d_days < 2) {
+        if (d_years > 0) {
+            return d_years + "年前";
+        } else if (d_month > 0 && d_years <= 0) {
+            return d_days + "月前";
+        } else if (d_days > 0 && d_month <= 0) {
             return d_days + "天前";
-        } else if (d_days <= 0 && d_hours > 0) {
+        } else if (d_hours > 0 && d_days <= 0) {
             return d_hours + "小时前";
-        } else if (d_hours <= 0 && d_minutes > 0) {
+        } else if (d_minutes > 0 && d_hours <= 0) {
             return d_minutes + "分钟前";
-        } else if (d_minutes <= 0 && d_secend > 0) {
-            return d_secend + "秒钟前";
-        } else if (d_secend == 0) {
+        } else if (d_secend > 0 && d_minutes <= 0) {
             return "刚刚";
         } else {
             return ("数据库时间超过了当前时间！！");
