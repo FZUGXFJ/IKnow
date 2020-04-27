@@ -4,6 +4,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.pojo.User;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -16,4 +17,6 @@ public interface QuestionService {
     public Map<String, Object>getQuestionType();
 
     public Map<String, Object>getQuestion(Integer questionId);
+
+    public String getAnswerTime(Date ms);
 }

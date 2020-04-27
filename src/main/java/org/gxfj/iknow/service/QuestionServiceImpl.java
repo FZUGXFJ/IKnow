@@ -39,6 +39,8 @@ public class QuestionServiceImpl implements QuestionService{
     BrowsingHistoryDAO browsingHistoryDAO;
     @Autowired
     CollectionProblemDAO collectionProblemDAO;
+    @Autowired
+    QuestionService questionService;
 
 
     @Override
@@ -155,7 +157,7 @@ public class QuestionServiceImpl implements QuestionService{
 
         //回答数组
         Iterator<Answer> it = answers.iterator();//回答迭代器
-        List<Answer> its = new ArrayList<Answer>();//采纳回答第一位的列表
+        List<Answer> its = new ArrayList<Answer>();//包含采纳回答的列表
         int i = 10;//填充十个回答
         if(question1.getAnswerByAdoptId() != null){//将采纳的回答放入列表第一位
             its.add(question1.getAnswerByAdoptId());
@@ -181,21 +183,26 @@ public class QuestionServiceImpl implements QuestionService{
                 questionAnswerMap.put("answererLevel",0);
                 questionAnswerMap.put("answererBadge",0);
                 questionAnswerMap.put("answererId",0);
+                questionAnswerMap.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
             }
-            else{
+            else{//非匿名设置
                 questionAnswerMap.put("answererName",answer.getUserByUserId().getName());
                 questionAnswerMap.put("answererLevel",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));////用户等级
                 questionAnswerMap.put("answererBadge",answer.getUserByUserId().getBadgeNum());
                 questionAnswerMap.put("answererId",answer.getUserByUserId().getId());
+                questionAnswerMap.put("answererHead",answer.getUserByUserId().getHead());
             }
-            //非匿名设置
+            //所有设置
             questionAnswerMap.put("answerId",answer.getId());
-            questionAnswerMap.put("answererHead",answer.getUserByUserId().getHead());
             questionAnswerMap.put("answerView",answer.getContent());//回答
             questionAnswerMap.put("answerApprove",answer.getApprovalCount());
             questionAnswerMap.put("answerComment",commentDAO.getCount(answer.getId()));//回答评论数
-            questionAnswerMap.put("answerState",0);//回答的状态
-            questionAnswerMap.put("answerTime",answer.getDate());
+            if(question1.getAnswerByAdoptId() != null && question1.getAnswerByAdoptId().getId() == answer.getId()){
+                questionAnswerMap.put("answerState",1);//置顶回答的状态
+            }else{
+                questionAnswerMap.put("answerState",0);//一般回答的状态
+            }
+            questionAnswerMap.put("answerTime",questionService.getAnswerTime(answer.getDate()));
             questionAnswerMap.put("isAnonymous",answer.getIsAnonymous());
             questionAnswsers.add(questionAnswerMap);
         }
@@ -204,4 +211,29 @@ public class QuestionServiceImpl implements QuestionService{
 
     }
 
+    @Override
+    public String getAnswerTime(Date m){
+        long ms = m.getTime();
+        long d_secend,d_minutes, d_hours, d_days;
+        long timeNow = new Date().getTime();
+        long d = (timeNow - ms)/1000;
+        d_days = Math.round(d / (24*60*60));
+        d_hours = Math.round(d / (60*60));
+        d_minutes = Math.round(d / 60);
+        d_secend = Math.round(d);
+        if (d_days > 0 && d_days < 2) {
+            return d_days + "天前";
+        } else if (d_days <= 0 && d_hours > 0) {
+            return d_hours + "小时前";
+        } else if (d_hours <= 0 && d_minutes > 0) {
+            return d_minutes + "分钟前";
+        } else if (d_minutes <= 0 && d_secend > 0) {
+            return d_secend + "秒钟前";
+        } else if (d_secend == 0) {
+            return "刚刚";
+        } else {
+            return ("数据库时间超过了当前时间！！");
+        }
+
+    }
 }
