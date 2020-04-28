@@ -39,9 +39,7 @@ public class QuestionServiceImpl implements QuestionService{
     BrowsingHistoryDAO browsingHistoryDAO;
     @Autowired
     CollectionProblemDAO collectionProblemDAO;
-    @Autowired
-    QuestionService questionService;
-
+    
 
     @Override
     public void postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
