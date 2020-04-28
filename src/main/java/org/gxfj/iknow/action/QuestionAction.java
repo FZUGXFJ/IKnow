@@ -45,12 +45,16 @@ public class QuestionAction {
 
     final static private int RESPONSE_NUM = 20;
     public String postQuestion() {
+        /*
+        测试用输出到屏幕
+         */
         System.out.println(questionTitle);
         System.out.println(questionContent);
         System.out.println(isAnonymous);
         System.out.println(categoriesType);
         System.out.println(subjectType);
         System.out.println(majorType);
+        /////////////
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get("user");
