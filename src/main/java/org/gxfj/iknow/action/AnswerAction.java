@@ -1,11 +1,15 @@
 package org.gxfj.iknow.action;
 
+import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +23,7 @@ public class AnswerAction {
     private String content;
     private Byte isAnonmyous;
     private String questionTitle;
+    private InputStream inputStream;
 
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
@@ -29,7 +34,11 @@ public class AnswerAction {
     @Autowired
     AnswerService answerService;
 
-    public String questionTitle(){
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public String getQuestionTitle(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get("user");
@@ -44,6 +53,7 @@ public class AnswerAction {
             response.put("title" , questionTitle);
             response.put("resulteCode" , SUCCESS);
         }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 
@@ -65,6 +75,7 @@ public class AnswerAction {
             response = answerService.postAnswer(questionId,content,isAnonmyous,user);
             response.put("resultCode" , SUCCESS);
         }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 }
