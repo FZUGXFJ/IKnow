@@ -21,7 +21,7 @@ import java.util.Map;
 public class AnswerAction {
     private Integer questionId;
     private String content;
-    private Byte isAnonmyous;
+    private Byte isAnonymous;
     private String questionTitle;
     private InputStream inputStream;
 
@@ -33,10 +33,6 @@ public class AnswerAction {
     final static private int RESPONSE_NUM = 20;
     @Autowired
     AnswerService answerService;
-
-    public InputStream getInputStream() {
-        return inputStream;
-    }
 
     public String questionTitle(){
         Map<String, Object> session = ActionContext.getContext().getSession();
@@ -51,13 +47,13 @@ public class AnswerAction {
         else{
             questionTitle = answerService.getQuestiontitle(questionId);
             response.put("title" , questionTitle);
-            response.put("resulteCode" , SUCCESS);
+            response.put("resultCode" , SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 
-    public String postAnswer(){
+    public String postAnswer() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get("user");
@@ -72,10 +68,44 @@ public class AnswerAction {
         }
         else{
             //得到新发布的回答的id
-            response = answerService.postAnswer(questionId,content,isAnonmyous,user);
+            response = answerService.postAnswer(questionId,content,isAnonymous,user);
             response.put("resultCode" , SUCCESS);
         }
+        System.out.println(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
+    public Integer getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Byte getIsAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setIsAnonymous(Byte isAnonymous) {
+        this.isAnonymous = isAnonymous;
+    }
+
+    public void setQuestionTitle(String questionTitle) {
+        this.questionTitle = questionTitle;
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
 }

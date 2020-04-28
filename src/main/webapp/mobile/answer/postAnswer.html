@@ -29,6 +29,13 @@
     <div id="question">
         <h5><b v-html="title"></b></h5>
     </div>
+    <br>
+    <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 </div>
 <div id="inputArea">
     <div id="editor" style="border: 0">
@@ -63,16 +70,81 @@
     let postAnswer = new Vue({
         el:"#postAnswer",
         data:{
-            id:1,
-            title:"有没有什么好的学习方法？",
+            questionId:1,
+            title:"",
+            load:false,
+            alertMsg:{head:"为啥啊",body:""}
         },
         methods:{
             check:function () {
-                alert($("#editor").html());
+                let content = editor.container.firstChild.innerHTML;
+                let isAnonymous = choseAnon.isAnonymous ? 1 : 0;
+                if (content.trim().length === 0) {
+                    this.alertMsg.head = "内容不能为空！";
+                    $("#alert").slideDown();
+                } else {
+                    this.post(content,isAnonymous);
+                }
+            },
+            post:function (content,isAnonymous) {
+                $.ajax({
+                    url:"../../answer/postAnswer.action",
+                    type:"POST",
+                    data:{
+                        questionId:postAnswer.questionId,
+                        content:content,
+                        isAnonymous:isAnonymous
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            alert("发布成功");
+                        } else {
+                            postAnswer.alertMsg.head = "未知错误！";
+                            $("#alert").slideDown();
+                        }
+                    },
+                    error:function (e) {
+                        postAnswer.alertMsg.head = "系统错误！";
+                        $("#alert").slideDown();
+                    }
+                });
+            },
+            closeAlert:function () {
+                $("#alert").slideUp();
             }
         },
         mounted:function () {
-
+            let loc = location.href;
+            loc = loc.replace("?","&").split("&")[1];
+            let questionId;
+            if (loc.indexOf("questionId=")!==-1) {
+                questionId = loc.replace("questionId=","");
+                this.questionId = questionId;
+            } else {
+                //location.href = "../../error/mobile/404error.html"
+            }
+            $.ajax({
+                url:"../../answer/questionTitle.action",
+                type:"POST",
+                data:{
+                    questionId:questionId,
+                },
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode == 0) {
+                        postAnswer.title = result.title;
+                        postAnswer.load = true;
+                    } else if (result.resultCode == 1) {
+                        alert("请先登录再回答问题！");
+                        location.href = "../user/login.html";
+                    }
+                },
+                error:function (e) {
+                    postAnswer.alertMsg.head = "系统错误！";
+                    $("#alert").slideDown();
+                }
+            });
         }
     });
     let choseAnon = new Vue({

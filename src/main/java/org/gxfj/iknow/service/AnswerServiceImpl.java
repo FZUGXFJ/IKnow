@@ -25,13 +25,13 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public String getQuestiontitle(Integer qId) {
         Question question = questionDAO.get(qId);
-       return question.getTitle();
+        return question.getTitle();
     }
 
     @Override
-    public Map<String,Object> postAnswer(Integer qId, String content, Byte isAnonmyous,User user) {
+    public Map<String,Object> postAnswer(Integer qId, String content, Byte isAnonymous,User user) {
         Answer answer=new Answer();
-        answer.setIsAnonymous(isAnonmyous);
+        answer.setIsAnonymous(isAnonymous);
         answer.setDate(new Date());
         answer.setApprovalCount(0);
         answer.setUserByUserId(user);
@@ -41,9 +41,9 @@ public class AnswerServiceImpl implements AnswerService{
         answer.setIsRoof((byte)0);
         answer.setContent(content);
 
-        Integer id=answerDAO.add(answer);
+        answerDAO.add(answer);
         Map<String, Object> result= new HashMap<>(MAP_NUM);
-        result.put("answerID",id);
+        result.put("answerID",answer.getId());
         return result;
     }
 }
