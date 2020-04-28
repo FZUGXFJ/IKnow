@@ -5,7 +5,7 @@ import org.gxfj.iknow.pojo.Answer;
 import java.util.List;
 
 public interface AnswerDAO {
-    public void add(Answer bean);
+    public Integer add(Answer bean);
 
     public Answer get(Integer id);
 
