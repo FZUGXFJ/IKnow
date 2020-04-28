@@ -84,18 +84,4 @@
             </result>
         </action>
     </package>
-    <package name="comment" namespace="/commnet" extends="default">
-        <action name="postComment" class="org.gxfj.iknow.action.CommentAction" method="postComment">
-            <result name="success" type="stream">
-                <param name="contentType">application/json;charset=utf-8</param>
-                <param name="inputName">inputStream</param>
-            </result>
-        </action>
-        <action name="questionType" class="org.gxfj.iknow.action.CommentAction" method="viewComment">
-            <result name="success" type="stream">
-                <param name="contentType">application/json;charset=utf-8</param>
-                <param name="inputName">inputStream</param>
-            </result>
-        </action>
-    </package>
 </struts>
