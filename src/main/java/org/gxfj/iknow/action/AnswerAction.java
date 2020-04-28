@@ -29,7 +29,7 @@ public class AnswerAction {
     @Autowired
     AnswerService answerService;
 
-    public String getQuestionTitle(){
+    public String questionTitle(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get("user");
