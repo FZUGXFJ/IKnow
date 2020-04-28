@@ -39,7 +39,14 @@ public class QuestionServiceImpl implements QuestionService{
     BrowsingHistoryDAO browsingHistoryDAO;
     @Autowired
     CollectionProblemDAO collectionProblemDAO;
-    
+
+    final static private int QUESTION_STATE_UNSOLVE = 1;
+    final static private int QUESTION_SCENARIO_STUDENT = 1;
+    final static private int MILLIS_PER_YEAR = 366*24*60*60;
+    final static private int MILLIS_PER_MONTH = 30*24*60*60;
+    final static private int MILLIS_PER_DAY = 24*60*60;
+    final static private int MILLIS_PER_HOUR = 60*60;
+    final static private int MILLIS_PER_MINUTE = 60;
 
     @Override
     public void postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
@@ -48,12 +55,9 @@ public class QuestionServiceImpl implements QuestionService{
         Questiontype questiontype = questionTypeDAO.get(categoryType,subjectType,majorType);
         Questionstate questionstate = new Questionstate();
         Questionscenario questionscenario = new Questionscenario();
-        Answer answer = new Answer();
 
-        //TODO 修正魔法值的存在
-        questionstate.setId(1);
-        questionscenario.setId(1);
-        answer.setId(0);
+        questionstate.setId(QUESTION_STATE_UNSOLVE);
+        questionscenario.setId(QUESTION_SCENARIO_STUDENT);
 
         question.setUserByUserId(user);
         question.setTitle(title);
@@ -64,7 +68,6 @@ public class QuestionServiceImpl implements QuestionService{
         question.setDate(new Date());
         question.setIsDelete((byte)0);
         question.setIsAnonymous(isAnonymous);
-
 
         questionDAO.add(question);
 
@@ -119,15 +122,13 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> getQuestion(Integer questionId){
+    public Map<String, Object> getQuestion(Integer questionId, int length){
         Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
 
         //根据问题id查询到的问题
         Question question = questionDAO.get(questionId);
-        //根据问题id查询到的题主
-        User user = question.getUserByUserId();
         //问题的回答
-        List<Answer> answers = answerDAO.listByQuestionId(question.getId(),0,10);
+        List<Answer> answers = answerDAO.listByQuestionId(question.getId(),0, length);
         //JSON成员
         //题主
         Map<String, Object> owner = new HashMap<>(MAP_NUM);
@@ -169,9 +170,9 @@ public class QuestionServiceImpl implements QuestionService{
         //填充剩余的回答
         for(Answer answer : answers) {
             //将采纳的回答放入列表第一位
-            if(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId())) {
-                continue;
-            } else {
+            if(!(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId()))) {
+//                continue;
+//            } else {
                 nAnswers.add(answer);
             }
         }
@@ -223,11 +224,11 @@ public class QuestionServiceImpl implements QuestionService{
         long second,minutes, hours, days,month,years;
         long timeNow = System.currentTimeMillis();
         long d = (timeNow - ms)/1000;
-        years = Math.round(d / (366*24*60*60));
-        month = Math.round(d / (30*24*60*60));
-        days = Math.round(d / (24*60*60));
-        hours = Math.round(d / (60*60));
-        minutes = Math.round(d / 60);
+        years = Math.round(d / MILLIS_PER_YEAR);
+        month = Math.round(d / MILLIS_PER_MONTH);
+        days = Math.round(d / MILLIS_PER_DAY);
+        hours = Math.round(d / MILLIS_PER_HOUR);
+        minutes = Math.round(d / MILLIS_PER_MINUTE);
         second = Math.round(d);
         if (years > 0) {
             return years + "年前";

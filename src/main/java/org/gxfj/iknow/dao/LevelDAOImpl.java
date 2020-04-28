@@ -32,6 +32,7 @@ public class LevelDAOImpl implements LevelDAO {
         return ht;
     }
 
+    @Override
     public Level get(Integer id) {
         return getHibernateTemplate().get(Level.class,id);
     }

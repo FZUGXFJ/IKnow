@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("commentDAO")
-public class CommentDAOimpl implements CommentDAO{
+public class CommentDAOImpl implements CommentDAO{
 
     private HibernateTemplate ht = null;
 

@@ -34,6 +34,7 @@ public class QuestionAction {
     @Autowired
     QuestionService questionService;
 
+    private static final int QUESTION_SHOW_ANSWER_NUM = 10;
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
     private final int MISS_QUESTION_INF = 2;
@@ -86,7 +87,7 @@ public class QuestionAction {
 
     public String viewQuestion() {
         System.out.println(questionId);
-        Map<String, Object> response = questionService.getQuestion(questionId);
+        Map<String, Object> response = questionService.getQuestion(questionId, 10);
         response.put("resultCode",SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
