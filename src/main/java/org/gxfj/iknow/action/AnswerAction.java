@@ -5,7 +5,6 @@ import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import sun.jvm.hotspot.types.CIntegerField;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,6 @@ public class AnswerAction {
     final static private int RESPONSE_NUM = 20;
     @Autowired
     AnswerService answerService;
-    ;
 
     public String getQuestionTitle(){
         Map<String, Object> session = ActionContext.getContext().getSession();
