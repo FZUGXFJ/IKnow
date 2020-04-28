@@ -20,3 +20,9 @@ table{
     width: 90%;
     margin: 0 auto;
 }
+#alert{
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+    display: none;
+}
