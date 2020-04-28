@@ -5,6 +5,7 @@ import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -12,6 +13,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author hhj
+ */
+@Controller
 public class CommentAction {
     private Integer answerId;
     private String content;

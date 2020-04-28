@@ -1,6 +1,7 @@
 package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.AnswerDAO;
+import org.gxfj.iknow.dao.QuestionDAO;
 import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
@@ -18,26 +19,23 @@ import java.util.Map;
 public class AnswerServiceImpl implements AnswerService{
     @Autowired
     private AnswerDAO answerDAO;
+    @Autowired
+    private QuestionDAO questionDAO;
     final static private int MAP_NUM = 20;
     @Override
-    public Map<String,Object> getQuestiontitle(Question q, User u) {
-        Map<String, Object> result= new HashMap<>(MAP_NUM);
-        if(u==null) {
-            result.put("resultCode",1);
-            return result;
-        }
-        result.put("resultCode",0);
-        result.put("title",q.getTitle());
-        return result;
+    public String getQuestiontitle(Integer qId) {
+        Question question = questionDAO.get(qId);
+       return question.getTitle();
     }
 
     @Override
-    public Map<String,Object> postAnswer(Question q, String content, Byte isAnonmyous,User user) {
+    public Map<String,Object> postAnswer(Integer qId, String content, Byte isAnonmyous,User user) {
         Answer answer=new Answer();
         answer.setIsAnonymous(isAnonmyous);
         answer.setDate(new Date());
         answer.setApprovalCount(0);
         answer.setUserByUserId(user);
+        Question q = questionDAO.get(qId);
         answer.setQuestionByQuestionId(q);
         answer.setIsDelete((byte)0);
         answer.setIsRoof((byte)0);
@@ -45,7 +43,6 @@ public class AnswerServiceImpl implements AnswerService{
 
         Integer id=answerDAO.add(answer);
         Map<String, Object> result= new HashMap<>(MAP_NUM);
-        result.put("resultCode",0);
         result.put("answerID",id);
         return result;
     }
