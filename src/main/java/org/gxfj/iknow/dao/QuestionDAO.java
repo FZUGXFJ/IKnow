@@ -12,4 +12,6 @@ public interface QuestionDAO {
     public void delete(Question bean);
 
     public Integer getQuestionStateId(Integer questionID);
+
+    public Integer getAnswerCount(Integer id);
 }

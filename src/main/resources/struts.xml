@@ -17,12 +17,6 @@
                 </interceptor-stack>
             </interceptors>
             <default-interceptor-ref name="auth-dafault" />
-            <global-results>
-                <result name="error">/error/error.html</result>
-            </global-results>
-            <global-exception-mappings>
-                <exception-mapping exception="java.lang.Exception" result="error" />
-            </global-exception-mappings>
         </package>
 
         <package name="user" namespace="/user" extends="default">

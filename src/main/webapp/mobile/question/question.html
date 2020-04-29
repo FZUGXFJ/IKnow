@@ -104,15 +104,18 @@
     </div>
     <br><br>
     <div id="footer">
-        <button><i class="fas fa-user-plus">邀请回答</i></button>
-        <button><i class="fas fa-pen">写回答</i></button>
-        <button><i class="fas fa-star">收藏问题</i></button>
+        <table>
+            <td><button><i class="fas fa-user-plus">邀请回答</i></button></td>
+            <td><button><i class="fas fa-pen" @click="postAnswer">写回答</i></button></td>
+            <td><button><i class="fas fa-star">收藏问题</i></button></td>
+        </table>
     </div>
 </div>
 <script type="text/javascript">
     let question = new Vue({
         el:"#question",
         data:{
+            questionId:0,
             isAnonymous:1,
             isSolved:1,
             owner:{
@@ -132,7 +135,9 @@
             load:false
         },
         methods:{
-
+            postAnswer:function () {
+                location.href = "../answer/postAnswer.html?questionId=" + this.questionId;
+            }
         },
         mounted:function () {
             let loc = location.href;
@@ -140,6 +145,7 @@
             let questionId;
             if (loc.indexOf("questionId=")!==-1) {
                 questionId = loc.replace("questionId=","");
+                this.questionId = questionId;
             } else {
                 location.href = "../../error/mobile/404error.html"
             }
@@ -169,10 +175,12 @@
                         question.answerCount = result.answerCount;
                         question.answers = result.questionAnswers;
                         question.load = true;
+                    } else if (result.resultCode === 1) {
+                        alert("问题找不到！")
                     }
                 },
                 error:function (e) {
-                    alert("哎呀，网页走失了");
+                    alert("系统错误");
                 }
             });
         },

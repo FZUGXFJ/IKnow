@@ -67,4 +67,10 @@ public class QuestionDAOImpl implements QuestionDAO {
         }
     }
 
+    @Override
+    public Integer getAnswerCount(Integer id) {
+        Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(*) from Answer WHERE questionId=" + id);
+        return ((Long) query.uniqueResult()).intValue();
+    }
+
 }

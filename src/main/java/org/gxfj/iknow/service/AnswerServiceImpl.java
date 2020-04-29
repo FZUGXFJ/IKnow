@@ -88,6 +88,7 @@ public class AnswerServiceImpl implements AnswerService{
         questionMap.put("id" , question.getId());
         questionMap.put("title" , question.getTitle());
         questionMap.put("content" , question.getContent());
+        questionMap.put("answerCount",questionDAO.getAnswerCount(qId));
         return questionMap;
     }
 
@@ -116,7 +117,7 @@ public class AnswerServiceImpl implements AnswerService{
             answererMap.put("id" , answerer.getId());
             answererMap.put("head" , "<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
             answererMap.put("name" , answerer.getName());
-            answererMap.put("Level",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
+            answererMap.put("level",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
             answererMap.put("badgeNum" , answerer.getBadgeNum());
             /*
              * TODO β版本实现回答者的身份
