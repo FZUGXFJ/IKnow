@@ -58,4 +58,11 @@ public class CommentDAOImpl implements CommentDAO{
         Query query = session.createQuery("from Comment WHERE answerID = ?");
         return query.setInteger(0,answerId).setFirstResult(start).setMaxResults(length).list();
     }
+
+    @Override
+    public List<Comment> getCommentsByAnswerId(Integer answerId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Comment WHERE answerID = ?");
+        return query.setInteger(0,answerId).list();
+    }
 }
