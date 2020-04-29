@@ -27,8 +27,8 @@ public class AnswerDAOImpl implements AnswerDAO{
         return ht;
     }
     @Override
-    public void add(Answer bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Answer bean) {
+        return (Integer) getHibernateTemplate().save(bean);
     }
 
     @Override
@@ -57,6 +57,13 @@ public class AnswerDAOImpl implements AnswerDAO{
         } else {
             return list;
         }
+    }
+
+    @Override
+    public List<Answer> listByQuestionId(int questionId, int start, int length) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Answer WHERE questionId = ?");
+        return query.setInteger(0,questionId).setFirstResult(start).setMaxResults(length).list();
     }
 
 }

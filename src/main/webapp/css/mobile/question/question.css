@@ -47,3 +47,25 @@ table{
     color: #12eee7;
     padding-left: 2%;
 }
+#footer{
+    padding: 0.5em 1em;
+    box-shadow: 0 -0.3em 0.2em #d6d6d6;
+    position: fixed;
+    bottom: 0;
+    z-index: 9999;
+    background-color: white;
+    text-align: center;
+}
+#footer button{
+    border: 0;
+    border-radius: 1em;
+    background-color: white;
+    color: #12eee7;
+}
+.headPortrait{
+    background-color: #12eee7;
+    border-radius: 100%;
+    width: 2em;
+    height: 2em;
+    overflow: hidden;
+}

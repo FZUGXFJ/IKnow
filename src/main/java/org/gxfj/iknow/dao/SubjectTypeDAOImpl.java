@@ -2,6 +2,7 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Categoriestype;
 import org.gxfj.iknow.pojo.Subjecttype;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,10 @@ public class SubjectTypeDAOImpl implements SubjectTypeDAO{
 
     @Override
     public List<Subjecttype> list(Integer categoryTypeID) {
-        String hql = "FROM Subjecttype as s WHERE s.categoriestypeByCategoryId.id = ?";
-        return (List<Subjecttype>) getHibernateTemplate().find(hql, categoryTypeID);
+        String hql = "FROM Subjecttype as s WHERE s.categoriestypeByCategoryId.id = ?1";
+        Query query = getSession().createQuery(hql);
+        query.setParameter("1", categoryTypeID);
+        return (List<Subjecttype>) query.list();
 
     }
 }

@@ -23,6 +23,7 @@ import java.util.Map;
 @Controller
 @Scope("prototype")
 public class QuestionAction {
+    private Integer questionId;
     private String questionTitle;
     private String questionContent;
     private Integer categoriesType;
@@ -33,6 +34,7 @@ public class QuestionAction {
     @Autowired
     QuestionService questionService;
 
+    private static final int QUESTION_SHOW_ANSWER_NUM = 10;
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
     private final int MISS_QUESTION_INF = 2;
@@ -43,12 +45,16 @@ public class QuestionAction {
 
     final static private int RESPONSE_NUM = 20;
     public String postQuestion() {
+        /*
+        测试用输出到屏幕
+         */
         System.out.println(questionTitle);
         System.out.println(questionContent);
         System.out.println(isAnonymous);
         System.out.println(categoriesType);
         System.out.println(subjectType);
         System.out.println(majorType);
+        /////////////
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get("user");
@@ -83,6 +89,13 @@ public class QuestionAction {
         return "success";
     }
 
+    public String viewQuestion() {
+        System.out.println(questionId);
+        Map<String, Object> response = questionService.getQuestion(questionId, 10);
+        response.put("resultCode",SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
 
     public String getQuestionTitle() {
         return questionTitle;
@@ -132,4 +145,11 @@ public class QuestionAction {
         this.isAnonymous = isAnonymous;
     }
 
+    public Integer getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
+    }
 }

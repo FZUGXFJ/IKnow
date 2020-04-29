@@ -18,7 +18,7 @@
             </interceptors>
             <default-interceptor-ref name="auth-dafault" />
             <global-results>
-                <result name="error">/error.html</result>
+                <result name="error">/error/error.html</result>
             </global-results>
             <global-exception-mappings>
                 <exception-mapping exception="java.lang.Exception" result="error" />
@@ -72,6 +72,46 @@
             </result>
         </action>
         <action name="questionType" class="org.gxfj.iknow.action.QuestionAction" method="questionType">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="viewQuestion" class="org.gxfj.iknow.action.QuestionAction" method="viewQuestion">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+    </package>
+    <package name="comment" namespace="/comment" extends="default">
+        <action name="postComment" class="org.gxfj.iknow.action.CommentAction" method="postComment">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+<!--        <action name="viewComment" class="org.gxfj.iknow.action.CommentAction" method="viewComment">-->
+<!--            <result name="success" type="stream">-->
+<!--                <param name="contentType">application/json;charset=utf-8</param>-->
+<!--                <param name="inputName">inputStream</param>-->
+<!--            </result>-->
+<!--        </action>-->
+    </package>
+    <package name="answer" namespace="/answer" extends="default">
+        <action name="postAnswer" class="org.gxfj.iknow.action.AnswerAction" method="postAnswer">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="questionTitle" class="org.gxfj.iknow.action.AnswerAction" method="questionTitle">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="viewAnswer" class="org.gxfj.iknow.action.AnswerAction" method="viewAnswer">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>
