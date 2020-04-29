@@ -47,19 +47,9 @@ public class CommentDAOImpl implements CommentDAO{
 
     @Override
     public Integer getCount(Integer answerId){
-        List<Comment> list=getHibernateTemplate().execute(new HibernateCallback<List<Comment>>() {
-            @Override
-            public List<Comment> doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select * from comment where " +
-                        "answerID = " +answerId).addEntity(Comment.class);
-                return sqlQuery.list();
-            }
-        });
-        if (list.isEmpty()) {
-            return 0;
-        } else {
-            return list.size();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Comment WHERE answerID = ?");
+        return query.setInteger(0,answerId).list().size();
     }
 
     @Override
