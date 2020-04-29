@@ -3,10 +3,7 @@ package org.gxfj.iknow.dao;
 import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.Questionstate;
-import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -54,17 +51,19 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public Integer getQuestionStateId(Integer questionID){
-        List<Integer> list=getHibernateTemplate().execute(new HibernateCallback<List<Integer>>() {
+        Integer stateId=getHibernateTemplate().execute(new HibernateCallback<Integer>() {
             @Override
-            public List<Integer> doInHibernate(Session session) throws HibernateException {
+            public Integer doInHibernate(Session session) throws HibernateException {
                 SQLQuery sqlQuery=session.createSQLQuery("select stateID from question where id="+questionID);
-                return sqlQuery.list();
+                return (Integer)sqlQuery.uniqueResult();
             }
         });
-        if (list.isEmpty()) {
+        if (stateId == 1) {
             return 0;
-        } else {
-            return list.get(0);
+        } else if(stateId == 2){
+            return 1;
+        }else{
+            return -1;
         }
     }
 

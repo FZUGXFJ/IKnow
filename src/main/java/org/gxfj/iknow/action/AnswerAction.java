@@ -76,6 +76,11 @@ public class AnswerAction {
         return "success";
     }
 
+    public String viewAnswer(){
+        
+        return "success";
+    }
+
     public Integer getQuestionId() {
         return questionId;
     }

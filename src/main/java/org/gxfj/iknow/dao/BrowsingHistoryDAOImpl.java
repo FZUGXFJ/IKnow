@@ -1,10 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Browsinghistory;
-import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -45,20 +42,10 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
     }
 
     @Override
-    public Integer getBrowsingCount(Integer questionID){
-        List<Browsinghistory> list=getHibernateTemplate().execute(new HibernateCallback<List<Browsinghistory>>() {
-            @Override
-            public List<Browsinghistory> doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select * from browsinghistory where " +
-                        "questionID="+questionID).addEntity(Browsinghistory.class);
-                return sqlQuery.list();
-            }
-        });
-        if (list.isEmpty()) {
-            return 0;
-        } else {
-            return list.size();
-        }
+    public Integer getBrowsingCount(Integer questionId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Browsinghistory WHERE questionID = ?");
+        return query.setInteger(0,questionId).list().size();
     }
 
 }

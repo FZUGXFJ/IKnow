@@ -11,14 +11,19 @@ public interface AnswerDAO {
 
     public void update(Answer bean);
 
-    public List getAnswersbyQid(Integer qid);
+    /**
+     * 获得回答列表
+     * @param questionId 问题id
+     * @return  回答列表(所有回答）
+     */
+    public List<Answer> getAnswersbyQid(Integer questionId);
 
     /**
      * 获得回答列表
      * @param questionId 问题id
      * @param start 开始index
      * @param length 记录数
-     * @return  回答列表
+     * @return  回答列表（部分回答）
      */
     public List<Answer> listByQuestionId(int questionId,int start,int length);
 }

@@ -43,26 +43,16 @@ public class AnswerDAOImpl implements AnswerDAO{
     }
 
     @Override
-    public List getAnswersbyQid(Integer qid) {
-        List<Answer> list=getHibernateTemplate().execute(new HibernateCallback<List<Answer>>() {
-            @Override
-            public List<Answer> doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select * from answer where " +
-                        "questionID='"+qid+"'").addEntity(Answer.class);
-                return sqlQuery.list();
-            }
-        });
-        if (list.isEmpty()) {
-            return null;
-        } else {
-            return list;
-        }
+    public List<Answer> getAnswersbyQid(Integer questionId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Answer WHERE questionID = ?");
+        return query.setInteger(0,questionId).list();
     }
 
     @Override
     public List<Answer> listByQuestionId(int questionId, int start, int length) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Answer WHERE questionId = ?");
+        Query query = session.createQuery("from Answer WHERE questionID = ?");
         return query.setInteger(0,questionId).setFirstResult(start).setMaxResults(length).list();
     }
 

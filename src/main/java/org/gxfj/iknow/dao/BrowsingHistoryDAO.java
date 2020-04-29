@@ -9,5 +9,5 @@ public interface BrowsingHistoryDAO {
 
     public void update(Browsinghistory bean);
 
-    public Integer getBrowsingCount(Integer questionID);
+    public Integer getBrowsingCount(Integer questionId);
 }
