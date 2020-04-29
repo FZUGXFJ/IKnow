@@ -111,5 +111,11 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="viewAnswer" class="org.gxfj.iknow.action.AnswerAction" method="viewAnswer">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
 </struts>
