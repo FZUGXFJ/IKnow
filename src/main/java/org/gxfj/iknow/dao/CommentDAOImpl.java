@@ -4,10 +4,7 @@ import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Comment;
 import org.gxfj.iknow.pojo.Level;
 import org.gxfj.iknow.pojo.User;
-import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -50,18 +47,15 @@ public class CommentDAOImpl implements CommentDAO{
 
     @Override
     public Integer getCount(Integer answerId){
-        List<Comment> list=getHibernateTemplate().execute(new HibernateCallback<List<Comment>>() {
-            @Override
-            public List<Comment> doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select * from comment where " +
-                        "answerID = " +answerId).addEntity(Comment.class);
-                return sqlQuery.list();
-            }
-        });
-        if (list.isEmpty()) {
-            return 0;
-        } else {
-            return list.size();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Comment WHERE answerID = ?");
+        return query.setInteger(0,answerId).list().size();
+    }
+
+    @Override
+    public List<Comment> listByAnswerId(int answerId, int start, int length){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Comment WHERE answerID = ?");
+        return query.setInteger(0,answerId).setFirstResult(start).setMaxResults(length).list();
     }
 }
