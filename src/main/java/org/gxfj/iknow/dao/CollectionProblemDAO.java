@@ -9,5 +9,5 @@ public interface CollectionProblemDAO {
 
     public void update(Collectionproblem bean);
 
-    public Integer getCollectionCount(Integer questionID);
+    public Integer getCollectionCount(Integer questionId);
 }
