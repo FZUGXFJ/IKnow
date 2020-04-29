@@ -53,7 +53,7 @@ public class AnswerServiceImpl implements AnswerService{
 
 
     @Override
-    public Map<String, Object> viewAnswer(Integer qId, Integer aId , User user) {
+    public Map<String, Object> getAnswer(Integer qId, Integer aId , User user) {
         Map<String , Object> resultMap = new HashMap<>(MAP_NUM);
 
         //获得回答关联的问题

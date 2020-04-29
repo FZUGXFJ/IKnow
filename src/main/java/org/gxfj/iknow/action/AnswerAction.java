@@ -77,7 +77,14 @@ public class AnswerAction {
     }
 
     public String viewAnswer(){
-        
+        Integer answerId;
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        questionId = (Integer) session.get("questionId");
+        answerId = (Integer) session.get("answerId");
+        User user = (User) session.get("user");
+        Map<String,Object> response = answerService.getAnswer(questionId,answerId,user);
+        response.put("resultCode",SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 

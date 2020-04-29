@@ -32,5 +32,5 @@ public interface AnswerService {
      * @param user 当前用户
      * @return json数据（答案的信息，关联的用户，评论，问题的信息）
      */
-    public Map<String,Object> viewAnswer(Integer qId , Integer id , User user);
+    public Map<String,Object> getAnswer(Integer qId , Integer id , User user);
 }
