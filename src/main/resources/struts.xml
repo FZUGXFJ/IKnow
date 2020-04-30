@@ -56,6 +56,30 @@
                     <param name="inputName">inputStream</param>
                 </result>
             </action>
+            <action name="isLogin" class="org.gxfj.iknow.action.UserAction" method="isLogin">
+                <result name="success" type="stream">
+                    <param name="contentType">application/json;charset=utf-8</param>
+                    <param name="inputName">inputStream</param>
+                </result>
+            </action>
+            <action name="sendVerifyEmail" class="org.gxfj.iknow.action.UserAction" method="sendVerifyEmail">
+                <result name="success" type="stream">
+                    <param name="contentType">application/json;charset=utf-8</param>
+                    <param name="inputName">inputStream</param>
+                </result>
+            </action>
+            <action name="resetPasswordVerify" class="org.gxfj.iknow.action.UserAction" method="resetPasswordVerify">
+                <result name="success" type="stream">
+                    <param name="contentType">application/json;charset=utf-8</param>
+                    <param name="inputName">inputStream</param>
+                </result>
+            </action>
+            <action name="resetPassword" class="org.gxfj.iknow.action.UserAction" method="resetPassword">
+                <result name="success" type="stream">
+                    <param name="contentType">application/json;charset=utf-8</param>
+                    <param name="inputName">inputStream</param>
+                </result>
+            </action>
         </package>
 
     <package name="question" namespace="/question" extends="default">
