@@ -76,12 +76,12 @@ public class CommentServiceImpl implements CommentService {
             userIdentify = (questionOwner.getId().equals(comment.getUserByUserId().getId()) && question.getIsAnonymous() == 1)
                     ||(answerOwner.getId().equals(comment.getUserByUserId().getId()) && answer.getIsAnonymous() == 1);
             if(userIdentify){
-                commentMap.put("head","<img src='../../head/0.jpg' style='width=100%;height=100%;border-radius:100%' " +
+                commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>" +
                         "alt=''>");
                 commentMap.put("name","匿名用户");
             }else{
                 commentMap.put("head","<img src='../../head/"+comment.getUserByUserId().getHead() +
-                        "' style='width=100%;height=100%;border-radius:100%' alt=''>");
+                                "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 commentMap.put("name",comment.getUserByUserId().getName());
             }
             commentMap.put("content",comment.getContent());
