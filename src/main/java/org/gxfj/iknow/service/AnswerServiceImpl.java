@@ -164,7 +164,7 @@ public class AnswerServiceImpl implements AnswerService{
             commentMap.put("uname" , comment.getUserByUserId().getName());
             commentMap.put("uHead" , "<img src='../../head/" + comment.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
             commentMap.put("content" , comment.getContent());
-            commentMap.put("approveNum" , approvalCommentDAO.getCount(comment.getId()));
+            commentMap.put("approveNum" , comment.getCount());
             int isQuestionOwner = 0;
             int isAnswerer = 0;
             if(user != null){
