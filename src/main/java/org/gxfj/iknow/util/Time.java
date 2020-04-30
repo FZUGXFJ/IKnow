@@ -3,8 +3,6 @@ package org.gxfj.iknow.util;
 import java.util.Date;
 
 public class Time {
-    final static private int QUESTION_STATE_UNSOLVE = 1;
-    final static private int QUESTION_SCENARIO_STUDENT = 1;
     final static private int MILLIS_PER_YEAR = 366*24*60*60;
     final static private int MILLIS_PER_MONTH = 30*24*60*60;
     final static private int MILLIS_PER_DAY = 24*60*60;
