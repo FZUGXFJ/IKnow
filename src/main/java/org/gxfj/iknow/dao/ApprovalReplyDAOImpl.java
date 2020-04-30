@@ -2,6 +2,7 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Approvalreply;
 import org.gxfj.iknow.pojo.Reply;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,12 @@ public class ApprovalReplyDAOImpl implements ApprovalReplyDAO{
     @Override
     public void update(Approvalreply bean) {
         getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public Integer getCount(Integer replyId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Approvalreply WHERE replyID = ?");
+        return query.setInteger(0,replyId).list().size();
     }
 }
