@@ -1,11 +1,9 @@
 package org.gxfj.iknow.action;
 
+import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
-import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.SessionAware;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.UserService;
-import org.gxfj.iknow.service.UserServiceImpl;
 import org.gxfj.iknow.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,6 +39,9 @@ public class UserAction {
     private final String EMAIL = "email";
     private final String VERIFY_CODE = "verifyCode";
     private final String SUCCESS = "success";
+    private final static String RESULT_CODE_NAME = "resultCode";
+    private final static int UN_LOGIN = 1;
+    private final static int MIN_HASH_MAP_NUM = 10;
 
     public InputStream getInputStream() {
         return inputStream;
@@ -119,6 +121,29 @@ public class UserAction {
         return SUCCESS;
     }
 
+    public String isLogin() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        if (session.get("user") == null) {
+            result.put(RESULT_CODE_NAME, UN_LOGIN);
+        } else {
+            result.put(RESULT_CODE_NAME, SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+    public String sendVerifyEmail() {
+        return sendEmail();
+    }
+
+    public String resetPasswordVerify() {
+        return SUCCESS;
+    }
+
+    public String resetPassword() {
+        return SUCCESS;
+    }
 
     public String getUsername() {
         return username;
