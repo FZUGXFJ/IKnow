@@ -61,4 +61,13 @@ public interface UserService {
      * @return json数据 resultCode：响应数据码，0表示修改成功，1表示用户名已占用
      */
     public String editUserInf(String head,String username,String gender,String introduction,User userinf);
+
+
+    /**
+     * 设置用户新密码
+     * @param user 要设置的用户
+     * @param newPassword 新密码
+     * @return 成功返回true，失败返回false
+     */
+    public Boolean resetPassword(User user, String newPassword);
 }
