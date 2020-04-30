@@ -1,0 +1,85 @@
+#contain{
+    width: 75%;
+    height: 60%;
+    margin-left: 13%;
+    margin-top: 3%;
+    position: relative;
+}
+.con1{
+    width: 80%;
+    height: 80%;
+    background-color: white;
+    float: left;
+    position: relative;
+    margin-left: 5%;
+}
+.con2{
+    width: 80%;
+    height: 12%;
+    background-color: white;
+    margin-left: 5%;
+}
+.con2 p{
+    margin-left: 1%;
+}
+.form-control{
+    resize: none;
+}
+#button1{
+    float: left;
+}
+#button2{
+    float: left;
+}
+#page{
+    position: absolute;
+    bottom: 0;
+    float: left;
+}
+#pen{
+    width: 20%;
+    margin-left: 20%;
+    margin-top: 10%;
+    float: left;
+}
+#star{
+    width: 20%;
+    margin-left: 25%;
+    margin-top: 10%;
+    float: left;
+}
+.fa-feather{
+    color: aqua;
+    font-size: 2em;
+}
+.fa-star{
+    color: gold;
+    font-size: 2em;
+}
+span a{
+    text-decoration: none;
+    color: black;
+}
+.que{
+    float: left;
+    width: 96%;
+    height: 20%;
+    margin-bottom: 1%;
+    background-color: cornsilk;
+    position: relative;
+    margin-left: 1%;
+}
+.title{
+    margin-top: 2%;
+    margin-left: 2%;
+}
+.content{
+    margin-left: 3%;
+    margin-bottom: 1%;
+    color: #444444;
+}
+#SearchConetent{
+    color: red;
+    font-weight: bold;
+}
+
