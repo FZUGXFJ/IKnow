@@ -49,4 +49,11 @@ public class ReplyDAOImpl implements ReplyDAO{
         Query query = session.createQuery("from Reply WHERE commentID = ?");
         return query.setInteger(0,commentId).setFirstResult(start).setMaxResults(count).list();
     }
+
+    @Override
+    public Integer getCount(Integer commentId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Reply WHERE commentID = ?");
+        return query.setInteger(0,commentId).list().size();
+    }
 }
