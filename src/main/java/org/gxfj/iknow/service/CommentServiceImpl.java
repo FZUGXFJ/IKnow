@@ -93,8 +93,9 @@ public class CommentServiceImpl implements CommentService {
             for(Reply reply:replies){
                 replyMap = new HashMap<>(MAP_NUM);
                 replyMap.put("id",reply.getId());
-                replyMap.put("head",reply.getUserByUserId().getId());
+                replyMap.put("userId",reply.getUserByUserId().getId());
                 replyMap.put("name",reply.getUserByUserId().getName());
+                replyMap.put("replyTo",reply.getUserByTargetUserId().getName());
                 replyMap.put("content",reply.getContent());
                 replyMap.put("approveNum",reply.getCount());
                 replyMap.put("isQuestionOwner",questionOwner.getId().equals(reply.getUserByUserId().getId())?1:0);
@@ -103,9 +104,13 @@ public class CommentServiceImpl implements CommentService {
                 userIdentify = (questionOwner.getId().equals(reply.getUserByTargetUserId().getId()) && question.getIsAnonymous() == 1)
                         ||(answerOwner.getId().equals(reply.getUserByTargetUserId().getId()) && answer.getIsAnonymous() == 1);
                 if(userIdentify){
-                    commentMap.put("name","匿名用户");
+                    replyMap.put("name","匿名用户");
+                    replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>" +
+                            "alt=''>");
                 }else{
-                    commentMap.put("name",reply.getUserByTargetUserId().getName());
+                    replyMap.put("name",reply.getUserByTargetUserId().getName());
+                    replyMap.put("head","<img src='../../head/"+reply.getUserByUserId().getHead() +
+                            "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 }
                 replyMap.put("time",Time.getTime(reply.getDate()));
 
