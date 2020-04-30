@@ -2,20 +2,20 @@ package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Entity
 public class Reply {
     private Integer id;
     private String content;
-    private Date date;
+    private Timestamp date;
     private Integer count;
     private Byte isDelete;
     private User userByUserId;
     private Comment commentByCommentId;
+    private User userByTargetUserId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     public Integer getId() {
         return id;
     }
@@ -36,11 +36,11 @@ public class Reply {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
@@ -108,5 +108,15 @@ public class Reply {
 
     public void setCommentByCommentId(Comment commentByCommentId) {
         this.commentByCommentId = commentByCommentId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "targetUserID", referencedColumnName = "id", nullable = false)
+    public User getUserByTargetUserId() {
+        return userByTargetUserId;
+    }
+
+    public void setUserByTargetUserId(User userByTargetUserId) {
+        this.userByTargetUserId = userByTargetUserId;
     }
 }

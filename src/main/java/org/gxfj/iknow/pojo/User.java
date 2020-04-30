@@ -35,6 +35,7 @@ public class User {
     private Userstate userstateByStateId;
     private Useridentity useridentityByIdentityId;
     private Collection<Useridentity> useridentitiesById;
+    private Collection<Reply> repliesById_1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -145,7 +146,6 @@ public class User {
     public void setHead(String head) {
         this.head = head;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -336,5 +336,14 @@ public class User {
 
     public void setUseridentitiesById(Collection<Useridentity> useridentitiesById) {
         this.useridentitiesById = useridentitiesById;
+    }
+
+    @OneToMany(mappedBy = "userByTargetUserId")
+    public Collection<Reply> getRepliesById_1() {
+        return repliesById_1;
+    }
+
+    public void setRepliesById_1(Collection<Reply> repliesById_1) {
+        this.repliesById_1 = repliesById_1;
     }
 }
