@@ -48,4 +48,13 @@ public class CommentAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
+    public String viewComments(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        response=commentService.getComments(answerId);
+        response.put("resultCode",SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return  "success";
+    }
 }

@@ -34,4 +34,5 @@ public interface CommentDAO {
      * @return  评论列表
      */
     public List<Comment> getCommentsByAnswerId(Integer answerId);
+
 }

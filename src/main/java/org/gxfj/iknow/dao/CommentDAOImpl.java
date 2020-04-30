@@ -65,4 +65,5 @@ public class CommentDAOImpl implements CommentDAO{
         Query query = session.createQuery("from Comment WHERE answerID = ?");
         return query.setInteger(0,answerId).list();
     }
+
 }
