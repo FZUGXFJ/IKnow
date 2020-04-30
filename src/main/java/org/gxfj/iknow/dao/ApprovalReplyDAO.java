@@ -10,6 +10,5 @@ public interface ApprovalReplyDAO {
     public Approvalreply get(Integer id);
 
     public void update(Approvalreply bean);
-
-    public Integer getCount(Integer replyId);
+    
 }

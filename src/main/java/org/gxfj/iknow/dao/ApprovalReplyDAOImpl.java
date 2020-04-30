@@ -41,10 +41,4 @@ public class ApprovalReplyDAOImpl implements ApprovalReplyDAO{
         getHibernateTemplate().update(bean);
     }
 
-    @Override
-    public Integer getCount(Integer replyId) {
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Approvalreply WHERE replyID = ?");
-        return query.setInteger(0,replyId).list().size();
-    }
 }
