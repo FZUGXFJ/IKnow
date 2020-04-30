@@ -31,7 +31,10 @@ public class CommentAction {
     public InputStream getInputStream() { return inputStream; }
 
     final static private int RESPONSE_NUM = 20;
+
     public String postComment(){
+        System.out.println(content);
+        System.out.println(answerId);
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get("user");
@@ -43,7 +46,7 @@ public class CommentAction {
         }
         else{
             commentService.postComment(user , answerId , content);
-            response.put("resultecode" , SUCCESS);
+            response.put("resultCode" , SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
@@ -51,10 +54,26 @@ public class CommentAction {
 
     public String viewComments(){
         Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-//        response=commentService.getComments(answerId);
+        Map<String, Object> response;
+        response = commentService.getComments(answerId);
         response.put("resultCode",SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return  "success";
+    }
+
+    public Integer getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(Integer answerId) {
+        this.answerId = answerId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -24,9 +24,7 @@
     <br><br>
     <div id="questionInf">
         <h5>{{question.title}}</h5>
-        <div id="questionContent" class="hidePart" v-html="question.content">
-
-        </div>
+        <div id="questionContent" class="hidePart" v-html="question.content"></div>
         <br>
         <table>
             <td style="text-align: left;font-size: 0.7em;opacity: 0.5">
@@ -46,9 +44,7 @@
         <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">此回答已被题主采纳</div>
         <table>
             <td style="width: 10%">
-                <div id="answererHead" class="headPortrait" v-html="answerer.head">
-
-                </div>
+                <div id="answererHead" class="headPortrait" v-html="answerer.head"></div>
             </td>
             <td style="width: 50%">
                 <span>{{answerer.name}}</span>
@@ -188,6 +184,7 @@
                     }
                 },
                 error:function (request,status,error) {
+                    alert("系统异常！");
                     console.log(request.status);
                     console.log(request.readyState);
                     console.log(status);

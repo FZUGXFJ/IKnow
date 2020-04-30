@@ -1,0 +1,58 @@
+div{
+    width: 100%;
+}
+table{
+    width: 100%;
+}
+#header{
+    background-color: white;
+    padding: 0.2em 1em;
+    box-shadow: 0 0.2em 0.3em #d6d6d6;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+}
+#separator{
+    padding: 0 1em;
+    border-bottom: #eaeaea solid 0.1em;
+}
+#comments{
+    padding: 1em 1em;
+}
+.commentUserHead{
+    border-radius: 100%;
+    overflow: hidden;
+}
+.commentContent{
+    padding-left: 2.7em;
+}
+.line{
+    background-color: #acacac;
+    opacity: 0.5;
+    height: 1px;
+    margin: 0.5em 0;
+}
+.lineCommentReply{
+    padding-left: 2.7em;
+}
+.lineReply{
+    padding-left: 2em;
+}
+.replies{
+    padding-left: 2.7em;
+}
+.replyContent{
+    padding-left: 2em;
+}
+#postComment{
+    background-color: white;
+    padding: 0.1em 0.5em;
+    box-shadow: 0 -0.2em 0.3em #d6d6d6;
+    position: fixed;
+    bottom: 0;
+    z-index: 9999;
+}
+.errorBox{
+    color: red;
+    font-size: 0.5em;
+}
