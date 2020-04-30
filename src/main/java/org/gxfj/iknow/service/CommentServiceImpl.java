@@ -29,4 +29,9 @@ public class CommentServiceImpl implements CommentService {
 
         commentDAO.add(comment);
     }
+
+    @Override
+    public List<Comment> getComments(Integer answerId){
+        return null;
+    }
 }

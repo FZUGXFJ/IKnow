@@ -23,16 +23,95 @@
     </div>
     <br><br>
     <div id="questionInf">
-        <h5>这个问题怎么解？</h5>
-        <div id="questionContent" class="hidePart">
-            测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测
-            试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
-            试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试g
-            试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
-            试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
-        </div>
-        <div style="text-align: right;font-size: 0.7em;opacity: 0.5"><span @click="show">展开全部 <i class="fas fa-angle-down"></i></span></div>
+        <h5>{{question.title}}</h5>
+        <div id="questionContent" class="hidePart" v-html="question.content">
 
+        </div>
+        <br>
+        <table>
+            <td style="text-align: left;font-size: 0.7em;opacity: 0.5">
+                <span>查看全部{{question.answerCount}}个回答</span>
+                <i class="fas fa-chevron-right"></i>
+            </td>
+            <td>
+                <div id="showAndHide">
+                    <span @click="show" v-if="hidePart">展开全部 <i class="fas fa-angle-down"></i></span>
+                    <span @click="hide" v-else>收起 <i class="fas fa-angle-up"></i></span>
+                </div>
+            </td>
+        </table>
+    </div>
+    <div id="separator"></div>
+    <div id="answererInf">
+        <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">此回答已被题主采纳</div>
+        <table>
+            <td style="width: 10%">
+                <div id="answererHead" class="headPortrait" v-html="answerer.head">
+
+                </div>
+            </td>
+            <td style="width: 50%">
+                <span>{{answerer.name}}</span>
+            </td>
+            <td style="width: 40%;text-align: right">
+                <span class="lb">
+                    <b style="color: #12eee7">LV</b>
+                    <i>{{answerer.level}}</i>
+                </span>
+                &nbsp;
+                <span class="lb">
+                    <i class="fas fa-award fa-1x" style="color: #12eee7"></i>
+                    <i>{{answerer.badgeNum}}</i>
+                </span>
+            </td>
+        </table>
+    </div>
+    <div id="content" v-html="answer.content">
+
+    </div>
+    <div id="splitLine"></div>
+    <div id="comments">
+        <span>评论-{{answer.commentNum}}</span>
+        <div class="comment" v-for="comment in comments">
+            <br>
+            <table>
+                <td style="width: 10%">
+                    <div class="headPortrait" v-html="comment.uHead"></div>
+                </td>
+                <td style="width: 50%;opacity: 0.5;padding: 0 0.5em">
+                    <span>{{comment.uName}}</span>
+                </td>
+                <td style="width: 40%;text-align: right;opacity: 0.5">
+                    <i class="fas fa-thumbs-up"></i>
+                    <span>{{comment.approveNum}}</span>
+                </td>
+            </table>
+            <div class="commentContent" v-html="comment.content"></div>
+        </div>
+        <button v-if="answer.commentNum>2" class="btn btn-link" style="padding-left: 2.6em">查看全部{{answer.commentNum}}条评论</button>
+        <br>
+        <table>
+            <td style="width: 10%">
+                <div class="headPortrait" v-html="userHead"></div>
+            </td>
+            <td style="padding: 0 0.5em">
+                <div style="border: #acacac solid 0.1em;opacity: 0.5;padding: 0.5em;border-radius: 1em">添加评论...</div>
+            </td>
+        </table>
+    </div>
+    <div id="footer">
+        <table>
+            <td style="text-align: left;width: 45%">
+                <div style="border-radius: 2em;border: #acacac solid 0.1em;padding: 0.1em 0.5em;">
+                    <span><i class="fas fa-thumbs-up" style="color: #acacac"></i>赞同</span>
+                    <span><i class="fas fa-thumbs-down" style="color:#acacac;"></i>反对</span>
+                    |{{answer.approveNum}}
+                </div>
+            </td>
+            <td style="width: 55%;text-align: right">
+                <span><i class="fas fa-comment" style="color: #12eee7"></i>评论{{answer.commentNum}}</span>
+            </td>
+        </table>
     </div>
 </div>
 <script>
@@ -40,34 +119,80 @@
         el:"#answer",
         data:{
             question: {
-                id:1,
+                id:0,
                 title: "",
-                content: ""
+                content: "",
+                answerCount:0
             },
             answerer:{
-                id:1,
+                id:0,
                 head:"",
                 name:"",
-                level:"",
-                badgeNum:""
+                level:0,
+                badgeNum:0,
+                isAdopt:0
             },
             answer:{
                 content:"",
-                approveCount:10,
-                commentCount:18,
-                comment:[
-
-                ]
+                approveNum:0,
+                commentNum:0,
+                isAdopt: 0
             },
+            comments:[
+            ],
+            userHead:"",
             hidePart:true,
         },
         methods:{
             show:function () {
                 $("#questionContent").removeClass("hidePart");
+                this.hidePart = false;
+            },
+            hide:function () {
+                $("#questionContent").addClass("hidePart");
+                this.hidePart = true;
+            },
+            clearImg:function (htmlText) {
+
             }
         },
         mounted:function () {
-
+            let loc = location.href;
+            loc = loc.replace("?","&").split("&");
+            let questionId = loc[1];
+            let answerId = loc[2];
+            if (questionId.indexOf("questionId=")!==-1 && answerId.indexOf("answerId=")!==-1) {
+                questionId = questionId.replace("questionId=","");
+                answerId = answerId.replace("answerId=","");
+            } else {
+                //location.href = "../../error/mobile/404error.html"
+            }
+            console.log(questionId);
+            console.log(answerId);
+            $.ajax({
+                url:"../../answer/viewAnswer.action",
+                type:"POST",
+                data:{
+                    questionId:questionId,
+                    answerId:answerId,
+                },
+                dataType:"json",
+                success:function (result) {
+                    console.log(result);
+                    if (result.resultCode === 0) {
+                        answer.question = result.question;
+                        answer.answerer = result.answerer;
+                        answer.answer = result.answer;
+                        answer.comments = result.comments;
+                        answer.userHead = result.userHead;
+                    }
+                },
+                error:function (request,status,error) {
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
+                }
+            });
         }
     });
 </script>

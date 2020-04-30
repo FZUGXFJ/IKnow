@@ -17,12 +17,6 @@
                 </interceptor-stack>
             </interceptors>
             <default-interceptor-ref name="auth-dafault" />
-            <global-results>
-                <result name="error">/error/error.html</result>
-            </global-results>
-            <global-exception-mappings>
-                <exception-mapping exception="java.lang.Exception" result="error" />
-            </global-exception-mappings>
         </package>
 
         <package name="user" namespace="/user" extends="default">
@@ -91,12 +85,12 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
-<!--        <action name="viewComment" class="org.gxfj.iknow.action.CommentAction" method="viewComment">-->
-<!--            <result name="success" type="stream">-->
-<!--                <param name="contentType">application/json;charset=utf-8</param>-->
-<!--                <param name="inputName">inputStream</param>-->
-<!--            </result>-->
-<!--        </action>-->
+        <action name="viewComments" class="org.gxfj.iknow.action.CommentAction" method="viewComments">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
     <package name="answer" namespace="/answer" extends="default">
         <action name="postAnswer" class="org.gxfj.iknow.action.AnswerAction" method="postAnswer">

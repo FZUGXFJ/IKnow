@@ -24,6 +24,7 @@ public class AnswerAction {
     private Byte isAnonymous;
     private String questionTitle;
     private InputStream inputStream;
+    private Integer answerId;
 
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
@@ -71,13 +72,16 @@ public class AnswerAction {
             response = answerService.postAnswer(questionId,content,isAnonymous,user);
             response.put("resultCode" , SUCCESS);
         }
-        System.out.println(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 
     public String viewAnswer(){
-        
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        Map<String,Object> response = answerService.getAnswer(questionId,answerId,user);
+        response.put("resultCode",SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 
@@ -107,6 +111,14 @@ public class AnswerAction {
 
     public void setQuestionTitle(String questionTitle) {
         this.questionTitle = questionTitle;
+    }
+
+    public Integer getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(Integer answerId) {
+        this.answerId = answerId;
     }
 
     public InputStream getInputStream() {

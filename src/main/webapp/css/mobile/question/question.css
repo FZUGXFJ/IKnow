@@ -62,6 +62,9 @@ table{
     background-color: white;
     color: #12eee7;
 }
+#footer td{
+    text-align: center;
+}
 .headPortrait{
     background-color: #12eee7;
     border-radius: 100%;

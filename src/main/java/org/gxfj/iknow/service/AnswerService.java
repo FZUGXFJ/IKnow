@@ -23,5 +23,14 @@ public interface AnswerService {
      * @param user 用户
      * @return json数据
      */
-    public  Map<String,Object> postAnswer(Integer qId,String content,Byte isAnonmyous,User user);
+    public Map<String,Object> postAnswer(Integer qId,String content,Byte isAnonmyous,User user);
+
+    /**
+     * 查看回答
+     * @param qId 问题id
+     * @param id 回答的id
+     * @param user 当前用户
+     * @return json数据（答案的信息，关联的用户，评论，问题的信息）
+     */
+    public Map<String,Object> getAnswer(Integer qId , Integer id , User user);
 }

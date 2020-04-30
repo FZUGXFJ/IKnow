@@ -2,10 +2,7 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Level;
-import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -43,18 +40,14 @@ public class LevelDAOImpl implements LevelDAO {
 
     @Override
     public Integer getLevelByExp(Integer exp) {
-        List<Level> list=getHibernateTemplate().execute(new HibernateCallback<List<Level>>() {
-            @Override
-            public List<Level> doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select * from level where " +
-                        "expBotLimit <= "+exp+" and expTopLimit >="+exp).addEntity(Level.class);
-                return sqlQuery.list();
-            }
-        });
-        if (list.isEmpty()) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select l.level from Level l WHERE" +
+                " l.expBotLimit <= :exp and expTopLimit >=:exp");
+        Integer level = (Integer)query.setParameter("exp",exp).uniqueResult();
+        if(level == null){
             return 0;
-        } else {
-            return list.get(0).getLevel();
+        }else{
+            return level;
         }
     }
 }

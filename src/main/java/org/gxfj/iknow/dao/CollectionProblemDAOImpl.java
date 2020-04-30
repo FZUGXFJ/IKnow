@@ -2,10 +2,7 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Browsinghistory;
 import org.gxfj.iknow.pojo.Collectionproblem;
-import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -47,19 +44,9 @@ public class CollectionProblemDAOImpl implements CollectionProblemDAO{
     }
 
     @Override
-    public Integer getCollectionCount(Integer questionID){
-        List<Collectionproblem> list=getHibernateTemplate().execute(new HibernateCallback<List<Collectionproblem>>() {
-            @Override
-            public List<Collectionproblem> doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select * from collectionproblem where " +
-                        "questionID="+questionID).addEntity(Collectionproblem.class);
-                return sqlQuery.list();
-            }
-        });
-        if (list.isEmpty()) {
-            return 0;
-        } else {
-            return list.size();
-        }
+    public Integer getCollectionCount(Integer questionId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Collectionproblem WHERE questionID = ?");
+        return query.setInteger(0,questionId).list().size();
     }
 }
