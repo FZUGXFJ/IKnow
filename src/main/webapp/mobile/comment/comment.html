@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>全部评论</title>
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/comment/comment.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+</head>
+<body>
+<div id="allComment">
+    <div id="header">
+        <table>
+            <td style="width: 33%;color: #acacac;font-size: 1.5em"><i class="fas fa-times"></i></td>
+            <td style="width: 34%;text-align: center">
+                <span v-if="load">全部条{{commentNum}}条评论</span>
+                <span v-else="">加载中<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            </td>
+            <td style="width: 33%;"></td>
+        </table>
+    </div>
+    <br><br>
+    <div id="separator" v-if="load">
+        评论（{{commentNum}}）
+    </div>
+    <div id="comments" v-if="load">
+        <div class="comment" v-for="comment in comments">
+            <table>
+                <td style="width: 12%">
+                    <div class="commentUserHead" v-html="comment.head"></div>
+                </td>
+                <td style="width: 58%">
+                    <span>{{comment.name}}</span>
+                </td>
+                <td style="width: 30%;text-align: right">
+                    <div class="dropdown">
+                        <button style="background-color: white;border: 0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <span class="dropdown-item">举报</span>
+                        </div>
+                    </div>
+                </td>
+            </table>
+            <div class="commentContent">
+                <p v-html="comment.content"></p>
+            </div>
+            <table style="opacity: 0.5;font-size: 0.7em;margin-top: 1em;">
+                <td style="width: 70%;padding-left: 3.9em">
+                    {{comment.time}}
+                </td>
+                <td style="width: 10%;text-align: right">
+                    {{comment.approveNum}}
+                </td>
+                <td style="width: 10%;text-align: center;">
+                    &nbsp;<i class="fas fa-thumbs-up"></i>
+                </td>
+                <td style="width: 10%;text-align: center">
+                    <i class="fas fa-comment"></i>
+                </td>
+            </table>
+            <div class="lineCommentReply"><div class="line"></div></div>
+            <div class="replies">
+                <div class="reply" v-for="reply in comment.replies">
+                    <table>
+                        <td style="width: 10%">
+                            <div class="commentUserHead" v-html="reply.head"></div>
+                        </td>
+                        <td style="width: 60%">
+                            <span>{{reply.name}}</span>
+                            <i class="fas fa-caret-right"></i>
+                            <span>{{reply.replyTo}}</span>
+                        </td>
+                        <td style="width: 30%;text-align: right">
+                            <div class="dropdown">
+                                <button style="background-color: white;border: 0" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <span class="dropdown-item">举报</span>
+                                </div>
+                            </div>
+                        </td>
+                    </table>
+                    <div class="replyContent">
+                        <p v-html="reply.content"></p>
+                    </div>
+                    <table style="opacity: 0.5;font-size: 0.7em;margin-top: 1em;">
+                        <td style="width: 70%;padding-left: 3em">
+                            {{reply.time}}
+                        </td>
+                        <td style="width: 10%;text-align: right">
+                            {{reply.approveNum}}
+                        </td>
+                        <td style="width: 10%;text-align: center;">
+                            &nbsp;<i class="fas fa-thumbs-up"></i>
+                        </td>
+                        <td style="width: 10%;text-align: center">
+                            <i class="fas fa-comment"></i>
+                        </td>
+                    </table>
+                    <div class="lineReply"><div class="line"></div></div>
+                </div>
+                <div v-if="comment.replyNum>2"><button class="btn btn-link">查看全部{{comment.replyNum}}条回复</button></div>
+            </div>
+            <div class="line"></div>
+        </div>
+    </div>
+    <br>
+    <div style="text-align: center;font-size: 0.7em;opacity: 0.5">没有更多内容</div>
+    <br><br><br>
+    <div id="postComment" v-if="load">
+        <div class="errorBox" v-if="postError">{{postErrorMsg}}</div>
+        <table>
+            <td style="width: 80%">
+                <input type="text" class="form-control" aria-label="发送评论" placeholder="请输入评论" v-model="postContent">
+            </td>
+            <td style="width: 20%;text-align: right">
+                <button class="btn btn-link" @click="post">发布</button>
+            </td>
+        </table>
+    </div>
+</div>
+<script>
+    let allComment = new Vue({
+        el:"#allComment",
+        data:{
+            commentNum: 0,
+            comments: [
+            ],
+            answerId:0,
+            postError:false,
+            postErrorMsg:"",
+            postContent:"",
+            load:false,
+        },
+        methods:{
+            post:function () {
+                let answerId = this.answerId;
+                let content = this.postContent.trim();
+                if (content.length === 0) {
+                    allComment.postErrorMsg = "评论内容不得为空！";
+                    allComment.postError = true;
+                } else {
+                    allComment.postError = false;
+                    $.ajax({
+                        url:"../../comment/postComment.action",
+                        type:"POST",
+                        data:{
+                            answerId:answerId,
+                            content:content
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                alert("发布成功！");
+                                history.go(0);
+                            } else if (result.resultCode === 1) {
+                                alert("请先登录后再发布评论");
+                                location.href = "../user/login.html";
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }
+            }
+        },
+        mounted:function () {
+            let loc = location.href;
+            loc = loc.replace("?","&").split("&");
+            let answerId = loc[1];
+            if (answerId.indexOf("answerId=")!==-1) {
+                answerId = answerId.replace("answerId=","");
+                this.answerId = answerId;
+            } else {
+                //location.href = "../../error/mobile/404error.html"
+            }
+            $.ajax({
+                url:"../../comment/viewComments.action",
+                type:"POST",
+                data:{
+                    answerId:answerId
+                },
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        allComment.commentNum = result.commentNum;
+                        allComment.comments = result.comments;
+                        allComment.load = true;
+                    }
+                },
+                error:function (request,status,error) {
+                    alert("系统异常！");
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

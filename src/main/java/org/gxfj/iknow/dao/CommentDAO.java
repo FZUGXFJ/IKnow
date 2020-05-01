@@ -20,11 +20,19 @@ public interface CommentDAO {
     public Integer getCount(Integer answerId);
 
     /**
-     * 获得评论列表
+     * 获得问题评论列表
      * @param answerId 回答id
      * @param start 开始index
      * @param length 记录数
      * @return  评论列表
      */
     public List<Comment> listByAnswerId(int answerId, int start, int length);
+
+    /**
+     * 获得问题所有评论列表
+     * @param answerId 回答id
+     * @return  评论列表
+     */
+    public List<Comment> getCommentsByAnswerId(Integer answerId);
+
 }

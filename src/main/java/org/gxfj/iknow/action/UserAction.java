@@ -1,11 +1,9 @@
 package org.gxfj.iknow.action;
 
+import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
-import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.SessionAware;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.UserService;
-import org.gxfj.iknow.service.UserServiceImpl;
 import org.gxfj.iknow.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,6 +30,7 @@ public class UserAction {
     String gender;
     String introduction;
     boolean remember;
+    String newPassword;
     @Autowired
     UserService userService;
 
@@ -40,6 +40,13 @@ public class UserAction {
     private final String EMAIL = "email";
     private final String VERIFY_CODE = "verifyCode";
     private final String SUCCESS = "success";
+    private final static String RESULT_CODE_NAME = "resultCode";
+    private final static String RESET_PASSWORD_VERIFY_CODE_SESSION_NAME = "verifyCode";
+    private final static int RESET_PASSWD_FAIL = 1;
+    private final static int UN_LOGIN = 1;
+    private final static int VARIFY_DEFAULT = 1;
+    private final static int MIN_HASH_MAP_NUM = 10;
+
 
     public InputStream getInputStream() {
         return inputStream;
@@ -63,7 +70,8 @@ public class UserAction {
         User loginInf = new User();
         loginInf.setEmail(email);
         Map<String,Object> session = ActionContext.getContext().getSession();
-        Map<String,Object> result = userService.loginByNoPassword(email,(String)session.get(EMAIL), verifyCode,(String) session.get(VERIFY_CODE));
+        Map<String,Object> result = userService.loginByNoPassword(email,(String)session.get(EMAIL), verifyCode
+                , (String) session.get(VERIFY_CODE));
         User user = (User) result.get("user");
         if (user != null) {
             ActionContext.getContext().getSession().put("user",user);
@@ -119,6 +127,64 @@ public class UserAction {
         return SUCCESS;
     }
 
+    public String isLogin() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        if (session.get("user") == null) {
+            result.put(RESULT_CODE_NAME, UN_LOGIN);
+        } else {
+            result.put(RESULT_CODE_NAME, SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        System.out.println(JSON.toJSONString(result));
+        return SUCCESS;
+    }
+
+    public String sendVerifyEmail() {
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+
+        Map<String,String> resultMap = userService.sendVerifyCode(user.getEmail());
+        session.put(VERIFY_CODE,resultMap.get(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME));
+        inputStream = new ByteArrayInputStream(resultMap.get("result").getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+    public String resetPasswordVerify() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+
+        if (session.get("user") == null) {
+            result.put(RESULT_CODE_NAME,UN_LOGIN);
+        } else {
+            if (verifyCode.equals(session.get(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME))) {
+                result.put(RESULT_CODE_NAME,SUCCESS);
+                session.put("resetPasswordVerify", true);
+            } else {
+                result.put(RESULT_CODE_NAME,VARIFY_DEFAULT);
+            }
+        }
+
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+    public String resetPassword() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+
+        User user = (User) session.get("user");
+        Boolean resetPasswordVerify = (Boolean)session.get("resetPasswordVerify");
+        if (user != null && resetPasswordVerify != null && resetPasswordVerify) {
+            result.put(RESULT_CODE_NAME, userService.resetPassword(user, newPassword) ? SUCCESS : RESET_PASSWD_FAIL);
+            session.put("resetPasswordVerify", false);
+        } else {
+            result.put(RESULT_CODE_NAME,UN_LOGIN);
+        }
+
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
 
     public String getUsername() {
         return username;
@@ -170,5 +236,13 @@ public class UserAction {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

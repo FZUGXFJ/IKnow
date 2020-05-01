@@ -151,4 +151,15 @@ public class UserServiceImpl<result> implements UserService{
         userDAO.update(userInf);
         return "{\"resultCode\":0}";
     }
+
+    @Override
+    public Boolean resetPassword(User user, String newPassword) {
+        if (user == null) {
+            return false;
+        }
+        user.setPasswd(SecurityUtil.md5(newPassword));
+        userDAO.update(user);
+
+        return true;
+    }
 }

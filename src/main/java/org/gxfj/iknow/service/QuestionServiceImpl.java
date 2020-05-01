@@ -3,6 +3,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class QuestionServiceImpl implements QuestionService{
     CollectionProblemDAO collectionProblemDAO;
 
     final static private int QUESTION_STATE_UNSOLVE = 1;
+    final static private int QUESTION_STATE_SOLVE = 2;
     final static private int QUESTION_SCENARIO_STUDENT = 1;
     final static private int MILLIS_PER_YEAR = 366*24*60*60;
     final static private int MILLIS_PER_MONTH = 30*24*60*60;
@@ -138,7 +140,7 @@ public class QuestionServiceImpl implements QuestionService{
         Map<String, Object> questionAnswerMap;
 
         questionMap.put("isAnonymous",question.getIsAnonymous());
-        questionMap.put("isSolved",questionDAO.getQuestionStateId(question.getId()));
+        questionMap.put("isSolved",questionDAO.getQuestionStateId(question.getId()) == QUESTION_STATE_SOLVE ? 1 : 0);
         questionMap.put("title",question.getTitle());
         questionMap.put("content",question.getContent());
         questionMap.put("collectionCount",collectionProblemDAO.getCollectionCount(question.getId()));
@@ -210,7 +212,7 @@ public class QuestionServiceImpl implements QuestionService{
                 //一般回答的状态
                 questionAnswerMap.put("answerState",0);
             }
-            questionAnswerMap.put("answerTime",getAnswerTime(answer.getDate()));
+            questionAnswerMap.put("answerTime",Time.getTime(answer.getDate()));
             questionAnswerMap.put("isAnonymous",answer.getIsAnonymous());
             questionAnswers.add(questionAnswerMap);
         }
@@ -219,32 +221,4 @@ public class QuestionServiceImpl implements QuestionService{
 
     }
 
-    private String getAnswerTime(Date m){
-        long ms = m.getTime();
-        long second,minutes, hours, days,month,years;
-        long timeNow = System.currentTimeMillis();
-        long d = (timeNow - ms)/1000;
-        years = Math.round(d / MILLIS_PER_YEAR);
-        month = Math.round(d / MILLIS_PER_MONTH);
-        days = Math.round(d / MILLIS_PER_DAY);
-        hours = Math.round(d / MILLIS_PER_HOUR);
-        minutes = Math.round(d / MILLIS_PER_MINUTE);
-        second = Math.round(d);
-        if (years > 0) {
-            return years + "年前";
-        } else if (month > 0 && years == 0) {
-            return days + "月前";
-        } else if (days > 0 && month == 0) {
-            return days + "天前";
-        } else if (hours > 0 && days == 0) {
-            return hours + "小时前";
-        } else if (minutes > 0 && hours == 0) {
-            return minutes + "分钟前";
-        } else if (second >= 0 && minutes == 0) {
-            return "刚刚";
-        } else {
-            return ("数据库时间超过了当前时间！！");
-        }
-
-    }
 }

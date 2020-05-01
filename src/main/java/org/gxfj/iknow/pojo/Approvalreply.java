@@ -1,7 +1,6 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -9,7 +8,7 @@ public class Approvalreply {
     private Integer id;
     private Date date;
     private User userByUserId;
-    private Comment commentByCommentId;
+    private Reply replyByReplytId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,12 +61,12 @@ public class Approvalreply {
     }
 
     @ManyToOne
-    @JoinColumn(name = "commentID", referencedColumnName = "id", nullable = false)
-    public Comment getCommentByCommentId() {
-        return commentByCommentId;
+    @JoinColumn(name = "replyID", referencedColumnName = "id", nullable = false)
+    public Reply getReplyByReplytId() {
+        return replyByReplytId;
     }
 
-    public void setCommentByCommentId(Comment commentByCommentId) {
-        this.commentByCommentId = commentByCommentId;
+    public void setReplyByReplytId(Reply replyByReplytId) {
+        this.replyByReplytId = replyByReplytId;
     }
 }

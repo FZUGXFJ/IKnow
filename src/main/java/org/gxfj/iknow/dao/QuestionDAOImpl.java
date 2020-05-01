@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository("questionDAO")
@@ -65,6 +64,12 @@ public class QuestionDAOImpl implements QuestionDAO {
         }else{
             return -1;
         }
+    }
+
+    @Override
+    public Integer getAnswerCount(Integer id) {
+        Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(*) from Answer WHERE questionId=" + id);
+        return ((Long) query.uniqueResult()).intValue();
     }
 
 }

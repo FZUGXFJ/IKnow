@@ -13,8 +13,10 @@ public class Reply {
     private Byte isDelete;
     private User userByUserId;
     private Comment commentByCommentId;
+    private User userByTargetUserId;
 
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
@@ -108,5 +110,15 @@ public class Reply {
 
     public void setCommentByCommentId(Comment commentByCommentId) {
         this.commentByCommentId = commentByCommentId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "targetUserID", referencedColumnName = "id", nullable = false)
+    public User getUserByTargetUserId() {
+        return userByTargetUserId;
+    }
+
+    public void setUserByTargetUserId(User userByTargetUserId) {
+        this.userByTargetUserId = userByTargetUserId;
     }
 }

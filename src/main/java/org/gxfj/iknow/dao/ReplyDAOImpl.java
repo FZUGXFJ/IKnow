@@ -1,11 +1,14 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Reply;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("replyDAO")
 public class ReplyDAOImpl implements ReplyDAO{
@@ -38,5 +41,26 @@ public class ReplyDAOImpl implements ReplyDAO{
     public void update(Reply bean) {
         getHibernateTemplate().update(bean);
 
+    }
+
+    @Override
+    public List<Reply> listByCommentId(Integer commentId, Integer start, Integer count) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Reply WHERE commentID = ?");
+        return query.setInteger(0,commentId).setFirstResult(start).setMaxResults(count).list();
+    }
+
+    @Override
+    public List<Reply> getAllReplies(Integer commentId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Reply WHERE commentID = ?");
+        return query.setInteger(0,commentId).list();
+    }
+
+    @Override
+    public Integer getCount(Integer commentId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Reply WHERE commentID = ?");
+        return query.setInteger(0,commentId).list().size();
     }
 }
