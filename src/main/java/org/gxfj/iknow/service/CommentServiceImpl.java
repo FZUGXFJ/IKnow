@@ -47,87 +47,152 @@ public class CommentServiceImpl implements CommentService {
         boolean userIdentify;
         //获取问题下的20条评论
         List<Comment> comments = commentDAO.listByAnswerId(answerId,0,20);
-        List<Reply> replies;
+
         //json数组
-        List<Map<String, Object>> commentListMap = new ArrayList<>();
-        List<Map<String, Object>> replyListMap;
-        //json数组元素
-        Map<String, Object> commentMap;
-        Map<String, Object> replyMap;
+        List<Map<String, Object>> commentListMap;
 
         //获取回答
         Answer answer = answerDAO.get(answerId);
         //获取问题
         Question question = answer.getQuestionByQuestionId();
         //获取回答者
-        User answerOwner = answerDAO.get(answerId).getUserByUserId();
+        User answerOwner = answer.getUserByUserId();
         //获取题主
-        User questionOwner = answerDAO.get(answerId).getQuestionByQuestionId().getUserByUserId();
+        User questionOwner = question.getUserByUserId();
 
         //获取问题评论数
         Integer count = commentDAO.getCount(answerId);
         response.put("commentNum",count);
 
-        for(Comment comment:comments){
-            commentMap = new HashMap<>(MAP_NUM);
-            commentMap.put("id",comment.getId());
-            commentMap.put("userId",comment.getUserByUserId().getId());
-            //评论者是题主或者回答者且匿名,则设置相应的头像和名称
-            userIdentify = (questionOwner.getId().equals(comment.getUserByUserId().getId()) && question.getIsAnonymous() == 1)
-                    ||(answerOwner.getId().equals(comment.getUserByUserId().getId()) && answer.getIsAnonymous() == 1);
-            if(userIdentify){
-                commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>" +
-                        "alt=''>");
-                commentMap.put("name","匿名用户");
-            }else{
-                commentMap.put("head","<img src='../../head/"+comment.getUserByUserId().getHead() +
-                                "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
-                commentMap.put("name",comment.getUserByUserId().getName());
-            }
-            commentMap.put("content",comment.getContent());
-            commentMap.put("approveNum",approvalCommentDAO.getCount(answerId));
-
-            //评论回复列表
-            replyListMap = new ArrayList<>();
-            replies = replyDAO.listByCommentId(comment.getId(),0,REPLY_NUM);
-            for(Reply reply:replies){
-                replyMap = new HashMap<>(MAP_NUM);
-                replyMap.put("id",reply.getId());
-                replyMap.put("userId",reply.getUserByUserId().getId());
-                replyMap.put("name",reply.getUserByUserId().getName());
-                replyMap.put("targetId",reply.getUserByTargetUserId().getId());
-                replyMap.put("content",reply.getContent());
-                replyMap.put("approveNum",reply.getCount());
-                replyMap.put("isQuestionOwner",questionOwner.getId().equals(reply.getUserByUserId().getId())?1:0);
-                replyMap.put("isAnswerer",answerOwner.getId().equals(reply.getUserByUserId().getId())?1:0);
-                //回复对象的用户名,需判断示符是题主、回答者，判断是否匿名
-                userIdentify = (questionOwner.getId().equals(reply.getUserByTargetUserId().getId()) && question.getIsAnonymous() == 1)
-                        ||(answerOwner.getId().equals(reply.getUserByTargetUserId().getId()) && answer.getIsAnonymous() == 1);
-                if(userIdentify){
-                    replyMap.put("targetName","匿名用户");
-                    replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>" +
-                            "alt=''>");
-                }else{
-                    replyMap.put("targetName",reply.getUserByTargetUserId().getName());
-                    replyMap.put("head","<img src='../../head/"+reply.getUserByUserId().getHead() +
-                            "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
-                }
-                replyMap.put("time",Time.getTime(reply.getDate()));
-
-                replyListMap.add(replyMap);
-            }
-            commentMap.put("replies",replyListMap);
-            commentMap.put("isQuestionOwner",questionOwner.getId().equals(comment.getUserByUserId().getId())?1:0);
-            commentMap.put("isAnswerer",answerOwner.getId().equals(comment.getUserByUserId().getId())?1:0);
-            commentMap.put("time", Time.getTime(comment.getDate()));
-            commentMap.put("replyNum",replyDAO.getCount(comment.getId()));
-            commentListMap.add(commentMap);
-        }
+        commentListMap = getCommentsMapArray(comments,questionOwner,answerOwner,question,answer);
         response.put("comments",commentListMap);
         return response;
     }
 
+    /**
+     * 评论者是题主或者回答者且匿名判断
+     * @param questionOwner 问题题主
+     * @param answerOwner 回答者
+     * @param comment 评论
+     * @param question 问题
+     * @param answer 回答
+     * @return 返回根据判断获得的评论用户名与头像map值
+     */
+    private Map<String, Object> commenterIsQAOwner(User questionOwner,User answerOwner,Comment comment,Question question,Answer answer){
+        User commentUser = comment.getUserByUserId();
+        Map<String, Object> commentMap = new HashMap<>(MAP_NUM);
+        boolean isAnonymous = (questionOwner.getId().equals(commentUser.getId()) && question.getIsAnonymous() == 1)
+                ||(answerOwner.getId().equals(commentUser.getId()) && answer.getIsAnonymous() == 1);
+        if(isAnonymous){
+            commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>" +
+                    "alt=''>");
+            commentMap.put("name","匿名用户");
+        }else{
+            commentMap.put("head","<img src='../../head/"+commentUser.getHead() +
+                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            commentMap.put("name",commentUser.getName());
+        }
+        return  commentMap;
+    }
 
+    /**
+     * 回复者者是题主或者回答者且匿名判断
+     * @param questionOwner 问题题主
+     * @param answerOwner 回答者
+     * @param reply 评论
+     * @param question 问题
+     * @param answer 回答
+     * @return boolean判断值
+     */
+    private Map<String, Object> replyIsQAOwner(User questionOwner,User answerOwner,Reply reply,Question question,Answer answer){
+        User replyUser = reply.getUserByUserId();
+        User targetUser = reply.getUserByTargetUserId();
+        Map<String, Object> replyMap = new HashMap<>(MAP_NUM);
+        boolean isAnonymous = (questionOwner.getId().equals(replyUser.getId()) && question.getIsAnonymous() == 1)
+                ||(answerOwner.getId().equals(replyUser.getId()) && answer.getIsAnonymous() == 1);
+        if(isAnonymous){
+            replyMap.put("targetName","匿名用户");
+            replyMap.put("name","匿名用户");
+            replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>" +
+                    "alt=''>");
+        }else{
+            replyMap.put("targetName",targetUser.getName());
+            replyMap.put("name",replyUser.getName());
+            replyMap.put("head","<img src='../../head/"+replyUser.getHead() +
+                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+        }
+        return  replyMap;
+    }
 
+    /**
+     * 获取评论下评论的json数组
+     * @param questionOwner 问题题主
+     * @param answerOwner 回答者
+     * @param comments 回答的评论列表
+     * @param question 问题
+     * @param answer 回答
+     * @return List<Map<String, Object>>型的回答map数组
+     */
+    private List<Map<String, Object>> getCommentsMapArray(List<Comment> comments,User questionOwner,User answerOwner,Question question,Answer answer) {
+        List<Map<String, Object>> commentListMap = new ArrayList<>();
+        List<Map<String, Object>> replyListMap;
 
+        List<Reply> replies;
+
+        Map<String, Object> replyMap;
+        Map<String, Object> commentMap;
+
+        User commentUser;
+        for(Comment comment:comments){
+            commentUser = comment.getUserByUserId();
+            //评论者是题主或者回答者且匿名,则设置相应的头像和名称
+            commentMap = commenterIsQAOwner(questionOwner,answerOwner,comment,question,answer);
+            commentMap.put("id",comment.getId());
+            commentMap.put("userId",commentUser.getId());
+            commentMap.put("content",comment.getContent());
+            commentMap.put("approveNum",comment.getCount());
+            commentMap.put("isQuestionOwner",questionOwner.getId().equals(commentUser.getId())?1:0);
+            commentMap.put("isAnswerer",answerOwner.getId().equals(commentUser.getId())?1:0);
+            commentMap.put("time", Time.getTime(comment.getDate()));
+            commentMap.put("replyNum",replyDAO.getCount(comment.getId()));
+            //评论回复列表
+            replies = replyDAO.listByCommentId(comment.getId(),0,REPLY_NUM);
+            replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
+            commentMap.put("replies",replyListMap);
+            commentListMap.add(commentMap);
+        }
+        return commentListMap;
+    }
+
+    /**
+     * 获取评论下回复的json数组
+     * @param questionOwner 问题题主
+     * @param answerOwner 回答者
+     * @param replies 评论下的回复列表
+     * @param question 问题
+     * @param answer 回答
+     * @return List<Map<String, Object>>型的回复map数组
+     */
+    private List<Map<String, Object>> getCommentReplyMapArray(List<Reply> replies,User questionOwner,User answerOwner,Question question,Answer answer){
+        List<Map<String, Object>> replyListMap = new ArrayList<>();;
+        Map<String, Object> replyMap;
+        User replyUser;
+        User targetUser;
+        for(Reply reply:replies){
+            //回复对象的用户名,需判断示符是题主、回答者，判断是否匿名
+            replyMap = replyIsQAOwner(questionOwner,answerOwner,reply,question,answer);
+            replyUser = reply.getUserByUserId();
+            targetUser = reply.getUserByTargetUserId();
+            replyMap.put("id",reply.getId());
+            replyMap.put("userId",replyUser.getId());
+            replyMap.put("targetId",targetUser.getId());
+            replyMap.put("content",reply.getContent());
+            replyMap.put("approveNum",reply.getCount());
+            replyMap.put("isQuestionOwner",questionOwner.getId().equals(replyUser.getId())?1:0);
+            replyMap.put("isAnswerer",answerOwner.getId().equals(replyUser.getId())?1:0);
+            replyMap.put("time",Time.getTime(reply.getDate()));
+            replyListMap.add(replyMap);
+        }
+        return replyListMap;
+    }
 }
