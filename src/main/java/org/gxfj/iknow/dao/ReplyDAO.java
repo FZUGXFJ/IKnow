@@ -25,7 +25,7 @@ public interface ReplyDAO {
      * @param commentId 评论id
      * @return  回复列表
      */
-    public List<Reply> getAllComments(Integer commentId);
+    public List<Reply> getAllReplies(Integer commentId);
 
     /**
      * 获得指定评论下的回复数
