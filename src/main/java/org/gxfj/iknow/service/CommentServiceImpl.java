@@ -95,6 +95,8 @@ public class CommentServiceImpl implements CommentService {
                 replyMap.put("id",reply.getId());
                 replyMap.put("userId",reply.getUserByUserId().getId());
                 replyMap.put("name",reply.getUserByUserId().getName());
+                replyMap.put("targetId",reply.getUserByTargetUserId().getId());
+                replyMap.put("targetName",reply.getUserByTargetUserId().getName());
                 replyMap.put("replyTo",reply.getUserByTargetUserId().getName());
                 replyMap.put("content",reply.getContent());
                 replyMap.put("approveNum",reply.getCount());
