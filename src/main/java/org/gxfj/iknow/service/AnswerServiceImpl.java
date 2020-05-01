@@ -20,12 +20,18 @@ public class AnswerServiceImpl implements AnswerService{
     @Autowired
     private CommentDAO commentDAO;
     @Autowired
-    private  LevelDAO levelDAO;
+    private LevelDAO levelDAO;
     @Autowired
-    private  ApprovalCommentDAO approvalCommentDAO;
+    private ApprovalCommentDAO approvalCommentDAO;
+    @Autowired
+    private UserDAO userDAO;
+
+
+
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
+    final static private int QUESTION_STATE_SOLVE = 2;
     @Override
     public String getQuestiontitle(Integer qId) {
         Question question = questionDAO.get(qId);
@@ -180,5 +186,31 @@ public class AnswerServiceImpl implements AnswerService{
             commmentsMap.add(commentMap);
         }
         return commmentsMap;
+    }
+
+    @Override
+    public Boolean adoptAnswer(User user, Integer answerId) {
+        Answer answer = answerDAO.get(answerId);
+        Question question = answer.getQuestionByQuestionId();
+
+        //构造已解决的问题状态对象
+        Questionstate questionstate = new Questionstate();
+        questionstate.setId(QUESTION_STATE_SOLVE);
+
+        if (user.getId().equals(question.getUserByUserId().getId())) {
+            //更新问题的采纳回答id
+            question.setAnswerByAdoptId(answer);
+            //更新问题状态为已解决
+            question.setQuestionstateByStateId(questionstate);
+            questionDAO.update(question);
+
+            //增加用户的徽章数
+            user.setBadgeNum(user.getBadgeNum() + 1);
+            userDAO.update(user);
+            
+            return true;
+        } else {
+            return false;
+        }
     }
 }
