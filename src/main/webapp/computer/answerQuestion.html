@@ -61,11 +61,21 @@
     <div class="hr"><hr></div>
     <div class="buttonDiv">
         <div class="button">
-            <form action="" method=""><input type="submit" id="collect" value="收藏问题" onclick=""></form>
+            <form action="" method=""><input type="submit" id="collect" value="收藏问题" onclick="collectQuestion()"></form>
         </div>
-        <div class="button answerBut">
-            <form action="" method=""><input type="submit" id="answer" value="回答问题" onclick=""></form>
-        </div>
+        <script>
+            function collectQuestion(){
+                var collect = document.getElementById("collect");
+                if (collect.value == "收藏问题") {
+                    collect.style.background = "aqua";
+                    collect.innerText = "已收藏";
+                }
+                else if (collect.value == "未收藏") {
+                    collect.style.background = "cornflowerblue";
+                    collect.innerText = "收藏问题";
+                }
+            }
+        </script>
         <div class="small">
             <a class="smallLabel" href="#"><img src="../img/评论.PNG">评论 <span class="badge" id="commentNum">100</span></a>
         </div>
@@ -73,8 +83,19 @@
             <a class="smallLabel" href="#"><img src="../img/举报.PNG">举报</a>
         </div>
     </div>
-    <div class="answerList">
-
+    <div class="answerArea">
+        <div class="guo-rich">
+            <textarea  id="richText" name="rich" placeholder="请输入正文"></textarea>
+        </div>
+        <script type="text/javascript">
+            CKEDITOR.replace('rich');
+        </script>
+        <div class="form-group guo-but">
+            <form>
+                <button type="submit" class="btn btn-primary" id="button1">回答</button>
+                <button type="submit" class="btn btn-primary" id="button2">存草稿</button>
+            </form>
+        </div>
     </div>
 </div>
 <div class="relativeQuestionDiv">
