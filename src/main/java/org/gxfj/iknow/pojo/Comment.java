@@ -1,7 +1,6 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 
@@ -101,7 +100,7 @@ public class Comment {
         this.approvalcommentsById = approvalcommentsById;
     }
 
-    @OneToMany(mappedBy = "commentByCommentId")
+    @OneToMany(mappedBy = "replyByReplytId")
     public Collection<Approvalreply> getApprovalrepliesById() {
         return approvalrepliesById;
     }
