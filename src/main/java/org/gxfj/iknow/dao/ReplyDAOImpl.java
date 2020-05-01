@@ -51,6 +51,13 @@ public class ReplyDAOImpl implements ReplyDAO{
     }
 
     @Override
+    public List<Reply> getAllReplies(Integer commentId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Reply WHERE commentID = ?");
+        return query.setInteger(0,commentId).list();
+    }
+
+    @Override
     public Integer getCount(Integer commentId){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Reply WHERE commentID = ?");

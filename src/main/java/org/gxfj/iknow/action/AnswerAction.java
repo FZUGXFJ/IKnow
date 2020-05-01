@@ -30,6 +30,7 @@ public class AnswerAction {
     private final int UN_LOGIN = 1;
     private final int MISS_QUESTIONID = 2;
     private final int MISS_ANSWER_IF = 3;
+    private final int USER_IS_NOT_QUESTIONER = 2;
 
     final static private int RESPONSE_NUM = 20;
     @Autowired
@@ -76,11 +77,35 @@ public class AnswerAction {
         return "success";
     }
 
-    public String viewAnswer(){
+    public String viewAnswer() {
         Map<String,Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         Map<String,Object> response = answerService.getAnswer(questionId,answerId,user);
         response.put("resultCode",SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String adoptAnswer() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>();
+        //从Session中获得当前用户对象
+        User user = (User) session.get("user");
+
+
+        if (user != null) {
+            if (answerService.adoptAnswer(user, answerId)) {
+                //用户已登录，且用户为题主，返回采纳成功
+                response.put("resultCode", SUCCESS);
+            } else {
+                //用户已登录，但用户不是题主，返回用户不是提问者
+                response.put("resultCode", USER_IS_NOT_QUESTIONER);
+            }
+        } else {
+            //用户未登录，返回未登录
+            response.put("resultCode", UN_LOGIN);
+        }
+
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
