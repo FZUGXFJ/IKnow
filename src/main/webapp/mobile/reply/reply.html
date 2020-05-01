@@ -1,10 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>全部回复</title>
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/reply/reply.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 </head>
 <body>
+<div id="allReply">
+    <div id="header">
+        <table>
+            <td style="width: 33%;color: #acacac;font-size: 1.5em"><i class="fas fa-times"></i></td>
+            <td style="width: 34%;text-align: center">
+                <span v-if="load">评论详情</span>
+                <span v-else>加载中<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            </td>
+            <td style="width: 33%;"></td>
+        </table>
+    </div>
+    <br><br><br>
+    <div v-if="load">
+        <div id="commentInf">
+            <table>
+                <td style="width: 12%">
+                    <div class="commentUserHead" v-html="comment.head"></div>
+                </td>
+                <td style="width: 58%">
+                    &nbsp;<span>{{comment.name}}</span>
+                    <span v-if="comment.isQuestionOwner">(题问者)</span>
+                    <span v-if="comment.isAnswerer">(回答者)</span>
+                </td>
+                <td style="width: 30%;text-align: right">
+                    <div class="dropdown">
+                        <button style="background-color: white;border: 0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <span class="dropdown-item">举报</span>
+                        </div>
+                    </div>
+                </td>
+            </table>
+            <div class="commentContent">
+                <p v-html="comment.content"></p>
+            </div>
+            <table style="opacity: 0.5;font-size: 0.7em;margin-top: 1em;">
+                <td style="width: 70%;padding-left: 3.9em">
+                    {{comment.time}}
+                </td>
+                <td style="width: 10%;text-align: right">
+                    {{comment.approveNum}}
+                </td>
+                <td style="width: 10%;text-align: center;">
+                    &nbsp;<i class="fas fa-thumbs-up"></i>
+                </td>
+                <td style="width: 10%;text-align: center">
+                    <i class="fas fa-comment"></i>
+                </td>
+            </table>
+        </div>
+        <div id="separator"></div>
+        <div id="replyCount">{{comment.replyNum}}条回复</div>
+        <div class="line"></div>
+        <div id="replies">
+            <div id="reply" v-for="reply in replies">
+                <table>
+                    <td style="width: 12%">
+                        <div class="commentUserHead" v-html="reply.head"></div>
+                    </td>
+                    <td style="width: 58%">
+                        &nbsp;<span>{{reply.name}}</span>
+                        <span v-if="reply.isQuestionOwner">(题问者)</span>
+                        <span v-if="reply.isAnswerer">(回答者)</span>
+                        <i class="fas fa-caret-right"></i>
+                        <span>{{reply.targetName}}</span>
+                    </td>
+                    <td style="width: 30%;text-align: right">
+                        <div class="dropdown">
+                            <button style="background-color: white;border: 0" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <span class="dropdown-item">举报</span>
+                            </div>
+                        </div>
+                    </td>
+                </table>
+                <div class="replyContent">
+                    <p v-html="reply.content"></p>
+                </div>
+                <table style="opacity: 0.5;font-size: 0.7em;margin-top: 1em;">
+                    <td style="width: 70%;padding-left: 3.7em">
+                        {{reply.time}}
+                    </td>
+                    <td style="width: 10%;text-align: right">
+                        {{reply.approveNum}}
+                    </td>
+                    <td style="width: 10%;text-align: center;">
+                        &nbsp;<i class="fas fa-thumbs-up"></i>
+                    </td>
+                    <td style="width: 10%;text-align: center">
+                        <i class="fas fa-comment"></i>
+                    </td>
+                </table>
+                <div class="lineReply"><div class="line"></div></div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div style="text-align: center;font-size: 0.7em;opacity: 0.5">没有更多内容</div>
+    <br><br><br>
+    <div id="addReply">
+        <div class="errorBox" v-if="sendError">{{sendErrorMsg}}</div>
+        <table>
+            <td style="width: 80%">
+                <input type="text" class="form-control" aria-label="发送评论" placeholder="在这里输入回复" v-model="sendContent">
+            </td>
+            <td style="width: 20%;text-align: right">
+                <button class="btn btn-link" @click="send">发送</button>
+            </td>
+        </table>
+    </div>
+</div>
+<script>
+    let allReply = new Vue({
+        el:"#allReply",
+        data:{
+            load:false,
+            commentId:0,
+            comment:{},
+            replies:[],
+            sendError:false,
+            sendErrorMsg:"",
+            sendContent:""
+        },
+        methods:{
+            send:function () {
 
+            }
+        },
+        mounted:function () {
+            let loc = location.href;
+            loc = loc.replace("?","&").split("&");
+            let commentId = loc[1];
+            if (commentId.indexOf("commentId=")!==-1) {
+                commentId = commentId.replace("commentId=","");
+                this.commentId = commentId;
+            } else {
+                //location.href = "../../error/mobile/404error.html"
+            }
+            $.ajax({
+                type:"POST",
+                url:"../../reply/showMoreReply.action",
+                data:{
+                    commentId:commentId
+                },
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        allReply.comment = result.comment;
+                        allReply.replies = result.replies;
+                        allReply.load = true;
+                    }
+                },
+                error:function (request,status,error) {
+                    alert("系统异常！");
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

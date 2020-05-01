@@ -112,7 +112,7 @@
                     </table>
                     <div class="lineReply"><div class="line"></div></div>
                 </div>
-                <div v-if="comment.replyNum > 2"><button class="btn btn-link" @click="moreReply">查看全部{{comment.replyNum}}条回复</button></div>
+                <div v-if="comment.replyNum > 2"><button class="btn btn-link" @click="moreReply(comment.id)">查看全部{{comment.replyNum}}条回复</button></div>
             </div>
             <div class="line"></div>
         </div>
@@ -180,8 +180,8 @@
                     });
                 }
             },
-            moreReply:function () {
-                location.href = "../reply/reply.html";
+            moreReply:function (commentId) {
+                location.href = "../reply/reply.html?commentId=" + commentId;
             }
         },
         mounted:function () {

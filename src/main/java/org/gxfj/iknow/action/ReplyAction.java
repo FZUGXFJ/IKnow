@@ -48,9 +48,8 @@ public class ReplyAction {
 
     public String showMoreReply(){
         Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get("user");
-        replyService.showAllReplys(commentId);
+        Map<String, Object> response;
+        response = replyService.showAllReplys(commentId);
         response.put("resultCode" , SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
