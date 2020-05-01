@@ -7,10 +7,10 @@ import org.gxfj.iknow.pojo.Comment;
 import org.gxfj.iknow.pojo.Reply;
 import org.gxfj.iknow.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.*;
-
+@Service("replyService")
 public class ReplyServiceImpl implements ReplyService {
     @Autowired
     private UserDAO userDAO;
@@ -27,7 +27,7 @@ public class ReplyServiceImpl implements ReplyService {
         reply.setContent(content);
         reply.setIsDelete((byte)0);
         reply.setCount(0);
-        reply.setDate((Timestamp) new Date());
+        reply.setDate(new Date());
         reply.setUserByTargetUserId(tu);
         reply.setCommentByCommentId(comment);
         reply.setUserByUserId(user);

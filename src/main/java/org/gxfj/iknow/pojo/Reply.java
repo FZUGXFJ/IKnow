@@ -2,12 +2,13 @@ package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 public class Reply {
     private Integer id;
     private String content;
-    private Timestamp date;
+    private Date date;
     private Integer count;
     private Byte isDelete;
     private User userByUserId;
@@ -16,6 +17,7 @@ public class Reply {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -36,11 +38,11 @@ public class Reply {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
