@@ -22,7 +22,7 @@
             <td style="width: 33%;text-align: right"><a href="logon.html">注册</a></td>
         </table>
     </div>
-    <img src="../../img/LOGO.png" class="figure-img img-fluid rounded" style="width: 100%" alt="logo">
+    <img src="../../img/logo.png" class="figure-img img-fluid rounded" style="width: 100%" alt="logo">
     <div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
         <button type="button" class="close"  aria-label="Close" @click="closeAlert">
@@ -42,15 +42,13 @@
             <br>
             <div class="errorMessage" v-if="verifyCodeError">{{verifyCodeErrorMsg}}</div>
             <table>
-                <tr>
-                    <td style="width: 60%;text-align: left">
-                        <input type="number" id="verifyCode" class="form-control" aria-label="验证码" @keyup="validateVerify">
-                    </td>
-                    <td style="width: 40%">
-                        <button class="btn btn-link" @click="getVerifyCode()" v-if="!verify">获取验证码</button>
-                        <button class="btn btn-link" disabled="disabled" v-else>重新发送({{timeout}})</button>
-                    </td>
-                </tr>
+                <td style="width: 60%;text-align: left">
+                    <input type="number" id="verifyCode" class="form-control" aria-label="验证码" @keyup="validateVerify">
+                </td>
+                <td style="width: 40%">
+                    <button class="btn btn-link" @click="getVerifyCode" v-if="!verify">获取验证码</button>
+                    <button class="btn btn-link" disabled="disabled" v-else>重新发送({{timeout}})</button>
+                </td>
             </table>
             <br>
             <div style="text-align: left">
@@ -111,6 +109,7 @@
                 val.length > 6 ? verifyCode.val(val.slice(0,6)) : "";
             },
             loginByEmail:function (email,verifyCode) {
+                let al = $("#alert");
                 $.ajax({
                     url:"../../user/emailLogin.action",
                     type:"POST",
@@ -122,20 +121,32 @@
                     success:function (result) {
                         if (result.response === 0) {
                             login.alertMsg.head = "登录成功";
-                            login.alertMsg.body = "登录成功";
-                            $("#alert").slideDown();
+                            login.alertMsg.body = "";
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            al.addClass("alert-success");
+                            al.slideDown();
                         } else if (result.response === 1) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "邮箱已修改，请重新发送验证码";
-                            $("#alert").slideDown();
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            al.addClass("alert-danger");
+                            al.slideDown();
                         } else if (result.response === 2) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "验证码错误";
-                            $("#alert").slideDown();
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            al.addClass("alert-danger");
+                            al.slideDown();
                         } else if (result.response === 3) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "该邮箱未注册";
-                            $("#alert").slideDown();
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            al.addClass("alert-danger");
+                            al.slideDown();
                         }
                     },
                     error:function (e) {
