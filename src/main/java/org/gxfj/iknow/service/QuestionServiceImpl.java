@@ -42,6 +42,7 @@ public class QuestionServiceImpl implements QuestionService{
     CollectionProblemDAO collectionProblemDAO;
 
     final static private int QUESTION_STATE_UNSOLVE = 1;
+    final static private int QUESTION_STATE_SOLVE = 2;
     final static private int QUESTION_SCENARIO_STUDENT = 1;
     final static private int MILLIS_PER_YEAR = 366*24*60*60;
     final static private int MILLIS_PER_MONTH = 30*24*60*60;
@@ -139,7 +140,7 @@ public class QuestionServiceImpl implements QuestionService{
         Map<String, Object> questionAnswerMap;
 
         questionMap.put("isAnonymous",question.getIsAnonymous());
-        questionMap.put("isSolved",questionDAO.getQuestionStateId(question.getId()));
+        questionMap.put("isSolved",questionDAO.getQuestionStateId(question.getId()) == QUESTION_STATE_SOLVE ? 1 : 0);
         questionMap.put("title",question.getTitle());
         questionMap.put("content",question.getContent());
         questionMap.put("collectionCount",collectionProblemDAO.getCollectionCount(question.getId()));
