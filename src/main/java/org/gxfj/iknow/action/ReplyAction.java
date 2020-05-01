@@ -45,6 +45,17 @@ public class ReplyAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
+    public String showMoreReply(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get("user");
+        replyService.showAllReply(commentId);
+        response.put("resultCode" , SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
