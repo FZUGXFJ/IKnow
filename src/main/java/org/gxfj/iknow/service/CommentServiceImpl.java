@@ -102,7 +102,7 @@ public class CommentServiceImpl implements CommentService {
      * @param reply 评论
      * @param question 问题
      * @param answer 回答
-     * @return boolean判断值
+     * @return 返回根据判断获得的回复者用户名与头像、回复对象用户名map值
      */
     private Map<String, Object> replyIsQAOwner(User questionOwner,User answerOwner,Reply reply,Question question,Answer answer){
         User replyUser = reply.getUserByUserId();
