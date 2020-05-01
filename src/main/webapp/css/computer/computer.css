@@ -162,7 +162,7 @@ body{
     margin-left: 40px;
     height: 40px;
     margin-top: 40px;
-    color: lightgrey;
+    color: #444444;
     font-size: 22px;
     width: 220px;
     float: left;
@@ -231,30 +231,30 @@ body{
 #ID{
     height:80px ;
 }
-#identifyCode{
+#verifyCode{
      margin-left: 40px;
      height: 40px;
-     color: lightgrey;
+    color: #444444;
      font-size: 22px;
      border-style: none;
      float: left;
      width:220px;
 
  }
-#psw{
+#password{
     margin-left: 40px;
     height: 40px;
-    color: lightgrey;
+    color: #444444;
     font-size: 22px;
     border-style: none;
     float: left;
     width:220px;
 
 }
-#user_id{
+#username{
     margin-left: 40px;
     height: 40px;
-    color: lightgrey;
+    color: #444444;
     font-size: 22px;
     border-style: none;
     float: left;
@@ -265,7 +265,7 @@ body{
     height: 40px;
     margin-top: 40px;
 }
-#password{
+#psw{
     height: 40px;
     margin-top: 40px;
 }
@@ -299,7 +299,7 @@ body{
     float: left;
     width:340px;
 }
-#codeBut{
+.codeBut{
     margin-left: 0px;
     height: 40px;
     color: white;
@@ -308,7 +308,7 @@ body{
     float: left;
     background-color: cornflowerblue;
     border-radius: 10px;
-    width:120px;
+    width:140px;
 }
 #codeUnderline{
     height: 3px;
@@ -332,7 +332,7 @@ placeholder{
 }
 #check{
     margin-top: 10px;
-    margin-left: 20px;
+    margin-left: 5px;
     height: 20px;
     overflow: hidden;
 }
@@ -395,4 +395,9 @@ placeholder{
 }
 .nav-item{
     margin-right: 50px;
+}
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
 }
