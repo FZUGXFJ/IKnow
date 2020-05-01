@@ -50,7 +50,7 @@ public class ReplyAction {
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get("user");
-        replyService.showAllReply(commentId);
+        replyService.showAllReplys(commentId);
         response.put("resultCode" , SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
