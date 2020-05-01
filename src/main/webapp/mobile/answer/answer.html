@@ -41,7 +41,7 @@
     </div>
     <div id="separator"></div>
     <div id="answererInf">
-        <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">此回答已被题主采纳</div>
+        <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">此回答已被采纳</div>
         <table>
             <td style="width: 10%">
                 <div id="answererHead" class="headPortrait" v-html="answerer.head"></div>
@@ -98,10 +98,10 @@
     <div id="footer">
         <table>
             <td style="text-align: left;width: 45%">
-                <div style="border-radius: 2em;border: #acacac solid 0.1em;padding: 0.1em 0.5em;">
-                    <span><i class="fas fa-thumbs-up" style="color: #acacac"></i>赞同</span>
-                    <span><i class="fas fa-thumbs-down" style="color:#acacac;"></i>反对</span>
-                    |{{answer.approveNum}}
+                <div style="border-radius: 2em;border: #acacac solid 0.1em;padding: 0.1em 0.5em;background-color: #d8e1ee">
+                    <span><i class="fas fa-thumbs-up" style="color: #acacac"></i>&nbsp;赞同</span>
+                    <span><i class="fas fa-thumbs-down" style="color:#acacac;"></i>&nbsp;反对</span>
+                    |&nbsp;{{answer.approveNum}}
                 </div>
             </td>
             <td style="width: 55%;text-align: right">
