@@ -25,8 +25,11 @@
     margin-top: 5%;
     margin-left:10%;
 }
+.describe{
+    height: 19%;
+}
 #describeQuestion{
-    height: 30%;
+    height: 100%;
     width: 80%;
     margin-top: 2%;
     margin-left: 10%;
@@ -63,7 +66,7 @@ hr{
     margin-top: 3%;
 }
 #answer{
-    background: #6affe1;
+    background: aqua;
     color: white;
     height: 100%;
     width: 100%;
@@ -84,16 +87,15 @@ hr{
     background: white;
     margin-left: 5%;
     margin-top: 2%;
-    width: 15%;
+    width: 20%;
     float: left;
 }
 .answerList{
     width: 80%;
     height: 50%;
-    border-style: solid;
     margin-left: 10%;
-    border-width: thin;
-    margin-top: 5%;
+    margin-top: 2%;
+    border-style: none;
 }
 .answerTable{
     width: 100%;
@@ -101,6 +103,11 @@ hr{
 }
 .item{
     height: 12%;
+}
+.bd{
+    margin-left: 1%;
+    font-weight: bold;
+    font-size: smaller;
 }
 .item1{
     margin-top: 5%;
@@ -110,25 +117,32 @@ hr{
     border-width: thin;
     width: 100%;
 }
+.answers{
+    height: 30%;
+    background-color: #fffbe3;
+}
 .answerMargin{
     background: #6affe1;
     border-radius: 20px;
+    border-style: none;
     color: white;
     float: left;
     clear: right;
     width: 50%;
     padding-left: 10%;
 }
+.info{
+    margin-left: 70%;
+}
 .likes{
     border-color: lightgrey;
     border-style: none;
     border-radius: 10px;
-    width: 15%;
+    width: 100%;
     padding-top: 1%;
     padding-bottom: 1%;
     font-size: 40%;
     height: 50%;
-    margin-left: 4%;
     margin-bottom: 1%;
 }
 
@@ -138,13 +152,35 @@ hr{
     font-size: 150%;
 }
 .titleTd{
-    height: 100%;
+    height: 60%;
     width: 90%;
-    padding-left: 5%;
-    padding-top: 2%;
+    padding-top: 5%;
+}
+.titleDiv{
+    width: 80%;
+    float: left;
+}
+.adoptDiv{
+    float: left;
+
+    width:20%;
+}
+.adopt{
+    color: white;
+    padding-left: 10%;
+    padding-right: 10%;
+    background-color: aqua;
+    border-style: none;
+    border-radius: 10px;
 }
 .like{
-    width: 70%;
+    height: 40%;
+    width: 90%;
+    clear: left;
+}
+.likeButton{
+    width: 10%;
+    float: left;
 }
 .itemT{
     border-top-color: lightgrey;
@@ -153,4 +189,23 @@ hr{
 }
 a{
     color: black;
+}
+.page{
+
+}
+.pageDiv{
+    height:10%;
+    margin-left: 10%;
+    width: 80%;
+    clear: left;
+}
+#answerNum{
+    font-weight: lighter;
+    width: 100%;
+    color: grey;
+}
+.label{
+    float: left;
+    margin-top: 0%;
+    margin-left: 3%;
 }

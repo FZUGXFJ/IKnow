@@ -2,18 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>发布问题</title>
+    <title>回答</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/computer/computer.css">
-    <link rel="stylesheet" type="text/css" href="../css/computer/Question/releaseQuetion.css">
+    <link rel="stylesheet" type="text/css" href="../css/computer/Question/checkQuetion.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
-    <script type="text/javascript" src="../js/computer.js"></script>
-    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+    <script src="/jquery/jquery-1.11.1.min.js">
+    </script>
+    <script>
+        $(document).ready(function(){
+            $("p.title").append("<h5>高数如何理解格林公式的概念？</h5>");
+            $("p.content").append("曲线积分条件：分段光滑");
+        });
+    </script>
 </head>
 <body style="background-color: aliceblue">
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -30,12 +36,13 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">问答</a>
             </li>
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#">登录</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#">注册</a>-->
-<!--            </li>-->
+
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="#">登录</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="#">注册</a>-->
+            <!--            </li>-->
         </ul>
         <a class="navbar-brand" href="#"><img src="../img/qq.PNG"></a>
         <form class="form-inline my-2 my-lg-0">
@@ -54,37 +61,55 @@
 </nav>
 <div id="contain">
     <div class="con1">
-        <form>
-            <div class="form-group guo-title-div">
-                <input type="text" class=" guo-title" id="exampleFormControlInput1"  placeholder="请输入标题">
+        <div class="que">
+            <p class="title"></p>
+            <p class="content"></p>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary" id="button1">收藏问题</button>
+            <button type="button" class="btn btn-primary" id="button2">
+                    <i class="fas fa-feather">回答问题</i>
+            </button>
+        </div>
+        <div class="form-group" id="answer">
+            <label for="exampleFormControlTextarea1">输入回答：</label>
+            <div class="form-group">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="9"></textarea>
             </div>
-            <!--<div class="form-group guo-text-div">&lt;!&ndash;
-                <label for="exampleFormControlTextarea1">问题详情</label>&ndash;&gt;
-                <textarea class="form-control guo-text" id="exampleFormControlTextarea1" rows="12" style="border-style: none" placeholder="请输入正文"></textarea>
-            </div>-->
-            <div class="guo-rich">
-                <textarea  id="richText" name="rich" placeholder="请输入正文"></textarea>
-            </div>
-            <script>
-                 CKEDITOR.replace('rich');
-            </script>
-            <div class="form-group guo-but">
-                <button type="submit" class="btn btn-primary" id="button1">发布</button>
-                <button type="submit" class="btn btn-primary" id="button2">存草稿</button>
-            </div>
-        </form>
+        </div>
+        <nav aria-label="Page navigation example" id="page">
+            <button type="button" class="btn btn-primary" id="button3">回答</button>
+        </nav>
     </div>
-
-   <!-- <div class="con2">
-        <textarea class="form-control" id="exampleFormControlTextarea2" rows="15">
-            相关介绍
+    <div class="con2">
+        <textarea class="form-control" id="exampleFormControlTextarea2" rows="11">
+            相关问题
         </textarea>
     </div>
     <div class="con3">
-        <textarea class="form-control" id="exampleFormControlTextarea3" rows="3">
-            版权介绍
+        <textarea class="form-control" id="exampleFormControlTextarea3" rows="11">
+            相关推荐
         </textarea>
-    </div>-->
+    </div>
 </div>
+<nav aria-label="Page navigation">
+    <ul class="pagination pagination-lg">
+        <li>
+            <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li aria-disabled="true"><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li>
+            <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 </body>
 </html>

@@ -37,6 +37,8 @@
                 </td>
                 <td style="width: 58%">
                     <span>{{comment.name}}</span>
+                    <span v-if="comment.isQuestionOwner">(题问者)</span>
+                    <span v-if="comment.isAnswerer">(回答者)</span>
                 </td>
                 <td style="width: 30%;text-align: right">
                     <div class="dropdown">
@@ -75,8 +77,10 @@
                         </td>
                         <td style="width: 60%">
                             <span>{{reply.name}}</span>
+                            <span v-if="reply.isQuestionOwner">(题问者)</span>
+                            <span v-if="reply.isAnswerer">(回答者)</span>
                             <i class="fas fa-caret-right"></i>
-                            <span>{{reply.replyTo}}</span>
+                            <span>{{reply.targetName}}</span>
                         </td>
                         <td style="width: 30%;text-align: right">
                             <div class="dropdown">
@@ -108,7 +112,7 @@
                     </table>
                     <div class="lineReply"><div class="line"></div></div>
                 </div>
-                <div v-if="comment.replyNum>2"><button class="btn btn-link">查看全部{{comment.replyNum}}条回复</button></div>
+                <div v-if="comment.replyNum > 2"><button class="btn btn-link" @click="moreReply">查看全部{{comment.replyNum}}条回复</button></div>
             </div>
             <div class="line"></div>
         </div>
@@ -175,6 +179,9 @@
                         }
                     });
                 }
+            },
+            moreReply:function () {
+                location.href = "../reply/reply.html";
             }
         },
         mounted:function () {

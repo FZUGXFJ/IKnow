@@ -175,6 +175,7 @@
                         question.answerCount = result.answerCount;
                         question.answers = result.questionAnswers;
                         question.load = true;
+                        question.isSolved = result.isSolved;
                     } else if (result.resultCode === 1) {
                         alert("问题找不到！")
                     }
