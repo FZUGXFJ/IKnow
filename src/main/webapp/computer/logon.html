@@ -58,20 +58,24 @@
         <input id="email" placeholder="请输入您的邮箱" type="email" >
     </div>
     <div id="emailUnderline"></div>
+    <div class="errorMessage" v-if="emailError">{{emailErrorMsg}}</div>
     <div id="userID">
         <input type="text" placeholder="请输入您的用户名" maxlength="12" id="username" value="">
     </div>
     <div id="userUnderline"></div>
+    <div class="errorMessage" v-if="usernameError">{{usernameErrorMsg}}</div>
     <div id="psw">
         <input type="password" placeholder="请输入您的密码" id="password" value="">
     </div>
     <div id="pswUnderline"></div>
+    <div class="errorMessage" v-if="passwordError">{{passwordErrorMsg}}</div>
     <div id="identifyDiv">
         <input type="number" placeholder="请输入您的验证码" maxlength="6" id="verifyCode" value="" @keyup="validateVerify">
         <button class="codeBut" @click="launch" v-if="!verify">获取验证码</button>
         <button class="codeBut" disabled="disabled" v-else>重新发送({{timeout}})</button>
     </div>
     <div id="codeUnderline"></div>
+    <div class="errorMessage" v-if="verifyCodeError">{{verifyCodeErrorMsg}}</div>
     <div id="loginButDiv">
         <input type="submit" value="注册" id="loginBut" @click="validator">
     </div>
@@ -82,10 +86,11 @@
 <!--        <form><input type="checkbox" value="" id="check">是否同意《IKnow协议》、《隐私保护指引》 </form>-->
         <p id="tip">未注册邮箱验证后自动登录</p>
     </div>
-    <div id="socialLogin">
-        <form method="" action=""><input type="submit" onclick="" id="weChat" value=""></form>
-        <form method="" action=""><input type="submit" onclick="" id="qq" value=""></form>
-    </div>
+    <div class="errorMessage" v-if="agreeError">{{agreeErrorMsg}}</div>
+<!--    <div id="socialLogin">-->
+<!--        <form method="" action=""><input type="submit" onclick="" id="weChat" value=""></form>-->
+<!--        <form method="" action=""><input type="submit" onclick="" id="qq" value=""></form>-->
+<!--    </div>-->
 </div>
 <script type="text/javascript">
     let logon=new Vue({
