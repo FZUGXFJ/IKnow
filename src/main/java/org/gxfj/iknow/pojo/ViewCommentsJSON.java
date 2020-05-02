@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class ViewCommentsJSON {
     Integer resultCode;
+    Integer commentNum;
     List<CommentJSON> comments = new ArrayList<>();
 
     public Integer getResultCode() {
@@ -27,6 +28,13 @@ public class ViewCommentsJSON {
         this.comments = comments;
     }
 
+    public Integer getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
+    }
 
     /**
      * @author qmbx
@@ -40,7 +48,9 @@ public class ViewCommentsJSON {
         Integer approveNum;
         Integer isQuestionOwner;
         Integer isAnswerer;
-        List<ReplyJSON> reolies = new ArrayList<>();
+        List<ReplyJSON> replies = new ArrayList<>();
+        Integer replyNum;
+        String time;
 
         public Integer getId() {
             return id;
@@ -106,12 +116,28 @@ public class ViewCommentsJSON {
             this.isAnswerer = isAnswerer;
         }
 
-        public List<ReplyJSON> getReolies() {
-            return reolies;
+        public List<ReplyJSON> getReplies() {
+            return replies;
         }
 
-        public void setReolies(List<ReplyJSON> reolies) {
-            this.reolies = reolies;
+        public void setReplies(List<ReplyJSON> replies) {
+            this.replies = replies;
+        }
+
+        public Integer getReplyNum() {
+            return replyNum;
+        }
+
+        public void setReplyNum(Integer replyNum) {
+            this.replyNum = replyNum;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
         }
     }
 
@@ -120,11 +146,13 @@ public class ViewCommentsJSON {
         Integer userId;
         String head;
         String name;
-        String replyTo;
+        String targetName;
+        Integer targetId;
         String content;
         Integer approveNum;
         Integer isQuestionOwner;
         Integer isAnswerer;
+        String time;
 
         public Integer getId() {
             return id;
@@ -158,12 +186,20 @@ public class ViewCommentsJSON {
             this.name = name;
         }
 
-        public String getReplyTo() {
-            return replyTo;
+        public String getTargetName() {
+            return targetName;
         }
 
-        public void setReplyTo(String replyTo) {
-            this.replyTo = replyTo;
+        public void setTargetName(String targetName) {
+            this.targetName = targetName;
+        }
+
+        public Integer getTargetId() {
+            return targetId;
+        }
+
+        public void setTargetId(Integer targetId) {
+            this.targetId = targetId;
         }
 
         public String getContent() {
@@ -198,6 +234,13 @@ public class ViewCommentsJSON {
             this.isAnswerer = isAnswerer;
         }
 
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
+        }
     }
 }
 
