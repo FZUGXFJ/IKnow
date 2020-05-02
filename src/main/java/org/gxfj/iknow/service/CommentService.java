@@ -25,6 +25,6 @@ public interface CommentService {
      */
     public Map<String, Object> getComments(Integer answerId);
 
-    public ViewCommentsJSON getCommentsTest(Integer answerId);
+
 
 }

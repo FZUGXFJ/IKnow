@@ -2,7 +2,6 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Reply;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

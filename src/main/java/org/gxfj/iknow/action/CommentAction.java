@@ -58,10 +58,6 @@ public class CommentAction {
         Map<String, Object> response;
         response = commentService.getComments(answerId);
         response.put("resultCode",SUCCESS);
-
-//        ViewCommentsJSON response = new ViewCommentsJSON();
-//        response = commentService.getCommentsTest(answerId);
-//        response.setResultCode(SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return  "success";
     }
