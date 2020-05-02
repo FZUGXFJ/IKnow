@@ -234,7 +234,7 @@ body{
 #verifyCode{
      margin-left: 40px;
      height: 40px;
-    color: #444444;
+     color: #444444;
      font-size: 22px;
      border-style: none;
      float: left;
@@ -400,4 +400,7 @@ placeholder{
     text-align: left;
     font-size: 0.8em;
     color: red;
+}
+.errorMessage{
+    margin-left: 40px;
 }

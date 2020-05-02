@@ -42,6 +42,7 @@ public class UserAction {
     private final String SUCCESS = "success";
     private final static String RESULT_CODE_NAME = "resultCode";
     private final static String RESET_PASSWORD_VERIFY_CODE_SESSION_NAME = "verifyCode";
+    private final static int SUCCESS_CODE = 0;
     private final static int RESET_PASSWD_FAIL = 1;
     private final static int UN_LOGIN = 1;
     private final static int VARIFY_DEFAULT = 1;
@@ -137,7 +138,7 @@ public class UserAction {
         if (session.get("user") == null) {
             result.put(RESULT_CODE_NAME, UN_LOGIN);
         } else {
-            result.put(RESULT_CODE_NAME, SUCCESS);
+            result.put(RESULT_CODE_NAME, SUCCESS_CODE);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         System.out.println(JSON.toJSONString(result));
@@ -166,7 +167,7 @@ public class UserAction {
             result.put(RESULT_CODE_NAME,UN_LOGIN);
         } else {
             if (verifyCode.equals(session.get(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME))) {
-                result.put(RESULT_CODE_NAME,SUCCESS);
+                result.put(RESULT_CODE_NAME,SUCCESS_CODE);
                 session.put("resetPasswordVerify", true);
             } else {
                 result.put(RESULT_CODE_NAME,VARIFY_DEFAULT);
@@ -184,7 +185,7 @@ public class UserAction {
         User user = (User) session.get("user");
         Boolean resetPasswordVerify = (Boolean)session.get("resetPasswordVerify");
         if (user != null && resetPasswordVerify != null && resetPasswordVerify) {
-            result.put(RESULT_CODE_NAME, userService.resetPassword(user, newPassword) ? SUCCESS : RESET_PASSWD_FAIL);
+            result.put(RESULT_CODE_NAME, userService.resetPassword(user, newPassword) ? SUCCESS_CODE : RESET_PASSWD_FAIL);
             session.put("resetPasswordVerify", false);
         } else {
             result.put(RESULT_CODE_NAME,UN_LOGIN);

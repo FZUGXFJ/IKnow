@@ -1,89 +1,122 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../../css/global.css">
-    <link rel="stylesheet" type="text/css" href="../../css/mobile/user/login.css">
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/computer/user/login.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script type="text/javascript" src="../js/computer.js"></script>
 </head>
-<body>
-<div id="login">
-    <div id="title">
-        <table>
-            <td style="width: 33%"><i class="fas fa-chevron-left" style="padding-right: 1em" @click="back"></i></td>
-            <td style="width: 34%;text-align: center">用户登录</td>
-            <td style="width: 33%;text-align: right"><a href="logon.html">注册</a></td>
-        </table>
+<body style="background-color: aliceblue">
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#" style="margin-left: 250PX"><img src="../img/LOGO透明%20(1).png"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active" style="margin-left: 10px">
+                <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">问答</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">登录</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">注册</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
+            <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
+        </form>
+        <ul class="navbar-nav mr-auto ">
+            <li class="nav-item dropdown" style="margin-left: 10PX">
+                <select class="form-control form-control-lg">
+                    <option>按题目查找</option>
+                    <option>按回答查找</option>
+                </select>
+            </li>
+        </ul>
     </div>
-    <img src="../../img/logo.png" class="figure-img img-fluid rounded" style="width: 100%" alt="logo">
-    <div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
-        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <br>
-    <div id="choose">
-        <span v-bind:class="{selected:useEmail}" @click="useEmail=!useEmail">免密码登录</span>
-        <span v-bind:class="{selected:!useEmail}" @click="useEmail=!useEmail">密码登录</span>
-    </div>
-    <div id="inputArea">
-        <div style="text-align: center" v-if="useEmail">
-            <br>
-            <div class="errorMessage" v-if="emailError">{{emailErrorMsg}}</div>
-            <input id="email" type="email" placeholder="邮箱" class="form-control" size="28" aria-label="邮箱">
-            <br>
-            <div class="errorMessage" v-if="verifyCodeError">{{verifyCodeErrorMsg}}</div>
-            <table>
-                <td style="width: 60%;text-align: left">
-                    <input type="number" id="verifyCode" class="form-control" aria-label="验证码" @keyup="validateVerify">
-                </td>
-                <td style="width: 40%">
-                    <button class="btn btn-link" @click="getVerifyCode" v-if="!verify">获取验证码</button>
-                    <button class="btn btn-link" disabled="disabled" v-else>重新发送({{timeout}})</button>
-                </td>
-            </table>
-            <br>
-            <div style="text-align: left">
-                <i class="fas fa-circle" @click="isRmb=!isRmb" v-if="!isRmb"></i>
-                <i class="fas fa-check-circle" @click="isRmb=!isRmb" v-else></i>
-                <span style="font-size: 1em">记住我</span>
-            </div>
-            <br>
-            <button class="btn btn-info" style="font-size: 1em;width: 80%" @click="validator()">登录</button>
-        </div>
-        <div style="text-align: center" v-else>
-            <br>
-            <div class="errorMessage" v-if="emailError1">{{emailErrorMsg1}}</div>
-            <input id="email1" type="email" placeholder="邮箱" class="form-control" aria-label="邮箱">
-            <br>
-            <div class="errorMessage" v-if="passwordError">{{passwordErrorMsg}}</div>
-            <input id="password" type="password" placeholder="密码" class="form-control" size="20" maxlength="20" aria-label="密码">
-            <br>
-            <table>
-                <tr>
-                    <td style="width: 50%;text-align: left">
-                        <i class="fas fa-circle" v-on:click="isRmb=!isRmb" v-if="!isRmb"></i>
-                        <i class="fas fa-check-circle" v-on:click="isRmb=!isRmb" v-else></i>
-                        <span>记住我</span>
-                    </td>
-                    <td style="width: 50%;text-align: right">
-                        <span style="font-size: 1em;margin-right: 5%"><a href="">忘记密码？</a></span>
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <button class="btn btn-info" style="font-size: 1em;width: 80%" @click="validator()">登录</button>
-        </div>
-    </div>
+</nav>
+
+<hr/>
+<div id="logoContext">
+    <img id="logoIn" src="../img/LOGO1.png">
 </div>
+<div id="login">
+    <div class="typeChoice">
+        <div id="freeLogin" @click="useEmail=!useEmail"><a href="#" id="free">免密登录</a></div>
+        <div id="keyLogin" @click="useEmail=!useEmail"><a href="#" id="key">密码登录</a></form></div>
+    </div>
+    <div id="loginUnderline" v-if="useEmail"></div>
+    <div id="loginUnderline1" v-if="!useEmail"></div>
+
+    <div v-if="useEmail">
+        <div id="account">
+            <form action="" method="">
+                <input id="email" placeholder="请输入您的邮箱" type="email" value="">
+            </form>
+        </div>
+        <div id="emailUnderline"></div>
+        <div class="errorMessage" v-if="emailError" style="margin-left: 40px">{{emailErrorMsg}}</div>
+        <div id="identifyDiv">
+            <input type="number" placeholder="请输入您的验证码" maxlength="6" id="verifyCode" value="" @keyup="validateVerify">
+            <button class="codeBut" @click="getVerifyCode" v-if="!verify">获取验证码</button>
+            <button class="codeBut" disabled="disabled" v-else>重新发送({{timeout}})</button>
+        </div>
+        <div id="codeUnderline"></div>
+        <div class="errorMessage" v-if="verifyCodeError" style="margin-left: 40px">{{verifyCodeErrorMsg}}</div>
+        <div style="margin-left: 40px;margin-top: 5%">
+            <i class="fas fa-circle" @click="isRmb=!isRmb" v-if="!isRmb" style="color: #d6d6d6"></i>
+            <i class="fas fa-check-circle" @click="isRmb=!isRmb" v-else style="color: cornflowerblue"></i>
+            <span style="font-size: 1em;">记住我</span>
+        </div>
+        <div id="loginButDiv">
+                <input type="submit" value="登录" id="loginBut" @click="validator()">
+        </div>
+        <div id="socialLogin">
+            <form method="" action=""><input type="submit" onclick="" class="weChat" value=""></form>
+            <form method="" action=""><input type="submit" onclick="" class="qq" value=""></form>
+        </div>
+    </div>
+
+    <div v-else>
+        <div id="account1">
+            <input id="email1" type="email" placeholder="请输入您的邮箱" value="">
+        </div>
+        <div id="emailUnderline1"></div>
+        <div class="errorMessage" v-if="emailError1" style="margin-left: 40px">{{emailErrorMsg1}}</div>
+        <div id="keyDiv"><input type="password" placeholder="请输入您的密码" id="password" maxlength="20"></div>
+        <div id="codeUnderline1"></div>
+        <div class="errorMessage" v-if="passwordError" style="margin-left: 40px">{{passwordErrorMsg}}</div>
+        <div style="margin-left: 40px;margin-top: 5%">
+            <i class="fas fa-circle" @click="isRmb=!isRmb" v-if="!isRmb" style="color: #d6d6d6"></i>
+            <i class="fas fa-check-circle" @click="isRmb=!isRmb" v-else style="color: cornflowerblue"></i>
+            <span style="font-size: 1em">记住我</span>
+            <span style="font-size: 1em;margin-left: 55%"><a href="">忘记密码？</a></span>
+        </div>
+        <div id="loginButDiv1">
+            <input type="submit" value="登录" id="loginBut1" @click="validator()">
+        </div>
+        <div id="socialLogin1">
+            <form method="" action=""><input type="submit" onclick="" class="weChat" value=""></form>
+            <form method="" action=""><input type="submit" onclick="" class="qq" value=""></form>
+        </div>
+    </div>
+
+</div>
+
 <script type="text/javascript">
     let login=new Vue({
         el:"#login",
@@ -111,7 +144,7 @@
             loginByEmail:function (email,verifyCode) {
                 let al = $("#alert");
                 $.ajax({
-                    url:"../../user/emailLogin.action",
+                    url:"../user/emailLogin.action",
                     type:"POST",
                     data:{
                         email:email,
@@ -156,7 +189,7 @@
             },
             loginByPassword:function (email,password) {
                 $.ajax({
-                    url:"../../user/passwordLogin.action",
+                    url:"../user/passwordLogin.action",
                     type:"POST",
                     data:{
                         email:email,
@@ -201,7 +234,7 @@
                     }
                 }, 1000);
                 $.ajax({
-                    url:"../../user/sendEmail.action",
+                    url:"../user/sendEmail.action",
                     type:"POST",
                     data:{
                         email:email.val(),
@@ -265,5 +298,6 @@
         },
     });
 </script>
+
 </body>
 </html>

@@ -104,7 +104,8 @@ public class CommentServiceImpl implements CommentService {
      * @param answer 回答
      * @return 返回根据判断获得的回复者用户名与头像、回复对象用户名map值
      */
-    private Map<String, Object> replyIsQAOwner(User questionOwner,User answerOwner,Reply reply,Question question,Answer answer){
+    private Map<String, Object> replyIsQAOwner(User questionOwner, User answerOwner, Reply reply, Question question
+            , Answer answer){
         User replyUser = reply.getUserByUserId();
         User targetUser = reply.getUserByTargetUserId();
         Map<String, Object> replyMap = new HashMap<>(MAP_NUM);
@@ -113,9 +114,9 @@ public class CommentServiceImpl implements CommentService {
         if(isAnonymous){
             replyMap.put("targetName","匿名用户");
             replyMap.put("name","匿名用户");
-            replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>" +
-                    "alt=''>");
-        }else{
+            replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
+                    "style='border-radius: 100%' alt=''> alt=''>");
+        } else {
             replyMap.put("targetName",targetUser.getName());
             replyMap.put("name",replyUser.getName());
             replyMap.put("head","<img src='../../head/"+replyUser.getHead() +
@@ -133,7 +134,8 @@ public class CommentServiceImpl implements CommentService {
      * @param answer 回答
      * @return List<Map<String, Object>>型的回答map数组
      */
-    private List<Map<String, Object>> getCommentsMapArray(List<Comment> comments,User questionOwner,User answerOwner,Question question,Answer answer) {
+    private List<Map<String, Object>> getCommentsMapArray(List<Comment> comments ,User questionOwner ,User answerOwner
+            , Question question, Answer answer) {
         List<Map<String, Object>> commentListMap = new ArrayList<>();
         List<Map<String, Object>> replyListMap;
 
@@ -143,7 +145,7 @@ public class CommentServiceImpl implements CommentService {
         Map<String, Object> commentMap;
 
         User commentUser;
-        for(Comment comment:comments){
+        for (Comment comment : comments) {
             commentUser = comment.getUserByUserId();
             //评论者是题主或者回答者且匿名,则设置相应的头像和名称
             commentMap = commenterIsQAOwner(questionOwner,answerOwner,comment,question,answer);
@@ -154,9 +156,11 @@ public class CommentServiceImpl implements CommentService {
             commentMap.put("isQuestionOwner",questionOwner.getId().equals(commentUser.getId())?1:0);
             commentMap.put("isAnswerer",answerOwner.getId().equals(commentUser.getId())?1:0);
             commentMap.put("time", Time.getTime(comment.getDate()));
-            commentMap.put("replyNum",replyDAO.getCount(comment.getId()));
             //评论回复列表
             replies = replyDAO.listByCommentId(comment.getId(),0,REPLY_NUM);
+            //减少一次DAO层查询
+            commentMap.put("replyNum", replies != null ?  replies.size() : 0);
+
             replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
             commentMap.put("replies",replyListMap);
             commentListMap.add(commentMap);
@@ -178,7 +182,7 @@ public class CommentServiceImpl implements CommentService {
         Map<String, Object> replyMap;
         User replyUser;
         User targetUser;
-        for(Reply reply:replies){
+        for (Reply reply : replies) {
             //回复对象的用户名,需判断示符是题主、回答者，判断是否匿名
             replyMap = replyIsQAOwner(questionOwner,answerOwner,reply,question,answer);
             replyUser = reply.getUserByUserId();
@@ -188,8 +192,8 @@ public class CommentServiceImpl implements CommentService {
             replyMap.put("targetId",targetUser.getId());
             replyMap.put("content",reply.getContent());
             replyMap.put("approveNum",reply.getCount());
-            replyMap.put("isQuestionOwner",questionOwner.getId().equals(replyUser.getId())?1:0);
-            replyMap.put("isAnswerer",answerOwner.getId().equals(replyUser.getId())?1:0);
+            replyMap.put("isQuestionOwner",questionOwner.getId().equals(replyUser.getId()) ? 1 : 0);
+            replyMap.put("isAnswerer",answerOwner.getId().equals(replyUser.getId()) ? 1 : 0);
             replyMap.put("time",Time.getTime(reply.getDate()));
             replyListMap.add(replyMap);
         }
