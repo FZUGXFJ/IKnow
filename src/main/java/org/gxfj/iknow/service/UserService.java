@@ -15,10 +15,9 @@ public interface UserService {
      * @param username 用户名
      * @param email 邮箱
      * @param password 密码
-     * @param verifyCode 注册验证码
      * @return 返回信息如下
      */
-    public Map<String,Object> logon(String username, String password, String email, String verifyCode);
+    public Map<String,Object> logon(String username, String password, String email);
 
     /**
      * 发送验证码到邮箱
@@ -70,4 +69,11 @@ public interface UserService {
      * @return 成功返回true，失败返回false
      */
     public Boolean resetPassword(User user, String newPassword);
+
+    /**
+     * 将用户的邮箱更新。
+     * @param newEmail
+     * @return 是否成功
+     */
+    public boolean reBindEmail(User user , String newEmail);
 }

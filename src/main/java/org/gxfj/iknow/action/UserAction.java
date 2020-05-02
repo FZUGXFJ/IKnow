@@ -95,7 +95,7 @@ public class UserAction {
             inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
             return SUCCESS;
         }
-        Map<String,Object> resultMap = userService.logon(username,password,email,verifyCode);
+        Map<String,Object> resultMap = userService.logon(username,password,email);
         if ((Integer) resultMap.get("value") == 0) {
             session.put("user",resultMap.get("user"));
         }
@@ -104,6 +104,10 @@ public class UserAction {
         return SUCCESS;
     }
 
+    /**
+     * 用于邮箱登录，session中无user
+     * @return
+     */
     public String sendEmail() {
         Map<String,Object> session = ActionContext.getContext().getSession();
         Map<String,String> resultMap = userService.sendVerifyCode(email);
@@ -140,6 +144,10 @@ public class UserAction {
         return SUCCESS;
     }
 
+    /**
+     * 用户已登录状态下使用，用于修改密码
+     * @return
+     */
     public String sendVerifyEmail() {
         Map<String,Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
