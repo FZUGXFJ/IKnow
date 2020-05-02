@@ -160,7 +160,13 @@ public class CommentServiceImpl implements CommentService {
             //评论回复列表
             replies = replyDAO.listByCommentId(comment.getId(),0,REPLY_NUM);
             //减少一次DAO层查询
-            commentMap.put("replyNum", replies != null ?  replies.size() : 0);
+            if (replies == null) {
+                commentMap.put("replyNum", 0);
+                replyListMap = new ArrayList<>();
+            } else {
+                commentMap.put("replyNum", replies.size());
+                replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
+            }
 
             replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
             commentMap.put("replies",replyListMap);

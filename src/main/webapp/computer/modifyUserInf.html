@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="UTF-8">
+    <title>修改个人信息</title>
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/computer/user/modifyUserInf.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script type="text/javascript" src="../js/computer.js"></script>
+</head>
+<body style="background-color: aliceblue">
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#" style="margin-left: 13%"><img src="../img/LOGO透明%20(1).png"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active" style="margin-left: 10px">
+                <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">问答</a>
+            </li>
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="#">登录</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="#">注册</a>-->
+            <!--            </li>-->
+        </ul>
+        <a class="navbar-brand" href="#"><img src="../img/qq.PNG"></a>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
+            <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
+        </form>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown" style="margin-left: 10PX">
+                <select class="form-control form-control-lg">
+                    <option>按题目查找</option>
+                    <option>按回答查找</option>
+                </select>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="contain" id="modifyUserInf">
+    <div class="con1">
+        <div id="headPortrait" v-html="headPortrait"></div>
+        <div style="text-align: center">
+            <button class="btn btn-link" @click="changeHead(20)">更换头像</button>
+        </div>
+<!--        <div class="media" >-->
+<!--            <img src="../img/qq.PNG" class="mr-3" alt="..." >-->
+<!--            <div class="media-body">-->
+<!--                <h5 class="mt-0">刚下飞机</h5>-->
+
+<!--                <div>-->
+<!--                    Lv-->
+<!--                    <span class="lv">17</span>-->
+<!--                    <span class="stars">-->
+<!--                        <i class="fas fa-certificate"></i>-->
+<!--                        <span class="star">17</span>-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--                <p style="margin-top: 1%">个人简介..................................</p>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+    <div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="con3">
+        <form>
+            <div class="inputType ">
+                <span class="inType"> 用户名</span>
+                <span class="errorMessage" v-if="usernameError">{{usernameErrorMsg}}</span>
+                <input id="username" type="text" class="form-control" aria-label="用户名" v-model="username">
+            </div>
+            <div class="inputType ">
+                <span class="inType"> 性别</span>
+                <select class="form-control" id="gender">
+                    <option>男</option>
+                    <option>女</option>
+                    <option>保密</option>
+                </select>
+            </div>
+            <div class="inputType">
+                <span class="inType">自我介绍</span> <span class="errorMessage" v-if="introductionError">{{introductionErrorMsg}}</span>
+                <textarea class="form-control" id="introduction" v-model="introduction" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btn1" @click="validator">确认</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let modifyUserInf = new Vue({
+        el:"#modifyUserInf",
+        data:{
+            head:"1.jpg",
+            headFirstPart:"<img src='../head/",
+            headLastPart:"' width='100%' height='100%' alt=''>",
+            username:"",
+            gender:"",
+            introduction:"",
+            usernameError:false,
+            usernameErrorMsg:"",
+            introductionError:false,
+            introductionErrorMsg:"",
+            alertMsg:{head:"",body:""},
+        },
+        methods:{
+            changeHead:function (total) {
+                let r = Math.floor(Math.random()*total) + 1;
+                let headName = r + ".jpg";
+                this.head = headName;
+                this.headPortrait = this.headFirstPart + headName + this.headLastPart;
+            },
+            save:function () {
+                $.ajax({
+                    url:"../user/editInf.action",
+                    type:"POST",
+                    data:{
+                        head:modifyUserInf.head.trim(),
+                        username:modifyUserInf.username.trim(),
+                        gender:modifyUserInf.gender,
+                        introduction:modifyUserInf.introduction.trim()
+                    } ,
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            modifyUserInf.alertMsg.head = "修改成功";
+                            $("#alert").slideDown();
+                        } else if (result.resultCode === 1) {
+                            modifyUserInf.usernameError =true;
+                            modifyUserInf.usernameErrorMsg = "用户名已占用";
+                        }
+                    },
+                    error:function (e) {
+                        alert("异常");
+                    }
+                });
+            },
+            validator:function () {
+                let usernameLen = modifyUserInf.username.length;
+                let introLen = modifyUserInf.introduction.length;
+                if (usernameLen < 2 || usernameLen > 12) {
+                    this.usernameError = true;
+                    this.usernameErrorMsg = "用户名长度不得少于2个字符多于12个字符";
+                } else {
+                    this.usernameError = false;
+                }
+                if (introLen > 30 ) {
+                    this.introductionError = true;
+                    this.introductionErrorMsg = "个人介绍不得多于30个字符";
+                } else {
+                    this.introductionError = false;
+                }
+                if (!this.usernameError && !this.introductionError) {
+                    this.save();
+                }
+            },
+            closeAlert:function () {
+                $("#alert").slideUp();
+            }
+        },
+        created:function () {
+            $.ajax({
+                url:"../user/userInf.action",
+                type:"POST",
+                data:{},
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        modifyUserInf.username = result.userInf.username;
+                        modifyUserInf.head = result.userInf.head;
+                        modifyUserInf.gender = result.userInf.gender;
+                        modifyUserInf.introduction = result.userInf.introduction;
+                    } else if (result.resultCode === 1) {
+                        alert("请先登录后再修改信息！");
+                        window.location.href = "login.html";
+                    }
+                },
+                error:function (e) {
+                    alert("数据请求异常");
+                }
+            });
+        },
+        computed:{
+            headPortrait:function () {
+                return this.headFirstPart + this.head + this.headLastPart;
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -73,7 +73,7 @@ body{
 #logo{
     width:119px;
     height: 50px;
-    background:url("../../img/LOGO透明 (1).png");
+    background:url("../../../img/LOGO透明 (1).png");
     border-style: none;
 }
 
@@ -81,7 +81,7 @@ body{
     margin-top: 5px;
     height: 35px;
     width: 35px;
-    background: url("../../img/search.PNG");
+    background: url("../../../img/search.PNG");
     border-style: none;
 }
 #logoContext{

@@ -1,5 +1,23 @@
+body{
+    height: 1000px;
+}
+.navigationPart{
+    float: left;
+    margin-top: 10px;
+    margin-left: 50px;
+    width:100px;
+    height: 50px;
+}
+.navigation{
+    height: 10%;
+    background: aliceblue;
+    border-radius: 10px;
+}
+.nav-item{
+    margin-right: 50px;
+}
 .contain{
-    height: 40%;
+    height: 45%;
     margin-left: 15%;
 }
 .con1{
@@ -17,11 +35,12 @@
     float: left;
 }
 .con3{
-    height: 90%;
+    height: 100%;
     width: 80%;
     background-color: white;
     margin-top: 2%;
     float: left;
+    position: relative;
 }
 .lv{
     text-align: center;
@@ -42,9 +61,8 @@
     margin-right: 1%;
 }
 .inputType{
-    margin-left: 7%;
-    margin-top: 3%;
-    position: relative;
+    margin-left: 2em;
+    margin-top: 2em;
 }
 .input{
     height: 5%;
@@ -64,8 +82,41 @@
     margin-left: 5%;
     margin-top: 2%;
 }
-.btn{
+#btn1{
     margin-left: 20%;
+    height: 10%;
     width: 15%;
     margin-top: 2%;
+    float: left;
+    position: absolute;
+    bottom: 1em;
+}
+#introduction{
+    width: 80%;
+}
+#gender{
+    width: 80%;
+}
+#username{
+    width: 80%;
+}
+#headPortrait{
+    width: 7em;
+    height: 7em;
+    margin: 0 auto;
+    border-radius: 100%;
+    overflow: hidden;
+    text-align: center;
+    margin-top: 1em;
+}
+#alert{
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+    display: none;
+}
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
 }
