@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Administrator
+ * @author Administrator hhj
  */
 @Service("userService")
 @Transactional(readOnly = false)
