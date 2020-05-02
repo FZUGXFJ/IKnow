@@ -3,6 +3,7 @@ package org.gxfj.iknow.action;
 import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.pojo.ViewCommentsJSON;
 import org.gxfj.iknow.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,6 +58,10 @@ public class CommentAction {
         Map<String, Object> response;
         response = commentService.getComments(answerId);
         response.put("resultCode",SUCCESS);
+
+//        ViewCommentsJSON response = new ViewCommentsJSON();
+//        response = commentService.getCommentsTest(answerId);
+//        response.setResultCode(SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return  "success";
     }

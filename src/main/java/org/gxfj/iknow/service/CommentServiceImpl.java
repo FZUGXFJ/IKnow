@@ -79,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
      * @return 返回根据判断获得的评论用户名与头像map值
      */
     private Map<String, Object> commenterIsQAOwner(User questionOwner,User answerOwner,Comment comment,
-            Question question, Answer answer){
+                                                   Question question, Answer answer){
         User commentUser = comment.getUserByUserId();
         Map<String, Object> commentMap = new HashMap<>(MAP_NUM);
         boolean isAnonymous = (questionOwner.getId().equals(commentUser.getId()) && question.getIsAnonymous() == 1)
@@ -123,7 +123,7 @@ public class CommentServiceImpl implements CommentService {
             replyMap.put("head","<img src='../../head/"+replyUser.getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
         }
-        return  replyMap;
+        return replyMap;
     }
 
     /**
@@ -142,7 +142,6 @@ public class CommentServiceImpl implements CommentService {
 
         List<Reply> replies;
 
-        Map<String, Object> replyMap;
         Map<String, Object> commentMap;
 
         User commentUser;
@@ -154,20 +153,21 @@ public class CommentServiceImpl implements CommentService {
             commentMap.put("userId",commentUser.getId());
             commentMap.put("content",comment.getContent());
             commentMap.put("approveNum",comment.getCount());
-            commentMap.put("isQuestionOwner",questionOwner.getId().equals(commentUser.getId())?1:0);
-            commentMap.put("isAnswerer",answerOwner.getId().equals(commentUser.getId())?1:0);
+            commentMap.put("isQuestionOwner",questionOwner.getId().equals(commentUser.getId()) ? 1 : 0);
+            commentMap.put("isAnswerer",answerOwner.getId().equals(commentUser.getId()) ? 1 : 0);
             commentMap.put("time", Time.getTime(comment.getDate()));
-            //评论回复列表
-            replies = replyDAO.listByCommentId(comment.getId(),0,REPLY_NUM);
-            //减少一次DAO层查询
-            if (replies == null) {
-                commentMap.put("replyNum", 0);
-                replyListMap = new ArrayList<>();
+            int num = replyDAO.getCount(comment.getId());
+            commentMap.put("replyNum", replyDAO.getCount(comment.getId()));
+            if (num != 0) {
+                replies = replyDAO.listByCommentId(comment.getId(), 0, REPLY_NUM);
             } else {
-                commentMap.put("replyNum", replies.size());
-                replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
+                replies = new ArrayList<>();
             }
+            //评论回复列表
 
+            replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
+
+            //replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
             commentMap.put("replies",replyListMap);
             commentListMap.add(commentMap);
         }
@@ -183,7 +183,8 @@ public class CommentServiceImpl implements CommentService {
      * @param answer 回答
      * @return List<Map<String, Object>>型的回复map数组
      */
-    private List<Map<String, Object>> getCommentReplyMapArray(List<Reply> replies,User questionOwner,User answerOwner,Question question,Answer answer){
+    private List<Map<String, Object>> getCommentReplyMapArray(List<Reply> replies,User questionOwner,User answerOwner,
+                                                              Question question,Answer answer) {
         List<Map<String, Object>> replyListMap = new ArrayList<>();;
         Map<String, Object> replyMap;
         User replyUser;

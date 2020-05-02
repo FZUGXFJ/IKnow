@@ -2,6 +2,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.pojo.Comment;
 import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.pojo.ViewCommentsJSON;
 
 import java.util.List;
 import java.util.Map;
@@ -23,5 +24,7 @@ public interface CommentService {
      * answerId 回答Id
      */
     public Map<String, Object> getComments(Integer answerId);
+
+    public ViewCommentsJSON getCommentsTest(Integer answerId);
 
 }
