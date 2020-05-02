@@ -135,10 +135,12 @@ public class QuestionServiceImpl implements QuestionService{
         //题主
         Map<String, Object> owner = new HashMap<>(MAP_NUM);
         //JSON中的数组
-        List<Map<String, Object>> questionAnswers = new ArrayList<>();
+        List<Map<String, Object>> questionAnswers;
         //JSON中的数组成员
         Map<String, Object> questionAnswerMap;
 
+        //Question的owner的JSON数据
+        questionMap.put("owner",setQueOwnerByIfAnonymous(question));
         questionMap.put("isAnonymous",question.getIsAnonymous());
         questionMap.put("isSolved",questionDAO.getQuestionStateId(question.getId()) == QUESTION_STATE_SOLVE ? 1 : 0);
         questionMap.put("title",question.getTitle());
@@ -151,18 +153,7 @@ public class QuestionServiceImpl implements QuestionService{
         } else {
             questionMap.put("answerCount", answers.size());
         }
-        //owner的JSON数据
-        if(question.getIsAnonymous() == 1) {
-            owner.put("id",0);
-            owner.put("username","匿名用户");
-            owner.put("head","0.jpg");
-        }
-        else{
-            owner.put("id",question.getUserByUserId().getId());
-            owner.put("username",question.getUserByUserId().getName());
-            owner.put("head",question.getUserByUserId().getHead());
-        }
-        questionMap.put("owner",owner);
+
         //包含采纳回答的列表
         List<Answer> nAnswers = new ArrayList<>();
         //将采纳的回答放入列表第一位
@@ -178,26 +169,73 @@ public class QuestionServiceImpl implements QuestionService{
                 nAnswers.add(answer);
             }
         }
+        //获取回答者json数据数组即map类型的list
+        questionAnswers = setAnswersJSON(nAnswers,question);
+        questionMap.put("questionAnswers",questionAnswers);
+        return questionMap;
 
+    }
+
+    /**
+     * 通过判断问题是否匿名发表设置题主相关信息并返回json数据
+     * @param question 问题
+     * @return Map<String, Object>型的问题题主相关json数据
+     */
+    private Map<String, Object> setQueOwnerByIfAnonymous(Question question){
+        Map<String, Object> owner = new HashMap<>(MAP_NUM);
+        if(question.getIsAnonymous() == 1) {
+            owner.put("id",0);
+            owner.put("username","匿名用户");
+            owner.put("head","0.jpg");
+        }
+        else{
+            owner.put("id",question.getUserByUserId().getId());
+            owner.put("username",question.getUserByUserId().getName());
+            owner.put("head",question.getUserByUserId().getHead());
+        }
+        return owner;
+    }
+
+    /**
+     * 通过判断问题回答是否匿名设置回答者相关信息并返回json数据
+     * @param answer 问题
+     * @return Map<String, Object>型的问题回答者相关json数据
+     */
+    private Map<String, Object> setQueAnswererByIfAnonymous(Answer answer){
+        Map<String, Object> questionAnswerMap = new HashMap<>(MAP_NUM);
+        //匿名设置
+        if(answer.getIsAnonymous() == 1) {
+            questionAnswerMap.put("answererName","匿名用户");
+            questionAnswerMap.put("answererLevel",0);
+            questionAnswerMap.put("answererBadge",0);
+            questionAnswerMap.put("answererId",0);
+            questionAnswerMap.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
+        }
+        //非匿名设置
+        else{
+            questionAnswerMap.put("answererName",answer.getUserByUserId().getName());
+            ////用户等级
+            questionAnswerMap.put("answererLevel",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
+            questionAnswerMap.put("answererBadge",answer.getUserByUserId().getBadgeNum());
+            questionAnswerMap.put("answererId",answer.getUserByUserId().getId());
+            questionAnswerMap.put("answererHead","<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
+        }
+        return questionAnswerMap;
+    }
+
+    /**
+     * 通过判断问题回答是否匿名设置回答者相关信息并返回json数据
+     * @param nAnswers 问题下回答列表
+     * @param question 问题
+     * @return Map<String, Object>型的问题回答者相关json数据
+     */
+    private List<Map<String, Object>> setAnswersJSON(List<Answer> nAnswers,Question question){
+        Map<String, Object> questionAnswerMap;
+        List<Map<String, Object>> questionAnswers = new ArrayList<>();
         for(Answer answer : nAnswers) {
-            questionAnswerMap = new HashMap<>(MAP_NUM);
-            //匿名设置
-            if(answer.getIsAnonymous() == 1) {
-                questionAnswerMap.put("answererName","匿名用户");
-                questionAnswerMap.put("answererLevel",0);
-                questionAnswerMap.put("answererBadge",0);
-                questionAnswerMap.put("answererId",0);
-                questionAnswerMap.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
-            }
-            //非匿名设置
-            else{
-                questionAnswerMap.put("answererName",answer.getUserByUserId().getName());
-                ////用户等级
-                questionAnswerMap.put("answererLevel",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
-                questionAnswerMap.put("answererBadge",answer.getUserByUserId().getBadgeNum());
-                questionAnswerMap.put("answererId",answer.getUserByUserId().getId());
-                questionAnswerMap.put("answererHead","<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
-            }
+            //通过判断回答是否匿名获取回答者相关信息
+            questionAnswerMap = setQueAnswererByIfAnonymous(answer);
+
             //所有设置
             questionAnswerMap.put("answerId",answer.getId());
             //回答
@@ -215,10 +253,10 @@ public class QuestionServiceImpl implements QuestionService{
             questionAnswerMap.put("answerTime",Time.getTime(answer.getDate()));
             questionAnswerMap.put("isAnonymous",answer.getIsAnonymous());
             questionAnswers.add(questionAnswerMap);
+            /*
+            answererIdentity：回答者的身份（α版本非必须）
+            */
         }
-        questionMap.put("questionAnswers",questionAnswers);
-        return questionMap;
-
+        return questionAnswers;
     }
-
 }
