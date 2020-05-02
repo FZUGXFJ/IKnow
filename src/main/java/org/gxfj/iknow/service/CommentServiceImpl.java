@@ -168,7 +168,6 @@ public class CommentServiceImpl implements CommentService {
                 replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
             }
 
-            replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
             commentMap.put("replies",replyListMap);
             commentListMap.add(commentMap);
         }
