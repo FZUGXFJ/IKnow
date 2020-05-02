@@ -78,14 +78,15 @@ public class CommentServiceImpl implements CommentService {
      * @param answer 回答
      * @return 返回根据判断获得的评论用户名与头像map值
      */
-    private Map<String, Object> commenterIsQAOwner(User questionOwner,User answerOwner,Comment comment,Question question,Answer answer){
+    private Map<String, Object> commenterIsQAOwner(User questionOwner,User answerOwner,Comment comment,
+            Question question, Answer answer){
         User commentUser = comment.getUserByUserId();
         Map<String, Object> commentMap = new HashMap<>(MAP_NUM);
         boolean isAnonymous = (questionOwner.getId().equals(commentUser.getId()) && question.getIsAnonymous() == 1)
                 ||(answerOwner.getId().equals(commentUser.getId()) && answer.getIsAnonymous() == 1);
         if(isAnonymous){
-            commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>" +
-                    "alt=''>");
+            commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%'" +
+                    " style='border-radius: 100%' alt=''>");
             commentMap.put("name","匿名用户");
         }else{
             commentMap.put("head","<img src='../../head/"+commentUser.getHead() +
