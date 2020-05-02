@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>免密登录</title>
+    <title>登录</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/computer/user/login.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
@@ -144,7 +144,7 @@
             loginByEmail:function (email,verifyCode) {
                 let al = $("#alert");
                 $.ajax({
-                    url:"../../user/emailLogin.action",
+                    url:"../user/emailLogin.action",
                     type:"POST",
                     data:{
                         email:email,
@@ -189,7 +189,7 @@
             },
             loginByPassword:function (email,password) {
                 $.ajax({
-                    url:"../../user/passwordLogin.action",
+                    url:"../user/passwordLogin.action",
                     type:"POST",
                     data:{
                         email:email,
@@ -234,7 +234,7 @@
                     }
                 }, 1000);
                 $.ajax({
-                    url:"../../user/sendEmail.action",
+                    url:"../user/sendEmail.action",
                     type:"POST",
                     data:{
                         email:email.val(),
