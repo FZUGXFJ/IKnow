@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Administrator
+ * @author Administrator hhj
  */
 @Service("userService")
 @Transactional(readOnly = false)
@@ -28,7 +28,7 @@ public class UserServiceImpl<result> implements UserService{
     private MailUtil mailUtil;
 
     @Override
-    public Map<String,Object> logon(String username, String password, String email, String verifyCode) {
+    public Map<String,Object> logon(String username, String password, String email) {
         Map<String,Object> resultMap = new HashMap<>(16);
         User user = new User();
         if (userDAO.hasUsername(username)) {
@@ -160,6 +160,16 @@ public class UserServiceImpl<result> implements UserService{
         user.setPasswd(SecurityUtil.md5(newPassword));
         userDAO.update(user);
 
+        return true;
+    }
+
+    @Override
+    public boolean reBindEmail(User user , String newEmail) {
+        if(user == null){
+            return false;
+        }
+        user.setEmail(newEmail);
+        userDAO.update(user);
         return true;
     }
 }
