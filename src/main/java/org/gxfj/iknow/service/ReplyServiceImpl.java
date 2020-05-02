@@ -134,6 +134,11 @@ public class ReplyServiceImpl implements ReplyService {
         return commentMap;
     }
 
+    /**
+     * 判断回复者是否为答主或题主，是否匿名，并相应的对hash表赋值
+     * @param replyId 评论id
+     * @return commentMap 评论哈希表
+     */
     public Map<String , Object> replierIsQAOwner(Integer replyId){
         Reply reply = replyDAO.get(replyId);
         Map<String , Object> replyMap = new HashMap<>(MAP_NUM);
