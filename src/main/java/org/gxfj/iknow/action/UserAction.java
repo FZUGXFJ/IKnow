@@ -31,6 +31,7 @@ public class UserAction {
     String introduction;
     boolean remember;
     String newPassword;
+    String newEmail;
     @Autowired
     UserService userService;
 
@@ -42,6 +43,7 @@ public class UserAction {
     private final String SUCCESS = "success";
     private final static String RESULT_CODE_NAME = "resultCode";
     private final static String RESET_PASSWORD_VERIFY_CODE_SESSION_NAME = "verifyCode";
+    private final static String RESET_EMAIL_VERIFY_CODE_SESSION_NAME = "verifyCode";
     private final static int SUCCESS_CODE = 0;
     private final static int RESET_PASSWD_FAIL = 1;
     private final static int UN_LOGIN = 1;
@@ -191,6 +193,34 @@ public class UserAction {
             result.put(RESULT_CODE_NAME,UN_LOGIN);
         }
 
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+    public String newEmailVerify(){
+        Map<String,Object> session = ActionContext.getContext().getSession();
+
+        Map<String,String> resultMap = userService.sendVerifyCode(newEmail);
+        session.put(VERIFY_CODE,resultMap.get(RESET_EMAIL_VERIFY_CODE_SESSION_NAME));
+        inputStream = new ByteArrayInputStream(resultMap.get("result").getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+    public String reBindEmail(){
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        String code=(String)session.get(VERIFY_CODE);
+        User user=(User)session.get("user");
+        if(code.equals(verifyCode)){
+            if(userService.reBindEmail(user,newEmail)){
+                result.put(RESULT_CODE_NAME,0);
+            }
+            else {
+                result.put(RESULT_CODE_NAME,1);
+            }
+        }else {
+            result.put(RESULT_CODE_NAME,1);
+        }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
     }
