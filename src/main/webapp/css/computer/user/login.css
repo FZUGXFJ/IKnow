@@ -1,0 +1,848 @@
+body{
+    height: 1000px;
+}
+.navigation{
+    height: 10%;
+    background: aliceblue;
+    border-radius: 10px;
+}
+#logoBut{
+    margin-left: 300px;
+    width:200px;
+    float: left;
+    margin-top: 10px;
+    height: 50px;
+}
+.navigationPart{
+    float: left;
+    margin-top: 10px;
+    margin-left: 50px;
+    width:100px;
+    height: 50px;
+}
+.button{
+    background: aliceblue;
+    height: 50px;
+    border-style: none;
+    font-size: 22px;
+    padding-bottom: 5px;
+}
+#input{
+    float: left;
+    margin-top: 10px;
+    margin-left: 120px;
+    width:170px;
+    height: 50px;
+}
+#select{
+    height: 35px;
+    margin-top: 10px;
+    float: left;
+}
+#selectType{
+    height: 35px;
+    margin-top: 5px;
+    border-color: aqua;
+    border-radius: 5px;
+    color: white;
+
+}
+#searchImg{
+    float: left;
+    margin-top: 10px;
+    margin-left: 0px;
+    width:100px;
+    height: 35px;
+}
+#question{
+    margin-top: 5px;
+    background-color: lightgrey;
+    height: 35px;
+    border-style: none;
+    color: black;
+}
+.textInput{
+    margin-top: 5px;
+    background: aliceblue;
+    height: 35px;
+    width:180px;
+    border-style: solid;
+    border-color: lightgrey;
+    color: lightgrey;
+}
+#logo{
+    width:119px;
+    height: 50px;
+    background:url("../../img/LOGO透明 (1).png");
+    border-style: none;
+}
+
+#search{
+    margin-top: 5px;
+    height: 35px;
+    width: 35px;
+    background: url("../../img/search.PNG");
+    border-style: none;
+}
+#logoContext{
+    height: 100px;
+    margin-top: 50px;
+    background: aliceblue;
+}
+#logoIn{
+    position: absolute;
+    left: 44%;
+    height:80px;
+    width: 240px;
+    background: aliceblue;
+
+}
+#login{
+    position: absolute;
+    left: 40%;
+    width: 430px;
+    height: 550px;
+    background-color: white;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+#logon{
+    position: absolute;
+    left: 40%;
+    width: 430px;
+    height: 650px;
+    background-color: white;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+#free{
+    background-color: white;
+    border-style: none;
+    color:black;
+    font-size: 22px;
+    font-weight: 100;
+    text-decoration: none;
+}
+#key{
+    background-color: white;
+    border-style: none;
+    font-size: 22px;
+    color:black;
+    font-weight: 100;
+    text-decoration: none;
+}
+#freeLogin{
+    margin-top: 40px;
+    margin-left: 40px;
+    float: left;
+}
+#keyLogin{
+    margin-top: 40px;
+    margin-left: 20px;
+    float: left;
+}
+.typeChoice{
+    height: 78px;
+}
+#loginUnderline{
+    height: 3px;
+    width: 95px;
+    background-color: aqua;
+    margin-top: 3px;
+    margin-left: 40px;
+}
+#loginUnderline1{
+    height: 3px;
+    width: 95px;
+    background-color: aqua;
+    margin-top: 3px;
+    margin-left: 145px;
+}
+
+#email{
+    border-style: none;
+    margin-left: 40px;
+    height: 40px;
+    margin-top: 40px;
+    color: #444444;
+    font-size: 22px;
+    width: 220px;
+    float: left;
+}
+#email1{
+    border-style: none;
+    margin-left: 40px;
+    height: 40px;
+    margin-top: 40px;
+    color: lightgrey;
+    font-size: 22px;
+    width: 220px;
+    float: left;
+}
+#emailSelect{
+    margin-left: 0px;
+    border-style: none;
+    color: lightgrey;
+    float: left;
+    font-size: 22px;
+    margin-top: 45px;
+    width: 130px;
+}
+#emailSelect1{
+    margin-left: 0px;
+    border-style: none;
+    color: lightgrey;
+    float: left;
+    font-size: 22px;
+    margin-top: 45px;
+    width:130px
+}
+
+#emailUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#userUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#IDUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#pswUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#account{
+    height:80px ;
+    width: 390px;
+}
+#account1{
+    height:80px ;
+    width: 390px;
+}
+#ID{
+    height:80px ;
+}
+#verifyCode{
+    margin-left: 40px;
+    height: 40px;
+    color: #444444;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:220px;
+
+}
+
+#username{
+    margin-left: 40px;
+    height: 40px;
+    color: #444444;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:220px;
+
+}
+#identifyDiv{
+    height: 40px;
+    margin-top: 40px;
+}
+#psw{
+    height: 40px;
+    margin-top: 40px;
+}
+#userID{
+    height: 40px;
+    margin-top: 40px;
+}
+#keyDiv{
+    height: 40px;
+    margin-top: 40px;
+}
+#ID{
+    height: 40px;
+    margin-top: 40px;
+}
+#keyInput{
+    margin-left: 40px;
+    height: 40px;
+    color: lightgrey;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:340px;
+}
+#IDnum{
+    margin-left: 40px;
+    height: 40px;
+    color: lightgrey;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:340px;
+}
+.codeBut{
+    margin-left: 0px;
+    height: 40px;
+    color: white;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    background-color: cornflowerblue;
+    border-radius: 10px;
+    width:140px;
+}
+#codeUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#codeUnderline1{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#tipText{
+    height: 70px;
+    width: 390px;
+    margin-left: 20px;
+    margin-top: 30px;
+    background-color: lightgrey;
+    font-size: 15px;
+    overflow: hidden;
+}
+placeholder{
+    font-weight: 100;
+    color:lightblue;
+}
+#check{
+    margin-top: 10px;
+    margin-left: 5px;
+    height: 20px;
+    overflow: hidden;
+}
+#check1{
+    margin-top: 10px;
+    margin-left: 20px;
+    height: 20px;
+    overflow: hidden;
+}
+#tip{
+    margin-left: 32px;
+    margin-top: 5px;
+    height: 20px;
+}
+#tip1{
+    margin-left: 32px;
+    margin-top: 5px;
+    height: 20px;
+}
+.weChat{
+    height: 58px;
+    width: 70px;
+    float: left;
+    margin-left: 110px;
+    background: url("../../../img/微信.PNG");
+    border-style: none;
+}
+.qq{
+    height: 58px;
+    width: 70px;
+    float: left;
+    margin-left: 50px;
+    background: url("../../../img/qq.PNG");
+    border-style: none;
+}
+#socialLogin{
+    height: 58px;
+    margin-top: 40px;
+}
+#loginBut{
+    border-color: cornflowerblue;
+    border-radius: 10px;
+    border-style: none;
+    background: cornflowerblue;
+    padding-left: 42%;
+    color: white;
+}
+#loginBut1{
+    border-color: cornflowerblue;
+    border-radius: 10px;
+    border-style: none;
+    background: cornflowerblue;
+    padding-left: 42%;
+    color: white;
+}
+#loginButDiv{
+    height: 40px;
+    margin-top: 30px;
+    background: cornflowerblue;
+    color: white;
+    font-size: 22px;
+    width: 335px;
+    margin-left: 45px;
+    border-radius: 10px;
+}
+#loginButDiv1{
+    height: 40px;
+    margin-top: 30px;
+    background: cornflowerblue;
+    color: white;
+    font-size: 22px;
+    width: 335px;
+    margin-left: 45px;
+    border-radius: 10px;
+}
+.nav-item{
+    margin-right: 50px;
+}
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
+}
+
+body{
+    height: 1000px;
+}
+.navigation{
+    height: 10%;
+    background: aliceblue;
+    border-radius: 10px;
+}
+#logoBut{
+    margin-left: 300px;
+    width:200px;
+    float: left;
+    margin-top: 10px;
+    height: 50px;
+}
+.navigationPart{
+    float: left;
+    margin-top: 10px;
+    margin-left: 50px;
+    width:100px;
+    height: 50px;
+}
+.button{
+    background: aliceblue;
+    height: 50px;
+    border-style: none;
+    font-size: 22px;
+    padding-bottom: 5px;
+}
+#input{
+    float: left;
+    margin-top: 10px;
+    margin-left: 120px;
+    width:170px;
+    height: 50px;
+}
+#select{
+    height: 35px;
+    margin-top: 10px;
+    float: left;
+}
+#selectType{
+    height: 35px;
+    margin-top: 5px;
+    border-color: aqua;
+    border-radius: 5px;
+    color: white;
+
+}
+#searchImg{
+    float: left;
+    margin-top: 10px;
+    margin-left: 0px;
+    width:100px;
+    height: 35px;
+}
+#question{
+    margin-top: 5px;
+    background-color: lightgrey;
+    height: 35px;
+    border-style: none;
+    color: black;
+}
+.textInput{
+    margin-top: 5px;
+    background: aliceblue;
+    height: 35px;
+    width:180px;
+    border-style: solid;
+    border-color: lightgrey;
+    color: lightgrey;
+}
+#logo{
+    width:119px;
+    height: 50px;
+    background:url("../../img/LOGO透明 (1).png");
+    border-style: none;
+}
+
+#search{
+    margin-top: 5px;
+    height: 35px;
+    width: 35px;
+    background: url("../../img/search.PNG");
+    border-style: none;
+}
+#logoContext{
+    height: 100px;
+    margin-top: 50px;
+    background: aliceblue;
+}
+#logoIn{
+    position: absolute;
+    left: 44%;
+    height:80px;
+    width: 240px;
+    background: aliceblue;
+
+}
+#login{
+    position: absolute;
+    left: 40%;
+    width: 430px;
+    height: 550px;
+    background-color: white;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+#logon{
+    position: absolute;
+    left: 40%;
+    width: 430px;
+    height: 650px;
+    background-color: white;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+#free{
+    background-color: white;
+    border-style: none;
+    color:black;
+    font-size: 22px;
+    font-weight: 100;
+    text-decoration: none;
+}
+#key{
+    background-color: white;
+    border-style: none;
+    font-size: 22px;
+    color:black;
+    font-weight: 100;
+    text-decoration: none;
+}
+#freeLogin{
+    margin-top: 40px;
+    margin-left: 40px;
+    float: left;
+}
+#keyLogin{
+    margin-top: 40px;
+    margin-left: 20px;
+    float: left;
+}
+.typeChoice{
+    height: 78px;
+}
+#loginUnderline{
+    height: 3px;
+    width: 95px;
+    background-color: aqua;
+    margin-top: 3px;
+    margin-left: 40px;
+}
+#loginUnderline1{
+    height: 3px;
+    width: 95px;
+    background-color: aqua;
+    margin-top: 3px;
+    margin-left: 145px;
+}
+
+#email{
+    border-style: none;
+    margin-left: 40px;
+    height: 40px;
+    margin-top: 40px;
+    color: #444444;
+    font-size: 22px;
+    width: 220px;
+    float: left;
+}
+#email1{
+    border-style: none;
+    margin-left: 40px;
+    height: 40px;
+    margin-top: 40px;
+    color: #444444;
+    font-size: 22px;
+    width: 220px;
+    float: left;
+}
+#emailSelect{
+    margin-left: 0px;
+    border-style: none;
+    color: lightgrey;
+    float: left;
+    font-size: 22px;
+    margin-top: 45px;
+    width: 130px;
+}
+#emailSelect1{
+    margin-left: 0px;
+    border-style: none;
+    color: lightgrey;
+    float: left;
+    font-size: 22px;
+    margin-top: 45px;
+    width:130px
+}
+
+#emailUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#emailUnderline1{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#userUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#IDUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#pswUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#account{
+    height:80px ;
+    width: 390px;
+}
+#ID{
+    height:80px ;
+}
+#verifyCode{
+    margin-left: 40px;
+    height: 40px;
+    color: #444444;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:220px;
+
+}
+#password{
+    margin-left: 40px;
+    height: 40px;
+    color: #444444;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:220px;
+
+}
+#username{
+    margin-left: 40px;
+    height: 40px;
+    color: #444444;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:220px;
+
+}
+#identifyDiv{
+    height: 40px;
+    margin-top: 40px;
+}
+#psw{
+    height: 40px;
+    margin-top: 40px;
+}
+#userID{
+    height: 40px;
+    margin-top: 40px;
+}
+#keyDiv{
+    height: 40px;
+    margin-top: 40px;
+}
+#ID{
+    height: 40px;
+    margin-top: 40px;
+}
+#keyInput{
+    margin-left: 40px;
+    height: 40px;
+    color: #444444;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:340px;
+}
+#IDnum{
+    margin-left: 40px;
+    height: 40px;
+    color: lightgrey;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:340px;
+}
+.codeBut{
+    margin-left: 0px;
+    height: 40px;
+    color: white;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    background-color: cornflowerblue;
+    border-radius: 10px;
+    width:140px;
+}
+#codeUnderline{
+    height: 3px;
+    width: 350px;
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#tipText{
+    height: 70px;
+    width: 390px;
+    margin-left: 20px;
+    margin-top: 30px;
+    background-color: lightgrey;
+    font-size: 15px;
+    overflow: hidden;
+}
+#tipText1{
+    height: 70px;
+    width: 390px;
+    margin-left: 20px;
+    margin-top: 30px;
+    background-color: lightgrey;
+    font-size: 15px;
+    overflow: hidden;
+}
+placeholder{
+    font-weight: 100;
+    color:lightblue;
+}
+#check{
+    margin-top: 10px;
+    margin-left: 5px;
+    height: 20px;
+    overflow: hidden;
+}
+#check1{
+    margin-top: 10px;
+    margin-left: 20px;
+    height: 20px;
+    overflow: hidden;
+}
+#tip{
+    margin-left: 32px;
+    margin-top: 5px;
+    height: 20px;
+}
+#weChat{
+    height: 58px;
+    width: 70px;
+    float: left;
+    margin-left: 110px;
+    background: url("../../../img/微信.PNG");
+    border-style: none;
+}
+#qq{
+    height: 58px;
+    width: 70px;
+    float: left;
+    margin-left: 50px;
+    background: url("../../../img/qq.PNG");
+    border-style: none;
+}
+#socialLogin{
+    height: 58px;
+    margin-top: 40px;
+}
+#socialLogin1{
+    height: 58px;
+    margin-top: 40px;
+}
+#loginBut{
+    border-color: cornflowerblue;
+    border-radius: 10px;
+    border-style: none;
+    background: cornflowerblue;
+    padding-left: 42%;
+    color: white;
+}
+#loginBut1{
+    border-color: cornflowerblue;
+    border-radius: 10px;
+    border-style: none;
+    background: cornflowerblue;
+    padding-left: 42%;
+    color: white;
+}
+#loginButDiv{
+    height: 40px;
+    margin-top: 30px;
+    background: cornflowerblue;
+    color: white;
+    font-size: 22px;
+    width: 335px;
+    margin-left: 45px;
+    border-radius: 10px;
+}
+.nav-item{
+    margin-right: 50px;
+}
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
+}
