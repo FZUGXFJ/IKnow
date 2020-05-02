@@ -43,7 +43,7 @@ public class ApprovalCommentDAOImpl implements ApprovalCommentDAO{
     @Override
     public Integer getCount(Integer commentId){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Approvalcomment WHERE commentID = ?");
-        return query.setInteger(0,commentId).list().size();
+        Query query = session.createQuery("select count(a) from Approvalcomment as a WHERE commentID = ?");
+        return ((Long)query.setInteger(0,commentId).uniqueResult()).intValue();
     }
 }

@@ -44,8 +44,8 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
     @Override
     public Integer getBrowsingCount(Integer questionId){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Browsinghistory WHERE questionID = ?");
-        return query.setInteger(0,questionId).list().size();
+        Query query = session.createQuery("select count(b) from Browsinghistory as b WHERE questionID = ?");
+        return ((Long)query.setInteger(0,questionId).uniqueResult()).intValue();
     }
 
 }

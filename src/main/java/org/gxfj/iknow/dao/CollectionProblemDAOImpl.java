@@ -46,7 +46,7 @@ public class CollectionProblemDAOImpl implements CollectionProblemDAO{
     @Override
     public Integer getCollectionCount(Integer questionId){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Collectionproblem WHERE questionID = ?");
-        return query.setInteger(0,questionId).list().size();
+        Query query = session.createQuery("select count(c) from Collectionproblem as c WHERE questionID = ?");
+        return ((Long)query.setInteger(0,questionId).uniqueResult()).intValue();
     }
 }
