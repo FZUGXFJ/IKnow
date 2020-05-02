@@ -48,8 +48,8 @@ public class CommentDAOImpl implements CommentDAO{
     @Override
     public Integer getCount(Integer answerId){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Comment WHERE answerID = ?");
-        return query.setInteger(0,answerId).list().size();
+        Query query = session.createQuery("select count(c) from Comment as c WHERE answerID = ?");
+        return Integer.parseInt(query.setInteger(0,answerId).uniqueResult().toString());
     }
 
     @Override
