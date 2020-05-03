@@ -21,6 +21,8 @@ public interface ApprovalCommentDAO {
      */
     public Approvalcomment get(Integer userId, Integer commentId);
 
+    public void delete(Approvalcomment approvalcomment);
+
     public void update(Approvalcomment bean);
 
     /**
