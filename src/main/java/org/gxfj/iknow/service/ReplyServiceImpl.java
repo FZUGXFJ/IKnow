@@ -1,9 +1,6 @@
 package org.gxfj.iknow.service;
 
-import org.gxfj.iknow.dao.AnswerDAO;
-import org.gxfj.iknow.dao.CommentDAO;
-import org.gxfj.iknow.dao.ReplyDAO;
-import org.gxfj.iknow.dao.UserDAO;
+import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,8 @@ public class ReplyServiceImpl implements ReplyService {
     private ReplyDAO replyDAO;
     @Autowired
     private AnswerDAO answerDAO;
+    @Autowired
+    private ApprovalReplyDAO approvalReplyDAO;
 
     private final int MAP_NUM = 20;
 
@@ -175,5 +174,16 @@ public class ReplyServiceImpl implements ReplyService {
             replyMap.put("isAnswerer" , 0);
         }
         return replyMap;
+    }
+
+    @Override
+    public boolean approveReply(Integer replyId, User user) {
+
+        return false;
+    }
+
+    @Override
+    public boolean cancelApprove(Integer replyId, User user) {
+        return false;
     }
 }

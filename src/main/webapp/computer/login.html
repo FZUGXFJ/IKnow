@@ -55,6 +55,12 @@
     <img id="logoIn" src="../img/LOGO1.png">
 </div>
 <div id="login">
+    <div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <div class="typeChoice">
         <div id="freeLogin" @click="useEmail=!useEmail"><a href="#" id="free">免密登录</a></div>
         <div id="keyLogin" @click="useEmail=!useEmail"><a href="#" id="key">密码登录</a></form></div>

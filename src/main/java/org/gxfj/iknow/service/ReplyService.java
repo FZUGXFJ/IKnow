@@ -23,4 +23,21 @@ public interface ReplyService {
      * @return json格式的评论信息和所有回复信息
      */
     public Map<String , Object> showAllReplys(Integer commentId);
+
+    /**
+     * 点赞回复
+     * @param replyId 回复id
+     * @param user 点赞用户
+     * @return 是否点赞
+     */
+    public boolean approveReply(Integer replyId,User user);
+
+    /**
+     * 取消点赞
+     * @param replyId 回复id
+     * @param user 用户
+     * @return 是否取消成功
+     */
+    public boolean cancelApprove(Integer replyId,User user);
+
 }

@@ -11,4 +11,6 @@ public interface ApprovalReplyDAO {
 
     public void update(Approvalreply bean);
 
+    public boolean searchByserIdandReplyId(Integer uid,Integer rid);
+
 }
