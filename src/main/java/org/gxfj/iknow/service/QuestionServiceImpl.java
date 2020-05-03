@@ -259,4 +259,11 @@ public class QuestionServiceImpl implements QuestionService{
         }
         return questionAnswers;
     }
+
+    @Override
+    public void cancelAdopt(Integer questionId){
+        Question question = questionDAO.get(questionId);
+        question.setIsAnonymous((byte)0);
+        questionDAO.update(question);
+    }
 }

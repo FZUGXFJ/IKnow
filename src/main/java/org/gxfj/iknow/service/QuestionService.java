@@ -38,4 +38,9 @@ public interface QuestionService {
      */
     public Map<String, Object>getQuestion(Integer questionId, int length);
 
+    /**
+     * 根据问题的id，获得问题及问题下的前length个回答的相关信息
+     * @param questionId 取消匿名的问题
+     */
+    public void cancelAdopt(Integer questionId);
 }
