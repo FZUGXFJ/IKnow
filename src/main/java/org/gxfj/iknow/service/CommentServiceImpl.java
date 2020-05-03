@@ -63,8 +63,12 @@ public class CommentServiceImpl implements CommentService {
         //获取问题评论数
         Integer count = commentDAO.getCount(answerId);
         response.put("commentNum",count);
+        if (count != 0) {
+            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer);
+        } else {
+            commentListMap = new ArrayList<>();
+        }
 
-        commentListMap = getCommentsMapArray(comments,questionOwner,answerOwner,question,answer);
         response.put("comments",commentListMap);
         return response;
     }
@@ -157,17 +161,15 @@ public class CommentServiceImpl implements CommentService {
             commentMap.put("isAnswerer",answerOwner.getId().equals(commentUser.getId()) ? 1 : 0);
             commentMap.put("time", Time.getTime(comment.getDate()));
             int num = replyDAO.getCount(comment.getId());
-            commentMap.put("replyNum", replyDAO.getCount(comment.getId()));
+            commentMap.put("replyNum", num);
             if (num != 0) {
                 replies = replyDAO.listByCommentId(comment.getId(), 0, REPLY_NUM);
+                replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
             } else {
-                replies = new ArrayList<>();
+                replyListMap = new ArrayList<>();
             }
             //评论回复列表
 
-            replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
-
-            //replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer);
             commentMap.put("replies",replyListMap);
             commentListMap.add(commentMap);
         }
