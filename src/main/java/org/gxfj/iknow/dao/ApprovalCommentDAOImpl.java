@@ -36,6 +36,15 @@ public class ApprovalCommentDAOImpl implements ApprovalCommentDAO{
     }
 
     @Override
+    public Approvalcomment get(Integer userId, Integer commentId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("FROM Approvalcomment AS a WHERE (userID = ?) and (commentID = ?)");
+        query.setInteger(0,userId);
+        query.setInteger(1,commentId);
+        return null;
+    }
+
+    @Override
     public void update(Approvalcomment bean) {
         getHibernateTemplate().update(bean);
     }
