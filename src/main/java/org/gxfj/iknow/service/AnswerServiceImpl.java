@@ -79,6 +79,13 @@ public class AnswerServiceImpl implements AnswerService{
         else{
             resultMap.put("userHead" , "<img src='../../head/" + user.getHead() + "' width='100%' height='100%' alt=''>");
         }
+        Answer answer=answerDAO.get(aId);
+        if (user.getId().equals(answer.getUserByUserId().getId())){
+            resultMap.put("viewerIsAnswerer",1);
+        }
+        else {
+            resultMap.put("viewerIsAnswerer",0);
+        }
         return resultMap;
     }
 
@@ -212,5 +219,16 @@ public class AnswerServiceImpl implements AnswerService{
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Boolean cancelAdopt(User user, Integer answerId) {
+        Answer answer = answerDAO.get(answerId);
+        if (answer.getUserByUserId().getId().equals(user.getId())){
+            answer.setIsAnonymous((byte)1);
+            answerDAO.update(answer);
+            return true;
+        }
+        return false;
     }
 }
