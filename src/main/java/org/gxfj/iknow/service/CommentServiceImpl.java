@@ -209,6 +209,7 @@ public class CommentServiceImpl implements CommentService {
             commentMap.put("isQuestionOwner",questionOwner.getId().equals(commentUser.getId()) ? 1 : 0);
             commentMap.put("isAnswerer",answerOwner.getId().equals(commentUser.getId()) ? 1 : 0);
 
+            //如果当前浏览者已登录，且评论有人点赞，且用户对该评论点过赞则为1,否则为0
             if (visitor != null && comment.getCount() != 0 &&
                     approvalCommentDAO.get(visitor.getId(), comment.getId()) != null) {
                 commentMap.put("isApproved", 1);
@@ -261,7 +262,13 @@ public class CommentServiceImpl implements CommentService {
             replyMap.put("isQuestionOwner",questionOwner.getId().equals(replyUser.getId()) ? 1 : 0);
             replyMap.put("isAnswerer",answerOwner.getId().equals(replyUser.getId()) ? 1 : 0);
             replyMap.put("time",Time.getTime(reply.getDate()));
-            replyMap.put("isApproved", approvalReplyDAO.searchByserIdandReplyId(visitor.getId(), reply.getId()));
+            //如果流浪者已登录，且有点赞记录，则isApproved为1，否则为0
+            int isApproved = 0;
+            if (visitor != null) {
+                isApproved = approvalReplyDAO.searchByserIdandReplyId(visitor.getId(), reply.getId());
+            }
+            replyMap.put("isApproved", isApproved);
+
             replyListMap.add(replyMap);
         }
         return replyListMap;

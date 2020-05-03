@@ -23,6 +23,7 @@ public class ReplyAction {
     @Autowired
     private ReplyService replyService;
 
+    private final String SESSION_USER = "user";
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
     private final int MISS_COMMENT_INF = 2;
@@ -50,7 +51,8 @@ public class ReplyAction {
     public String showMoreReply(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
-        response = replyService.showAllReplys(commentId);
+        User user = (User) session.get(SESSION_USER);
+        response = replyService.showAllReplys(commentId, user);
         response.put("resultCode" , SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
@@ -59,7 +61,7 @@ public class ReplyAction {
     public String approveReply(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get("user");
+        User user = (User) session.get(SESSION_USER);
         if(user == null){
             response.put("resultCode" , UN_LOGIN);
         }
@@ -76,7 +78,7 @@ public class ReplyAction {
     public String cancelApprove(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get("user");
+        User user = (User) session.get(SESSION_USER);
         if(user == null){
             response.put("resultCode" , UN_LOGIN);
         }

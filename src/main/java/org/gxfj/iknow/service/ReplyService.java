@@ -20,9 +20,10 @@ public interface ReplyService {
     /**
      * 查看全部回复
      * @param commentId 评论
+     * @param visitor 浏览的用户
      * @return json格式的评论信息和所有回复信息
      */
-    public Map<String , Object> showAllReplys(Integer commentId);
+    public Map<String , Object> showAllReplys(Integer commentId, User visitor);
 
     /**
      * 点赞回复
