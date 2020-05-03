@@ -42,7 +42,9 @@
     </div>
     <div id="separator"></div>
     <div id="answererInf">
-        <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">此回答已被采纳</div>
+        <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">
+            <h5><i class="fas fa-check"></i>此回答已被采纳</h5>
+        </div>
         <table>
             <td style="width: 10%">
                 <div id="answererHead" class="headPortrait" v-html="answerer.head"></div>
@@ -99,7 +101,7 @@
     <div id="footer">
         <table>
             <td style="text-align: left;width: 45%">
-                <div style="border-radius: 2em;border: #acacac solid 0.1em;padding: 0.1em 0.5em;background-color: #d8e1ee">
+                <div style="border-radius: 2em;border: #acacac solid 0.05em;padding: 0.1em 0.5em;background-color: white">
                     <span><i class="fas fa-thumbs-up" style="color: #acacac"></i>&nbsp;赞同</span>
                     <span><i class="fas fa-thumbs-down" style="color:#acacac;"></i>&nbsp;反对</span>
                     |&nbsp;{{answer.approveNum}}
@@ -121,13 +123,13 @@
                 <div><i class="fas fa-minus-circle fa-2x"></i></div>
                 <span>举报</span>
             </td>
-            <td class="operateItem">
-                <div><i class="fas fa-user-check fa-2x"></i></div>
-                <span>取消匿名</span>
-            </td>
-            <td class="operateItem">
-                <div><i class="fas fa-check-square fa-2x"></i></div>
+            <td class="operateItem" v-if="viewerIsQuestionOwner == 1 && question.isSolved == 0 && answer.isAdopt == 0">
+                <div><i class="fas fa-check-square fa-2x" @click="adopt"></i></div>
                 <span>采纳回答</span>
+            </td>
+            <td class="operateItem" v-if="viewerIsQuestionOwner == 1 && question.isSolved == 1 && answer.isAdopt == 1">
+                <div><i class="fas fa-user-times fa-2x" @click="adopt"></i></div>
+                <span>取消采纳</span>
             </td>
             <td class="operateItem"></td>
         </table>
@@ -162,6 +164,11 @@
             ],
             userHead:"",
             hidePart:true,
+            viewerIsAnswerer:0,
+            viewerIsQuestionOwner:0,
+            answerId:"",
+            questionId:"",
+            load:false
         },
         methods:{
             show:function () {
@@ -177,6 +184,27 @@
             },
             showOperateMenu:function () {
                 $("#operateMenu").slideToggle();
+            },
+            adopt:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"../../answer/adoptAnswer.action",
+                    data:{
+                        answerId:answer.answerId
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            alert("采纳成功");
+                        }
+                    },
+                    error:function () {
+                        alert("系统异常");
+                    }
+                });
+            },
+            allComment:function () {
+                location.href = "../comment?answerId=" + this.answerId;
             }
         },
         mounted:function () {
@@ -187,6 +215,8 @@
             if (questionId.indexOf("questionId=")!==-1 && answerId.indexOf("answerId=")!==-1) {
                 questionId = questionId.replace("questionId=","");
                 answerId = answerId.replace("answerId=","");
+                this.answerId = answerId;
+                this.questionId = questionId;
             } else {
                 //location.href = "../../error/mobile/404error.html"
             }
@@ -208,6 +238,8 @@
                         answer.answer = result.answer;
                         answer.comments = result.comments;
                         answer.userHead = result.userHead;
+                        answer.viewerIsAnswerer = result.viewerIsAnswerer;
+                        answer.viewerIsQuestionOwner = result.viewerIsQuestionOwner;
                     }
                 },
                 error:function (request,status,error) {

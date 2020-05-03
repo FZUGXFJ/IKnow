@@ -108,6 +108,7 @@ public class AnswerServiceImpl implements AnswerService{
         questionMap.put("title" , question.getTitle());
         questionMap.put("content" , question.getContent());
         questionMap.put("answerCount",questionDAO.getAnswerCount(qId));
+        questionMap.put("isSolved",question.getQuestionstateByStateId().getId() == 1 ? 0 : 1);
         return questionMap;
     }
 

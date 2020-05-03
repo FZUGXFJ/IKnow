@@ -84,7 +84,8 @@ img{
     position: fixed;
     z-index: 9999;
     background-color: white;
-    border-top: 1px solid #acacac;
+    box-shadow: 0 -0.3em 0.2em #d6d6d6;
+    font-size: 1em;
 }
 .operateItem{
     width: 20%;
