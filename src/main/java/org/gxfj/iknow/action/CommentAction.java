@@ -62,6 +62,16 @@ public class CommentAction {
         return  "success";
     }
 
+    public String approveComment() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+
+        return "success";
+    }
+
+    public String cancelApprove() {
+        return "success";
+    }
+
     public Integer getAnswerId() {
         return answerId;
     }
