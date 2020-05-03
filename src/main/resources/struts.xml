@@ -128,6 +128,19 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="approveComment" class="org.gxfj.iknow.action.CommentAction" method="approveComment">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="cancelApprove" class="org.gxfj.iknow.action.CommentAction" method="cancelApprove">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+
     </package>
 
     <package name="answer" namespace="/answer" extends="default">

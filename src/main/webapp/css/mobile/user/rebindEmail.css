@@ -1,0 +1,24 @@
+div{
+    width: 100%;
+}
+table{
+    width: 100%;
+}
+#header{
+    background-color: #12eee7;
+    padding: 0.5em 1em;
+}
+#container{
+    padding: 1em 1em;
+}
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
+}
+#alert{
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+    display: none;
+}
