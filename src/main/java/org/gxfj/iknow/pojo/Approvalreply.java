@@ -9,6 +9,7 @@ public class Approvalreply {
     private Date date;
     private User userByUserId;
     private Reply replyByReplytId;
+    private Comment commentByCommentId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,5 +69,15 @@ public class Approvalreply {
 
     public void setReplyByReplytId(Reply replyByReplytId) {
         this.replyByReplytId = replyByReplytId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "commentID", referencedColumnName = "id", nullable = false)
+    public Comment getCommentByCommentId() {
+        return commentByCommentId;
+    }
+
+    public void setCommentByCommentId(Comment commentByCommentId) {
+        this.commentByCommentId = commentByCommentId;
     }
 }

@@ -178,12 +178,32 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public boolean approveReply(Integer replyId, User user) {
-
+        if(approvalReplyDAO.searchByserIdandReplyId(user.getId(),replyId)==-1){
+            Reply reply=replyDAO.get(replyId);
+            Comment comment=reply.getCommentByCommentId();
+            Approvalreply approvalreply=new Approvalreply();
+            approvalreply.setDate(new Date());
+            approvalreply.setUserByUserId(user);
+            approvalreply.setReplyByReplytId(reply);
+            approvalreply.setCommentByCommentId(comment);
+            approvalReplyDAO.add(approvalreply);
+            reply.setCount(reply.getCount()+1);
+            replyDAO.update(reply);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean cancelApprove(Integer replyId, User user) {
-        return false;
+        Integer x=approvalReplyDAO.searchByserIdandReplyId(user.getId(),replyId);
+        if(x==-1){
+            return false;
+        }
+        approvalReplyDAO.delete(approvalReplyDAO.get(x));
+        Reply reply=replyDAO.get(replyId);
+        reply.setCount(reply.getCount()-1);
+        replyDAO.update(reply);
+        return true;
     }
 }

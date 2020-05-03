@@ -57,10 +57,36 @@ public class ReplyAction {
     }
 
     public String approveReply(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get("user");
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else if(!replyService.approveReply(replyId,user)){
+            response.put("resultCode" , 2 );
+        }
+        else{
+            response.put("resultCode" , SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 
     public String cancelApprove(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get("user");
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else if(!replyService.cancelApprove(replyId,user)){
+            response.put("resultCode" , 2 );
+        }
+        else{
+            response.put("resultCode" , SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 
