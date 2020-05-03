@@ -262,7 +262,7 @@ public class CommentServiceImpl implements CommentService {
             replyMap.put("isQuestionOwner",questionOwner.getId().equals(replyUser.getId()) ? 1 : 0);
             replyMap.put("isAnswerer",answerOwner.getId().equals(replyUser.getId()) ? 1 : 0);
             replyMap.put("time",Time.getTime(reply.getDate()));
-            //如果流浪者已登录，且有点赞记录，则isApproved为1，否则为0
+            //如果浏览者已登录，且有点赞记录，则isApproved为1，否则为0
             int isApproved = 0;
             if (visitor != null) {
                 isApproved = approvalReplyDAO.searchByserIdandReplyId(visitor.getId(), reply.getId());

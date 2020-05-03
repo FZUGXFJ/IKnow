@@ -96,7 +96,7 @@ public class ReplyServiceImpl implements ReplyService {
             replyMap.put("content" , reply.getContent());
             replyMap.put("approveNum" , reply.getCount());
             replyMap.put("time" , Time.getTime(reply.getDate()));
-            //如果流浪者已登录，且有点赞记录，则isApproved为1，否则为0
+            //如果浏览者已登录，且有点赞记录，则isApproved为1，否则为0
             int isApproved = 0;
             if (visitor != null) {
                 isApproved = approvalReplyDAO.searchByserIdandReplyId(visitor.getId(), reply.getId());
@@ -130,7 +130,7 @@ public class ReplyServiceImpl implements ReplyService {
                 (commentOwnerId.equals(answerOwnerId) && answer.getIsAnonymous() == 1);
         if(userIdentify) {
             commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
-                    "style='border-radius: 100%' alt=''>alt=''>");
+                    "style='border-radius: 100%' alt=''>");
             commentMap.put("name","匿名用户");
         }else{
             commentMap.put("head","<img src='../../head/"+comment.getUserByUserId().getHead() +
