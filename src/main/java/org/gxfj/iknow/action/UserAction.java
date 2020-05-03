@@ -215,7 +215,7 @@ public class UserAction {
             result.put(RESULT_CODE_NAME,2);
         } else {
             if (code.equals(verifyCode)) {
-                if (userService.reBindEmail(user, newEmail)) {
+                if (userService.reBindEmail(user, (String) session.get("newEmail"))) {
                     result.put(RESULT_CODE_NAME, 0);
                 } else {
                     result.put(RESULT_CODE_NAME, 1);
