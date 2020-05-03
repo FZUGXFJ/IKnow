@@ -73,6 +73,55 @@ public class CommentServiceImpl implements CommentService {
         return response;
     }
 
+    @Override
+    public boolean approveComment(User user, Integer commentId) {
+        if (user == null) {
+            return false;
+        }
+
+        //如果查询到记录，说明已经点过赞了
+        Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
+        if (approvalcomment != null) {
+            return false;
+        }
+
+        //更新评论记录中评论点赞数
+        Comment comment = commentDAO.get(commentId);
+        comment.setCount(comment.getCount() + 1);
+        commentDAO.update(comment);
+
+        //向评论点赞表中插入记录
+        approvalcomment = new Approvalcomment();
+        approvalcomment.setCommentByCommentId(comment);
+        approvalcomment.setUserByUserId(user);
+        approvalcomment.setDate(new Date());
+        approvalCommentDAO.add(approvalcomment);
+
+        return true;
+    }
+
+    @Override
+    public boolean cancelApprove(User user, Integer commentId) {
+        if (user == null) {
+            return false;
+        }
+
+        //如果没有查询到记录，说明已经点过赞了
+        Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
+        if (approvalcomment == null) {
+            return false;
+        }
+
+        //更新评论记录中评论点赞数
+        Comment comment = commentDAO.get(commentId);
+        comment.setCount(comment.getCount() - 1);
+        commentDAO.update(comment);
+
+        approvalCommentDAO.delete(approvalcomment);
+
+        return true;
+    }
+
     /**
      * 评论者是题主或者回答者且匿名判断
      * @param questionOwner 问题题主

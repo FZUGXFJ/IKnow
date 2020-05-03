@@ -1,6 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Approvalcomment;
+import org.gxfj.iknow.pojo.Approvalreply;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -44,6 +45,11 @@ public class ApprovalCommentDAOImpl implements ApprovalCommentDAO{
         query.setInteger(0,userId);
         query.setInteger(1,commentId);
         return (Approvalcomment) query.uniqueResult();
+    }
+
+    @Override
+    public void delete(Approvalcomment bean) {
+        getHibernateTemplate().delete(bean);
     }
 
     @Override
