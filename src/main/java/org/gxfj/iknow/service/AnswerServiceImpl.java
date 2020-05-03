@@ -80,12 +80,18 @@ public class AnswerServiceImpl implements AnswerService{
             resultMap.put("userHead" , "<img src='../../head/" + user.getHead() + "' width='100%' height='100%' alt=''>");
         }
         Answer answer=answerDAO.get(aId);
-        if (user.getId().equals(answer.getUserByUserId().getId())){
-            resultMap.put("viewerIsAnswerer",1);
+        int viewerIsAnswerer = 0;
+        int viewerIsQuestionOwner = 0;
+        if (user != null) {
+            if (user.getId().equals(answer.getQuestionByQuestionId().getUserByUserId().getId())) {
+                viewerIsQuestionOwner = 1;
+            }
+            if (user.getId().equals(answer.getUserByUserId().getId())) {
+                viewerIsAnswerer = 1;
+            }
         }
-        else {
-            resultMap.put("viewerIsAnswerer",0);
-        }
+        resultMap.put("viewerIsAnswerer", viewerIsAnswerer);
+        resultMap.put("viewerIsQuestionOwner", viewerIsQuestionOwner);
         return resultMap;
     }
 
@@ -174,18 +180,24 @@ public class AnswerServiceImpl implements AnswerService{
         for(Comment comment : comments){
             Map<String , Object> commentMap = new HashMap<>(MAP_NUM);
             commentMap.put("uid" , comment.getUserByUserId().getId());
-            commentMap.put("uname" , comment.getUserByUserId().getName());
-            commentMap.put("uHead" , "<img src='../../head/" + comment.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
+            commentMap.put("uName" , comment.getUserByUserId().getName());
+            commentMap.put("uHead" , "<img src='../../head/" + comment.getUserByUserId().getHead() + "' width='100%' height='100%'  style='border-radius:100%' alt=''>");
             commentMap.put("content" , comment.getContent());
             commentMap.put("approveNum" , comment.getCount());
             int isQuestionOwner = 0;
             int isAnswerer = 0;
-            if(user != null){
-                if(user.getId().equals(questionDAO.get(qId).getAnswerByAdoptId().getId())){
-                    isQuestionOwner = 1;
+            if(comment.getUserByUserId().getId().equals(questionDAO.get(qId).getUserByUserId().getId())){
+                isQuestionOwner = 1;
+                if (comment.getAnswerByAnswerId().getQuestionByQuestionId().getIsAnonymous() == 1) {
+                    commentMap.put("uName","匿名用户");
+                    commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius:100%' alt=''>");
                 }
-                if(user.getId().equals(answerDAO.get(aId).getUserByUserId().getId())){
-                    isAnswerer = 1;
+            }
+            if(comment.getUserByUserId().getId().equals(answerDAO.get(aId).getUserByUserId().getId())){
+                isAnswerer = 1;
+                if (comment.getAnswerByAnswerId().getIsAnonymous() == 1) {
+                    commentMap.put("uName","匿名用户");
+                    commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius:100%' alt=''>");
                 }
             }
             commentMap.put("isQuestionOwner" , isQuestionOwner);

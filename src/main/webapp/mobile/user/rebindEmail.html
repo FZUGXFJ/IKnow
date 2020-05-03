@@ -217,6 +217,8 @@
                                 rebindEmail.alertMsg.head = "验证成功";
                                 rebindEmail.alertMsg.body = "请输入新邮箱并验证新邮箱";
                                 al.slideDown();
+                                verifyCode.val("");
+                                $("#rebindVerifyCode").val("");
                                 rebindEmail.passVerify = true;
                             } else if (result.resultCode === 1) {
                                 al.addClass("alert-danger");

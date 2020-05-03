@@ -19,7 +19,7 @@
         <table style="color: #acacac">
             <td style="width: 80%;padding-left: 1em"><i class="fas fa-chevron-left"></i></td>
             <td style="width: 10%"><i class="fas fa-search"></i></td>
-            <td style="width: 10%"><i class="fas fa-ellipsis-h"></i></td>
+            <td style="width: 10%"><i class="fas fa-ellipsis-v" @click="showOperateMenu"></i></td>
         </table>
     </div>
     <br>
@@ -110,6 +110,28 @@
             <td><button><i class="fas fa-star">收藏问题</i></button></td>
         </table>
     </div>
+    <div id="operateMenu">
+        <br>
+        <table>
+            <td class="operateItem">
+                <div><i class="fas fa-user-plus fa-2x"></i></div>
+                <span>邀请回答</span>
+            </td>
+            <td class="operateItem" v-if="">
+                <div><i class="fas fa-minus-circle fa-2x"></i></div>
+                <span>举报问题</span>
+            </td>
+            <td class="operateItem">
+                <div><i class="fas fa-user-check fa-2x"></i></div>
+                <span>取消匿名</span>
+            </td>
+            <td class="operateItem">
+
+            </td>
+            <td class="operateItem"></td>
+        </table>
+        <br>
+    </div>
 </div>
 <script type="text/javascript">
     let question = new Vue({
@@ -132,11 +154,14 @@
             sortMethod:"默认排序",
             headFirstPart:"<img src='../../head/",
             headLastPart:"' width='100%' height='100%' alt=''>",
-            load:false
+            load:true
         },
         methods:{
             postAnswer:function () {
                 location.href = "../answer/postAnswer.html?questionId=" + this.questionId;
+            },
+            showOperateMenu:function () {
+                $("#operateMenu").slideToggle();
             }
         },
         mounted:function () {
@@ -147,7 +172,7 @@
                 questionId = loc.replace("questionId=","");
                 this.questionId = questionId;
             } else {
-                location.href = "../../error/mobile/404error.html"
+                //location.href = "../../error/mobile/404error.html"
             }
             $.ajax({
                 url:"../../question/viewQuestion.action",
