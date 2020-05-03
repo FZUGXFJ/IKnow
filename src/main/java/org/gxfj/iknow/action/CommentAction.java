@@ -56,7 +56,7 @@ public class CommentAction {
     public String viewComments(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
-        response = commentService.getComments(answerId);
+        response = commentService.getComments(answerId, (User) session.get("user"));
         response.put("resultCode",SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return  "success";

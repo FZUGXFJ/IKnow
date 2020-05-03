@@ -22,8 +22,10 @@ public interface CommentService {
     /**
      * 获取回答的评论(评论数方法中指定）
      * answerId 回答Id
+     * user 发起查看请求的用户
+     * return 构造好的MAP
      */
-    public Map<String, Object> getComments(Integer answerId);
+    public Map<String, Object> getComments(Integer answerId, User user);
 
 
 
