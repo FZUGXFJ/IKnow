@@ -49,7 +49,7 @@ public class UserAction {
     private final static int UN_LOGIN = 1;
     private final static int VARIFY_DEFAULT = 1;
     private final static int MIN_HASH_MAP_NUM = 10;
-
+    private final static String NEWEMAIL="newEmail";
 
     public InputStream getInputStream() {
         return inputStream;
@@ -210,12 +210,13 @@ public class UserAction {
         Map<String,Object> session = ActionContext.getContext().getSession();
         Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         String code=(String)session.get(VERIFY_CODE);
+
         User user=(User)session.get("user");
-        if (userService.existEmail((String) session.get("newEmail"))) {
+        if (userService.existEmail((String) session.get(NEWEMAIL))) {
             result.put(RESULT_CODE_NAME,2);
         } else {
             if (code.equals(verifyCode)) {
-                if (userService.reBindEmail(user, (String) session.get("newEmail"))) {
+                if (userService.reBindEmail(user, (String) session.get(NEWEMAIL))) {
                     result.put(RESULT_CODE_NAME, 0);
                 } else {
                     result.put(RESULT_CODE_NAME, 1);
