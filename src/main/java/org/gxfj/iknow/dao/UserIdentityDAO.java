@@ -2,10 +2,6 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Useridentity;
 
-public interface UserIdentityDAO {
-    public void add(Useridentity bean);
+public interface UserIdentityDAO extends BaseDAO<Useridentity>{
 
-    public Useridentity get(Integer id);
-
-    public void update(Useridentity bean);
 }

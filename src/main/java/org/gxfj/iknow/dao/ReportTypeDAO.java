@@ -2,10 +2,6 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Reporttype;
 
-public interface ReportTypeDAO {
-    public void add(Reporttype bean);
+public interface ReportTypeDAO extends BaseDAO<Reporttype>{
 
-    public Reporttype get(Integer id);
-
-    public void update(Reporttype bean);
 }

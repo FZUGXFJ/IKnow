@@ -2,17 +2,20 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Approvalreply;
 
-import javax.persistence.criteria.CriteriaBuilder;
 
-public interface ApprovalReplyDAO {
-    public void add(Approvalreply bean);
+public interface ApprovalReplyDAO extends BaseDAO<Approvalreply>{
+    /**
+     * 根据用户id和回复id得到赞同id
+     * @param uid   用户id
+     * @param rid   回复id
+     * @return  赞同id
+     */
+    Integer searchByUserIdandReplyId(Integer uid,Integer rid);
 
-    public Approvalreply get(Integer id);
-
-    public void update(Approvalreply bean);
-
-    public Integer searchByserIdandReplyId(Integer uid,Integer rid);
-
-    public void delete(Approvalreply bean);
+    /**
+     * 删除赞同
+     * @param bean  需要删除的元素
+     */
+    void delete(Approvalreply bean);
 
 }

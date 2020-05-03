@@ -99,7 +99,7 @@ public class ReplyServiceImpl implements ReplyService {
             //如果浏览者已登录，且有点赞记录，则isApproved为1，否则为0
             int isApproved = 0;
             if (visitor != null) {
-                isApproved = approvalReplyDAO.searchByserIdandReplyId(visitor.getId(), reply.getId());
+                isApproved = approvalReplyDAO.searchByUserIdandReplyId(visitor.getId(), reply.getId());
             }
             replyMap.put("isApproved", isApproved);
 
@@ -197,7 +197,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public boolean approveReply(Integer replyId, User user) {
-        if(approvalReplyDAO.searchByserIdandReplyId(user.getId(),replyId)==-1){
+        if(approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId)==-1){
             Reply reply=replyDAO.get(replyId);
             Comment comment=reply.getCommentByCommentId();
             Approvalreply approvalreply=new Approvalreply();
@@ -215,7 +215,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public boolean cancelApprove(Integer replyId, User user) {
-        Integer x = approvalReplyDAO.searchByserIdandReplyId(user.getId(),replyId);
+        Integer x = approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId);
         if(x==-1){
             return false;
         }

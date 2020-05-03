@@ -41,7 +41,7 @@ public class ApprovalReplyDAOImpl implements ApprovalReplyDAO{
     }
 
     @Override
-    public Integer searchByserIdandReplyId(Integer uid, Integer rid) {
+    public Integer searchByUserIdandReplyId(Integer uid, Integer rid) {
         Integer replyId=getHibernateTemplate().execute(new HibernateCallback<Integer>() {
             @Override
             public Integer doInHibernate(Session session) throws HibernateException {

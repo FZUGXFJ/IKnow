@@ -5,19 +5,14 @@ import org.gxfj.iknow.pojo.Comment;
 
 import java.util.List;
 
-public interface CommentDAO {
-    public void add(Comment bean);
-
-    public Comment get(Integer id);
-
-    public void update(Comment bean);
+public interface CommentDAO extends BaseDAO<Comment>{
 
     /**
      * 获得问题评论数
      * @param answerId 回答id
      * @return  问题评论数
      */
-    public Integer getCount(Integer answerId);
+    Integer getCount(Integer answerId);
 
     /**
      * 获得问题评论列表
@@ -26,13 +21,13 @@ public interface CommentDAO {
      * @param length 记录数
      * @return  评论列表
      */
-    public List<Comment> listByAnswerId(int answerId, int start, int length);
+    List<Comment> listByAnswerId(int answerId, int start, int length);
 
     /**
      * 获得问题所有评论列表
      * @param answerId 回答id
      * @return  评论列表
      */
-    public List<Comment> getCommentsByAnswerId(Integer answerId);
+    List<Comment> getCommentsByAnswerId(Integer answerId);
 
 }
