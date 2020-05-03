@@ -19,6 +19,7 @@ public class ReplyAction {
     private String content;
     private Integer replyTagetId;
     private InputStream inputStream;
+    private Integer replyId;
     @Autowired
     private ReplyService replyService;
 
@@ -55,6 +56,14 @@ public class ReplyAction {
         return "success";
     }
 
+    public String approveReply(){
+        return "success";
+    }
+
+    public String cancelApprove(){
+        return "success";
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
@@ -77,5 +86,13 @@ public class ReplyAction {
 
     public void setReplyTagetId(Integer replyTagetId) {
         this.replyTagetId = replyTagetId;
+    }
+
+    public Integer getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(Integer replyId) {
+        this.replyId = replyId;
     }
 }

@@ -41,4 +41,14 @@ public class ApprovalReplyDAOImpl implements ApprovalReplyDAO{
         getHibernateTemplate().update(bean);
     }
 
+    @Override
+    public boolean searchByserIdandReplyId(Integer uid, Integer rid) {
+        Query query = sessionFactory.getCurrentSession().createQuery(
+                "SELECT count(*) from Approvereply WHERE userByUserId.id=" + uid + "and replyByReplytId.id="+rid);
+        int x = ((Long) query.uniqueResult()).intValue();
+        if(x!=0){
+            return true;
+        }
+        return false;
+    }
 }
