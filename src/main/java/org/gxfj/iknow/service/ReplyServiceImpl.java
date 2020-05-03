@@ -215,7 +215,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public boolean cancelApprove(Integer replyId, User user) {
-        Integer x=approvalReplyDAO.searchByserIdandReplyId(user.getId(),replyId);
+        Integer x = approvalReplyDAO.searchByserIdandReplyId(user.getId(),replyId);
         if(x==-1){
             return false;
         }

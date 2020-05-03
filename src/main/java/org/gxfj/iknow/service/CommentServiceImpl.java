@@ -131,7 +131,7 @@ public class CommentServiceImpl implements CommentService {
      * @param answer 回答
      * @return 返回根据判断获得的评论用户名与头像map值
      */
-    private Map<String, Object> commenterIsQAOwner(User questionOwner,User answerOwner,Comment comment,
+    private Map<String, Object> commenterIsQAOwner(User questionOwner, User answerOwner, Comment comment,
                                                    Question question, Answer answer){
         User commentUser = comment.getUserByUserId();
         Map<String, Object> commentMap = new HashMap<>(MAP_NUM);
@@ -243,8 +243,8 @@ public class CommentServiceImpl implements CommentService {
      * @param answer 回答
      * @return List<Map<String, Object>>型的回复map数组
      */
-    private List<Map<String, Object>> getCommentReplyMapArray(List<Reply> replies,User questionOwner,User answerOwner,
-                                                              Question question,Answer answer, User visitor) {
+    private List<Map<String, Object>> getCommentReplyMapArray(List<Reply> replies, User questionOwner, User answerOwner,
+                                                              Question question, Answer answer, User visitor) {
         List<Map<String, Object>> replyListMap = new ArrayList<>();;
         Map<String, Object> replyMap;
         User replyUser;

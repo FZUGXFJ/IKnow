@@ -77,8 +77,9 @@ public class AnswerServiceImpl implements AnswerService{
         }
         //已登录
         else{
-            resultMap.put("userHead" , "<img src='../../head/" + user.getHead() + "' width='100%' height='100%' alt=''>");
+            resultMap.put("userHead" , "<img src='../../head/" + user.getHead() + "' width='100%'  height='100%' alt=''>");
         }
+
         Answer answer=answerDAO.get(aId);
         int viewerIsAnswerer = 0;
         int viewerIsQuestionOwner = 0;
@@ -170,14 +171,14 @@ public class AnswerServiceImpl implements AnswerService{
     /**
      * 获取回答关联的一部分评论的信息
      * @param qId 问题id
-     * @param aId 回答id
+     * @param answerId 回答id
      * @param user 操作的用户
      * @return Json形式的评论信息
      */
-    private List<Map<String , Object>> getCommentsMap(Integer qId , Integer aId , User user){
+    private List<Map<String , Object>> getCommentsMap(Integer qId , Integer answerId , User user){
 
         List<Map<String , Object>> commmentsMap = new ArrayList<>();
-        List<Comment> comments = commentDAO.listByAnswerId(aId , 0 , COMMENT_NUM);
+        List<Comment> comments = commentDAO.listByAnswerId(answerId , 0 , COMMENT_NUM);
         for(Comment comment : comments){
             Map<String , Object> commentMap = new HashMap<>(MAP_NUM);
             commentMap.put("uid" , comment.getUserByUserId().getId());
@@ -194,7 +195,7 @@ public class AnswerServiceImpl implements AnswerService{
                     commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius:100%' alt=''>");
                 }
             }
-            if(comment.getUserByUserId().getId().equals(answerDAO.get(aId).getUserByUserId().getId())){
+            if(comment.getUserByUserId().getId().equals(answerDAO.get(answerId).getUserByUserId().getId())){
                 isAnswerer = 1;
                 if (comment.getAnswerByAnswerId().getIsAnonymous() == 1) {
                     commentMap.put("uName","匿名用户");
