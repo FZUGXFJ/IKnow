@@ -199,8 +199,8 @@ public class UserAction {
 
     public String newEmailVerify(){
         Map<String,Object> session = ActionContext.getContext().getSession();
-
         Map<String,String> resultMap = userService.sendVerifyCode(newEmail);
+        session.put("newEmail",newEmail);
         session.put(VERIFY_CODE,resultMap.get(RESET_EMAIL_VERIFY_CODE_SESSION_NAME));
         inputStream = new ByteArrayInputStream(resultMap.get("result").getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
@@ -211,10 +211,9 @@ public class UserAction {
         Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         String code=(String)session.get(VERIFY_CODE);
         User user=(User)session.get("user");
-        if (userService.existEmail(newEmail)){
+        if (userService.existEmail((String) session.get("newEmail"))) {
             result.put(RESULT_CODE_NAME,2);
-        }
-        else {
+        } else {
             if (code.equals(verifyCode)) {
                 if (userService.reBindEmail(user, newEmail)) {
                     result.put(RESULT_CODE_NAME, 0);
@@ -287,5 +286,13 @@ public class UserAction {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getNewEmail() {
+        return newEmail;
+    }
+
+    public void setNewEmail(String newEmail) {
+        this.newEmail = newEmail;
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("approvalCommentDAO")
 public class ApprovalCommentDAOImpl implements ApprovalCommentDAO{
     private HibernateTemplate ht = null;
@@ -41,7 +43,7 @@ public class ApprovalCommentDAOImpl implements ApprovalCommentDAO{
         Query query = session.createQuery("FROM Approvalcomment AS a WHERE (userID = ?) and (commentID = ?)");
         query.setInteger(0,userId);
         query.setInteger(1,commentId);
-        return null;
+        return (Approvalcomment) query.uniqueResult();
     }
 
     @Override

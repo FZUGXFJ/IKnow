@@ -19,7 +19,7 @@
         <table>
             <td style="width: 33%;color: #acacac;font-size: 1.5em"><i class="fas fa-times"></i></td>
             <td style="width: 34%;text-align: center">
-                <span v-if="load">全部条{{commentNum}}条评论</span>
+                <span v-if="load">全部{{commentNum}}条评论</span>
                 <span v-else="">加载中<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
             </td>
             <td style="width: 33%;"></td>
@@ -37,7 +37,7 @@
                 </td>
                 <td style="width: 58%">
                     <span>{{comment.name}}</span>
-                    <span v-if="comment.isQuestionOwner">(题问者)</span>
+                    <span v-if="comment.isQuestionOwner">(提问者)</span>
                     <span v-if="comment.isAnswerer">(回答者)</span>
                 </td>
                 <td style="width: 30%;text-align: right">
