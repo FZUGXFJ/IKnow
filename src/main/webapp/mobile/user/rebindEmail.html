@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>重新绑定邮箱</title>
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/user/rebindEmail.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+</head>
+<body>
+<div id="rebindEmail">
+    <div id="header">
+        <table>
+            <td style="width: 33%"><i class="fas fa-chevron-left" style="color: white"></i></td>
+            <td style="width: 34%;text-align: center"><span >重新绑定邮箱</span></td>
+            <td style="width: 33%;text-align: right"></td>
+        </table>
+    </div>
+    <br>
+    <div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div id="container">
+        <div id="verify" v-if="!passVerify">
+            <label for="identityVerifyCode">请输入验证码</label>
+            <br>
+            <div class="errorMessage" v-if="verifyCodeError">{{verifyCodeErrorMsg}}</div>
+            <table>
+                <td style="width: 50%;text-align: left">
+                    <input type="number" id="identityVerifyCode" class="form-control"  @keyup="validateVerify">
+                </td>
+                <td style="width: 50%;text-align: right">
+                    <button class="btn btn-link" @click="getIdentityVerifyCode" v-if="!identityVerify">获取验证码</button>
+                    <button class="btn btn-link" disabled="disabled" v-else>重新发送({{identityTimeout}})</button>
+                </td>
+            </table>
+            <small>在重新绑定邮箱之前我们需要确认一下您的身份</small>
+            <br><br>
+            <div style="text-align: center" v-if="!passVerify">
+                <button class="btn btn-info" style="width: 40%" @click="verifyIdentity">验证</button>
+            </div>
+        </div>
+        <div id="rebindArea" class="form-group" v-if="passVerify">
+            <br>
+            <label for="newEmail">请输入新邮箱地址</label>
+            <div class="errorMessage" v-if="emailError">{{emailErrorMsg}}</div>
+            <input type="email" id="newEmail" class="form-control">
+            <br>
+            <label for="rebindVerifyCode">请输入验证码</label>
+            <div class="errorMessage" v-if="verifyCodeError">{{verifyCodeErrorMsg}}</div>
+            <table>
+                <td style="width: 50%;text-align: left">
+                    <input type="number" id="rebindVerifyCode" class="form-control"  @keyup="validateVerify">
+                </td>
+                <td style="width: 50%;text-align: right">
+                    <button class="btn btn-link" @click="getNewEmailVerifyCode" v-if="!newEmailVerify">获取验证码</button>
+                    <button class="btn btn-link" disabled="disabled" v-else>重新发送({{newEmailTimeout}})</button>
+                </td>
+            </table>
+            <br>
+            <div style="text-align: center">
+                <button class="btn btn-info" style="width: 40%" @click="rebind">绑定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let rebindEmail = new Vue({
+        el:"#rebindEmail",
+        data:{
+            identityVerify:false,
+            newEmailVerify:false,
+            passVerify:false,
+            alertMsg:{head:"",body:""},
+            identityTimeout:60,
+            newEmailTimeout:60,
+            verifyCodeError:false,
+            verifyCodeErrorMsg:"",
+            emailError:false,
+            emailErrorMsg:""
+        },
+        methods:{
+            getIdentityVerifyCode: function () {
+                this.identityVerify = true;
+                let timer = setInterval(function () {
+                    rebindEmail.identityTimeout--;
+                    if (rebindEmail.timeout === 0) {
+                        clearInterval(timer);
+                        rebindEmail.identityTimeout = false;
+                        rebindEmail.identityTimeout = 60;
+                    }
+                }, 1000);
+                $.ajax({
+                    type:"POST",
+                    url:"../../user/sendVerifyEmail.action",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        let al = $("#alert");
+                        al.removeClass("alert-success");
+                        al.removeClass("alert-danger");
+                        if (result.head === "发送成功") {
+                            al.addClass("alert-success");
+                            rebindEmail.alertMsg.head = "发送成功";
+                            rebindEmail.alertMsg.body = "请进入邮箱查看验证码";
+                            al.slideDown();
+                        } else {
+                            al.addClass("alert-danger");
+                            rebindEmail.alertMsg.head = "发送失败";
+                            rebindEmail.alertMsg.body = "服务器异常";
+                            al.slideDown();
+                        }
+                    },
+                    error:function () {
+                        let al = $("#alert");
+                        al.removeClass("alert-success");
+                        al.removeClass("alert-danger");
+                        al.addClass("alert-danger");
+                        rebindEmail.alertMsg.head = "服务器异常";
+                        rebindEmail.alertMsg.body = "";
+                        al.slideDown();
+                    }
+                });
+            },
+            getNewEmailVerifyCode:function () {
+                let newEmail = $("#newEmail");
+                let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if (!emailRegex.test(newEmail.val())) {
+                    this.emailError = true;
+                    this.emailErrorMsg = "邮箱格式错误，请重新输入";
+                } else {
+                    this.emailError = false;
+                    newEmail.attr("disabled",true);
+                    this.newEmailVerify = true;
+                    let timer = setInterval(function () {
+                        rebindEmail.newEmailTimeout--;
+                        if (rebindEmail.newEmailTimeout === 0) {
+                            clearInterval(timer);
+                            rebindEmail.newEmailVerify = false;
+                            rebindEmail.newEmailTimeout = 60;
+                            newEmail.attr("disabled",false);
+                        }
+                    }, 1000);
+                    $.ajax({
+                        type:"POST",
+                        url:"../../user/newEmailVerify.action",
+                        data:{
+                            newEmail:newEmail.val()
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            let al = $("#alert");
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            if (result.head === "发送成功") {
+                                al.addClass("alert-success");
+                                rebindEmail.alertMsg.head = "发送成功";
+                                rebindEmail.alertMsg.body = "请进入邮箱查看验证码";
+                                al.slideDown();
+                            } else {
+                                al.addClass("alert-danger");
+                                rebindEmail.alertMsg.head = "发送失败";
+                                rebindEmail.alertMsg.body = "服务器异常";
+                                al.slideDown();
+                            }
+                        },
+                        error:function () {
+                            let al = $("#alert");
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            al.addClass("alert-danger");
+                            rebindEmail.alertMsg.head = "服务器异常";
+                            rebindEmail.alertMsg.body = "";
+                            al.slideDown();
+                        }
+                    });
+                }
+            },
+            validateVerify:function () {
+                let verifyCode = $("#identityVerifyCode");
+                let rebindVerify = $("#rebindVerifyCode");
+                verifyCode.val.length > 6 ? verifyCode.val(verifyCode.val.slice(0,6)) : "";
+                rebindVerify.val.length > 6 ? rebindVerify.val(rebindVerify.val.slice(0,6)) : "";
+            },
+            closeAlert:function () {
+                $("#alert").slideUp();
+            },
+            verifyIdentity:function () {
+                let verifyCode = $("#identityVerifyCode").val();
+                if (verifyCode.length === 0) {
+                    this.verifyCodeErrorMsg = "验证码不得为空";
+                    this.verifyCodeError = true;
+                } else {
+                    this.verifyCodeError = false;
+                    $.ajax({
+                        type:"POST",
+                        url:"../../user/resetPasswordVerify.action",
+                        data:{
+                            verifyCode:verifyCode
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            let al = $("#alert");
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            if (result.resultCode === 0) {
+                                al.addClass("alert-success");
+                                rebindEmail.alertMsg.head = "验证成功";
+                                rebindEmail.alertMsg.body = "请输入新邮箱并验证新邮箱";
+                                al.slideDown();
+                                rebindEmail.passVerify = true;
+                            } else if (result.resultCode === 1) {
+                                al.addClass("alert-danger");
+                                rebindEmail.alertMsg.head = "验证失败";
+                                rebindEmail.alertMsg.body = "验证码错误";
+                                al.slideDown();
+                            }
+                        },
+                        error:function () {
+                            let al = $("#alert");
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            al.addClass("alert-danger");
+                            rebindEmail.alertMsg.head = "服务器异常";
+                            rebindEmail.alertMsg.body = "";
+                            al.slideDown();
+                        }
+                    });
+                }
+            },
+            rebind:function () {
+                let verifyCode = $("#rebindVerifyCode").val();
+                if (verifyCode.length === 0) {
+                    this.verifyCodeErrorMsg = "验证码不得为空";
+                    this.verifyCodeError = true;
+                } else {
+                    this.verifyCodeError = false;
+                    $.ajax({
+                        type:"POST",
+                        url:"../../user/reBindEmail.action",
+                        data:{
+                            verifyCode:verifyCode
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            let al = $("#alert");
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            if (result.resultCode === 0) {
+                                al.addClass("alert-success");
+                                rebindEmail.alertMsg.head = "绑定成功";
+                                rebindEmail.alertMsg.body = "";
+                                al.slideDown();
+                            } else if (result.resultCode === 1) {
+                                al.addClass("alert-danger");
+                                rebindEmail.alertMsg.head = "验证码错误";
+                                rebindEmail.alertMsg.body = "请重新输入";
+                                al.slideDown();
+                            } else if (result.resultCode === 2) {
+                                al.addClass("alert-danger");
+                                rebindEmail.alertMsg.head = "无法绑定邮箱";
+                                rebindEmail.alertMsg.body = "该邮箱已被其他用户绑定";
+                                al.slideDown();
+                            }
+                        },
+                        error:function () {
+                            let al = $("#alert");
+                            al.removeClass("alert-success");
+                            al.removeClass("alert-danger");
+                            al.addClass("alert-danger");
+                            rebindEmail.alertMsg.head = "服务器异常";
+                            rebindEmail.alertMsg.body = "";
+                            al.slideDown();
+                        }
+                    });
+                }
+            }
+        },
+        mounted:function () {
+            $.ajax({
+                type:"POST",
+                url:"../../user/isLogin.action",
+                data:{
+
+                },
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 1) {
+                        alert("请先登录后再修改密码");
+                        location.href = "login.html";
+                    }
+                },
+                error:function () {
+                    let al = $("#alert");
+                    al.removeClass("alert-success");
+                    al.removeClass("alert-danger");
+                    al.addClass("alert-danger");
+                    rebindEmail.alertMsg.head = "服务器异常";
+                    al.slideDown();
+                }
+            })
+        }
+    });
+</script>
+</body>
+</html>

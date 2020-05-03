@@ -17,11 +17,12 @@
 <div id="answer">
     <div id="header">
         <table style="color: #acacac">
-            <td style="width: 80%;padding-left: 1em"><i class="fas fa-chevron-left"></i></td>
-            <td style="width: 20%;text-align: right;padding-right: 1em"><i class="fas fa-search"></i></td>
+            <td style="width: 80%"><i class="fas fa-chevron-left"></i></td>
+            <td style="width: 10%;text-align: right"><i class="fas fa-search"></i></td>
+            <td style="width: 10%;text-align: right"><i class="fas fa-ellipsis-v" @click="showOperateMenu"></i></td>
         </table>
     </div>
-    <br><br>
+    <br><br><br>
     <div id="questionInf">
         <h5>{{question.title}}</h5>
         <div id="questionContent" class="hidePart" v-html="question.content"></div>
@@ -62,10 +63,8 @@
             </td>
         </table>
     </div>
-    <div id="content" v-html="answer.content">
-
-    </div>
-    <div id="splitLine"></div>
+    <div id="content" v-html="answer.content"></div>
+    <div class="splitLine"></div>
     <div id="comments">
         <span>评论-{{answer.commentNum}}</span>
         <div class="comment" v-for="comment in comments">
@@ -75,7 +74,7 @@
                     <div class="headPortrait" v-html="comment.uHead"></div>
                 </td>
                 <td style="width: 50%;opacity: 0.5;padding: 0 0.5em">
-                    <span>{{comment.uName}}</span>
+                    <span>{{comment.uname}}</span>
                 </td>
                 <td style="width: 40%;text-align: right;opacity: 0.5">
                     <i class="fas fa-thumbs-up"></i>
@@ -108,6 +107,28 @@
                 <span><i class="fas fa-comment" style="color: #12eee7"></i>评论{{answer.commentNum}}</span>
             </td>
         </table>
+    </div>
+    <div id="operateMenu">
+        <br>
+        <h5>操作</h5>
+        <br>
+        <table>
+            <td class="operateItem">
+                <div><i class="fas fa-user-plus fa-2x"></i></div>
+                <span>邀请回答</span>
+            </td>
+            <td class="operateItem">
+                <div><i class="fas fa-minus-circle fa-2x"></i></div>
+                <span>举报</span>
+            </td>
+            <td class="operateItem">
+                <div><i class="fas fa-user-check fa-2x"></i></div>
+                <span>取消匿名</span>
+            </td>
+            <td class="operateItem"></td>
+            <td class="operateItem"></td>
+        </table>
+        <br><br>
     </div>
 </div>
 <script>
@@ -150,6 +171,9 @@
             },
             clearImg:function (htmlText) {
 
+            },
+            showOperateMenu:function () {
+                $("#operateMenu").slideToggle();
             }
         },
         mounted:function () {
