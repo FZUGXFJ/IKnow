@@ -87,14 +87,14 @@
             </table>
             <div class="commentContent" v-html="comment.content"></div>
         </div>
-        <button v-if="answer.commentNum>2" class="btn btn-link" style="padding-left: 2.6em">查看全部{{answer.commentNum}}条评论</button>
+        <button v-if="answer.commentNum>2" class="btn btn-link" style="padding-left: 2.6em" @click="allComment">查看全部{{answer.commentNum}}条评论</button>
         <br>
         <table>
             <td style="width: 10%">
                 <div class="headPortrait" v-html="userHead"></div>
             </td>
             <td style="padding: 0 0.5em">
-                <div style="border: #acacac solid 0.1em;opacity: 0.5;padding: 0.5em;border-radius: 1em">添加评论...</div>
+                <div style="border: #acacac solid 0.1em;opacity: 0.5;padding: 0.5em;border-radius: 1em" @click="allComment">span添加评论...</div>
             </td>
         </table>
     </div>
@@ -204,7 +204,7 @@
                 });
             },
             allComment:function () {
-                location.href = "../comment?answerId=" + this.answerId;
+                location.href = "../comment/comment.html?answerId=" + this.answerId;
             }
         },
         mounted:function () {

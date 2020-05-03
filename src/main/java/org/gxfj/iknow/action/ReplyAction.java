@@ -17,7 +17,7 @@ import java.util.Map;
 public class ReplyAction {
     private Integer commentId;
     private String content;
-    private Integer replyTagetId;
+    private Integer replyTarget;
     private InputStream inputStream;
     private Integer replyId;
     @Autowired
@@ -36,12 +36,10 @@ public class ReplyAction {
         User user = (User) session.get("user");
         if(user == null){
             response.put("resultCode" , UN_LOGIN);
-        }
-        else if(content == null){
+        } else if(content == null){
             response.put("resultCode" , MISS_COMMENT_INF );
-        }
-        else{
-            replyService.postReply(commentId,content,replyTagetId,user);
+        } else{
+            replyService.postReply(commentId,content, replyTarget,user);
             response.put("resultCode" , SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -100,8 +98,8 @@ public class ReplyAction {
         return commentId;
     }
 
-    public Integer getReplyTagetId() {
-        return replyTagetId;
+    public Integer getReplyTarget() {
+        return replyTarget;
     }
 
     public String getContent() {
@@ -112,8 +110,8 @@ public class ReplyAction {
         this.commentId = commentId;
     }
 
-    public void setReplyTagetId(Integer replyTagetId) {
-        this.replyTagetId = replyTagetId;
+    public void setReplyTarget(Integer replyTarget) {
+        this.replyTarget = replyTarget;
     }
 
     public Integer getReplyId() {

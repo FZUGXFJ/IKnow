@@ -139,14 +139,12 @@ public class ReplyServiceImpl implements ReplyService {
         }
         if(commentOwnerId.equals(questionOwnerId)){
             commentMap.put("isQuestionOwner" , 1);
-        }
-        else{
+        } else{
             commentMap.put("isQuestionOwner" , 0);
         }
         if(commentOwnerId.equals(answerOwnerId)){
             commentMap.put("isAnswerer" , 1);
-        }
-        else{
+        } else{
             commentMap.put("isAnswerer" , 0);
         }
         return commentMap;
@@ -167,13 +165,13 @@ public class ReplyServiceImpl implements ReplyService {
         //得到题主的id
         Integer questionOwnerId = answer.getQuestionByQuestionId().getUserByUserId().getId();
         //得到答主的id
-        Integer answerOwnerId = question.getUserByUserId().getId();
+        Integer answerOwnerId = answer.getUserByUserId().getId();
         Integer replierId =reply.getUserByUserId().getId();
         boolean userIdentify = (replierId.equals(questionOwnerId) && question.getIsAnonymous() == 1) ||
                 (replierId.equals(answerOwnerId) && answer.getIsAnonymous() == 1);
         if(userIdentify){
             replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
-                    "style='border-radius: 100%' alt=''> alt=''>");
+                    "style='border-radius: 100%' alt=''>");
             replyMap.put("name","匿名用户");
         }else{
             replyMap.put("head","<img src='../../head/"+reply.getUserByUserId().getHead() +
@@ -182,14 +180,12 @@ public class ReplyServiceImpl implements ReplyService {
         }
         if(replierId.equals(questionOwnerId)){
             replyMap.put("isQuestionOwner" , 1);
-        }
-        else{
+        } else{
             replyMap.put("isQuestionOwner" , 0);
         }
         if(replierId.equals(answerOwnerId)){
             replyMap.put("isAnswerer" , 1);
-        }
-        else{
+        } else{
             replyMap.put("isAnswerer" , 0);
         }
         return replyMap;
