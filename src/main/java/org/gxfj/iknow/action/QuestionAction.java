@@ -3,6 +3,7 @@ package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
+import org.gxfj.iknow.dao.QuestionDAO;
 import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.QuestionService;
@@ -33,6 +34,8 @@ public class QuestionAction {
     private InputStream inputStream;
     @Autowired
     QuestionService questionService;
+    @Autowired
+    QuestionDAO questionDAO;
 
     private static final int QUESTION_SHOW_ANSWER_NUM = 10;
     private final int SUCCESS = 0;
@@ -91,8 +94,35 @@ public class QuestionAction {
 
     public String viewQuestion() {
         System.out.println(questionId);
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        //题主
+        User viewUser = questionDAO.get(questionId).getUserByUserId();
+        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
         Map<String, Object> response = questionService.getQuestion(questionId, 10);
         response.put("resultCode",SUCCESS);
+        if(user == null || !isQuestionUser){
+            response.put("viewerIsOwner",0);
+        }
+        if(isQuestionUser){
+            response.put("viewerIsOwner",1);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String cancelAdopt(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        User viewUser = questionDAO.get(questionId).getUserByUserId();
+        Map<String, Object> response = new HashMap<>(16);
+        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
+        if(user == null || !isQuestionUser){
+            response.put("resultCode",1);
+        }else{
+            questionService.cancelAdopt(questionId);
+            response.put("resultCode",SUCCESS);
+        }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
