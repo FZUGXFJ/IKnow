@@ -172,4 +172,12 @@ public class UserServiceImpl<result> implements UserService{
         userDAO.update(user);
         return true;
     }
+
+    @Override
+    public boolean existEmail(String email) {
+        if(userDAO.getUserByEmail(email)==null){
+            return false;
+        }
+        return true;
+    }
 }

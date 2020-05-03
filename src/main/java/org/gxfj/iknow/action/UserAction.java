@@ -211,15 +211,19 @@ public class UserAction {
         Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         String code=(String)session.get(VERIFY_CODE);
         User user=(User)session.get("user");
-        if(code.equals(verifyCode)){
-            if(userService.reBindEmail(user,newEmail)){
-                result.put(RESULT_CODE_NAME,0);
+        if (userService.existEmail(newEmail)){
+            result.put(RESULT_CODE_NAME,2);
+        }
+        else {
+            if (code.equals(verifyCode)) {
+                if (userService.reBindEmail(user, newEmail)) {
+                    result.put(RESULT_CODE_NAME, 0);
+                } else {
+                    result.put(RESULT_CODE_NAME, 1);
+                }
+            } else {
+                result.put(RESULT_CODE_NAME, 1);
             }
-            else {
-                result.put(RESULT_CODE_NAME,1);
-            }
-        }else {
-            result.put(RESULT_CODE_NAME,1);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
