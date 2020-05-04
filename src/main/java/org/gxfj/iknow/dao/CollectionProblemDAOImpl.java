@@ -49,4 +49,13 @@ public class CollectionProblemDAOImpl implements CollectionProblemDAO{
         Query query = session.createQuery("select count(c) from Collectionproblem as c WHERE questionID = ?");
         return ((Long)query.setInteger(0,questionId).uniqueResult()).intValue();
     }
+
+    @Override
+    public Collectionproblem getCollectionQuestion(Integer userId,Integer questionId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Collectionproblem as c WHERE" +
+                " userID = :userId and questionID = :questionId");
+        return (Collectionproblem)query.setParameter("userId",userId)
+                .setParameter("questionId",questionId).uniqueResult();
+    }
 }
