@@ -68,16 +68,30 @@ public class Reply {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Reply reply = (Reply) o;
 
-        if (id != null ? !id.equals(reply.id) : reply.id != null) return false;
-        if (content != null ? !content.equals(reply.content) : reply.content != null) return false;
-        if (date != null ? !date.equals(reply.date) : reply.date != null) return false;
-        if (count != null ? !count.equals(reply.count) : reply.count != null) return false;
-        if (isDelete != null ? !isDelete.equals(reply.isDelete) : reply.isDelete != null) return false;
+        if (id != null ? !id.equals(reply.id) : reply.id != null) {
+            return false;
+        }
+        if (content != null ? !content.equals(reply.content) : reply.content != null) {
+            return false;
+        }
+        if (date != null ? !date.equals(reply.date) : reply.date != null) {
+            return false;
+        }
+        if (count != null ? !count.equals(reply.count) : reply.count != null) {
+            return false;
+        }
+        if (isDelete != null ? !isDelete.equals(reply.isDelete) : reply.isDelete != null) {
+            return false;
+        }
 
         return true;
     }

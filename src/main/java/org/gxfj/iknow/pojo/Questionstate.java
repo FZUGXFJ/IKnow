@@ -31,13 +31,21 @@ public class Questionstate {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Questionstate that = (Questionstate) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (state != null ? !state.equals(that.state) : that.state != null) {
+            return false;
+        }
 
         return true;
     }

@@ -31,13 +31,21 @@ public class Reportreason {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Reportreason that = (Reportreason) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (content != null ? !content.equals(that.content) : that.content != null) {
+            return false;
+        }
 
         return true;
     }
