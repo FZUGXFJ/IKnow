@@ -248,6 +248,9 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String, Object> getAnswer(Integer count) {
+        List<Answer> answers=answerDAO.list(0,20);
+        Map<String,Object> recommends=new HashMap<>(20);
+
         return null;
     }
 }
