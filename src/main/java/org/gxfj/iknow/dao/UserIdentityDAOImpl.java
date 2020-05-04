@@ -25,8 +25,8 @@ public class UserIdentityDAOImpl implements UserIdentityDAO{
         return ht;
     }
     @Override
-    public void add(Useridentity bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Useridentity bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

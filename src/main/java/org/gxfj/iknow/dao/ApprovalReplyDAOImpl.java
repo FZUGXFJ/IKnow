@@ -2,10 +2,9 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Approvalreply;
 import org.gxfj.iknow.pojo.Reply;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -27,8 +26,8 @@ public class ApprovalReplyDAOImpl implements ApprovalReplyDAO{
         return ht;
     }
     @Override
-    public void add(Approvalreply bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Approvalreply bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override
@@ -41,4 +40,24 @@ public class ApprovalReplyDAOImpl implements ApprovalReplyDAO{
         getHibernateTemplate().update(bean);
     }
 
+    @Override
+    public Integer searchByUserIdandReplyId(Integer uid, Integer rid) {
+        Integer replyId=getHibernateTemplate().execute(new HibernateCallback<Integer>() {
+            @Override
+            public Integer doInHibernate(Session session) throws HibernateException {
+                SQLQuery sqlQuery=session.createSQLQuery(
+                        "SELECT id from Approvalreply WHERE userID=" + uid + "&&replyID="+rid);
+                return (Integer)sqlQuery.uniqueResult();
+            }
+        });
+        if (replyId==null){
+            return -1;
+        }
+        return replyId;
+    }
+
+    @Override
+    public void delete(Approvalreply bean) {
+        getHibernateTemplate().delete(bean);
+    }
 }

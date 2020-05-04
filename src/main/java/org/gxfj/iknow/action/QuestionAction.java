@@ -3,6 +3,10 @@ package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
+import org.gxfj.iknow.dao.CollectionProblemDAO;
+import org.gxfj.iknow.dao.QuestionDAO;
+import org.gxfj.iknow.dao.UserDAO;
+import org.gxfj.iknow.pojo.Collectionproblem;
 import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.QuestionService;
@@ -33,6 +37,12 @@ public class QuestionAction {
     private InputStream inputStream;
     @Autowired
     QuestionService questionService;
+    @Autowired
+    QuestionDAO questionDAO;
+    @Autowired
+    CollectionProblemDAO collectionProblemDAO;
+    @Autowired
+    UserDAO userDAO;
 
     private static final int QUESTION_SHOW_ANSWER_NUM = 10;
     private final int SUCCESS = 0;
@@ -76,7 +86,7 @@ public class QuestionAction {
 
     public String questionType() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(16);
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get("user");
         if (user == null) {
             response.put("resultCode",UN_LOGIN);
@@ -91,8 +101,70 @@ public class QuestionAction {
 
     public String viewQuestion() {
         System.out.println(questionId);
-        Map<String, Object> response = questionService.getQuestion(questionId, 10);
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        //题主
+        User viewUser = questionDAO.get(questionId).getUserByUserId();
+        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        response.put("question",questionService.getQuestion(user,questionId, 10));
         response.put("resultCode",SUCCESS);
+        if(user == null || !isQuestionUser){
+            response.put("viewerIsOwner",0);
+        }
+        if(isQuestionUser){
+            response.put("viewerIsOwner",1);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String cancelAdopt(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        User viewUser = questionDAO.get(questionId).getUserByUserId();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
+        if(user == null || !isQuestionUser){
+            response.put("resultCode",1);
+        }else{
+            questionService.cancelAdopt(questionId);
+            response.put("resultCode",SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String collectQuestion(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        if (user == null) {
+            response.put("resultCode",UN_LOGIN);
+        } else if(collectionProblemDAO.getCollectionQuestion(user.getId(),questionId) != null){
+            //resultCode = 2 表示已收藏无法再次收藏
+            response.put("resultCode", 2);
+        } else {
+            questionService.collectProblem(user,questionId);
+            response.put("resultCode", SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String cancelCollect(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        if (user == null) {
+            response.put("resultCode",UN_LOGIN);
+        } else if(collectionProblemDAO.getCollectionQuestion(user.getId(),questionId) == null){
+            //resultCode = 2 表示未收藏无法取消收藏
+            response.put("resultCode", 2);
+        } else {
+            questionService.cancelCollect(user,questionId);
+            response.put("resultCode", SUCCESS);
+        }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }

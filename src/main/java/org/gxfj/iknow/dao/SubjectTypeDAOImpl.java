@@ -32,8 +32,8 @@ public class SubjectTypeDAOImpl implements SubjectTypeDAO{
         return ht;
     }
     @Override
-    public void add(Subjecttype bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Subjecttype bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

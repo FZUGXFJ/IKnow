@@ -1,8 +1,10 @@
 package org.gxfj.iknow.service;
 
+import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,4 +43,19 @@ public interface AnswerService {
      * @return 成功为true,失败为false
      */
     public Boolean adoptAnswer(User user, Integer answerId);
+
+    /**
+     * 执行用户采纳问题操作。如果用户是题主，采纳成功，否则采纳失败
+     * @param user 执行操作的用户
+     * @param answerId 要采纳的回答的id
+     * @return 成功为true,失败为false
+     */
+    public Boolean cancelAdopt(User user,Integer answerId);
+
+    /**
+     * 获得count条问题信息
+     * @param count 推荐数
+     * @return 问题表
+     */
+    public Map<String,Object> getAnswer(Integer count);
 }

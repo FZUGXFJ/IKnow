@@ -846,3 +846,9 @@ placeholder{
     font-size: 0.8em;
     color: red;
 }
+#alert{
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+    display: none;
+}

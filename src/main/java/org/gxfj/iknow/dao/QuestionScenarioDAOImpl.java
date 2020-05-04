@@ -25,8 +25,8 @@ public class QuestionScenarioDAOImpl implements QuestionScenarioDAO{
         return ht;
     }
     @Override
-    public void add(Questionscenario bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Questionscenario bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

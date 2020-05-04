@@ -17,11 +17,13 @@ import java.util.Map;
 public class ReplyAction {
     private Integer commentId;
     private String content;
-    private Integer replyTagetId;
+    private Integer replyTarget;
     private InputStream inputStream;
+    private Integer replyId;
     @Autowired
     private ReplyService replyService;
 
+    private final String SESSION_USER = "user";
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
     private final int MISS_COMMENT_INF = 2;
@@ -34,12 +36,10 @@ public class ReplyAction {
         User user = (User) session.get("user");
         if(user == null){
             response.put("resultCode" , UN_LOGIN);
-        }
-        else if(content == null){
+        } else if(content == null){
             response.put("resultCode" , MISS_COMMENT_INF );
-        }
-        else{
-            replyService.postReply(commentId,content,replyTagetId,user);
+        } else{
+            replyService.postReply(commentId,content, replyTarget,user);
             response.put("resultCode" , SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -49,8 +49,43 @@ public class ReplyAction {
     public String showMoreReply(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
-        response = replyService.showAllReplys(commentId);
+        User user = (User) session.get(SESSION_USER);
+        response = replyService.showAllReplys(commentId, user);
         response.put("resultCode" , SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String approveReply(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else if(!replyService.approveReply(replyId,user)){
+            response.put("resultCode" , 2 );
+        }
+        else{
+            response.put("resultCode" , SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String cancelApprove(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else if(!replyService.cancelApprove(replyId,user)){
+            response.put("resultCode" , 2 );
+        }
+        else{
+            response.put("resultCode" , SUCCESS);
+        }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
@@ -63,8 +98,8 @@ public class ReplyAction {
         return commentId;
     }
 
-    public Integer getReplyTagetId() {
-        return replyTagetId;
+    public Integer getReplyTarget() {
+        return replyTarget;
     }
 
     public String getContent() {
@@ -75,7 +110,15 @@ public class ReplyAction {
         this.commentId = commentId;
     }
 
-    public void setReplyTagetId(Integer replyTagetId) {
-        this.replyTagetId = replyTagetId;
+    public void setReplyTarget(Integer replyTarget) {
+        this.replyTarget = replyTarget;
+    }
+
+    public Integer getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(Integer replyId) {
+        this.replyId = replyId;
     }
 }

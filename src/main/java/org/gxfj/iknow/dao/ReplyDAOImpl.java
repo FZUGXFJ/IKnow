@@ -28,8 +28,8 @@ public class ReplyDAOImpl implements ReplyDAO{
         return ht;
     }
     @Override
-    public void add(Reply bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Reply bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

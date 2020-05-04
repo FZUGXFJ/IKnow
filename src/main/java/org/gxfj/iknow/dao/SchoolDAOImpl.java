@@ -25,8 +25,8 @@ public class SchoolDAOImpl implements SchoolDAO{
         return ht;
     }
     @Override
-    public void add(School bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(School bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

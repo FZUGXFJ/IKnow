@@ -25,8 +25,8 @@ public class UserStateDAOImpl implements  UserStateDAO{
         return ht;
     }
     @Override
-    public void add(Userstate bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Userstate bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

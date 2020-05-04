@@ -25,8 +25,8 @@ public class CollegeDAOImpl implements CollegeDAO{
         return ht;
     }
     @Override
-    public void add(College bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(College bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

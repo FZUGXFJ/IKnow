@@ -27,8 +27,8 @@ public class QuestionTypeDAOImpl implements QuestionTypeDAO{
         return ht;
     }
     @Override
-    public void add(Questiontype bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Questiontype bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

@@ -25,8 +25,8 @@ public class MessageDAOImpl implements MessageDAO{
         return ht;
     }
     @Override
-    public void add(Message bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Message bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

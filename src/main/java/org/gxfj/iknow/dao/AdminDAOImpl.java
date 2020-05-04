@@ -25,8 +25,8 @@ public class AdminDAOImpl implements AdminDAO{
         return ht;
     }
     @Override
-    public void add(Admin bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Admin bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

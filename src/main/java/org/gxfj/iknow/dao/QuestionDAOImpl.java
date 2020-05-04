@@ -39,8 +39,8 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public void add(Question bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Question bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

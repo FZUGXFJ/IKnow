@@ -25,8 +25,8 @@ public class OppositionAnswerDAOImpl implements OppositionAnswerDAO{
         return ht;
     }
     @Override
-    public void add(Oppositionanswer bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Oppositionanswer bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

@@ -25,8 +25,8 @@ public class QuestionStateDAOImpl implements QuestionStateDAO{
         return ht;
     }
     @Override
-    public void add(Questionstate bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Questionstate bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

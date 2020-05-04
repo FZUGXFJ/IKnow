@@ -128,6 +128,19 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="approveComment" class="org.gxfj.iknow.action.CommentAction" method="approveComment">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="cancelApprove" class="org.gxfj.iknow.action.CommentAction" method="cancelApprove">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+
     </package>
 
     <package name="answer" namespace="/answer" extends="default">
@@ -155,6 +168,18 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="cancelAdopt" class="org.gxfj.iknow.action.AnswerAction" method="cancelAdopt">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="recommendAnswer" class="org.gxfj.iknow.action.AnswerAction" method="recommendAnswer">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
     <package name="reply" namespace="/reply" extends="default">
         <action name="sendReply" class="org.gxfj.iknow.action.ReplyAction" method="sendReply">
@@ -164,6 +189,18 @@
             </result>
         </action>
         <action name="showMoreReply" class="org.gxfj.iknow.action.ReplyAction" method="showMoreReply">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="approveReply" class="org.gxfj.iknow.action.ReplyAction" method="approveReply">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="cancelApprove" class="org.gxfj.iknow.action.ReplyAction" method="cancelApprove">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>

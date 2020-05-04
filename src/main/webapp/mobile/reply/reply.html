@@ -17,7 +17,9 @@
 <div id="allReply">
     <div id="header">
         <table>
-            <td style="width: 33%;color: #acacac;font-size: 1.5em"><i class="fas fa-times"></i></td>
+            <td style="width: 33%;color: #acacac;font-size: 1.5em">
+                <i class="fas fa-times" @click="back"></i>
+            </td>
             <td style="width: 34%;text-align: center">
                 <span v-if="load">评论详情</span>
                 <span v-else>加载中<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
@@ -29,15 +31,15 @@
     <div v-if="load">
         <div id="commentInf">
             <table>
-                <td style="width: 12%">
-                    <div class="commentUserHead" v-html="comment.head"></div>
+                <td style="width: 12%;text-align: center">
+                    <div class="userHead" v-html="comment.head"></div>
                 </td>
-                <td style="width: 58%">
+                <td style="width: 73%">
                     &nbsp;<span>{{comment.name}}</span>
                     <span v-if="comment.isQuestionOwner">(题问者)</span>
                     <span v-if="comment.isAnswerer">(回答者)</span>
                 </td>
-                <td style="width: 30%;text-align: right">
+                <td style="width: 15%;text-align: right">
                     <div class="dropdown">
                         <button style="background-color: white;border: 0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
@@ -62,7 +64,7 @@
                     &nbsp;<i class="fas fa-thumbs-up"></i>
                 </td>
                 <td style="width: 10%;text-align: center">
-                    <i class="fas fa-comment"></i>
+                    <i class="fas fa-comment" @click="doReplyOthers(comment.userId,comment.name)"></i>
                 </td>
             </table>
         </div>
@@ -72,17 +74,17 @@
         <div id="replies">
             <div id="reply" v-for="reply in replies">
                 <table>
-                    <td style="width: 12%">
-                        <div class="commentUserHead" v-html="reply.head"></div>
+                    <td style="width: 12%;text-align: center">
+                        <div class="userHead" v-html="reply.head"></div>
                     </td>
-                    <td style="width: 58%">
+                    <td style="width: 73%;font-size: 0.8em">
                         &nbsp;<span>{{reply.name}}</span>
                         <span v-if="reply.isQuestionOwner">(题问者)</span>
                         <span v-if="reply.isAnswerer">(回答者)</span>
                         <i class="fas fa-caret-right"></i>
                         <span>{{reply.targetName}}</span>
                     </td>
-                    <td style="width: 30%;text-align: right">
+                    <td style="width: 15%;text-align: right;font-size: 0.8em">
                         <div class="dropdown">
                             <button style="background-color: white;border: 0" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
@@ -107,7 +109,7 @@
                         &nbsp;<i class="fas fa-thumbs-up"></i>
                     </td>
                     <td style="width: 10%;text-align: center">
-                        <i class="fas fa-comment"></i>
+                        <i class="fas fa-comment" @click="doReplyOthers(reply.userId,reply.name)"></i>
                     </td>
                 </table>
                 <div class="lineReply"><div class="line"></div></div>
@@ -119,9 +121,13 @@
     <br><br><br>
     <div id="addReply">
         <div class="errorBox" v-if="sendError">{{sendErrorMsg}}</div>
+        <div v-if="replyOthers">
+            <span>回复：{{targetName}}</span><button class="btn btn-link" @click="cancelReplyOthers">取消</button>
+        </div>
         <table>
             <td style="width: 80%">
-                <input type="text" class="form-control" aria-label="发送评论" placeholder="在这里输入回复" v-model="sendContent">
+                <input type="text" class="form-control" aria-label="发送评论"
+                       placeholder="在这里输入回复" v-model="sendContent">
             </td>
             <td style="width: 20%;text-align: right">
                 <button class="btn btn-link" @click="send">发送</button>
@@ -139,11 +145,65 @@
             replies:[],
             sendError:false,
             sendErrorMsg:"",
-            sendContent:""
+            sendContent:"",
+            replyOthers:false,
+            targetId: 0,
+            targetName:"",
         },
         methods:{
             send:function () {
-
+                let commentId = this.commentId;
+                let content = this.sendContent;
+                let replyTarget;
+                this.sendError = false;
+                if (content.length === 0) {
+                    this.sendError = true;
+                    this.sendErrorMsg = "回复内容为空";
+                    return;
+                }
+                if (!this.replyOthers) {
+                    replyTarget = this.comment.userId;
+                } else {
+                    replyTarget = this.targetId;
+                }
+                $.ajax({
+                    type:"POST",
+                    url:"../../reply/sendReply.action",
+                    data:{
+                        commentId:commentId,
+                        content:content,
+                        replyTarget:replyTarget
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            location.href = "../reply/reply.html?commentId=" + commentId;
+                        } else if (result.resultCode === 1) {
+                            if (confirm("登录后才能发送回复")) {
+                                location.href = "../user/login.html"
+                            }
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            cancelReplyOthers:function () {
+                this.targetName = "";
+                this.targetId = 0;
+                this.replyOthers = false;
+            },
+            doReplyOthers:function (targetId,targetName) {
+                this.targetName = targetName;
+                this.targetId = targetId;
+                this.replyOthers = true;
+            },
+            back:function () {
+                history.go(-1);
             }
         },
         mounted:function () {
@@ -154,7 +214,7 @@
                 commentId = commentId.replace("commentId=","");
                 this.commentId = commentId;
             } else {
-                //location.href = "../../error/mobile/404error.html"
+                location.href = "../../error/mobile/404error.html"
             }
             $.ajax({
                 type:"POST",

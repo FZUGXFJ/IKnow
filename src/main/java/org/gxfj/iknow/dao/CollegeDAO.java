@@ -2,10 +2,6 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.College;
 
-public interface CollegeDAO {
-    public void add(College bean);
+public interface CollegeDAO extends BaseDAO<College>{
 
-    public College get(Integer id);
-
-    public void update(College bean);
 }

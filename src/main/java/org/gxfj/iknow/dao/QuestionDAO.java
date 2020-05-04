@@ -2,16 +2,24 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Question;
 
-public interface QuestionDAO {
-    public Question get(Integer id);
+public interface QuestionDAO extends BaseDAO<Question>{
 
-    public void update(Question bean);
+    /**
+     * 删除
+     * @param bean 类
+     */
+    void delete(Question bean);
+    /**
+     * 获得问题状态
+     * @param questionID 问题id
+     * @return  状态码
+     */
+    Integer getQuestionStateId(Integer questionID);
 
-    public void add(Question bean);
-
-    public void delete(Question bean);
-
-    public Integer getQuestionStateId(Integer questionID);
-
-    public Integer getAnswerCount(Integer id);
+    /**
+     * 问题数量
+     * @param id 问题id
+     * @return  数量
+     */
+    Integer getAnswerCount(Integer id);
 }

@@ -4,7 +4,7 @@
     margin-left: 15%;
     width: 40%;
     float: left;
-
+    position: relative;
 }
 .relativeQuestionDiv{
     height: 55%;
@@ -12,6 +12,7 @@
     margin-left: 3%;
     width: 20%;
     float: left;
+    position: relative;
 }
 .relativeRecommendDiv{
     height: 32%;
@@ -20,6 +21,7 @@
     margin-top: 1%;
     width: 20%;
     float: left;
+    position: relative;
 }
 #questionTitle{
     margin-top: 5%;

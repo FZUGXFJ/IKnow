@@ -31,6 +31,7 @@ public class AnswerAction {
     private final int MISS_QUESTIONID = 2;
     private final int MISS_ANSWER_IF = 3;
     private final int USER_IS_NOT_QUESTIONER = 2;
+    private final int USER_IS_NOT_ANSWERER = 1;
 
     final static private int RESPONSE_NUM = 20;
     @Autowired
@@ -106,6 +107,33 @@ public class AnswerAction {
             response.put("resultCode", UN_LOGIN);
         }
 
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String cancelAdopt(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>();
+        User user = (User) session.get("user");
+
+        if (user != null) {
+            if (answerService.cancelAdopt(user, answerId)) {
+                response.put("resultCode", SUCCESS);
+            } else {
+                response.put("resultCode", USER_IS_NOT_ANSWERER);
+            }
+        } else {
+            response.put("resultCode", UN_LOGIN);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String recommendAnswer(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>();
+        response=answerService.getAnswer(20);
+        response.put("resultCode",SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }

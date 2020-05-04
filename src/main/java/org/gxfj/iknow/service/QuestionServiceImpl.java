@@ -124,7 +124,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> getQuestion(Integer questionId, int length){
+    public Map<String, Object> getQuestion(User user, Integer questionId, int length){
         Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
 
         //根据问题id查询到的问题
@@ -172,8 +172,13 @@ public class QuestionServiceImpl implements QuestionService{
         //获取回答者json数据数组即map类型的list
         questionAnswers = setAnswersJSON(nAnswers,question);
         questionMap.put("questionAnswers",questionAnswers);
+        //查看问题的用户是否收藏了问题
+        if(user == null || collectionProblemDAO.getCollectionQuestion(user.getId(),questionId) == null){
+            questionMap.put("isCollected",0);
+        }else {
+            questionMap.put("isCollected",1);
+        }
         return questionMap;
-
     }
 
     /**
@@ -259,4 +264,27 @@ public class QuestionServiceImpl implements QuestionService{
         }
         return questionAnswers;
     }
+
+    @Override
+    public void cancelAdopt(Integer questionId){
+        Question question = questionDAO.get(questionId);
+        question.setIsAnonymous((byte)0);
+        questionDAO.update(question);
+    }
+
+    @Override
+    public void collectProblem(User user,Integer questionId){
+        Collectionproblem collectionproblem = new Collectionproblem();
+        collectionproblem.setDate(new Date());
+        collectionproblem.setQuestionByQuestionId(questionDAO.get(questionId));
+        collectionproblem.setUserByUserId(user);
+        collectionProblemDAO.add(collectionproblem);
+    }
+
+    @Override
+    public void cancelCollect(User user,Integer questionId){
+        Collectionproblem collectionproblem = collectionProblemDAO.getCollectionQuestion(user.getId(),questionId);
+        collectionProblemDAO.delete(collectionproblem);
+    }
+
 }

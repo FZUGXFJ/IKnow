@@ -28,8 +28,8 @@ public class CategoriesTypeDAOImpl implements CategoriesTypeDAO{
         return ht;
     }
     @Override
-    public void add(Categoriestype bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Categoriestype bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

@@ -30,8 +30,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void add(User bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(User bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

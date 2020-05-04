@@ -76,4 +76,11 @@ public interface UserService {
      * @return 是否成功
      */
     public boolean reBindEmail(User user , String newEmail);
+
+    /**
+     * 是否存在邮箱
+     * @param email 判断的邮箱
+     * @return 是否存在:0不存在可以更新，1存在
+     */
+    public boolean existEmail(String email);
 }

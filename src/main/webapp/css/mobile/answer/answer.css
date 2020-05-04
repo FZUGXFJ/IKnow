@@ -55,7 +55,7 @@ img{
     margin: 0 auto;
     padding: 0.5em 0;
 }
-#splitLine{
+.splitLine{
     height: 0.1em;
     background-color: #acacac;
     opacity: 0.3;
@@ -73,7 +73,22 @@ img{
     box-shadow: 0 -0.3em 0.2em #d6d6d6;
     position: fixed;
     bottom: 0;
-    z-index: 9999;
+    z-index: 9998;
     background-color: white;
     text-align: center;
+}
+#operateMenu{
+    padding: 0 5%;
+    display: none;
+    bottom: 0;
+    position: fixed;
+    z-index: 9999;
+    background-color: white;
+    box-shadow: 0 -0.3em 0.2em #d6d6d6;
+    font-size: 1em;
+}
+.operateItem{
+    width: 20%;
+    text-align: center;
+    color: #acacac;
 }

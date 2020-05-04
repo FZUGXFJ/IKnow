@@ -2,10 +2,6 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Questionstate;
 
-public interface QuestionStateDAO {
-    public void add(Questionstate bean);
+public interface QuestionStateDAO extends BaseDAO<Questionstate>{
 
-    public Questionstate get(Integer id);
-
-    public void update(Questionstate bean);
 }
