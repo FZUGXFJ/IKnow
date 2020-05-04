@@ -36,11 +36,18 @@ public interface QuestionService {
      * @param length 要加载的回答个数
      * @return
      */
-    public Map<String, Object>getQuestion(Integer questionId, int length);
+    public Map<String, Object>getQuestion(User user, Integer questionId, int length);
 
     /**
      * 根据问题的id，获得问题及问题下的前length个回答的相关信息
      * @param questionId 取消匿名的问题
      */
     public void cancelAdopt(Integer questionId);
+
+    /**
+     * 用户收藏问题
+     * @param user 浏览问题的用户
+     * @param questionId 用户想要收藏的问题
+     */
+    public void collectProblem(User user,Integer questionId);
 }
