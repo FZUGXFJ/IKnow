@@ -19,7 +19,7 @@ table{
 #comments{
     padding: 1em 1em;
 }
-.commentUserHead{
+.userHead{
     border-radius: 100%;
     overflow: hidden;
 }

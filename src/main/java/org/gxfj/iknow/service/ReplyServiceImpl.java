@@ -90,7 +90,7 @@ public class ReplyServiceImpl implements ReplyService {
         List<Reply> replies = replyDAO.getAllReplies(commentId);
         for (Reply reply : replies) {
             Map<String ,Object> replyMap = replierIsQAOwner(reply.getId());
-            replyMap.put("id" , reply.getId());
+            replyMap.put("userId" , reply.getUserByUserId().getId());
             replyMap.put("targetName" , reply.getUserByTargetUserId().getName());
             replyMap.put("targetId" , reply.getUserByTargetUserId().getId());
             replyMap.put("content" , reply.getContent());
@@ -125,7 +125,7 @@ public class ReplyServiceImpl implements ReplyService {
         //得到题主的id
         Integer questionOwnerId = answer.getQuestionByQuestionId().getUserByUserId().getId();
         //得到答主的id
-        Integer answerOwnerId = question.getUserByUserId().getId();
+        Integer answerOwnerId = answer.getUserByUserId().getId();
         boolean userIdentify = (commentOwnerId.equals(questionOwnerId) && question.getIsAnonymous() == 1) ||
                 (commentOwnerId.equals(answerOwnerId) && answer.getIsAnonymous() == 1);
         if(userIdentify) {

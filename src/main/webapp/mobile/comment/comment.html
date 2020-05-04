@@ -123,7 +123,8 @@
     <div id="postComment" v-if="load">
         <div class="errorBox" v-if="postError">{{postErrorMsg}}</div>
         <div v-if="toReply">
-            <span>回复：{{targetName}}</span><button class="btn btn-link" @click="cancelReply">取消</button></div>
+            <span>回复：{{targetName}}</span><button class="btn btn-link" @click="cancelReply">取消</button>
+        </div>
         <table>
             <td style="width: 80%">
                 <input type="text" class="form-control" aria-label="发送评论" v-bind:placeholder="placeholder" v-model="postContent">
