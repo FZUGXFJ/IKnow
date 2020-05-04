@@ -3,7 +3,6 @@ package org.gxfj.iknow.dao;
 import org.gxfj.iknow.pojo.Answer;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -56,4 +55,10 @@ public class AnswerDAOImpl implements AnswerDAO{
         return query.setInteger(0,questionId).setFirstResult(start).setMaxResults(length).list();
     }
 
+    @Override
+    public List<Answer> list(Integer start,Integer count) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Answer");
+        return query.setFirstResult(start).setMaxResults(count).list();
+    }
 }

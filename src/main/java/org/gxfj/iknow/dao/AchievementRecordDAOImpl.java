@@ -25,8 +25,8 @@ public class AchievementRecordDAOImpl implements AchievementRecordDAO{
         return ht;
     }
     @Override
-    public void add(Achievementrecord bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Achievementrecord bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

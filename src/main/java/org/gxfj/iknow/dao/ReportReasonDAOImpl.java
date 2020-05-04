@@ -25,8 +25,8 @@ public class ReportReasonDAOImpl implements ReportReasonDAO{
         return ht;
     }
     @Override
-    public void add(Reportreason bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Reportreason bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

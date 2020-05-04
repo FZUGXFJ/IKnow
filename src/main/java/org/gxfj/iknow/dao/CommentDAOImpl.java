@@ -31,8 +31,8 @@ public class CommentDAOImpl implements CommentDAO{
         return ht;
     }
     @Override
-    public void add(Comment bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Comment bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

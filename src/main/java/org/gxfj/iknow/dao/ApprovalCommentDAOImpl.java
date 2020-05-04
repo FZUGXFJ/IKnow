@@ -29,8 +29,8 @@ public class ApprovalCommentDAOImpl implements ApprovalCommentDAO{
         return ht;
     }
     @Override
-    public void add(Approvalcomment bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Approvalcomment bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

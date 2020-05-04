@@ -25,8 +25,8 @@ public class MajorDAOImpl implements MajorDAO{
         return ht;
     }
     @Override
-    public void add(Major bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Major bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

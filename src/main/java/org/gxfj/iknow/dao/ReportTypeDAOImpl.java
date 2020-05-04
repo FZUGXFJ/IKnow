@@ -25,8 +25,8 @@ public class ReportTypeDAOImpl implements ReportTypeDAO{
         return ht;
     }
     @Override
-    public void add(Reporttype bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Reporttype bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

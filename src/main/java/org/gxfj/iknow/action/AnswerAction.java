@@ -129,6 +129,10 @@ public class AnswerAction {
         return "success";
     }
 
+    public String recommendAnswer(){
+        return "success";
+    }
+
     public Integer getQuestionId() {
         return questionId;
     }

@@ -25,8 +25,8 @@ public class ApprovalAnswerDAOImpl implements ApprovalAnswerDAO{
         return ht;
     }
     @Override
-    public void add(Approvalanswer bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Approvalanswer bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

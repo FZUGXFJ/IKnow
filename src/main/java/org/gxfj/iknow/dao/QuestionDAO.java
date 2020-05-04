@@ -5,6 +5,11 @@ import org.gxfj.iknow.pojo.Question;
 public interface QuestionDAO extends BaseDAO<Question>{
 
     /**
+     * 删除
+     * @param bean 类
+     */
+    void delete(Question bean);
+    /**
      * 获得问题状态
      * @param questionID 问题id
      * @return  状态码

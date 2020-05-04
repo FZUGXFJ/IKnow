@@ -29,8 +29,8 @@ public class CollectionProblemDAOImpl implements CollectionProblemDAO{
         return ht;
     }
     @Override
-    public void add(Collectionproblem bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Collectionproblem bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

@@ -245,4 +245,9 @@ public class AnswerServiceImpl implements AnswerService{
         }
         return false;
     }
+
+    @Override
+    public Map<String, Object> getAnswer(Integer count) {
+        return null;
+    }
 }

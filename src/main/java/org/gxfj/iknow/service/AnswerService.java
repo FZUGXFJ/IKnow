@@ -50,4 +50,11 @@ public interface AnswerService {
      * @return 成功为true,失败为false
      */
     public Boolean cancelAdopt(User user,Integer answerId);
+
+    /**
+     * 获得count条问题信息
+     * @param count 推荐数
+     * @return 问题表
+     */
+    public Map<String,Object> getAnswer(Integer count);
 }

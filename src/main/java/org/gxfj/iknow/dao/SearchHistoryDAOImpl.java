@@ -25,8 +25,8 @@ public class SearchHistoryDAOImpl implements SearchHistoryDAO{
         return ht;
     }
     @Override
-    public void add(Searchhistory bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Searchhistory bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

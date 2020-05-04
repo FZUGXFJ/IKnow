@@ -30,8 +30,18 @@ public class LevelDAOImpl implements LevelDAO {
     }
 
     @Override
+    public Integer add(Level bean) {
+        return (Integer)getHibernateTemplate().save(bean);
+    }
+
+    @Override
     public Level get(Integer id) {
         return getHibernateTemplate().get(Level.class,id);
+    }
+
+    @Override
+    public void update(Level bean) {
+        getHibernateTemplate().save(bean);
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {

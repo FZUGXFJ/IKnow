@@ -27,8 +27,8 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
         return ht;
     }
     @Override
-    public void add(Browsinghistory bean) {
-        getHibernateTemplate().save(bean);
+    public Integer add(Browsinghistory bean) {
+        return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override

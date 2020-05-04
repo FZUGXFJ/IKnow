@@ -6,8 +6,9 @@ public interface BaseDAO<T> {
     /**
      * 添加记录到数据库中
      * @param bean 要添加的bean
+     * @return id
      */
-    void add(T bean);
+    Integer add(T bean);
 
     /**
      * 根据主键获取对象
