@@ -250,8 +250,9 @@ public class AnswerServiceImpl implements AnswerService{
     public Map<String, Object> getAnswer(Integer count) {
         List<Answer> answers=answerDAO.list(0,count);
         List<Map<String,Object>> recommendList=new ArrayList<>();
-        Map<String,Object> recommend=new HashMap<>(15);
+        Map<String,Object> recommend;
         for(Answer answer:answers){
+            recommend = new HashMap<>(MAP_NUM);
             Question question=answer.getQuestionByQuestionId();
             User user=answer.getUserByUserId();
             User quser=question.getUserByUserId();
@@ -286,7 +287,7 @@ public class AnswerServiceImpl implements AnswerService{
             }
             recommendList.add(recommend);
         }
-        Map<String,Object> recommends=new HashMap<>(20);
+        Map<String,Object> recommends=new HashMap<>(MAP_NUM);
         recommends.put("recommends",recommendList);
         return recommends;
     }
