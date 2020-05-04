@@ -26,25 +26,23 @@ public class AnswerServiceImpl implements AnswerService{
     private UserDAO userDAO;
 
 
-
-
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
     final static private int QUESTION_STATE_SOLVE = 2;
     @Override
-    public String getQuestiontitle(Integer qId) {
-        Question question = questionDAO.get(qId);
+    public String getQuestiontitle(Integer questionId) {
+        Question question = questionDAO.get(questionId);
         return question.getTitle();
     }
 
     @Override
-    public Map<String,Object> postAnswer(Integer qId, String content, Byte isAnonymous,User user) {
+    public Map<String,Object> postAnswer(Integer questionId, String content, Byte isAnonymous, User user) {
         Answer answer=new Answer();
         answer.setIsAnonymous(isAnonymous);
         answer.setDate(new Date());
         answer.setApprovalCount(0);
         answer.setUserByUserId(user);
-        Question q = questionDAO.get(qId);
+        Question q = questionDAO.get(questionId);
         answer.setQuestionByQuestionId(q);
         answer.setIsDelete((byte)0);
         answer.setIsRoof((byte)0);
@@ -159,10 +157,9 @@ public class AnswerServiceImpl implements AnswerService{
         answerMap.put("content" , answer.getContent());
         answerMap.put("approveNum" , answer.getApprovalCount());
         answerMap.put("commentNum" , commentDAO.getCount(answerId));
-        if(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId())){
+        if(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId())) {
             answerMap.put("isAdopt" , 1);
-        }
-        else{
+        } else {
             answerMap.put("isAdopt" , 0);
         }
         answerMap.put("isAnonymous",answer.getIsAnonymous() == 0 ? 0 : 1);
@@ -252,26 +249,26 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String, Object> getAnswer(Integer count) {
-        List<Answer> answers=answerDAO.list(0,count);
-        List<Map<String,Object>> recommendList=new ArrayList<>();
+        List<Answer> answers = selectRecommendAnswer(count);
+        List<Map<String,Object>> recommendList = new ArrayList<>();
         Map<String,Object> recommend;
         for(Answer answer:answers){
             recommend = new HashMap<>(MAP_NUM);
-            Question question=answer.getQuestionByQuestionId();
-            User user=answer.getUserByUserId();
-            User quser=question.getUserByUserId();
+            Question question = answer.getQuestionByQuestionId();
+            User user = answer.getUserByUserId();
+            User quser = question.getUserByUserId();
             recommend.put("questionId",question.getId());
             recommend.put("questionTitle",question.getTitle());
             recommend.put("answererId",user.getId());
             boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1);
-            if(isAnonymous){
+            if(isAnonymous) {
                 recommend.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%'" +
                         " style='border-radius: 100%' alt=''>");
                 recommend.put("answererName","匿名用户");
                 recommend.put("answererLevel",0);
                 recommend.put("answererBadge",0);
-            }else{
-                recommend.put("answererHead","<img src='../../head/"+user.getHead() +
+            } else {
+                recommend.put("answererHead","<img src='../../head/" + user.getHead() +
                         "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 recommend.put("answererName",user.getName());
                 recommend.put("answererLevel",levelDAO.getLevelByExp(user.getExp()));
@@ -282,17 +279,24 @@ public class AnswerServiceImpl implements AnswerService{
             recommend.put("approveNum",answer.getApprovalCount());
             recommend.put("commentNum",commentDAO.getCount(answer.getId()));
             Answer au=question.getAnswerByAdoptId();
-            if (au!=null&&au.getId().equals(answer.getId()))
-                {
+            if (au!=null&&au.getId().equals(answer.getId())) {
                 recommend.put("isAdopt",1);
-            }
-            else {
+            } else {
                 recommend.put("isAdopt",0);
             }
             recommendList.add(recommend);
         }
-        Map<String,Object> recommends=new HashMap<>(MAP_NUM);
+        Map<String,Object> recommends = new HashMap<>(MAP_NUM);
         recommends.put("recommends",recommendList);
         return recommends;
+    }
+
+    /**
+     * 从数据库中获取推荐的问题
+     * @param count 推荐问题的条数
+     * @return 推荐的问题，没有则内容为空
+     */
+    private List<Answer> selectRecommendAnswer(Integer count) {
+        return answerDAO.list(0,count);
     }
 }
