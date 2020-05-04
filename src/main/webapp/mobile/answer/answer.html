@@ -142,9 +142,9 @@
                                 <div><i class="fas fa-user-times fa-2x" @click="cancelAdopt"></i></div>
                                 <span>取消采纳</span>
                             </td>
-                            <td class="operateItem" v-if="viewerIsAnswerer == 1">
-                                <div><i class="fas fa-user-check fa-2x" @click="cancelAdopt"></i></div>
-                                <span>取消采纳</span>
+                            <td class="operateItem" v-if="viewerIsAnswerer == 1 && answer.isAnonymous == 1">
+                                <div><i class="fas fa-user-check fa-2x" @click="cancelAnonymous"></i></div>
+                                <span>取消匿名</span>
                             </td>
                         </table>
                         <br>
@@ -184,8 +184,8 @@
             hidePart:true,
             viewerIsAnswerer:0,
             viewerIsQuestionOwner:0,
-            answerId:"",
-            questionId:"",
+            answerId:0,
+            questionId:0,
             load:false
         },
         methods:{
@@ -226,6 +226,32 @@
             },
             allComment:function () {
                 location.href = "../comment/comment.html?answerId=" + this.answerId;
+            },
+            cancelAnonymous:function () {
+                if (confirm("确定取消匿名吗？")) {
+                    $.ajax({
+                        url:"../../answer/cancelAdopt.action",
+                        type:"POST",
+                        data:{
+                            answerId:answer.answerId
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                history.go(0);
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }
+            },
+            back:function () {
+                history.go(-1);
             }
         },
         mounted:function () {

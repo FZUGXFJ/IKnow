@@ -165,6 +165,7 @@ public class AnswerServiceImpl implements AnswerService{
         else{
             answerMap.put("isAdopt" , 0);
         }
+        answerMap.put("isAnonymous",answer.getIsAnonymous() == 0 ? 0 : 1);
         return answerMap;
     }
 

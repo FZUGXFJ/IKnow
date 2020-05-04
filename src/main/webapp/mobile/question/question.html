@@ -135,7 +135,7 @@
                             </td>
                             <td class="operateItem" v-if="viewerIsOwner==1 && isAnonymous==1">
                                 <div>
-                                    <i class="fas fa-user-check fa-2x" @click="cancelAdopt"></i>
+                                    <i class="fas fa-user-check fa-2x" @click="cancelAnonymous"></i>
                                 </div>
                                 <span>取消匿名</span>
                             </td>
@@ -179,7 +179,7 @@
             showOperateMenu:function () {
                 $("#operateMenu").slideToggle();
             },
-            cancelAdopt:function () {
+            cancelAnonymous:function () {
                 if (confirm("确定取消匿名吗？")) {
                     $.ajax({
                         url:"../../question/cancelAdopt.action",
