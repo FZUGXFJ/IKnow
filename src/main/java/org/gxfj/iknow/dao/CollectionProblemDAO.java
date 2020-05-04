@@ -1,5 +1,6 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.Approvalreply;
 import org.gxfj.iknow.pojo.Collectionproblem;
 
 public interface CollectionProblemDAO extends BaseDAO<Collectionproblem>{
@@ -18,4 +19,11 @@ public interface CollectionProblemDAO extends BaseDAO<Collectionproblem>{
      * @return  收藏问题记录
      */
     Collectionproblem getCollectionQuestion(Integer userId,Integer questionId);
+
+    /**
+     * 删除收藏的问题
+     * @param bean  需要删除的元素
+     */
+    void delete(Collectionproblem bean);
+
 }
