@@ -281,4 +281,10 @@ public class QuestionServiceImpl implements QuestionService{
         collectionProblemDAO.add(collectionproblem);
     }
 
+    @Override
+    public void cancelCollect(User user,Integer questionId){
+        Collectionproblem collectionproblem = collectionProblemDAO.getCollectionQuestion(user.getId(),questionId);
+        collectionProblemDAO.delete(collectionproblem);
+    }
+
 }
