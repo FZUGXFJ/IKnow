@@ -1,0 +1,75 @@
+.answerDiv{
+    height: 70%;
+    background: white;
+    margin-left: 15%;
+    width: 40%;
+    float: left;
+
+}
+.relativeQuestionDiv{
+    height: 40%;
+    background: white;
+    margin-left: 3%;
+    width: 20%;
+    float: left;
+}
+.relativeRecommendDiv{
+    height: 28%;
+    background: white;
+    margin-left: 3%;
+    margin-top: 1%;
+    width: 20%;
+    float: left;
+}
+.content{
+    margin-top: 10%;
+    margin-left: 10%;
+    width: 80%;
+    height: 50%;
+}
+#textContent{
+    width: 100%;
+    height: 100%;
+}
+.infoDiv{
+    height: 10%;
+}
+.buttonDiv{
+    margin-top: 5%;
+    margin-left: 10%;
+    width: 30%;
+    height: 10%;
+    border-radius: 10px;
+    border-style: none;
+    background-color: white;
+    float: left;
+}
+.button{
+    width: 45%;
+    height: 100%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border-style: none;
+    float: left;
+    background-color: white;
+}
+.but{
+    width: 100%;
+    height: 100%;
+    border-style: none;
+    border-radius: 10px;
+}
+#like{
+    background-color: lightgrey;
+}
+#comment{
+    margin-left: 10%;
+    color:white;
+    background-color: dodgerblue;
+}
+.info{
+    height: 100%;
+    margin-left: 30%;
+    float: left;
+    margin-top: 5%;
+}

@@ -1,5 +1,5 @@
 .questionContent{
-    height: 80%;
+    height: 90%;
     background: white;
     margin-left: 15%;
     width: 40%;
@@ -7,14 +7,14 @@
 
 }
 .relativeQuestionDiv{
-    height: 50%;
+    height: 55%;
     background: white;
     margin-left: 3%;
     width: 20%;
     float: left;
 }
 .relativeRecommendDiv{
-    height: 28%;
+    height: 32%;
     background: white;
     margin-left: 3%;
     margin-top: 1%;
