@@ -1,9 +1,12 @@
 package org.gxfj.iknow.pojo;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Questiontype {
     private Integer id;
     private Collection<Question> questionsById;
