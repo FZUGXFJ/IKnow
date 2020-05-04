@@ -135,7 +135,8 @@ public class AnswerServiceImpl implements AnswerService{
         }
         else {
             answererMap.put("id" , answerer.getId());
-            answererMap.put("head" , "<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
+            answererMap.put("head" , "<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%'" +
+                    " height='100%' alt=''>");
             answererMap.put("name" , answerer.getName());
             answererMap.put("level",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
             answererMap.put("badgeNum" , answerer.getBadgeNum());

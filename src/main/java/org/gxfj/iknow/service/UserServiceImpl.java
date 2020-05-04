@@ -103,7 +103,8 @@ public class UserServiceImpl<result> implements UserService{
     }
 
     @Override
-    public Map<String,Object> loginByNoPassword(String email, String sessionEmail, String verifyCode, String sessionVerifyCode) {
+    public Map<String,Object> loginByNoPassword(String email, String sessionEmail, String verifyCode,
+                                                String sessionVerifyCode) {
         Map<String,Object> result = new HashMap<>(16);
         if (!email.equals(sessionEmail)) {
             result.put("value",1);
