@@ -68,16 +68,30 @@ public class Useridentity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Useridentity that = (Useridentity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (studentNum != null ? !studentNum.equals(that.studentNum) : that.studentNum != null) return false;
-        if (jobNum != null ? !jobNum.equals(that.jobNum) : that.jobNum != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (studentNum != null ? !studentNum.equals(that.studentNum) : that.studentNum != null) {
+            return false;
+        }
+        if (jobNum != null ? !jobNum.equals(that.jobNum) : that.jobNum != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
+        if (type != null ? !type.equals(that.type) : that.type != null) {
+            return false;
+        }
 
         return true;
     }

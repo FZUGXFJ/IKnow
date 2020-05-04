@@ -32,13 +32,21 @@ public class Majortype {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Majortype majortype = (Majortype) o;
 
-        if (id != null ? !id.equals(majortype.id) : majortype.id != null) return false;
-        if (name != null ? !name.equals(majortype.name) : majortype.name != null) return false;
+        if (id != null ? !id.equals(majortype.id) : majortype.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(majortype.name) : majortype.name != null) {
+            return false;
+        }
 
         return true;
     }

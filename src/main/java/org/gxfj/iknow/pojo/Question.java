@@ -74,16 +74,30 @@ public class Question {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Question question = (Question) o;
 
-        if (id != null ? !id.equals(question.id) : question.id != null) return false;
-        if (title != null ? !title.equals(question.title) : question.title != null) return false;
-        if (content != null ? !content.equals(question.content) : question.content != null) return false;
-        if (date != null ? !date.equals(question.date) : question.date != null) return false;
-        if (isDelete != null ? !isDelete.equals(question.isDelete) : question.isDelete != null) return false;
+        if (id != null ? !id.equals(question.id) : question.id != null) {
+            return false;
+        }
+        if (title != null ? !title.equals(question.title) : question.title != null) {
+            return false;
+        }
+        if (content != null ? !content.equals(question.content) : question.content != null) {
+            return false;
+        }
+        if (date != null ? !date.equals(question.date) : question.date != null) {
+            return false;
+        }
+        if (isDelete != null ? !isDelete.equals(question.isDelete) : question.isDelete != null) {
+            return false;
+        }
 
         return true;
     }

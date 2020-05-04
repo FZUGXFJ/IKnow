@@ -33,13 +33,21 @@ public class College {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         College college = (College) o;
 
-        if (id != null ? !id.equals(college.id) : college.id != null) return false;
-        if (name != null ? !name.equals(college.name) : college.name != null) return false;
+        if (id != null ? !id.equals(college.id) : college.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(college.name) : college.name != null) {
+            return false;
+        }
 
         return true;
     }

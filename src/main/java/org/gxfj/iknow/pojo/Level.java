@@ -51,15 +51,27 @@ public class Level {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Level level1 = (Level) o;
 
-        if (id != null ? !id.equals(level1.id) : level1.id != null) return false;
-        if (level != null ? !level.equals(level1.level) : level1.level != null) return false;
-        if (expTopLimit != null ? !expTopLimit.equals(level1.expTopLimit) : level1.expTopLimit != null) return false;
-        if (expBotLimit != null ? !expBotLimit.equals(level1.expBotLimit) : level1.expBotLimit != null) return false;
+        if (id != null ? !id.equals(level1.id) : level1.id != null) {
+            return false;
+        }
+        if (level != null ? !level.equals(level1.level) : level1.level != null) {
+            return false;
+        }
+        if (expTopLimit != null ? !expTopLimit.equals(level1.expTopLimit) : level1.expTopLimit != null) {
+            return false;
+        }
+        if (expBotLimit != null ? !expBotLimit.equals(level1.expBotLimit) : level1.expBotLimit != null) {
+            return false;
+        }
 
         return true;
     }

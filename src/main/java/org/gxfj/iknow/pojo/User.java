@@ -149,21 +149,45 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         User user = (User) o;
 
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (passwd != null ? !passwd.equals(user.passwd) : user.passwd != null) return false;
-        if (name != null ? !name.equals(user.name) : user.name != null) return false;
-        if (introduction != null ? !introduction.equals(user.introduction) : user.introduction != null) return false;
-        if (gender != null ? !gender.equals(user.gender) : user.gender != null) return false;
-        if (isAttest != null ? !isAttest.equals(user.isAttest) : user.isAttest != null) return false;
-        if (date != null ? !date.equals(user.date) : user.date != null) return false;
-        if (badgeNum != null ? !badgeNum.equals(user.badgeNum) : user.badgeNum != null) return false;
-        if (exp != null ? !exp.equals(user.exp) : user.exp != null) return false;
+        if (id != null ? !id.equals(user.id) : user.id != null) {
+            return false;
+        }
+        if (email != null ? !email.equals(user.email) : user.email != null) {
+            return false;
+        }
+        if (passwd != null ? !passwd.equals(user.passwd) : user.passwd != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(user.name) : user.name != null) {
+            return false;
+        }
+        if (introduction != null ? !introduction.equals(user.introduction) : user.introduction != null) {
+            return false;
+        }
+        if (gender != null ? !gender.equals(user.gender) : user.gender != null) {
+            return false;
+        }
+        if (isAttest != null ? !isAttest.equals(user.isAttest) : user.isAttest != null) {
+            return false;
+        }
+        if (date != null ? !date.equals(user.date) : user.date != null) {
+            return false;
+        }
+        if (badgeNum != null ? !badgeNum.equals(user.badgeNum) : user.badgeNum != null) {
+            return false;
+        }
+        if (exp != null ? !exp.equals(user.exp) : user.exp != null) {
+            return false;
+        }
 
         return true;
     }

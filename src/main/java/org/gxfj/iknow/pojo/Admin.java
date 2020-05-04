@@ -40,14 +40,24 @@ public class Admin {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Admin admin = (Admin) o;
 
-        if (id != null ? !id.equals(admin.id) : admin.id != null) return false;
-        if (account != null ? !account.equals(admin.account) : admin.account != null) return false;
-        if (passwd != null ? !passwd.equals(admin.passwd) : admin.passwd != null) return false;
+        if (id != null ? !id.equals(admin.id) : admin.id != null) {
+            return false;
+        }
+        if (account != null ? !account.equals(admin.account) : admin.account != null) {
+            return false;
+        }
+        if (passwd != null ? !passwd.equals(admin.passwd) : admin.passwd != null) {
+            return false;
+        }
 
         return true;
     }
