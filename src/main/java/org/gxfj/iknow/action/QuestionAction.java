@@ -152,6 +152,23 @@ public class QuestionAction {
         return "success";
     }
 
+    public String cancelCollect(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        if (user == null) {
+            response.put("resultCode",UN_LOGIN);
+        } else if(collectionProblemDAO.getCollectionQuestion(user.getId(),questionId) == null){
+            //resultCode = 2 表示未收藏无法取消收藏
+            response.put("resultCode", 2);
+        } else {
+            questionService.cancelCollect(user,questionId);
+            response.put("resultCode", SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
     public String getQuestionTitle() {
         return questionTitle;
     }
