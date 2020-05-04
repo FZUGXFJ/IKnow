@@ -19,7 +19,7 @@
         <table style="color: #acacac">
             <td style="width: 80%"><i class="fas fa-chevron-left"></i></td>
             <td style="width: 10%;text-align: right"><i class="fas fa-search"></i></td>
-            <td style="width: 10%;text-align: right"><i class="fas fa-ellipsis-v" @click="showOperateMenu"></i></td>
+            <td style="width: 10%;text-align: right"><i class="fas fa-ellipsis-v" data-toggle="modal" data-target="#operateModal"></i></td>
         </table>
     </div>
     <br><br><br>
@@ -112,28 +112,46 @@
             </td>
         </table>
     </div>
-    <div id="operateMenu">
-        <br>
-        <table>
-            <td class="operateItem">
-                <div><i class="fas fa-user-plus fa-2x"></i></div>
-                <span>邀请回答</span>
-            </td>
-            <td class="operateItem">
-                <div><i class="fas fa-minus-circle fa-2x"></i></div>
-                <span>举报</span>
-            </td>
-            <td class="operateItem" v-if="viewerIsQuestionOwner == 1 && question.isSolved == 0 && answer.isAdopt == 0">
-                <div><i class="fas fa-check-square fa-2x" @click="adopt"></i></div>
-                <span>采纳回答</span>
-            </td>
-            <td class="operateItem" v-if="viewerIsQuestionOwner == 1 && question.isSolved == 1 && answer.isAdopt == 1">
-                <div><i class="fas fa-user-times fa-2x" @click="adopt"></i></div>
-                <span>取消采纳</span>
-            </td>
-            <td class="operateItem"></td>
-        </table>
-        <br>
+    <div style="z-index: 9999;" class="modal fade" id="operateModal" tabindex="-1"
+         role="dialog" aria-labelledby="topModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">操作</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="operateMenu">
+                        <br>
+                        <table>
+                            <td class="operateItem">
+                                <div><i class="fas fa-user-plus fa-2x"></i></div>
+                                <span>邀请回答</span>
+                            </td>
+                            <td class="operateItem">
+                                <div><i class="fas fa-minus-circle fa-2x"></i></div>
+                                <span>举报</span>
+                            </td>
+                            <td class="operateItem" v-if="viewerIsQuestionOwner == 1 && question.isSolved == 0 && answer.isAdopt == 0">
+                                <div><i class="fas fa-check-square fa-2x" @click="adopt"></i></div>
+                                <span>采纳回答</span>
+                            </td>
+                            <td class="operateItem" v-if="viewerIsQuestionOwner == 1 && question.isSolved == 1 && answer.isAdopt == 1">
+                                <div><i class="fas fa-user-times fa-2x" @click="cancelAdopt"></i></div>
+                                <span>取消采纳</span>
+                            </td>
+                            <td class="operateItem" v-if="viewerIsAnswerer == 1">
+                                <div><i class="fas fa-user-check fa-2x" @click="cancelAdopt"></i></div>
+                                <span>取消采纳</span>
+                            </td>
+                        </table>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -202,6 +220,9 @@
                         alert("系统异常");
                     }
                 });
+            },
+            cancelAdopt:function () {
+
             },
             allComment:function () {
                 location.href = "../comment/comment.html?answerId=" + this.answerId;

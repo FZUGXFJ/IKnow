@@ -19,7 +19,7 @@
         <table style="color: #acacac">
             <td style="width: 80%;padding-left: 1em"><i class="fas fa-chevron-left"></i></td>
             <td style="width: 10%"><i class="fas fa-search"></i></td>
-            <td style="width: 10%"><i class="fas fa-ellipsis-v" @click="showOperateMenu"></i></td>
+            <td style="width: 10%"><i class="fas fa-ellipsis-v" data-toggle="modal" data-target="#operateModal"></i></td>
         </table>
     </div>
     <br>
@@ -62,9 +62,10 @@
     <div id="answerList">
         <div class="item" v-for="answer in answers">
             <div class="separator"></div>
+            <h6 style="color: #12eee7" v-if="answer.isAdopt == 1"><i class="fas fa-check"></i>&nbsp;此回答已被采纳</h6>
             <div class="answer">
                 <div class="answererInf">
-                    <table>
+                    <table style="margin-bottom: 0.5em">
                         <td style="width: 15%">
                             <div class="headPortrait" v-html="answer.answererHead"></div>
                         </td>
@@ -82,7 +83,7 @@
                     </table>
                 </div>
                 <div class="answerInf">
-                    <p class="answerView" v-html="answer.answerView"></p>
+                    <div class="answerView" v-html="answer.answerView" @click="answerPage(answer.answerId)"></div>
                     <table>
                         <td style="width: 80%;opacity: 0.5;font-size: 0.8em">
                             {{answer.answerApprove}}赞同-{{answer.answerComment}}评论-{{answer.answerTime}}
@@ -105,32 +106,45 @@
     <br><br>
     <div id="footer">
         <table>
-            <td><button><i class="fas fa-user-plus">邀请回答</i></button></td>
-            <td><button><i class="fas fa-pen" @click="postAnswer">写回答</i></button></td>
-            <td><button><i class="fas fa-star">收藏问题</i></button></td>
+            <td><button><i class="fas fa-user-plus"></i>&nbsp;邀请回答</button></td>
+            <td><button><i class="fas fa-pen" @click="postAnswer"></i>&nbsp;写回答</button></td>
+            <td><button><i class="fas fa-star"></i>&nbsp;收藏问题</button></td>
         </table>
     </div>
-    <div id="operateMenu">
-        <br>
-        <table>
-            <td class="operateItem">
-                <div><i class="fas fa-user-plus fa-2x"></i></div>
-                <span>邀请回答</span>
-            </td>
-            <td class="operateItem" v-if="">
-                <div><i class="fas fa-minus-circle fa-2x"></i></div>
-                <span>举报问题</span>
-            </td>
-            <td class="operateItem">
-                <div><i class="fas fa-user-check fa-2x"></i></div>
-                <span>取消匿名</span>
-            </td>
-            <td class="operateItem">
-
-            </td>
-            <td class="operateItem"></td>
-        </table>
-        <br>
+    <div style="z-index: 9999;" class="modal fade" id="operateModal" tabindex="-1"
+         role="dialog" aria-labelledby="topModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">操作</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="operateMenu">
+                        <br>
+                        <table>
+                            <td class="operateItem">
+                                <div><i class="fas fa-user-plus fa-2x"></i></div>
+                                <span>邀请回答</span>
+                            </td>
+                            <td class="operateItem">
+                                <div><i class="fas fa-minus-circle fa-2x"></i></div>
+                                <span>举报问题</span>
+                            </td>
+                            <td class="operateItem" v-if="viewerIsOwner==1 && isAnonymous==1">
+                                <div>
+                                    <i class="fas fa-user-check fa-2x" @click="cancelAdopt"></i>
+                                </div>
+                                <span>取消匿名</span>
+                            </td>
+                        </table>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -138,6 +152,7 @@
         el:"#question",
         data:{
             questionId:0,
+            viewerIsOwner:0,
             isAnonymous:1,
             isSolved:1,
             owner:{
@@ -154,7 +169,8 @@
             sortMethod:"默认排序",
             headFirstPart:"<img src='../../head/",
             headLastPart:"' width='100%' height='100%' alt=''>",
-            load:true
+            load:true,
+            modelMsg:"确定要取消匿名吗？"
         },
         methods:{
             postAnswer:function () {
@@ -162,6 +178,33 @@
             },
             showOperateMenu:function () {
                 $("#operateMenu").slideToggle();
+            },
+            cancelAdopt:function () {
+                if (confirm("确定取消匿名吗？")) {
+                    $.ajax({
+                        url:"../../question/cancelAdopt.action",
+                        type:"POST",
+                        data:{
+                            questionId:question.questionId
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                history.go(0);
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }
+            },
+            answerPage: function (answerId) {
+                location.href = "../answer/answer.html?questionId=" + this.questionId
+                    + "&answerId=" + answerId;
             }
         },
         mounted:function () {
@@ -172,11 +215,11 @@
                 questionId = loc.replace("questionId=","");
                 this.questionId = questionId;
             } else {
-                //location.href = "../../error/mobile/404error.html"
+                location.href = "../../error/mobile/404error.html"
             }
             $.ajax({
                 url:"../../question/viewQuestion.action",
-                type:"GET",
+                type:"POST",
                 data:{
                     questionId:questionId
                 },
@@ -184,15 +227,9 @@
                 success:function (result) {
                     if (result.resultCode === 0) {
                         question.isAnonymous = result.isAnonymous;
-                        if (question.isAnonymous === 0) {
-                            question.owner.id = 0;
-                            question.owner.username = "匿名用户";
-                            question.owner.head = "0.jpg";
-                        } else {
-                            question.owner.id = result.owner.id;
-                            question.owner.username = result.owner.username;
-                            question.owner.head = result.owner.head;
-                        }
+                        question.owner.id = result.owner.id;
+                        question.owner.username = result.owner.username;
+                        question.owner.head = result.owner.head;
                         question.title = result.title;
                         question.content = result.content;
                         question.collectionCount = result.collectionCount;
@@ -201,6 +238,7 @@
                         question.answers = result.questionAnswers;
                         question.load = true;
                         question.isSolved = result.isSolved;
+                        question.viewerIsOwner = result.viewerIsOwner;
                     } else if (result.resultCode === 1) {
                         alert("问题找不到！")
                     }

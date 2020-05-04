@@ -9,7 +9,7 @@ table{
     box-shadow: 0 0.3em 0.2em #d6d6d6;
     position: fixed;
     top: 0;
-    z-index: 9999;
+    z-index: 9998;
     background-color: white;
 }
 #questionInf{
@@ -27,6 +27,16 @@ table{
 #answerList{
     width: 90%;
     margin: 0 auto;
+}
+.answerView p , .answerView div{
+    display: inline;
+}
+.answerView{
+    overflow: hidden;;
+    text-overflow: ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 .noBorder{
     background-color: white;
@@ -58,9 +68,8 @@ table{
 }
 #footer button{
     border: 0;
-    border-radius: 1em;
     background-color: white;
-    color: #12eee7;
+    color: rgba(18, 238, 231, 0.8);
 }
 #footer td{
     text-align: center;
@@ -74,16 +83,14 @@ table{
 }
 #operateMenu{
     padding: 0 5%;
-    display: none;
-    bottom: 0;
-    position: fixed;
-    z-index: 9999;
     background-color: white;
-    box-shadow: 0 -0.3em 0.2em #d6d6d6;
     font-size: 1em;
 }
 .operateItem{
-    width: 20%;
     text-align: center;
     color: #acacac;
+}
+.operateItem button{
+    border: 0;
+    background-color: white;
 }

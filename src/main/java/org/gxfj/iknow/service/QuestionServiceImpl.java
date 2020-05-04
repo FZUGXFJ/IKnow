@@ -257,6 +257,12 @@ public class QuestionServiceImpl implements QuestionService{
             }
             questionAnswerMap.put("answerTime",Time.getTime(answer.getDate()));
             questionAnswerMap.put("isAnonymous",answer.getIsAnonymous());
+            int isAdopt = 0;
+            Answer adoptAnswer = answer.getQuestionByQuestionId().getAnswerByAdoptId();
+            if (adoptAnswer != null && answer.getId().equals(adoptAnswer.getId())) {
+                isAdopt = 1;
+            }
+            questionAnswerMap.put("isAdopt",isAdopt);
             questionAnswers.add(questionAnswerMap);
             /*
             answererIdentity：回答者的身份（α版本非必须）
