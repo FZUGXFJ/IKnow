@@ -248,9 +248,46 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String, Object> getAnswer(Integer count) {
-        List<Answer> answers=answerDAO.list(0,20);
+        List<Answer> answers=answerDAO.list(0,count);
+        List<Map<String,Object>> recommendList=new ArrayList<>();
+        Map<String,Object> recommend=new HashMap<>(15);
+        for(Answer answer:answers){
+            Question question=answer.getQuestionByQuestionId();
+            User user=answer.getUserByUserId();
+            User quser=question.getUserByUserId();
+            recommend.put("questionId",question.getId());
+            recommend.put("questionTitle",question.getTitle());
+            recommend.put("answererId",user.getId());
+            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1);
+            if(isAnonymous){
+                recommend.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%'" +
+                        " style='border-radius: 100%' alt=''>");
+                recommend.put("answererName","匿名用户");
+                recommend.put("answererLevel",0);
+                recommend.put("answererBadge",0);
+            }else{
+                recommend.put("answererHead","<img src='../../head/"+user.getHead() +
+                        "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+                recommend.put("answererName",user.getName());
+                recommend.put("answererLevel",levelDAO.getLevelByExp(user.getExp()));
+                recommend.put("answererBadge",user.getBadgeNum());
+            }
+            recommend.put("answerId",answer.getId());
+            recommend.put("content",answer.getContent());
+            recommend.put("approveNum",answer.getApprovalCount());
+            recommend.put("commentNum",commentDAO.getCount(answer.getId()));
+            Answer au=question.getAnswerByAdoptId();
+            if (au!=null&&au.getId().equals(answer.getId()))
+                {
+                recommend.put("isAdopt",1);
+            }
+            else {
+                recommend.put("isAdopt",0);
+            }
+            recommendList.add(recommend);
+        }
         Map<String,Object> recommends=new HashMap<>(20);
-
-        return null;
+        recommends.put("recommends",recommendList);
+        return recommends;
     }
 }

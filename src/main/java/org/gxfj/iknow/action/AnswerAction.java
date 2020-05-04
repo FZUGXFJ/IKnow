@@ -130,6 +130,11 @@ public class AnswerAction {
     }
 
     public String recommendAnswer(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>();
+        response=answerService.getAnswer(20);
+        response.put("resultCode",SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
 
