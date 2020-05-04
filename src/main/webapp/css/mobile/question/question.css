@@ -94,3 +94,7 @@ table{
     border: 0;
     background-color: white;
 }
+
+.noCollect{
+    color: #acacac;
+}
