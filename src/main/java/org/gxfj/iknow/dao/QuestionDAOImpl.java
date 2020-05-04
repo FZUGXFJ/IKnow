@@ -15,6 +15,9 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     private HibernateTemplate ht = null;
 
+    static final int SOLVED = 1;
+    static final int UNSOLVED = 2;
+
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -57,9 +60,9 @@ public class QuestionDAOImpl implements QuestionDAO {
                 return (Integer)sqlQuery.uniqueResult();
             }
         });
-        if (stateId == 1) {
+        if (stateId == SOLVED) {
             return 0;
-        } else if(stateId == 2){
+        } else if(stateId == UNSOLVED){
             return 1;
         }else{
             return -1;
