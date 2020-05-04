@@ -229,6 +229,15 @@ public class UserAction {
         return SUCCESS;
     }
 
+    public String logout(){
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        if(!session.isEmpty()){
+            session.clear();
+        }
+        inputStream = new ByteArrayInputStream("{\"response\":0}".getBytes(StandardCharsets.UTF_8));
+        return  SUCCESS;
+    }
+
     public String getUsername() {
         return username;
     }
