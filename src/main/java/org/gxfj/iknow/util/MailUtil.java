@@ -65,9 +65,8 @@ public class MailUtil {
         message.setRecipient(RecipientType.TO, new InternetAddress(email));
         message.addRecipients(MimeMessage.RecipientType.CC, InternetAddress.parse(userName));
 
-        //设置邮件主题
+        //设置邮件主题 message.setText("这是一封激活邮件，请<a href='#'>点击</a>");
         message.setSubject(subject);
-        // message.setText("这是一封激活邮件，请<a href='#'>点击</a>");
 
         //设置邮件内容
         message.setContent(content, "text/html;charset=utf-8");

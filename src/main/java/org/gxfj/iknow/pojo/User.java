@@ -1,7 +1,6 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 
@@ -35,7 +34,7 @@ public class User {
     private Userstate userstateByStateId;
     private Useridentity useridentityByIdentityId;
     private Collection<Useridentity> useridentitiesById;
-    private Collection<Reply> repliesById_1;
+    private Collection<Reply> repliesById1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -363,11 +362,11 @@ public class User {
     }
 
     @OneToMany(mappedBy = "userByTargetUserId")
-    public Collection<Reply> getRepliesById_1() {
-        return repliesById_1;
+    public Collection<Reply> getRepliesById1() {
+        return repliesById1;
     }
 
-    public void setRepliesById_1(Collection<Reply> repliesById_1) {
-        this.repliesById_1 = repliesById_1;
+    public void setRepliesById1(Collection<Reply> repliesById1) {
+        this.repliesById1 = repliesById1;
     }
 }

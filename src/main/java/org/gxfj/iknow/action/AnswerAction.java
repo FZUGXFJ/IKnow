@@ -34,6 +34,7 @@ public class AnswerAction {
     private final int USER_IS_NOT_ANSWERER = 1;
 
     final static private int RESPONSE_NUM = 20;
+    private static int MAP_NUM = 20;
     @Autowired
     AnswerService answerService;
 
@@ -89,7 +90,7 @@ public class AnswerAction {
 
     public String adoptAnswer() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>(MAP_NUM);
         //从Session中获得当前用户对象
         User user = (User) session.get("user");
 
@@ -113,7 +114,7 @@ public class AnswerAction {
 
     public String cancelAdopt(){
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>(MAP_NUM);
         User user = (User) session.get("user");
 
         if (user != null) {
@@ -130,8 +131,7 @@ public class AnswerAction {
     }
 
     public String recommendAnswer(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response;
         response=answerService.getAnswer(20);
         response.put("resultCode",SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));

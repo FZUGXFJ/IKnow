@@ -49,11 +49,11 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public Integer getQuestionStateId(Integer questionID){
+    public Integer getQuestionStateId(Integer questionId){
         Integer stateId=getHibernateTemplate().execute(new HibernateCallback<Integer>() {
             @Override
             public Integer doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select stateID from question where id="+questionID);
+                SQLQuery sqlQuery=session.createSQLQuery("select stateID from question where id="+ questionId);
                 return (Integer)sqlQuery.uniqueResult();
             }
         });

@@ -10,16 +10,16 @@ import java.util.Map;
 public interface CommentService {
     /**
      * 提交评论
-     * @user 提交用户
-     * @answerId 回答的id
-     * @content 评论的内容
+     * @param user 用户
+     * @param answerId 回答ID
+     * @param content 用户输入的回答内容
      */
     public void postComment(User user, Integer answerId, String content);
 
     /**
      * 获取回答的评论(评论数方法中指定）
-     * @answerId 回答Id
-     * @user 发起查看请求的用户
+     * @param answerId 回答Id
+     * @param user 发起查看请求的用户
      * @return 构造好的MAP
      */
     public Map<String, Object> getComments(Integer answerId, User user);

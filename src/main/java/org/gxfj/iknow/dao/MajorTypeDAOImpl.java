@@ -49,10 +49,10 @@ public class MajorTypeDAOImpl implements MajorTypeDAO {
     }
 
     @Override
-    public List<Majortype> list(Integer subjectTypeID) {
+    public List<Majortype> list(Integer subjectTypeId) {
         String hql = "FROM Majortype AS m WHERE m.subjecttypeBySubjectId.id = ?1";
         Query query = getSession().createQuery(hql);
-        query.setParameter("1", subjectTypeID);
+        query.setParameter("1", subjectTypeId);
         return (List<Majortype>) query.list();
     }
 

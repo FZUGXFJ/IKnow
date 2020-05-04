@@ -11,10 +11,10 @@ public interface QuestionDAO extends BaseDAO<Question>{
     void delete(Question bean);
     /**
      * 获得问题状态
-     * @param questionID 问题id
+     * @param questionId 问题id
      * @return  状态码
      */
-    Integer getQuestionStateId(Integer questionID);
+    Integer getQuestionStateId(Integer questionId);
 
     /**
      * 问题数量
