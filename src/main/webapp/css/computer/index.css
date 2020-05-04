@@ -1,3 +1,6 @@
+body{
+    height: 65em;
+}
 #contain{
     width: 75%;
     height: 60%;
@@ -11,6 +14,7 @@
     background-color: white;
     float: left;
     position: relative;
+    overflow: hidden;
 }
 .con2{
     width: 25%;
@@ -34,6 +38,9 @@
     float: left;
     background-color: white;
     margin-left: 1%;
+    position: relative;
+    padding: 1%;
+    overflow: hidden;
 }
 .form-control{
     resize: none;
@@ -50,16 +57,16 @@
     float: left;
 }
 #pen{
-    width: 20%;
-    margin-left: 20%;
-    margin-top: 10%;
-    float: left;
+    position: absolute;
+    left: 10%;
+    top: 20%;
+    bottom: 20%;
 }
 #star{
-    width: 20%;
-    margin-left: 25%;
-    margin-top: 10%;
-    float: left;
+    position: absolute;
+    left: 80%;
+    top: 20%;
+    bottom: 20%;
 }
 .fa-feather{
     color: aqua;
@@ -73,13 +80,44 @@ span a{
     text-decoration: none;
     color: black;
 }
-.que{
+.que1{
     float: left;
     width: 96%;
     height: 20%;
     margin-bottom: 1%;
     background-color: cornsilk;
-    position: relative;
+    position: absolute;
+    overflow: auto;
+}
+.que2{
+    float: left;
+    width: 96%;
+    height: 20%;
+    margin-bottom: 21%;
+    background-color: cornsilk;
+    position: absolute;
+    margin-top: 8.4em;
+    overflow: auto;
+}
+.que3{
+    float: left;
+    width: 96%;
+    height: 20%;
+    margin-bottom: 11%;
+    background-color: cornsilk;
+    position: absolute;
+    margin-top: 16.8em;
+    overflow: auto;
+}
+.que4{
+    float: left;
+    width: 96%;
+    height: 20%;
+    margin-bottom: 1%;
+    background-color: cornsilk;
+    position: absolute;
+    margin-top: 25.2em;
+    overflow: auto;
 }
 .title{
     margin-top: 2%;
@@ -89,5 +127,8 @@ span a{
     margin-left: 3%;
     margin-bottom: 1%;
     color: #444444;
+}
+.clear {
+    clear:both;
 }
 
