@@ -185,6 +185,15 @@ public class AnswerServiceImpl implements AnswerService{
                     "height='100%'  style='border-radius:100%' alt=''>");
             commentMap.put("content" , comment.getContent());
             commentMap.put("approveNum" , comment.getCount());
+
+            //如果当前浏览者已登录，且评论有人点赞，且用户对该评论点过赞则为1,否则为0
+            if (user != null && comment.getCount() != 0 &&
+                    approvalCommentDAO.get(user.getId(), comment.getId()) != null) {
+                commentMap.put("isApproved", 1);
+            } else {
+                commentMap.put("isApproved", 0);
+            }
+
             int isQuestionOwner = 0;
             int isAnswerer = 0;
             if(comment.getUserByUserId().getId().equals(questionDAO.get(questionId).getUserByUserId().getId())){
