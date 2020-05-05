@@ -66,6 +66,7 @@ public class ReplyServiceImpl implements ReplyService {
         commentMap.put("content",comment.getContent());
         commentMap.put("replyNum" , replyDAO.getCount(commentId));
         commentMap.put("approveNum" , comment.getCount());
+        commentMap.put("id", comment);
 
         //如果当前浏览者已登录，且评论有人点赞，且用户对该评论点过赞则为1,否则为0
         if (visitor != null && comment.getCount() != 0 &&
@@ -90,6 +91,7 @@ public class ReplyServiceImpl implements ReplyService {
         List<Reply> replies = replyDAO.getAllReplies(commentId);
         for (Reply reply : replies) {
             Map<String ,Object> replyMap = replierIsQAOwner(reply.getId());
+            replyMap.put("id", reply.getId());
             replyMap.put("userId" , reply.getUserByUserId().getId());
             replyMap.put("targetName" , reply.getUserByTargetUserId().getName());
             replyMap.put("targetId" , reply.getUserByTargetUserId().getId());

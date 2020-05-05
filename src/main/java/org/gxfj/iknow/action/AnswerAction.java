@@ -82,7 +82,7 @@ public class AnswerAction {
     public String viewAnswer() {
         Map<String,Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
-        Map<String,Object> response = answerService.getAnswer(questionId,answerId,user);
+        Map<String,Object> response = answerService.getRecommendAnswer(questionId,answerId,user);
         response.put("resultCode",SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
@@ -134,7 +134,7 @@ public class AnswerAction {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
         Map<String,Object> cuser=new HashMap<>(2);
-        response=answerService.getAnswer(20);
+        response=answerService.getRecommendAnswer(20);
         response.put("resultCode",SUCCESS);
         User user=(User)session.get("user");
         if (user != null) {

@@ -56,7 +56,7 @@ public class AnswerServiceImpl implements AnswerService{
 
 
     @Override
-    public Map<String, Object> getAnswer(Integer questionId, Integer answerId, User user) {
+    public Map<String, Object> getRecommendAnswer(Integer questionId, Integer answerId, User user) {
         Map<String , Object> resultMap = new HashMap<>(MAP_NUM);
 
         //获得回答关联的问题
@@ -179,6 +179,7 @@ public class AnswerServiceImpl implements AnswerService{
         List<Comment> comments = commentDAO.listByAnswerId(answerId , 0 , COMMENT_NUM);
         for(Comment comment : comments){
             Map<String , Object> commentMap = new HashMap<>(MAP_NUM);
+            commentMap.put("id", comment.getId());
             commentMap.put("uid" , comment.getUserByUserId().getId());
             commentMap.put("uName" , comment.getUserByUserId().getName());
             commentMap.put("uHead" , "<img src='../../head/" + comment.getUserByUserId().getHead() + "' width='100%' " +
@@ -257,7 +258,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> getAnswer(Integer count) {
+    public Map<String, Object> getRecommendAnswer(Integer count) {
         List<Answer> answers = selectRecommendAnswer(count);
         List<Map<String,Object>> recommendList = new ArrayList<>();
         Map<String,Object> recommend;
