@@ -61,7 +61,7 @@
                     {{comment.approveNum}}
                 </td>
                 <td style="width: 10%;text-align: center;" @click="approveComment(comment)">
-                    &nbsp;<i class="fas fa-thumbs-up"></i>
+                    &nbsp;<i class="fas fa-thumbs-up" :class="{approved:comment.isApproved==1}"></i>
                 </td>
                 <td style="width: 10%;text-align: center">
                     <i class="fas fa-comment" @click="doReplyOthers(comment.userId,comment.name)"></i>
@@ -106,7 +106,7 @@
                         {{reply.approveNum}}
                     </td>
                     <td style="width: 10%;text-align: center;" @click="approveReply(reply)">
-                        &nbsp;<i class="fas fa-thumbs-up"></i>
+                        &nbsp;<i class="fas fa-thumbs-up" :class="{approved:reply.isApproved==1}"></i>
                     </td>
                     <td style="width: 10%;text-align: center">
                         <i class="fas fa-comment" @click="doReplyOthers(reply.userId,reply.name)"></i>

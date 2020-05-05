@@ -133,19 +133,20 @@ public class AnswerAction {
     public String recommendAnswer(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
-        Map<String,Object> cuser=new HashMap<>(2);
+        Map<String,Object> cUser=new HashMap<>(2);
         response=answerService.getRecommendAnswer(20);
         response.put("resultCode",SUCCESS);
         User user=(User)session.get("user");
         if (user != null) {
-            cuser.put("id",user.getId());
-            cuser.put("head","<img src='../../head/" + user.getHead() +
+            cUser.put("id",user.getId());
+            cUser.put("head","<img src='../head/" + user.getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
         } else {
-            cuser.put("head","<img src='../../head/0.jpg' width='100%' height='100%'" +
+            cUser.put("id",0);
+            cUser.put("head","<img src='../head/0.jpg' width='100%' height='100%'" +
                     " style='border-radius: 100%' alt=''>");
         }
-        response.put("user",cuser);
+        response.put("user",cUser);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }

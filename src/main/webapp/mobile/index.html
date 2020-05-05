@@ -26,7 +26,7 @@
                 </td>
                 <td style="width: 3%"></td>
                 <td style="width: 12%;text-align: center">
-                    <div class="headPortrait" v-html="user.head"></div>
+                    <div class="headPortrait" v-html="user.head" @click="userCheck"></div>
                 </td>
             </table>
             <br>
@@ -49,7 +49,7 @@
                         <table>
                             <tr>
                                 <td style="width: 10%">
-                                    <div class="headPortrait" style="border-radius: 100%" v-html="recommend.answererHead"></div>
+                                    <div class="headPortrait" v-html="recommend.answererHead"></div>
                                 </td>
                                 <td style="width: 60%">
                                     <span class="username">{{recommend.answererName}}</span>
@@ -69,7 +69,8 @@
                         </table>
                     </div>
                     <div class="answerInf">
-                        <p class="answerView" v-html="recommend.content"></p>
+                        <p class="answerView" v-html="recommend.content"
+                           @click="toAnswerPage(recommend.questionId,recommend.answerId)"></p>
                         <table>
                             <tr>
                                 <td style="width: 80%;opacity: 0.5">
@@ -91,11 +92,12 @@
                     </div>
                 </div>
             </div>
-            <br><br>
+            <br>
             <div style="text-align: center;font-size: 0.7em">
-                <span style="opacity: 0.5">没有更多内容</span>
+                <span v-if="loading == 0">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+                <span style="opacity: 0.5" v-if="loading == 1">没有更多内容</span>
             </div>
-            <br><br>
+            <br><br><br>
         </div>
         <div id="zonePage" v-else="">
             <div class="splitBox"></div>
@@ -128,48 +130,40 @@
     let homePage = new Vue({
         el:"#index",
         data:{
-            recommends:[
-                {
-                    questionTitle:"这个问题怎么解？",
-                    answererHead:"<img src='../head/0.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    answererName:"飞天",
-                    answererLevel:29,
-                    answererBadge:20,
-                    content:"应该这样解决",
-                    approveNum:10,
-                    commentNum:10,
-                    isAdopt:0,
-                },{
-                    questionTitle:"这个问题怎么解？",
-                    answererHead:"<img src='../head/0.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    answererName:"飞天",
-                    answererLevel:29,
-                    answererBadge:20,
-                    content:"应该这样解决",
-                    approveNum:10,
-                    commentNum:10,
-                    isAdopt:0,
-                },
-            ],
-            user:{
-                head:"<img src='../head/16.jpg' width='100%' height='100%' style='border-radius: 100%'>"
-            },
+            recommends:[],
+            user:{},
             recommendPage:true,
             pageIndex:1,
+            loading:0
         },
         methods:{
             add:function () {
                 location.href = "add.html";
+            },
+            userCheck:function () {
+                if (this.user.id === 0) {
+                    location.href = "user/login.html";
+                } else {
+                    this.pageIndex = 2;
+                }
+            },
+            toAnswerPage:function (questionId,answerId) {
+                location.href = "answer/answer.html?questionId=" + questionId
+                + "&answerId=" +answerId;
             }
         },
         mounted:function () {
             $.ajax({
-                url:"",
+                url:"../answer/recommendAnswer.action",
                 type:"POST",
                 data:{},
                 dataType:"json",
                 success:function (result) {
-
+                    if (result.resultCode === 0) {
+                        homePage.recommends = result.recommends;
+                        homePage.user = result.user;
+                        homePage.loading = 1;
+                    }
                 },
                 error:function (request,status,error) {
                     alert("系统异常！");

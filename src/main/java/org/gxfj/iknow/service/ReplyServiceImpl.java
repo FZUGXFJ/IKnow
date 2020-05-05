@@ -66,7 +66,7 @@ public class ReplyServiceImpl implements ReplyService {
         commentMap.put("content",comment.getContent());
         commentMap.put("replyNum" , replyDAO.getCount(commentId));
         commentMap.put("approveNum" , comment.getCount());
-        commentMap.put("id", comment);
+        commentMap.put("id", comment.getId());
 
         //如果当前浏览者已登录，且评论有人点赞，且用户对该评论点过赞则为1,否则为0
         if (visitor != null && comment.getCount() != 0 &&

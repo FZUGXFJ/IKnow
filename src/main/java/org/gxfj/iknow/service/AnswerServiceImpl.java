@@ -272,13 +272,13 @@ public class AnswerServiceImpl implements AnswerService{
             recommend.put("answererId",user.getId());
             boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1);
             if(isAnonymous) {
-                recommend.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%'" +
+                recommend.put("answererHead","<img src='../head/0.jpg' width='100%' height='100%'" +
                         " style='border-radius: 100%' alt=''>");
                 recommend.put("answererName","匿名用户");
                 recommend.put("answererLevel",0);
                 recommend.put("answererBadge",0);
             } else {
-                recommend.put("answererHead","<img src='../../head/" + user.getHead() +
+                recommend.put("answererHead","<img src='../head/" + user.getHead() +
                         "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 recommend.put("answererName",user.getName());
                 recommend.put("answererLevel",levelDAO.getLevelByExp(user.getExp()));

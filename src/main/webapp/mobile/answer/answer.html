@@ -17,12 +17,16 @@
 <div id="answer">
     <div id="header">
         <table style="color: #acacac">
-            <td style="width: 20%"><i class="fas fa-chevron-left"></i></td>
+            <td style="width: 20%"><i class="fas fa-chevron-left" @click="back"></i></td>
             <td style="width: 60%;text-align: center">
                 <span v-if="!load">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
             </td>
-            <td style="width: 10%;text-align: right"><i class="fas fa-search"></i></td>
-            <td style="width: 10%;text-align: right"><i class="fas fa-ellipsis-v" data-toggle="modal" data-target="#operateModal"></i></td>
+            <td style="width: 10%;text-align: right">
+                <i class="fas fa-search"></i>
+            </td>
+            <td style="width: 10%;text-align: right">
+                <i class="fas fa-ellipsis-v" data-toggle="modal" data-target="#operateModal"></i>
+            </td>
         </table>
     </div>
     <br><br><br>
@@ -84,7 +88,7 @@
                     <span v-if="comment.isAnswerer">(回答者)</span>
                 </td>
                 <td style="width: 40%;text-align: right;opacity: 0.5" @click="approveComment(comment)">
-                    <i class="fas fa-thumbs-up"></i>
+                    <i class="fas fa-thumbs-up" :class="{approved:comment.isApproved==1}"></i>
                     <span>{{comment.approveNum}}</span>
                 </td>
             </table>
@@ -320,7 +324,7 @@
                         }
                     });
                 }
-            }
+            },
         },
         mounted:function () {
             let loc = location.href;
