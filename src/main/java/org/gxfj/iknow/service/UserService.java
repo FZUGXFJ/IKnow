@@ -72,7 +72,8 @@ public interface UserService {
 
     /**
      * 将用户的邮箱更新。
-     * @param newEmail
+     * @param user 用户
+     * @param newEmail 新邮件
      * @return 是否成功
      */
     public boolean reBindEmail(User user , String newEmail);

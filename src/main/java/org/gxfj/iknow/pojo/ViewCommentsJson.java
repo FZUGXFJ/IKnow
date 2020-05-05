@@ -7,10 +7,10 @@ import java.util.List;
  * @author qmbx
  * 5月2日
  */
-public class ViewCommentsJSON {
+public class ViewCommentsJson {
     Integer resultCode;
     Integer commentNum;
-    List<CommentJSON> comments = new ArrayList<>();
+    List<CommentJson> comments = new ArrayList<>();
 
     public Integer getResultCode() {
         return resultCode;
@@ -20,11 +20,11 @@ public class ViewCommentsJSON {
         this.resultCode = resultCode;
     }
 
-    public List<CommentJSON> getComments() {
+    public List<CommentJson> getComments() {
         return comments;
     }
 
-    public void setComments(List<CommentJSON> comments) {
+    public void setComments(List<CommentJson> comments) {
         this.comments = comments;
     }
 
@@ -39,7 +39,7 @@ public class ViewCommentsJSON {
     /**
      * @author qmbx
      */
-    static public class CommentJSON {
+    static public class CommentJson {
         Integer id;
         Integer userId;
         String head;
@@ -48,7 +48,7 @@ public class ViewCommentsJSON {
         Integer approveNum;
         Integer isQuestionOwner;
         Integer isAnswerer;
-        List<ReplyJSON> replies = new ArrayList<>();
+        List<ReplyJson> replies = new ArrayList<>();
         Integer replyNum;
         String time;
 
@@ -116,11 +116,11 @@ public class ViewCommentsJSON {
             this.isAnswerer = isAnswerer;
         }
 
-        public List<ReplyJSON> getReplies() {
+        public List<ReplyJson> getReplies() {
             return replies;
         }
 
-        public void setReplies(List<ReplyJSON> replies) {
+        public void setReplies(List<ReplyJson> replies) {
             this.replies = replies;
         }
 
@@ -141,7 +141,7 @@ public class ViewCommentsJSON {
         }
     }
 
-    static public class  ReplyJSON {
+    static public class ReplyJson {
         Integer id;
         Integer userId;
         String head;

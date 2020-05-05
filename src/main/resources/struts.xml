@@ -125,6 +125,18 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="collectQuestion" class="org.gxfj.iknow.action.QuestionAction" method="collectQuestion">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="cancelCollect" class="org.gxfj.iknow.action.QuestionAction" method="cancelCollect">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
 
     <package name="comment" namespace="/comment" extends="default">
@@ -193,6 +205,7 @@
             </result>
         </action>
     </package>
+
     <package name="reply" namespace="/reply" extends="default">
         <action name="sendReply" class="org.gxfj.iknow.action.ReplyAction" method="sendReply">
             <result name="success" type="stream">

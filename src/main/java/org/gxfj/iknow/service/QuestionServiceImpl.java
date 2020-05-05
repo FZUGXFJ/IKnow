@@ -170,7 +170,7 @@ public class QuestionServiceImpl implements QuestionService{
             }
         }
         //获取回答者json数据数组即map类型的list
-        questionAnswers = setAnswersJSON(nAnswers,question);
+        questionAnswers = setAnswersJson(nAnswers,question);
         questionMap.put("questionAnswers",questionAnswers);
         //查看问题的用户是否收藏了问题
         if(user == null || collectionProblemDAO.getCollectionQuestion(user.getId(),questionId) == null){
@@ -234,7 +234,7 @@ public class QuestionServiceImpl implements QuestionService{
      * @param question 问题
      * @return Map<String, Object>型的问题回答者相关json数据
      */
-    private List<Map<String, Object>> setAnswersJSON(List<Answer> nAnswers,Question question){
+    private List<Map<String, Object>> setAnswersJson(List<Answer> nAnswers, Question question){
         Map<String, Object> questionAnswerMap;
         List<Map<String, Object>> questionAnswers = new ArrayList<>();
         for(Answer answer : nAnswers) {

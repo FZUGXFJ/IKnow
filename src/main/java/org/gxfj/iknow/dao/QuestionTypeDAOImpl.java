@@ -37,12 +37,12 @@ public class QuestionTypeDAOImpl implements QuestionTypeDAO{
     }
 
     @Override
-    public Questiontype get(Integer categoryTypeID, Integer subjectTypeID, Integer majorTypeID) {
+    public Questiontype get(Integer categoryTypeId, Integer subjectTypeId, Integer majorTypeId) {
         String hql = "FROM Questiontype AS q WHERE (q.categoriestypeByCategoryId.id = ?0) and (q.subjecttypeBySubjectId.id = ?1) and (q.majortypeByMajorId.id = ?2) ";
         Query query = getSession().createQuery(hql);
-        query.setParameter("0", categoryTypeID);
-        query.setParameter("1", subjectTypeID);
-        query.setParameter("2", majorTypeID);
+        query.setParameter("0", categoryTypeId);
+        query.setParameter("1", subjectTypeId);
+        query.setParameter("2", majorTypeId);
         List<Questiontype> list = query.list();
 
         if (list.isEmpty()) {

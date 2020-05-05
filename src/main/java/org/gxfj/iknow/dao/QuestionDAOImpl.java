@@ -15,6 +15,9 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     private HibernateTemplate ht = null;
 
+    static final int SOLVED = 1;
+    static final int UNSOLVED = 2;
+
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -49,17 +52,17 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public Integer getQuestionStateId(Integer questionID){
+    public Integer getQuestionStateId(Integer questionId){
         Integer stateId=getHibernateTemplate().execute(new HibernateCallback<Integer>() {
             @Override
             public Integer doInHibernate(Session session) throws HibernateException {
-                SQLQuery sqlQuery=session.createSQLQuery("select stateID from question where id="+questionID);
+                SQLQuery sqlQuery=session.createSQLQuery("select stateID from question where id="+ questionId);
                 return (Integer)sqlQuery.uniqueResult();
             }
         });
-        if (stateId == 1) {
+        if (stateId == SOLVED) {
             return 0;
-        } else if(stateId == 2){
+        } else if(stateId == UNSOLVED){
             return 1;
         }else{
             return -1;

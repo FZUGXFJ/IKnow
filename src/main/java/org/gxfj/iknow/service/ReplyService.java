@@ -10,12 +10,20 @@ import java.util.Map;
  */
 public interface ReplyService {
     /**
-     * 提交回复
+     *
      * user 提交用户
-     * commentId 评论的id
-     * content 评论的内容
+     * commentId
+     * content
      */
-    public void postReply(Integer commentID, String content, Integer replyTarget, User user);
+
+    /**
+     * 提交回复
+     * @param commentId 评论的id
+     * @param content 评论的内容
+     * @param replyTarget **
+     * @param user 提交用户
+     */
+    public void postReply(Integer commentId, String content, Integer replyTarget, User user);
 
     /**
      * 查看全部回复

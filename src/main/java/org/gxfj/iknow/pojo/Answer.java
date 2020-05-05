@@ -13,6 +13,7 @@ public class Answer {
     private Byte isDelete;
     private User userByUserId;
     private Question questionByQuestionId;
+    private Collection<Browsinghistory> browsinghistoriesById;
     private Collection<Approvalanswer> approvalanswersById;
     private Collection<Oppositionanswer> oppositionanswersById;
     private Collection<Comment> commentsById;
@@ -62,15 +63,27 @@ public class Answer {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Answer answer = (Answer) o;
 
-        if (id != null ? !id.equals(answer.id) : answer.id != null) return false;
-        if (content != null ? !content.equals(answer.content) : answer.content != null) return false;
-        if (date != null ? !date.equals(answer.date) : answer.date != null) return false;
-        if (isDelete != null ? !isDelete.equals(answer.isDelete) : answer.isDelete != null) return false;
+        if (id != null ? !id.equals(answer.id) : answer.id != null) {
+            return false;
+        }
+        if (content != null ? !content.equals(answer.content) : answer.content != null) {
+            return false;
+        }
+        if (date != null ? !date.equals(answer.date) : answer.date != null) {
+            return false;
+        }
+        if (isDelete != null ? !isDelete.equals(answer.isDelete) : answer.isDelete != null) {
+            return false;
+        }
 
         return true;
     }
@@ -102,6 +115,15 @@ public class Answer {
 
     public void setQuestionByQuestionId(Question questionByQuestionId) {
         this.questionByQuestionId = questionByQuestionId;
+    }
+
+    @OneToMany(mappedBy = "answerByAnswerId")
+    public Collection<Browsinghistory> getBrowsinghistoriesById() {
+        return browsinghistoriesById;
+    }
+
+    public void setBrowsinghistoriesById(Collection<Browsinghistory> browsinghistoriesById) {
+        this.browsinghistoriesById = browsinghistoriesById;
     }
 
     @OneToMany(mappedBy = "answerByAnswerId")

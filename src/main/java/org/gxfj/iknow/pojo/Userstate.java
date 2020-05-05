@@ -1,9 +1,12 @@
 package org.gxfj.iknow.pojo;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Userstate {
     private Integer id;
     private String state;
@@ -31,13 +34,21 @@ public class Userstate {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Userstate userstate = (Userstate) o;
 
-        if (id != null ? !id.equals(userstate.id) : userstate.id != null) return false;
-        if (state != null ? !state.equals(userstate.state) : userstate.state != null) return false;
+        if (id != null ? !id.equals(userstate.id) : userstate.id != null) {
+            return false;
+        }
+        if (state != null ? !state.equals(userstate.state) : userstate.state != null) {
+            return false;
+        }
 
         return true;
     }

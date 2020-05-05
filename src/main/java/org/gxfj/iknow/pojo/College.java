@@ -1,9 +1,12 @@
 package org.gxfj.iknow.pojo;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class College {
     private Integer id;
     private String name;
@@ -33,13 +36,21 @@ public class College {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         College college = (College) o;
 
-        if (id != null ? !id.equals(college.id) : college.id != null) return false;
-        if (name != null ? !name.equals(college.name) : college.name != null) return false;
+        if (id != null ? !id.equals(college.id) : college.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(college.name) : college.name != null) {
+            return false;
+        }
 
         return true;
     }

@@ -17,13 +17,16 @@
 <div id="answer">
     <div id="header">
         <table style="color: #acacac">
-            <td style="width: 80%"><i class="fas fa-chevron-left"></i></td>
+            <td style="width: 20%"><i class="fas fa-chevron-left"></i></td>
+            <td style="width: 60%;text-align: center">
+                <span v-if="!load">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            </td>
             <td style="width: 10%;text-align: right"><i class="fas fa-search"></i></td>
             <td style="width: 10%;text-align: right"><i class="fas fa-ellipsis-v" data-toggle="modal" data-target="#operateModal"></i></td>
         </table>
     </div>
     <br><br><br>
-    <div id="questionInf">
+    <div id="questionInf" v-if="load">
         <h5>{{question.title}}</h5>
         <div id="questionContent" class="hidePart" v-html="question.content"></div>
         <br>
@@ -40,8 +43,8 @@
             </td>
         </table>
     </div>
-    <div id="separator"></div>
-    <div id="answererInf">
+    <div id="separator" v-if="load"></div>
+    <div id="answererInf" v-if="load">
         <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">
             <h5><i class="fas fa-check"></i>此回答已被采纳</h5>
         </div>
@@ -65,9 +68,9 @@
             </td>
         </table>
     </div>
-    <div id="content" v-html="answer.content"></div>
-    <div class="splitLine"></div>
-    <div id="comments">
+    <div id="content" v-html="answer.content" v-if="load"></div>
+    <div class="splitLine" v-if="load"></div>
+    <div id="comments" v-if="load">
         <span>评论-{{answer.commentNum}}</span>
         <div class="comment" v-for="comment in comments">
             <br>
@@ -80,25 +83,27 @@
                     <span v-if="comment.isQuestionOwner">(提问者)</span>
                     <span v-if="comment.isAnswerer">(回答者)</span>
                 </td>
-                <td style="width: 40%;text-align: right;opacity: 0.5">
+                <td style="width: 40%;text-align: right;opacity: 0.5" @click="approveComment(comment)">
                     <i class="fas fa-thumbs-up"></i>
                     <span>{{comment.approveNum}}</span>
                 </td>
             </table>
             <div class="commentContent" v-html="comment.content"></div>
         </div>
-        <button v-if="answer.commentNum>2" class="btn btn-link" style="padding-left: 2.6em" @click="allComment">查看全部{{answer.commentNum}}条评论</button>
+        <button v-if="answer.commentNum > 0" class="btn btn-link" style="padding-left: 2.6em" @click="allComment">
+            查看全部{{answer.commentNum}}条评论
+        </button>
         <br>
         <table>
             <td style="width: 10%">
                 <div class="headPortrait" v-html="userHead"></div>
             </td>
             <td style="padding: 0 0.5em">
-                <div style="border: #acacac solid 0.1em;opacity: 0.5;padding: 0.5em;border-radius: 1em" @click="allComment">span添加评论...</div>
+                <div id="addCommentInput" @click="allComment">添加评论...</div>
             </td>
         </table>
     </div>
-    <div id="footer">
+    <div id="footer" v-if="load">
         <table>
             <td style="text-align: left;width: 45%">
                 <div style="border-radius: 2em;border: #acacac solid 0.05em;padding: 0.1em 0.5em;background-color: white">
@@ -108,7 +113,7 @@
                 </div>
             </td>
             <td style="width: 55%;text-align: right">
-                <span><i class="fas fa-comment" style="color: #12eee7"></i>评论{{answer.commentNum}}</span>
+                <span><i class="fas fa-comment-dots" style="color: #12eee7"></i>评论{{answer.commentNum}}</span>
             </td>
         </table>
     </div>
@@ -142,9 +147,9 @@
                                 <div><i class="fas fa-user-times fa-2x" @click="cancelAdopt"></i></div>
                                 <span>取消采纳</span>
                             </td>
-                            <td class="operateItem" v-if="viewerIsAnswerer == 1">
-                                <div><i class="fas fa-user-check fa-2x" @click="cancelAdopt"></i></div>
-                                <span>取消采纳</span>
+                            <td class="operateItem" v-if="viewerIsAnswerer == 1 && answer.isAnonymous == 1">
+                                <div><i class="fas fa-user-check fa-2x" @click="cancelAnonymous"></i></div>
+                                <span>取消匿名</span>
                             </td>
                         </table>
                         <br>
@@ -184,9 +189,10 @@
             hidePart:true,
             viewerIsAnswerer:0,
             viewerIsQuestionOwner:0,
-            answerId:"",
-            questionId:"",
-            load:false
+            answerId:0,
+            questionId:0,
+            load:false,
+            noAction:false
         },
         methods:{
             show:function () {
@@ -226,6 +232,94 @@
             },
             allComment:function () {
                 location.href = "../comment/comment.html?answerId=" + this.answerId;
+            },
+            cancelAnonymous:function () {
+                if (confirm("确定取消匿名吗？")) {
+                    $.ajax({
+                        url:"../../answer/cancelAdopt.action",
+                        type:"POST",
+                        data:{
+                            answerId:answer.answerId
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                history.go(0);
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }
+            },
+            back:function () {
+                history.go(-1);
+            },
+            approveComment:function (comment) {
+                if (answer.noAction) {
+                    return;
+                }
+                answer.noAction = true;
+                let type = "POST";
+                let data = {
+                    commentId:comment.id
+                };
+                let dataType = "json";
+                if (comment.isApproved === 0) {
+                    $.ajax({
+                        url:"../../comment/approveComment.action",
+                        type:type,
+                        data:data,
+                        dataType:dataType,
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                comment.isApproved = 1;
+                                comment.approveNum += 1;
+                            } else if (result.resultCode === 1) {
+                                if (confirm("请先登录")) {
+                                    location.href = "../user/login.html";
+                                }
+                            }
+                            answer.noAction = false;
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                            answer.noAction = false;
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url:"../../comment/cancelApprove.action",
+                        type:type,
+                        data:data,
+                        dataType:dataType,
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                comment.isApproved = 0;
+                                comment.approveNum -= 1;
+                            } else if (result.resultCode === 1) {
+                                if (confirm("请先登录")) {
+                                    location.href = "../user/login.html";
+                                }
+                            }
+                            answer.noAction = false;
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                            answer.noAction = false;
+                        }
+                    });
+                }
             }
         },
         mounted:function () {
@@ -241,8 +335,6 @@
             } else {
                 //location.href = "../../error/mobile/404error.html"
             }
-            console.log(questionId);
-            console.log(answerId);
             $.ajax({
                 url:"../../answer/viewAnswer.action",
                 type:"POST",
@@ -252,7 +344,6 @@
                 },
                 dataType:"json",
                 success:function (result) {
-                    console.log(result);
                     if (result.resultCode === 0) {
                         answer.question = result.question;
                         answer.answerer = result.answerer;
@@ -261,6 +352,7 @@
                         answer.userHead = result.userHead;
                         answer.viewerIsAnswerer = result.viewerIsAnswerer;
                         answer.viewerIsQuestionOwner = result.viewerIsQuestionOwner;
+                        answer.load = true;
                     }
                 },
                 error:function (request,status,error) {

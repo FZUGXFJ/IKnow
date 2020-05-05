@@ -28,9 +28,9 @@ public class ReplyServiceImpl implements ReplyService {
     private final int MAP_NUM = 20;
 
     @Override
-    public void postReply(Integer commentID, String content, Integer replyTarget, User user) {
+    public void postReply(Integer commentId, String content, Integer replyTarget, User user) {
         User tu= userDAO.get(replyTarget);
-        Comment comment=commentDAO.get(commentID);
+        Comment comment=commentDAO.get(commentId);
 
         Reply reply=new Reply();
         reply.setContent(content);

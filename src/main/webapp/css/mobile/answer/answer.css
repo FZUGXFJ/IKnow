@@ -86,3 +86,10 @@ img{
     text-align: center;
     color: #acacac;
 }
+#addCommentInput{
+    border: #acacac solid 0.1em;
+    opacity: 0.5;
+    padding: 0.5em;
+    border-radius: 1em;
+    font-size: 0.8em;
+}

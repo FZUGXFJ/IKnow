@@ -4,11 +4,18 @@ div{
 table{
     width: 100%;
 }
-#header{
-    padding-top: 5%;
+#homeHeader{
+    padding: 1em 1em 0 1em;
+    background-color: white;
+    top: 0;
+    position: fixed;
+    z-index: 9990;
 }
-#header h1{
+#homeHeader h1{
     padding-left: 5%;
+}
+#space{
+    height: 6.5em;
 }
 #searchBox{
     background-color: #e9e9e9;
@@ -16,26 +23,27 @@ table{
     padding-top: 2%;
     padding-bottom: 2%;
     text-align: left;
-    border-radius: 1em;
+    border-radius: 0.2em;
 }
 #recSearch{
-    font-size: 3rem;
     padding-left: 10%;
     color: #acacac;
 }
 .splitBox{
     width: 100%;
-    height: 20px;
+    height: 0.5em;
     background-color: #cecece;
     opacity: 0.5;
-    margin-top: 10px;
+    margin-top: 0.5em;
 }
 .itemBody{
     width: 90%;
     margin: 20px auto;
 }
+.userInf{
+    margin-bottom: 0.5em;
+}
 .username{
-    font-size: 2em;
     margin-bottom: 20px;
 }
 .select{
@@ -46,30 +54,36 @@ table{
 .selected{
     color: #12eee7;
     border: 0;
-    border-bottom: 10px solid #12eee7;
+    border-bottom: 2px solid #12eee7;
 }
 .lb{
-    font-size: 2em;
-    color: #12eee7;
     padding-left: 2%;
 }
-#add{
+#footer{
     position: fixed;
-    left: 0;
     bottom: 0;
     width: 100%;
-    height: 6em;
     background-color: #ffffff;
-    box-shadow: 0 -10px 5px #d6d6d6;
+    box-shadow: 0 -0.2em 0.2em #d6d6d6;
     text-align: center;
-    padding-top: 1em;
+    padding: 0.2em 0;
+}
+#footer table div{
+    font-size: 0.7em;
 }
 .answerView{
-    font-size: 2em;
-    max-height: 100em;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    overflow: hidden;;
+    text-overflow: ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.answerView p{
+    display: inline;
+}
+.answerView div{
+    display: inline;
 }
 .hide{
     background-color: white;
@@ -84,4 +98,11 @@ table{
     outline: none;
     border-color: transparent;
     box-shadow:none;
+}
+.select{
+    color: #12eee7;
+}
+.headPortrait{
+    border-radius: 100%;
+    overflow: hidden;
 }

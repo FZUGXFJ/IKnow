@@ -29,12 +29,13 @@ public interface QuestionService {
      * @return 以Map形式嵌套存储所有分类
      */
     public Map<String, Object>getQuestionType();
-
+    
     /**
      * 根据问题的id，获得问题及问题下的前length个回答的相关信息
+     * @param user 用户
      * @param questionId 要获得的问题
      * @param length 要加载的回答个数
-     * @return
+     * @return json格式的问题信息
      */
     public Map<String, Object>getQuestion(User user, Integer questionId, int length);
 

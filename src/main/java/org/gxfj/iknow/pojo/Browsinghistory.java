@@ -10,6 +10,7 @@ public class Browsinghistory {
     private Date date;
     private User userByUserId;
     private Question questionByQuestionId;
+    private Answer answerByAnswerId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +34,21 @@ public class Browsinghistory {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Browsinghistory that = (Browsinghistory) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (date != null ? !date.equals(that.date) : that.date != null) {
+            return false;
+        }
 
         return true;
     }
@@ -69,5 +78,15 @@ public class Browsinghistory {
 
     public void setQuestionByQuestionId(Question questionByQuestionId) {
         this.questionByQuestionId = questionByQuestionId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
+    public Answer getAnswerByAnswerId() {
+        return answerByAnswerId;
+    }
+
+    public void setAnswerByAnswerId(Answer answerByAnswerId) {
+        this.answerByAnswerId = answerByAnswerId;
     }
 }

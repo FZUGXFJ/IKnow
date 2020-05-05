@@ -50,6 +50,8 @@ public class UserAction {
     private final static int VARIFY_DEFAULT = 1;
     private final static int MIN_HASH_MAP_NUM = 10;
     private final static String NEWEMAIL="newEmail";
+    private final static int SUCCESS_LOGON = 0;
+    private final static String NO_USER = null;
 
     public InputStream getInputStream() {
         return inputStream;
@@ -99,7 +101,7 @@ public class UserAction {
             return SUCCESS;
         }
         Map<String,Object> resultMap = userService.logon(username,password,email);
-        if ((Integer) resultMap.get("value") == 0) {
+        if ((Integer) resultMap.get("value") == SUCCESS_LOGON) {
             session.put("user",resultMap.get("user"));
         }
         result = "{\"response\":" + resultMap.get("value") + "}";
@@ -137,7 +139,7 @@ public class UserAction {
     public String isLogin() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
-        if (session.get("user") == null) {
+        if (session.get("user") == NO_USER) {
             result.put(RESULT_CODE_NAME, UN_LOGIN);
         } else {
             result.put(RESULT_CODE_NAME, SUCCESS_CODE);
@@ -165,7 +167,7 @@ public class UserAction {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
 
-        if (session.get("user") == null) {
+        if (session.get("user") == NO_USER) {
             result.put(RESULT_CODE_NAME,UN_LOGIN);
         } else {
             if (verifyCode.equals(session.get(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME))) {

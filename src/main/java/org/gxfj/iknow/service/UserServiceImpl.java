@@ -27,6 +27,8 @@ public class UserServiceImpl<result> implements UserService{
     @Autowired
     private MailUtil mailUtil;
 
+    private static int MAP_NUM = 20;
+
     @Override
     public Map<String,Object> logon(String username, String password, String email) {
         Map<String,Object> resultMap = new HashMap<>(16);
@@ -69,7 +71,7 @@ public class UserServiceImpl<result> implements UserService{
 
     @Override
     public Map<String,String> sendVerifyCode(String email) {
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new HashMap<>(MAP_NUM);
         String subject = "IKnow验证邮件";
         String verifyCode = SecurityUtil.generatorVerifyCode(6);
         map.put("verifyCode",verifyCode);
@@ -101,7 +103,8 @@ public class UserServiceImpl<result> implements UserService{
     }
 
     @Override
-    public Map<String,Object> loginByNoPassword(String email, String sessionEmail, String verifyCode, String sessionVerifyCode) {
+    public Map<String,Object> loginByNoPassword(String email, String sessionEmail, String verifyCode,
+                                                String sessionVerifyCode) {
         Map<String,Object> result = new HashMap<>(16);
         if (!email.equals(sessionEmail)) {
             result.put("value",1);

@@ -88,6 +88,12 @@
       <artifactId>hibernate-core</artifactId>
       <version>${hibernate.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+      <version>5.1.7.Final</version>
+    </dependency>
+
     <!-- Hibernate 配置文件读取 -->
     <dependency>
       <groupId>javax.xml.bind</groupId>
@@ -104,6 +110,12 @@
       <groupId>javax.activation</groupId>
       <artifactId>javax.activation-api</artifactId>
       <version>1.2.0</version>
+    </dependency>
+    <!-- Hibernate 二级缓存依赖 -->
+    <dependency>
+      <groupId>org.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>3.3.1</version>
     </dependency>
     <!-- jdbc 依赖 -->
     <dependency>

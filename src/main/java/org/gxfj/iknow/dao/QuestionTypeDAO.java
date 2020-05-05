@@ -9,12 +9,12 @@ public interface QuestionTypeDAO extends BaseDAO<Questiontype>{
 
 
     /**
-     * 根据问题的categoryTypeID、subjectTypeID、majorTypeID查询对应Questiontype对象
-     * @param categoryTypeID 门类ID
-     * @param subjectTypeID 专业类ID
-     * @param majorTypeID 专业ID
+     * 根据问题的categoryTypeID、subjectTypeId、majorTypeID查询对应Questiontype对象
+     * @param categoryTypeId 门类ID
+     * @param subjectTypeId 专业类ID
+     * @param majorTypeId 专业ID
      * @return 没有返回null
      */
-    Questiontype get(Integer categoryTypeID, Integer subjectTypeID, Integer majorTypeID);
+    Questiontype get(Integer categoryTypeId, Integer subjectTypeId, Integer majorTypeId);
 
 }

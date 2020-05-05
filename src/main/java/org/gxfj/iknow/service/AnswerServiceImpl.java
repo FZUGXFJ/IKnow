@@ -1,6 +1,5 @@
 package org.gxfj.iknow.service;
 
-import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,25 +26,23 @@ public class AnswerServiceImpl implements AnswerService{
     private UserDAO userDAO;
 
 
-
-
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
     final static private int QUESTION_STATE_SOLVE = 2;
     @Override
-    public String getQuestiontitle(Integer qId) {
-        Question question = questionDAO.get(qId);
+    public String getQuestiontitle(Integer questionId) {
+        Question question = questionDAO.get(questionId);
         return question.getTitle();
     }
 
     @Override
-    public Map<String,Object> postAnswer(Integer qId, String content, Byte isAnonymous,User user) {
+    public Map<String,Object> postAnswer(Integer questionId, String content, Byte isAnonymous, User user) {
         Answer answer=new Answer();
         answer.setIsAnonymous(isAnonymous);
         answer.setDate(new Date());
         answer.setApprovalCount(0);
         answer.setUserByUserId(user);
-        Question q = questionDAO.get(qId);
+        Question q = questionDAO.get(questionId);
         answer.setQuestionByQuestionId(q);
         answer.setIsDelete((byte)0);
         answer.setIsRoof((byte)0);
@@ -59,17 +56,17 @@ public class AnswerServiceImpl implements AnswerService{
 
 
     @Override
-    public Map<String, Object> getAnswer(Integer qId, Integer aId , User user) {
+    public Map<String, Object> getAnswer(Integer questionId, Integer answerId, User user) {
         Map<String , Object> resultMap = new HashMap<>(MAP_NUM);
 
         //获得回答关联的问题
-        resultMap.put("question" , getQuestionMap(qId));
+        resultMap.put("question" , getQuestionMap(questionId));
         //获得回答答主
-        resultMap.put("answerer" , getAnswererMap(aId));
+        resultMap.put("answerer" , getAnswererMap(answerId));
         //回答的信息转化为json格式
-        resultMap.put("answer" , getAnswerMap(qId , aId));
+        resultMap.put("answer" , getAnswerMap(questionId, answerId));
         //获得一个存储评论列表
-        resultMap.put("comments" , getCommentsMap(qId, aId ,user));
+        resultMap.put("comments" , getCommentsMap(questionId, answerId,user));
         //获得查看回答的用户的头像
         //未登录
         if(user == null){
@@ -80,7 +77,7 @@ public class AnswerServiceImpl implements AnswerService{
             resultMap.put("userHead" , "<img src='../../head/" + user.getHead() + "' width='100%'  height='100%' alt=''>");
         }
 
-        Answer answer=answerDAO.get(aId);
+        Answer answer=answerDAO.get(answerId);
         int viewerIsAnswerer = 0;
         int viewerIsQuestionOwner = 0;
         if (user != null) {
@@ -98,28 +95,28 @@ public class AnswerServiceImpl implements AnswerService{
 
     /**
      * 获取回答相关问题一部分信息
-     * @param qId 问题id
+     * @param questionId 问题id
      * @return 问题信息的json
      */
-    private Map<String , Object> getQuestionMap(Integer qId){
-        Question question = questionDAO.get(qId);
+    private Map<String , Object> getQuestionMap(Integer questionId){
+        Question question = questionDAO.get(questionId);
         Map<String , Object> questionMap = new HashMap<>(MAP_NUM);
         //将问题变成json格式
         questionMap.put("id" , question.getId());
         questionMap.put("title" , question.getTitle());
         questionMap.put("content" , question.getContent());
-        questionMap.put("answerCount",questionDAO.getAnswerCount(qId));
+        questionMap.put("answerCount",questionDAO.getAnswerCount(questionId));
         questionMap.put("isSolved",question.getQuestionstateByStateId().getId() == 1 ? 0 : 1);
         return questionMap;
     }
 
     /**
      * 获取答主的一部分信息
-     * @param aId 问题id
+     * @param answerId 问题id
      * @return json形式的答主信息
      */
-    private Map<String , Object> getAnswererMap(Integer aId){
-        Answer answer = answerDAO.get(aId);
+    private Map<String , Object> getAnswererMap(Integer answerId){
+        Answer answer = answerDAO.get(answerId);
         User answerer = answer.getUserByUserId();
         Map<String , Object> answererMap = new HashMap<>(MAP_NUM);
         //答主的信息转化为Json格式
@@ -136,7 +133,8 @@ public class AnswerServiceImpl implements AnswerService{
         }
         else {
             answererMap.put("id" , answerer.getId());
-            answererMap.put("head" , "<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
+            answererMap.put("head" , "<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%'" +
+                    " height='100%' alt=''>");
             answererMap.put("name" , answerer.getName());
             answererMap.put("level",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
             answererMap.put("badgeNum" , answerer.getBadgeNum());
@@ -149,33 +147,33 @@ public class AnswerServiceImpl implements AnswerService{
 
     /**
      * 获取回答的信息
-     * @param aId 回答id
+     * @param answerId 回答id
      * @return json形式的回答信息
      */
-    private Map<String , Object> getAnswerMap(Integer qId , Integer aId){
-        Answer answer = answerDAO.get(aId);
-        Question question = questionDAO.get(qId);
+    private Map<String , Object> getAnswerMap(Integer questionId, Integer answerId){
+        Answer answer = answerDAO.get(answerId);
+        Question question = questionDAO.get(questionId);
         Map<String , Object> answerMap = new HashMap<>(MAP_NUM);
         answerMap.put("content" , answer.getContent());
         answerMap.put("approveNum" , answer.getApprovalCount());
-        answerMap.put("commentNum" , commentDAO.getCount(aId));
-        if(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId())){
+        answerMap.put("commentNum" , commentDAO.getCount(answerId));
+        if(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId())) {
             answerMap.put("isAdopt" , 1);
-        }
-        else{
+        } else {
             answerMap.put("isAdopt" , 0);
         }
+        answerMap.put("isAnonymous",answer.getIsAnonymous() == 0 ? 0 : 1);
         return answerMap;
     }
 
     /**
      * 获取回答关联的一部分评论的信息
-     * @param qId 问题id
+     * @param questionId 问题id
      * @param answerId 回答id
      * @param user 操作的用户
      * @return Json形式的评论信息
      */
-    private List<Map<String , Object>> getCommentsMap(Integer qId , Integer answerId , User user){
+    private List<Map<String , Object>> getCommentsMap(Integer questionId , Integer answerId , User user){
 
         List<Map<String , Object>> commmentsMap = new ArrayList<>();
         List<Comment> comments = commentDAO.listByAnswerId(answerId , 0 , COMMENT_NUM);
@@ -183,23 +181,35 @@ public class AnswerServiceImpl implements AnswerService{
             Map<String , Object> commentMap = new HashMap<>(MAP_NUM);
             commentMap.put("uid" , comment.getUserByUserId().getId());
             commentMap.put("uName" , comment.getUserByUserId().getName());
-            commentMap.put("uHead" , "<img src='../../head/" + comment.getUserByUserId().getHead() + "' width='100%' height='100%'  style='border-radius:100%' alt=''>");
+            commentMap.put("uHead" , "<img src='../../head/" + comment.getUserByUserId().getHead() + "' width='100%' " +
+                    "height='100%'  style='border-radius:100%' alt=''>");
             commentMap.put("content" , comment.getContent());
             commentMap.put("approveNum" , comment.getCount());
+
+            //如果当前浏览者已登录，且评论有人点赞，且用户对该评论点过赞则为1,否则为0
+            if (user != null && comment.getCount() != 0 &&
+                    approvalCommentDAO.get(user.getId(), comment.getId()) != null) {
+                commentMap.put("isApproved", 1);
+            } else {
+                commentMap.put("isApproved", 0);
+            }
+
             int isQuestionOwner = 0;
             int isAnswerer = 0;
-            if(comment.getUserByUserId().getId().equals(questionDAO.get(qId).getUserByUserId().getId())){
+            if(comment.getUserByUserId().getId().equals(questionDAO.get(questionId).getUserByUserId().getId())){
                 isQuestionOwner = 1;
                 if (comment.getAnswerByAnswerId().getQuestionByQuestionId().getIsAnonymous() == 1) {
                     commentMap.put("uName","匿名用户");
-                    commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius:100%' alt=''>");
+                    commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%' " +
+                            "style='border-radius:100%' alt=''>");
                 }
             }
             if(comment.getUserByUserId().getId().equals(answerDAO.get(answerId).getUserByUserId().getId())){
                 isAnswerer = 1;
                 if (comment.getAnswerByAnswerId().getIsAnonymous() == 1) {
                     commentMap.put("uName","匿名用户");
-                    commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius:100%' alt=''>");
+                    commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%'" +
+                            " style='border-radius:100%' alt=''>");
                 }
             }
             commentMap.put("isQuestionOwner" , isQuestionOwner);
@@ -248,26 +258,26 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String, Object> getAnswer(Integer count) {
-        List<Answer> answers=answerDAO.list(0,count);
-        List<Map<String,Object>> recommendList=new ArrayList<>();
+        List<Answer> answers = selectRecommendAnswer(count);
+        List<Map<String,Object>> recommendList = new ArrayList<>();
         Map<String,Object> recommend;
         for(Answer answer:answers){
             recommend = new HashMap<>(MAP_NUM);
-            Question question=answer.getQuestionByQuestionId();
-            User user=answer.getUserByUserId();
-            User quser=question.getUserByUserId();
+            Question question = answer.getQuestionByQuestionId();
+            User user = answer.getUserByUserId();
+            User quser = question.getUserByUserId();
             recommend.put("questionId",question.getId());
             recommend.put("questionTitle",question.getTitle());
             recommend.put("answererId",user.getId());
             boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1);
-            if(isAnonymous){
+            if(isAnonymous) {
                 recommend.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%'" +
                         " style='border-radius: 100%' alt=''>");
                 recommend.put("answererName","匿名用户");
                 recommend.put("answererLevel",0);
                 recommend.put("answererBadge",0);
-            }else{
-                recommend.put("answererHead","<img src='../../head/"+user.getHead() +
+            } else {
+                recommend.put("answererHead","<img src='../../head/" + user.getHead() +
                         "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 recommend.put("answererName",user.getName());
                 recommend.put("answererLevel",levelDAO.getLevelByExp(user.getExp()));
@@ -278,17 +288,24 @@ public class AnswerServiceImpl implements AnswerService{
             recommend.put("approveNum",answer.getApprovalCount());
             recommend.put("commentNum",commentDAO.getCount(answer.getId()));
             Answer au=question.getAnswerByAdoptId();
-            if (au!=null&&au.getId().equals(answer.getId()))
-                {
+            if (au!=null&&au.getId().equals(answer.getId())) {
                 recommend.put("isAdopt",1);
-            }
-            else {
+            } else {
                 recommend.put("isAdopt",0);
             }
             recommendList.add(recommend);
         }
-        Map<String,Object> recommends=new HashMap<>(MAP_NUM);
-        recommends.put("recommends",recommendList);
-        return recommends;
+        Map<String,Object> result = new HashMap<>(MAP_NUM);
+        result.put("recommends",recommendList);
+        return result;
+    }
+
+    /**
+     * 从数据库中获取推荐的问题
+     * @param count 推荐问题的条数
+     * @return 推荐的问题，没有则内容为空
+     */
+    private List<Answer> selectRecommendAnswer(Integer count) {
+        return answerDAO.list(0,count);
     }
 }

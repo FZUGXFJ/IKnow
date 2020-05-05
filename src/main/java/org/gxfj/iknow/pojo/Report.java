@@ -56,15 +56,27 @@ public class Report {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Report report = (Report) o;
 
-        if (id != null ? !id.equals(report.id) : report.id != null) return false;
-        if (type != null ? !type.equals(report.type) : report.type != null) return false;
-        if (description != null ? !description.equals(report.description) : report.description != null) return false;
-        if (date != null ? !date.equals(report.date) : report.date != null) return false;
+        if (id != null ? !id.equals(report.id) : report.id != null) {
+            return false;
+        }
+        if (type != null ? !type.equals(report.type) : report.type != null) {
+            return false;
+        }
+        if (description != null ? !description.equals(report.description) : report.description != null) {
+            return false;
+        }
+        if (date != null ? !date.equals(report.date) : report.date != null) {
+            return false;
+        }
 
         return true;
     }

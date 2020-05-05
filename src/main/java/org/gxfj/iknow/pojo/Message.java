@@ -54,15 +54,27 @@ public class Message {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Message message = (Message) o;
 
-        if (id != null ? !id.equals(message.id) : message.id != null) return false;
-        if (date != null ? !date.equals(message.date) : message.date != null) return false;
-        if (isRead != null ? !isRead.equals(message.isRead) : message.isRead != null) return false;
-        if (content != null ? !content.equals(message.content) : message.content != null) return false;
+        if (id != null ? !id.equals(message.id) : message.id != null) {
+            return false;
+        }
+        if (date != null ? !date.equals(message.date) : message.date != null) {
+            return false;
+        }
+        if (isRead != null ? !isRead.equals(message.isRead) : message.isRead != null) {
+            return false;
+        }
+        if (content != null ? !content.equals(message.content) : message.content != null) {
+            return false;
+        }
 
         return true;
     }
