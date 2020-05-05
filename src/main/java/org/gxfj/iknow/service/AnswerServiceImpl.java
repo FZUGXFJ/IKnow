@@ -286,9 +286,9 @@ public class AnswerServiceImpl implements AnswerService{
             }
             recommendList.add(recommend);
         }
-        Map<String,Object> recommends = new HashMap<>(MAP_NUM);
-        recommends.put("recommends",recommendList);
-        return recommends;
+        Map<String,Object> result = new HashMap<>(MAP_NUM);
+        result.put("recommends",recommendList);
+        return result;
     }
 
     /**
