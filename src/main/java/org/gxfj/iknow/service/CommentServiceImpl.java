@@ -265,7 +265,7 @@ public class CommentServiceImpl implements CommentService {
             //如果浏览者已登录，且有点赞记录，则isApproved为1，否则为0
             int isApproved = 0;
             if (visitor != null) {
-                isApproved = approvalReplyDAO.searchByUserIdandReplyId(visitor.getId(), reply.getId());
+                isApproved = approvalReplyDAO.searchByUserIdandReplyId(visitor.getId(), reply.getId()) == -1 ? 0 : 1;
             }
             replyMap.put("isApproved", isApproved);
 

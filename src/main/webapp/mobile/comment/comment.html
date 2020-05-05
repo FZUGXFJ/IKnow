@@ -61,11 +61,11 @@
                 <td style="width: 10%;text-align: right">
                     {{comment.approveNum}}
                 </td>
-                <td style="width: 10%;text-align: center;">
-                    &nbsp;<i class="fas fa-thumbs-up"></i>
+                <td style="width: 10%;text-align: center" @click="approveComment(comment)">
+                    &nbsp;<i class="fas fa-thumbs-up" :class="{approved:comment.isApproved==1}"></i>
                 </td>
-                <td style="width: 10%;text-align: center">
-                    <i class="fas fa-comment" @click="doReply(comment.userId,comment.name,comment.id)"></i>
+                <td style="width: 10%;text-align: center" @click="doReply(reply)">
+                    <i class="fas fa-comment-dots"></i>
                 </td>
             </table>
             <div class="lineCommentReply"><div class="line"></div></div>
@@ -103,11 +103,11 @@
                         <td style="width: 10%;text-align: right">
                             {{reply.approveNum}}
                         </td>
-                        <td style="width: 10%;text-align: center;">
-                            &nbsp;<i class="fas fa-thumbs-up"></i>
+                        <td style="width: 10%;text-align: center;" @click="approveReply(reply)">
+                            &nbsp;<i class="fas fa-thumbs-up" :class="{approved:reply.isApproved==1}"></i>
                         </td>
-                        <td style="width: 10%;text-align: center">
-                            <i class="fas fa-comment" @click="doReply(reply.userId,reply.name,comment.id)"></i>
+                        <td style="width: 10%;text-align: center" @click="doReply(reply.userId,reply.name,reply.id)">
+                            <i class="fas fa-comment-dots"></i>
                         </td>
                     </table>
                     <div class="lineReply"><div class="line"></div></div>
@@ -235,6 +235,114 @@
                 this.placeholder = "请输入评论内容";
                 this.postContent = "";
                 this.toReply = false;
+            },
+            approveComment:function (comment) {
+                let type = "POST";
+                let data = {
+                    commentId:comment.id
+                };
+                let dataType = "json";
+                if (comment.isApproved === 0) {
+                    $.ajax({
+                        url:"../../comment/approveComment.action",
+                        type:type,
+                        data:data,
+                        dataType:dataType,
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                comment.isApproved = 1;
+                                comment.approveNum += 1;
+                            } else if (result.resultCode === 1) {
+                                if (confirm("请先登录")) {
+                                    location.href = "../user/login.html";
+                                }
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url:"../../comment/cancelApprove.action",
+                        type:type,
+                        data:data,
+                        dataType:dataType,
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                comment.isApproved = 0;
+                                comment.approveNum -= 1;
+                            } else if (result.resultCode === 1) {
+                                if (confirm("请先登录")) {
+                                    location.href = "../user/login.html";
+                                }
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }
+            },
+            approveReply:function (reply) {
+                let type = "POST";
+                let data = {
+                    replyId:reply.id
+                };
+                let dataType = "json";
+                if (reply.isApproved === 0) {
+                    $.ajax({
+                        url:"../../reply/approveReply.action",
+                        type:type,
+                        data:data,
+                        dataType:dataType,
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                reply.isApproved = 1;
+                                reply.approveNum += 1;
+                            } else if (result.resultCode === 1) {
+                                if (confirm("请先登录")) {
+                                    location.href = "../user/login.html";
+                                }
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url:"../../reply/cancelApprove.action",
+                        type:type,
+                        data:data,
+                        dataType:dataType,
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                reply.isApproved = 0;
+                                reply.approveNum -= 1;
+                            } else if (result.resultCode === 1) {
+                                if (confirm("请先登录")) {
+                                    location.href = "../user/login.html";
+                                }
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }
             }
         },
         mounted:function () {
@@ -245,7 +353,7 @@
                 answerId = answerId.replace("answerId=","");
                 this.answerId = answerId;
             } else {
-                //location.href = "../../error/mobile/404error.html"
+                location.href = "../../error/mobile/404error.html"
             }
             $.ajax({
                 url:"../../comment/viewComments.action",

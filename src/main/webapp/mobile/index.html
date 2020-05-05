@@ -5,7 +5,7 @@
     <title>首页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../css/global.css">
-    <link rel="stylesheet" href="../css/mobile/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/mobile/index.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
@@ -14,86 +14,110 @@
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 </head>
 <body>
-<div id="homePage">
-    <div id="header">
-        <table>
-            <tr>
-                <td style="width: 5%"></td>
-                <td style="width: 75%">
+<div id="index">
+    <div id="homePage"  v-if="pageIndex == 1">
+        <div id="homeHeader">
+            <table>
+                <td style="width: 85%">
                     <div id="searchBox">
-                        <i class="fas fa-search fa-4x" style="color: #acacac"></i>
+                        <i class="fas fa-search" style="color: #acacac"></i>
                         <span id="recSearch">@IKnow发布啦</span>
                     </div>
                 </td>
-                <td style="width: 20%;text-align: center">
-                    <i class="fas fa-user-circle fa-7x" style="color: #12eee7"></i>
+                <td style="width: 3%"></td>
+                <td style="width: 12%;text-align: center">
+                    <div class="headPortrait" v-html="user.head"></div>
                 </td>
-            </tr>
-        </table>
-        <br>
-        <table>
-            <tr>
-                <td class="select" v-bind:class="{selected:recommendPage}" v-on:click="recommendPage=!recommendPage"><h1>推荐</h1></td>
-                <td class="select" v-bind:class="{selected:!recommendPage}" v-on:click="recommendPage=!recommendPage"><h1>分区</h1></td>
-            </tr>
-        </table>
-    </div>
-    <div id="recommendPage" v-if="recommendPage">
-        <div class="item" v-for="recommend in recommends">
-            <div class="splitBox"></div>
-            <div class="itemBody">
-                <h1 class="questionTitle"><b>{{recommend.questionTitle}}</b></h1>
-                <br>
-                <div class="userInf">
-                    <table>
-                        <tr>
-                            <td style="width: 70%">
-                                <span class="headPortrait" style="border-radius: 100%" v-html="recommend.userInf.headPortrait">
-
-                                </span>
-                                <span class="username">{{recommend.userInf.username}}</span>
-                                <span class="identity"></span>
-                            </td>
-                            <td style="width: 30%;text-align: right">
-                                <span class="lb"><b>&nbsp;&nbsp;LV{{recommend.userInf.level}}</b></span>
+            </table>
+            <br>
+            <table>
+                <td class="select" v-bind:class="{selected:recommendPage}" v-on:click="recommendPage=!recommendPage">
+                    <h6>推荐</h6>
+                </td>
+                <td class="select" v-bind:class="{selected:!recommendPage}" v-on:click="recommendPage=!recommendPage">
+                    <h6>分区</h6>
+                </td>
+            </table>
+        </div>
+        <br><br><br><br><br>
+        <div id="recommendPage" v-if="recommendPage">
+            <div class="item" v-for="recommend in recommends">
+                <div class="splitBox"></div>
+                <div class="itemBody">
+                    <h6 class="questionTitle"><b>{{recommend.questionTitle}}</b></h6>
+                    <div class="userInf">
+                        <table>
+                            <tr>
+                                <td style="width: 10%">
+                                    <div class="headPortrait" style="border-radius: 100%" v-html="recommend.answererHead"></div>
+                                </td>
+                                <td style="width: 60%">
+                                    <span class="username">{{recommend.answererName}}</span>
+                                    <span class="identity"></span>
+                                </td>
+                                <td style="width: 30%;text-align: right">
                                 <span class="lb">
-                                    <i class="fas fa-award fa-1x" style="color: #12eee7"></i>
-                                    <b>{{recommend.userInf.badgeNum}}</b>
+                                    <b style="color: #12eee7">&nbsp;&nbsp;LV</b>
+                                    <i>{{recommend.answererLevel}}</i>
                                 </span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <br>
-                <div class="answerInf">
-                    <p class="answerView" v-html="recommend.answerInf.answerView"></p>
-                    <br>
-                    <table>
-                        <tr>
-                            <td style="width: 80%;font-size: 2em;opacity: 0.5">
-                                {{recommend.answerInf.approve}}赞同-{{recommend.answerInf.comment}}评论
-                            </td>
-                            <td style="width: 20%;text-align: right;">
-                                <div class="dropdown">
-                                    <button class="hide" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-h fa-2x" style="opacity: 0.5"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size: 2em;">
-                                        <a class="dropdown-item" href="#">不感兴趣</a>
-                                        <a class="dropdown-item" href="#">举报</a>
+                                    <span class="lb">
+                                    <i class="fas fa-award" style="color: #12eee7"></i>
+                                    <i>{{recommend.answererBadge}}</i>
+                                </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="answerInf">
+                        <p class="answerView" v-html="recommend.content"></p>
+                        <table>
+                            <tr>
+                                <td style="width: 80%;opacity: 0.5">
+                                    {{recommend.approveNum}}赞同-{{recommend.commentNum}}评论
+                                </td>
+                                <td style="width: 20%;text-align: right;">
+                                    <div class="dropdown">
+                                        <button class="hide" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">不感兴趣</a>
+                                            <a class="dropdown-item" href="#">举报</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
+            <br><br>
+            <div style="text-align: center;font-size: 0.7em">
+                <span style="opacity: 0.5">没有更多内容</span>
+            </div>
+            <br><br>
         </div>
-        <div id="add">
-            <i class="fas fa-plus fa-4x" style="color: #12eee7"></i>
+        <div id="zonePage" v-else="">
+            <div class="splitBox"></div>
         </div>
     </div>
-    <div id="partitionPage" v-else></div>
+    <div id="myPage" v-if="pageIndex == 2"></div>
+    <div id="footer">
+        <table>
+            <td style="width: 33%;text-align: center">
+                <i class="fas fa-home" :class="{selected:pageIndex == 1}" @click="pageIndex=1"></i>
+                <div>首页</div>
+            </td>
+            <td style="width: 34%;text-align: center">
+                <i class="fas fa-plus" style="color: #12eee7" @click="add"></i>
+                <div>添加</div>
+            </td>
+            <td style="width: 33%;text-align: center">
+                <i class="fas fa-user" :class="{selected:pageIndex == 2}" @click="pageIndex=2"></i>
+                <div>我的</div>
+            </td>
+        </table>
+    </div>
 </div>
 <script type="text/javascript">
     $(function () {
@@ -102,41 +126,58 @@
         })
     });
     let homePage = new Vue({
-        el:"#homePage",
+        el:"#index",
         data:{
             recommends:[
                 {
                     questionTitle:"这个问题怎么解？",
-                    userInf:{
-                        headPortrait:"<i class='fas fa-user-circle fa-3x'></i>",
-                        username:"飞天",
-                        level:29,
-                        badgeNum:20
-                    },
-                    answerInf:{
-                        answerView:"应该这样解决",
-                        approve:10,
-                        comment:10
-                    }
+                    answererHead:"<img src='../head/0.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    answererName:"飞天",
+                    answererLevel:29,
+                    answererBadge:20,
+                    content:"应该这样解决",
+                    approveNum:10,
+                    commentNum:10,
+                    isAdopt:0,
                 },{
                     questionTitle:"这个问题怎么解？",
-                    userInf:{
-                        headPortrait:"<i class='fas fa-user-circle fa-3x'></i>",
-                        username:"银河",
-                        level:29,
-                        badgeNum:20
-                    },
-                    answerInf:{
-                        answerView:"应该这样解决",
-                        approve:10,
-                        comment:10
-                    }
+                    answererHead:"<img src='../head/0.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    answererName:"飞天",
+                    answererLevel:29,
+                    answererBadge:20,
+                    content:"应该这样解决",
+                    approveNum:10,
+                    commentNum:10,
+                    isAdopt:0,
                 },
             ],
-            recommendPage:true
+            user:{
+                head:"<img src='../head/16.jpg' width='100%' height='100%' style='border-radius: 100%'>"
+            },
+            recommendPage:true,
+            pageIndex:1,
         },
         methods:{
+            add:function () {
+                location.href = "add.html";
+            }
+        },
+        mounted:function () {
+            $.ajax({
+                url:"",
+                type:"POST",
+                data:{},
+                dataType:"json",
+                success:function (result) {
 
+                },
+                error:function (request,status,error) {
+                    alert("系统异常！");
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
+                }
+            });
         }
     });
 </script>

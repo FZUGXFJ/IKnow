@@ -100,7 +100,7 @@ public class CommentAction {
         } else {
             response.put(RESULT_CODE, UN_LOGIN);
         }
-
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 

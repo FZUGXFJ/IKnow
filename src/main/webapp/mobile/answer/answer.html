@@ -80,21 +80,23 @@
                     <span v-if="comment.isQuestionOwner">(提问者)</span>
                     <span v-if="comment.isAnswerer">(回答者)</span>
                 </td>
-                <td style="width: 40%;text-align: right;opacity: 0.5">
+                <td style="width: 40%;text-align: right;opacity: 0.5" @click="approveComment()">
                     <i class="fas fa-thumbs-up"></i>
                     <span>{{comment.approveNum}}</span>
                 </td>
             </table>
             <div class="commentContent" v-html="comment.content"></div>
         </div>
-        <button v-if="answer.commentNum>2" class="btn btn-link" style="padding-left: 2.6em" @click="allComment">查看全部{{answer.commentNum}}条评论</button>
+        <button v-if="answer.commentNum > 0" class="btn btn-link" style="padding-left: 2.6em" @click="allComment">
+            查看全部{{answer.commentNum}}条评论
+        </button>
         <br>
         <table>
             <td style="width: 10%">
                 <div class="headPortrait" v-html="userHead"></div>
             </td>
             <td style="padding: 0 0.5em">
-                <div style="border: #acacac solid 0.1em;opacity: 0.5;padding: 0.5em;border-radius: 1em" @click="allComment">span添加评论...</div>
+                <div id="addCommentInput"@click="allComment">添加评论...</div>
             </td>
         </table>
     </div>
