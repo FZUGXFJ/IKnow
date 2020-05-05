@@ -5,6 +5,7 @@ import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.*;
@@ -74,6 +75,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public boolean approveComment(User user, Integer commentId) {
         if (user == null) {
             return false;
@@ -106,7 +108,7 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-        //如果没有查询到记录，说明已经点过赞了
+        //如果查询到记录，说明点过赞
         Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
         if (approvalcomment == null) {
             return false;
