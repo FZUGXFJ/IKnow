@@ -5,6 +5,7 @@
     width: 40%;
     float: left;
     position: relative;
+    overflow: hidden;
 }
 .relativeQuestionDiv{
     height: 55%;
@@ -13,6 +14,7 @@
     width: 20%;
     float: left;
     position: relative;
+    overflow: hidden;
 }
 .relativeRecommendDiv{
     height: 32%;
@@ -22,13 +24,16 @@
     width: 20%;
     float: left;
     position: relative;
+    overflow: hidden;
 }
 #questionTitle{
     margin-top: 5%;
     margin-left:10%;
+    overflow: hidden;
 }
 .describe{
     height: 19%;
+    overflow: hidden;
 }
 #describeQuestion{
     height: 100%;
@@ -37,6 +42,7 @@
     margin-left: 10%;
     border-style: none;
     background: white;
+    overflow: hidden;
 }
 hr{
     border-color: lightgrey;
@@ -44,12 +50,14 @@ hr{
 .hr{
     width: 80%;
     margin-left: 10%;
+    overflow: hidden;
 }
 .buttonDiv{
     height: 6%;
     width: 80%;
     margin-left: 10%;
     border-style: none;
+    overflow: hidden;
 }
 .button{
     width: 20%;
@@ -57,6 +65,7 @@ hr{
     border-radius: 10px;
     border-style: none;
     float: left;
+    overflow: hidden;
 }
 #collect{
     background:cornflowerblue ;
@@ -66,6 +75,7 @@ hr{
     border-style: none;
     border-radius: 10px;
     margin-top: 3%;
+    overflow: hidden;
 }
 #answer{
     background: aqua;
@@ -98,6 +108,7 @@ hr{
     margin-left: 10%;
     margin-top: 2%;
     border-style: none;
+    overflow: hidden;
 }
 .answerTable{
     width: 100%;
@@ -110,6 +121,7 @@ hr{
     margin-left: 1%;
     font-weight: bold;
     font-size: smaller;
+    overflow: hidden;
 }
 .item1{
     margin-top: 5%;
@@ -118,10 +130,12 @@ hr{
     border-bottom-style: solid;
     border-width: thin;
     width: 100%;
+    overflow: hidden;
 }
 .answers{
     height: 30%;
     background-color: #fffbe3;
+    overflow: hidden;
 }
 .answerMargin{
     background: #6affe1;
@@ -132,9 +146,13 @@ hr{
     clear: right;
     width: 50%;
     padding-left: 10%;
+    overflow: hidden;
 }
 .info{
-    margin-left: 70%;
+    margin-left: 55%;
+    width: 35%;
+    height: 100%;
+    overflow: hidden;
 }
 .likes{
     border-color: lightgrey;
@@ -146,10 +164,11 @@ hr{
     font-size: 40%;
     height: 50%;
     margin-bottom: 1%;
+    overflow: hidden;
 }
 
 .title{
-    margin-left: 5%;
+    margin-left: 5em;
     margin-top: 5%;
     font-size: 150%;
 }
@@ -157,14 +176,16 @@ hr{
     height: 60%;
     width: 90%;
     padding-top: 5%;
+    overflow: hidden;
 }
 .titleDiv{
     width: 80%;
     float: left;
+    overflow: hidden;
 }
 .adoptDiv{
     float: left;
-
+    overflow: hidden;
     width:20%;
 }
 .adopt{
@@ -174,15 +195,18 @@ hr{
     background-color: aqua;
     border-style: none;
     border-radius: 10px;
+    overflow: hidden;
 }
 .like{
     height: 40%;
     width: 90%;
     clear: left;
+    overflow: hidden;
 }
 .likeButton{
     width: 10%;
     float: left;
+    overflow: hidden;
 }
 .itemT{
     border-top-color: lightgrey;
@@ -197,7 +221,7 @@ a{
 }
 .pageDiv{
     height:10%;
-    margin-left: 10%;
+    margin-left: 6em;
     width: 80%;
     clear: left;
 }
@@ -207,7 +231,10 @@ a{
     color: grey;
 }
 .label{
+    width: 30%;
     float: left;
     margin-top: 0%;
     margin-left: 3%;
+    height: 100%;
+    overflow: hidden;
 }

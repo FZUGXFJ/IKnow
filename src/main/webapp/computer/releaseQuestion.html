@@ -13,7 +13,7 @@
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
     <script type="text/javascript" src="../js/computer.js"></script>
-    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.14.0/full/ckeditor.js"></script>
 </head>
 <body style="background-color: aliceblue">
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -66,7 +66,13 @@
                 <textarea  id="richText" name="rich" placeholder="请输入正文"></textarea>
             </div>
             <script>
-                 CKEDITOR.replace('rich');
+                CKEDITOR.replace('rich', {
+                    toolbar:
+                        [
+                            ['Bold','Italic','Underline'], ['Cut','Copy','Paste'],
+                            ['Image']
+                        ]
+                });
             </script>
             <div class="form-group guo-but">
                 <button type="submit" class="btn btn-primary" id="button1">发布</button>
