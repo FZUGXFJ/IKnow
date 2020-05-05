@@ -10,6 +10,7 @@ public class Browsinghistory {
     private Date date;
     private User userByUserId;
     private Question questionByQuestionId;
+    private Answer answerByAnswerId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,5 +78,15 @@ public class Browsinghistory {
 
     public void setQuestionByQuestionId(Question questionByQuestionId) {
         this.questionByQuestionId = questionByQuestionId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
+    public Answer getAnswerByAnswerId() {
+        return answerByAnswerId;
+    }
+
+    public void setAnswerByAnswerId(Answer answerByAnswerId) {
+        this.answerByAnswerId = answerByAnswerId;
     }
 }

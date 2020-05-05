@@ -13,6 +13,7 @@ public class Answer {
     private Byte isDelete;
     private User userByUserId;
     private Question questionByQuestionId;
+    private Collection<Browsinghistory> browsinghistoriesById;
     private Collection<Approvalanswer> approvalanswersById;
     private Collection<Oppositionanswer> oppositionanswersById;
     private Collection<Comment> commentsById;
@@ -114,6 +115,15 @@ public class Answer {
 
     public void setQuestionByQuestionId(Question questionByQuestionId) {
         this.questionByQuestionId = questionByQuestionId;
+    }
+
+    @OneToMany(mappedBy = "answerByAnswerId")
+    public Collection<Browsinghistory> getBrowsinghistoriesById() {
+        return browsinghistoriesById;
+    }
+
+    public void setBrowsinghistoriesById(Collection<Browsinghistory> browsinghistoriesById) {
+        this.browsinghistoriesById = browsinghistoriesById;
     }
 
     @OneToMany(mappedBy = "answerByAnswerId")
