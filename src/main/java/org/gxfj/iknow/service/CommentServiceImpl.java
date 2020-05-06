@@ -224,7 +224,7 @@ public class CommentServiceImpl implements CommentService {
             int num = replyDAO.getCount(comment.getId());
             commentMap.put("replyNum", num);
             if (num != 0) {
-                replies = replyDAO.listByCommentId(comment.getId(), 0, REPLY_NUM);
+                 replies = replyDAO.listByCommentId(comment.getId(), 0, REPLY_NUM);
                 replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer, visitor);
             } else {
                 replyListMap = new ArrayList<>();
