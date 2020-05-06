@@ -128,7 +128,7 @@ public class QuestionServiceImpl implements QuestionService{
         Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
 
         //根据问题id查询到的问题
-        Question question = questionDAO.get(questionId);
+        Question question = questionDAO.getNotDelete(questionId);
         //问题的回答
         List<Answer> answers = answerDAO.listByQuestionId(question.getId(),0, length);
         //JSON成员
@@ -273,7 +273,7 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public void cancelAdopt(Integer questionId){
-        Question question = questionDAO.get(questionId);
+        Question question = questionDAO.getNotDelete(questionId);
         question.setIsAnonymous((byte)0);
         questionDAO.update(question);
     }
@@ -282,7 +282,7 @@ public class QuestionServiceImpl implements QuestionService{
     public void collectProblem(User user,Integer questionId){
         Collectionproblem collectionproblem = new Collectionproblem();
         collectionproblem.setDate(new Date());
-        collectionproblem.setQuestionByQuestionId(questionDAO.get(questionId));
+        collectionproblem.setQuestionByQuestionId(questionDAO.getNotDelete(questionId));
         collectionproblem.setUserByUserId(user);
         collectionProblemDAO.add(collectionproblem);
     }

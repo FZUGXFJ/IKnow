@@ -44,21 +44,21 @@ public class AnswerDAOImpl implements AnswerDAO{
     @Override
     public List<Answer> getAnswersbyQid(Integer questionId) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Answer WHERE questionID = ?");
+        Query query = session.createQuery("from Answer WHERE (questionID = ?) and (isDelete = 0)");
         return query.setInteger(0,questionId).list();
     }
 
     @Override
     public List<Answer> listByQuestionId(int questionId, int start, int length) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Answer WHERE questionID = ?");
+        Query query = session.createQuery("from Answer WHERE (questionID = ?) and (isDelete = 0)");
         return query.setInteger(0,questionId).setFirstResult(start).setMaxResults(length).list();
     }
 
     @Override
     public List<Answer> list(Integer start,Integer count) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Answer");
+        Query query = session.createQuery("from Answer where isDelete = 0");
         return query.setFirstResult(start).setMaxResults(count).list();
     }
 
