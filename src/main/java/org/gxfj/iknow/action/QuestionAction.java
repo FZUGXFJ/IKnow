@@ -76,8 +76,9 @@ public class QuestionAction {
             response.put("resultCode",MISS_QUESTION_INF);
         }
         else {
-            questionService.postQuestion(user, questionTitle, questionContent, categoriesType, subjectType, majorType
-                    , isAnonymous);
+            Integer x=questionService.postQuestion(user, questionTitle, questionContent, categoriesType, subjectType
+                    , majorType, isAnonymous);
+            response.put("questionId",x);
             response.put("resultCode",SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));

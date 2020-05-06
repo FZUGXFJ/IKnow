@@ -51,7 +51,7 @@ public class QuestionServiceImpl implements QuestionService{
     final static private int MILLIS_PER_MINUTE = 60;
 
     @Override
-    public void postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
+    public Integer postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
             , Integer majorType, Byte isAnonymous) {
         Question question = new Question();
         Questiontype questiontype = questionTypeDAO.get(categoryType,subjectType,majorType);
@@ -71,8 +71,8 @@ public class QuestionServiceImpl implements QuestionService{
         question.setIsDelete((byte)0);
         question.setIsAnonymous(isAnonymous);
 
-        questionDAO.add(question);
-
+        Integer x=questionDAO.add(question);
+        return  x;
     }
 
     final static private int MAP_NUM = 20;
