@@ -47,7 +47,7 @@ public class ReplyDAOImpl implements ReplyDAO{
     @Override
     public List<Reply> listByCommentId(Integer commentId, Integer start, Integer count) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Reply WHERE (ommentID = ?) and (isDelete = 0)");
+        Query query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0)");
         return query.setInteger(0,commentId).setFirstResult(start).setMaxResults(count).list();
     }
 
