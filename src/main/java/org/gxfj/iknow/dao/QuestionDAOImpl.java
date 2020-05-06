@@ -72,7 +72,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public Integer getAnswerCount(Integer id) {
-        String sql = "SELECT count(*) from Answer WHERE ( questionId= " + id + " ) and (isDelete = 1)";
+        String sql = "SELECT count(*) from Answer WHERE ( questionId= " + id + " ) and (isDelete = 0)";
         Query query = sessionFactory.getCurrentSession().createQuery(sql);
         return ((Long) query.uniqueResult()).intValue();
     }
