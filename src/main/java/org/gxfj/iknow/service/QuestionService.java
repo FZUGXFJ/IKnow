@@ -20,8 +20,9 @@ public interface QuestionService {
      * @param subjectType 问题所属的学科
      * @param majorType 问题所属的专业
      * @param isAnonymous 提问者发布问题时，是否匿名
+     * @return 问题id
      */
-    public void postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
+    public Integer postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
         , Integer majorType, Byte isAnonymous);
 
     /**
