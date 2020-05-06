@@ -36,8 +36,8 @@
         <br>
         <table>
             <td style="text-align: left;font-size: 0.7em;opacity: 0.5">
-                <span>查看全部{{question.answerCount}}个回答</span>
-                <i class="fas fa-chevron-right"></i>
+                <span @click="backToQuestion">查看全部{{question.answerCount}}个回答</span>
+                <i class="fas fa-chevron-right" @click="backToQuestion"></i>
             </td>
             <td>
                 <div id="showAndHide">
@@ -107,6 +107,7 @@
             </td>
         </table>
     </div>
+    <br><br><br>
     <div id="footer" v-if="load">
         <table>
             <td style="text-align: left;width: 45%">
@@ -167,28 +168,10 @@
     let answer = new Vue({
         el:"#answer",
         data:{
-            question: {
-                id:0,
-                title: "",
-                content: "",
-                answerCount:0
-            },
-            answerer:{
-                id:0,
-                head:"",
-                name:"",
-                level:0,
-                badgeNum:0,
-                isAdopt:0
-            },
-            answer:{
-                content:"",
-                approveNum:0,
-                commentNum:0,
-                isAdopt: 0
-            },
-            comments:[
-            ],
+            question: {},
+            answerer:{},
+            answer:{},
+            comments:[],
             userHead:"",
             hidePart:true,
             viewerIsAnswerer:0,
@@ -325,6 +308,9 @@
                     });
                 }
             },
+            backToQuestion:function () {
+                location.href = "../question/question.html?questionId=" + answer.questionId;
+            }
         },
         mounted:function () {
             let loc = location.href;

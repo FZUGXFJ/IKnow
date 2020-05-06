@@ -20,7 +20,7 @@
 <div id="postAnswer">
     <div id="header">
         <table>
-            <td style="width: 33%;"><i class="fas fa-times"></i></td>
+            <td style="width: 33%;"><i class="fas fa-times" @click="back"></i></td>
             <td style="width: 34%;text-align: center">回答问题</td>
             <td style="width: 33%;text-align: right;"><button class="btn btn-link" @click="check">发布</button></td>
         </table>
@@ -98,7 +98,7 @@
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
-                            alert("发布成功");
+                            location.href = "../question/question.html?questionId=" + postAnswer.questionId;
                         } else {
                             postAnswer.alertMsg.head = "未知错误！";
                             $("#alert").slideDown();
@@ -112,6 +112,9 @@
             },
             closeAlert:function () {
                 $("#alert").slideUp();
+            },
+            back:function () {
+                history.go(-1);
             }
         },
         mounted:function () {
@@ -136,7 +139,6 @@
                         postAnswer.title = result.title;
                         postAnswer.load = true;
                     } else if (result.resultCode === 1) {
-                        alert("请先登录再回答问题！");
                         location.href = "../user/login.html";
                     }
                 },

@@ -16,10 +16,14 @@
 <body>
 <div id="question">
     <div id="header">
-        <table style="color: #acacac">
-            <td style="width: 80%;padding-left: 1em"><i class="fas fa-chevron-left"></i></td>
-            <td style="width: 10%"><i class="fas fa-search"></i></td>
-            <td style="width: 10%"><i class="fas fa-ellipsis-v" data-toggle="modal" data-target="#operateModal"></i></td>
+        <table style="color: #acacac;">
+            <td style="width: 80%;"><i class="fas fa-chevron-left" @click="back"></i></td>
+            <td style="width: 10%;text-align: right">
+                <i class="fas fa-search"></i>
+            </td>
+            <td style="width: 10%;text-align: right">
+                <i class="fas fa-ellipsis-v" data-toggle="modal" data-target="#operateModal"></i>
+            </td>
         </table>
     </div>
     <br>
@@ -118,7 +122,7 @@
     <div id="footer">
         <table>
             <td><button><i class="fas fa-user-plus"></i>&nbsp;邀请回答</button></td>
-            <td><button><i class="fas fa-pen" @click="postAnswer"></i>&nbsp;写回答</button></td>
+            <td><button @click="addAnswer"><i class="fas fa-pen" @click="postAnswer"></i>&nbsp;写回答</button></td>
             <td  v-if="isCollected===1"><button @click="cancelCollect"><i class="fas fa-star"></i>&nbsp;已收藏</button></td>
             <td  v-else><button style="color: #acacac" @click="collect"><i class="fas fa-star"></i>&nbsp;收藏问题</button></td>
         </table>
@@ -141,7 +145,7 @@
                                 <div><i class="fas fa-user-plus fa-2x"></i></div>
                                 <span>邀请回答</span>
                             </td>
-                            <td class="operateItem">
+                            <td class="operateItem" v-if="viewerIsOwner==0">
                                 <div><i class="fas fa-minus-circle fa-2x"></i></div>
                                 <span>举报问题</span>
                             </td>
@@ -263,6 +267,12 @@
                         console.log(status);
                     }
                 });
+            },
+            addAnswer:function () {
+                location.href = "../answer/postAnswer.html?questionId=" + this.questionId;
+            },
+            back:function () {
+                history.go(-1);
             }
         },
         mounted:function () {

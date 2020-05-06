@@ -20,7 +20,7 @@
 <div id="postQuestion">
     <div id="header">
         <table>
-            <td style="width: 50%;"><i class="fas fa-times"></i></td>
+            <td style="width: 50%;"><i class="fas fa-times" @click="back"></i></td>
             <td style="width: 50%;text-align: right;"><button class="btn btn-link" @click="validator">发表问题</button></td>
         </table>
     </div>
@@ -136,7 +136,7 @@
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
-                            alert("发布成功（这里会跳转到问题页面）")
+                            location.href = "question.html?questionId=" + result.questionId;
                         }
                     },
                     error:function (e) {
@@ -185,6 +185,9 @@
             },
             closeAlert:function () {
                 $("#alert").slideUp();
+            },
+            back:function () {
+                history.go(-1);
             }
         },
     });
@@ -242,7 +245,7 @@
                 }
             }
         },
-        created:function () {
+        mounted:function () {
             $.ajax({
                 url:"../../question/questionType.action",
                 type:"POST",
