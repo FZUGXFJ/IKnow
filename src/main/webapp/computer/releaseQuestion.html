@@ -65,32 +65,58 @@
             <div class="guo-rich">
                 <textarea  id="richText" name="rich" placeholder="请输入正文"></textarea>
             </div>
-            <script>
-                CKEDITOR.replace('rich', {
-                    toolbar:
-                        [
-                            ['Bold','Italic','Underline'], ['Cut','Copy','Paste'],
-                            ['Image']
-                        ]
-                });
-            </script>
+            <div class="selectDiv">
+                <div class="select">
+                    <div class="selectDiv" >
+                        <select class="selectBut">
+                            <option>请选择门类</option>
+                            <option>哲学</option>
+                            <option>经济学</option>
+                            <option>法学</option>
+                            <option>工学</option>
+                            <option>文学</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="select">
+                    <div class="selectDiv" >
+                        <select class="selectBut">
+                            <option>请选择门类</option>
+                            <option>哲学</option>
+                            <option>经济学</option>
+                            <option>法学</option>
+                            <option>工学</option>
+                            <option>文学</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="select">
+                    <div class="selectDiv" >
+                        <select class="selectBut">
+                            <option>请选择门类</option>
+                            <option>哲学</option>
+                            <option>经济学</option>
+                            <option>法学</option>
+                            <option>工学</option>
+                            <option>文学</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="form-group guo-but">
                 <button type="submit" class="btn btn-primary" id="button1">发布</button>
-                <button type="submit" class="btn btn-primary" id="button2">存草稿</button>
             </div>
         </form>
     </div>
-
-   <!-- <div class="con2">
-        <textarea class="form-control" id="exampleFormControlTextarea2" rows="15">
-            相关介绍
-        </textarea>
-    </div>
-    <div class="con3">
-        <textarea class="form-control" id="exampleFormControlTextarea3" rows="3">
-            版权介绍
-        </textarea>
-    </div>-->
+    <script>
+        CKEDITOR.replace('rich', {
+            toolbar:
+                [
+                    ['Bold','Italic','Underline'], ['Cut','Copy','Paste'],
+                    ['Image']
+                ]
+        });
+    </script>
 </div>
 </body>
 </html>
