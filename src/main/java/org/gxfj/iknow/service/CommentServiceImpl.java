@@ -171,7 +171,7 @@ public class CommentServiceImpl implements CommentService {
             replyMap.put("targetName","匿名用户");
             replyMap.put("name","匿名用户");
             replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
-                    "style='border-radius: 100%' alt=''> alt=''>");
+                    "style='border-radius: 100%' alt=''>");
         } else {
             replyMap.put("targetName",targetUser.getName());
             replyMap.put("name",replyUser.getName());
