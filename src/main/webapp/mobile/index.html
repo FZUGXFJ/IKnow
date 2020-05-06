@@ -167,15 +167,23 @@
             user:{},
             recommendPage:true,
             pageIndex:1,
-            loading:0
+            loading:0,
         },
         methods:{
             add:function () {
-                location.href = "add.html";
+                if (this.user.id === 0) {
+                    location.href = "user/login.html";
+                } else if (this.loading === 0) {
+                    this.pageIndex = 1;
+                } else {
+                    location.href = "add.html";
+                }
             },
             userCheck:function () {
                 if (this.user.id === 0) {
                     location.href = "user/login.html";
+                } else if (this.loading === 0) {
+                    this.pageIndex = 1;
                 } else {
                     this.pageIndex = 2;
                 }
@@ -195,9 +203,6 @@
                     dataType:"json",
                     success:function (result) {
                         if (result.response === 0) {
-                            homePage.user.id = 0;
-                            homePage.user.head =
-                                "<img src='../head/0.jpg' width='100%' height='100%' style='border-radius: 100%'>";
                             history.go(0);
                         }
                     },
