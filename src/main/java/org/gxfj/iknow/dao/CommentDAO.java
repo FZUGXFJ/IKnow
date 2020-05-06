@@ -8,14 +8,14 @@ import java.util.List;
 public interface CommentDAO extends BaseDAO<Comment>{
 
     /**
-     * 获得问题评论数
+     * 获得问题未被删除的评论数
      * @param answerId 回答id
      * @return  问题评论数
      */
     Integer getCount(Integer answerId);
 
     /**
-     * 获得问题评论列表
+     * 获得问题下未被删除的评论列表
      * @param answerId 回答id
      * @param start 开始index
      * @param length 记录数
@@ -30,4 +30,10 @@ public interface CommentDAO extends BaseDAO<Comment>{
      */
     List<Comment> getCommentsByAnswerId(Integer answerId);
 
+    /**
+     * 在未删除的数据中查找记录
+     * @param id 要查找的记录的主键
+     * @return 没有则为null
+     */
+    Comment getNotDelete(Integer id);
 }

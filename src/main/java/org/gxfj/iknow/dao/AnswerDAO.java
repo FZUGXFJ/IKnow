@@ -1,6 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Answer;
+import org.gxfj.iknow.pojo.Comment;
 
 import java.util.List;
 
@@ -29,4 +30,11 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      * @return 问题列表
      */
     List<Answer> list(Integer start,Integer count);
+
+    /**
+     * 在未删除的数据中查找记录
+     * @param id 要查找的记录的主键
+     * @return 没有则为null
+     */
+    Answer getNotDelete(Integer id);
 }

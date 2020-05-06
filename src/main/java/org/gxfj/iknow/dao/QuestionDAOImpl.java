@@ -1,6 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Answer;
+import org.gxfj.iknow.pojo.Comment;
 import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.Questionstate;
 import org.hibernate.*;
@@ -62,17 +63,30 @@ public class QuestionDAOImpl implements QuestionDAO {
         });
         if (stateId == SOLVED) {
             return 0;
-        } else if(stateId == UNSOLVED){
+        } else if(stateId == UNSOLVED) {
             return 1;
-        }else{
+        } else {
             return -1;
         }
     }
 
     @Override
     public Integer getAnswerCount(Integer id) {
-        Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(*) from Answer WHERE questionId=" + id);
+        String sql = "SELECT count(*) from Answer WHERE ( questionId= " + id + " ) and (isDelete = 1)";
+        Query query = sessionFactory.getCurrentSession().createQuery(sql);
         return ((Long) query.uniqueResult()).intValue();
+    }
+
+    @Override
+    public Question getNotDelete(Integer id) {
+        Question question = null;
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Question WHERE (id = ?) and (isDelete = 0)");
+        List<Question> list = query.setInteger(0, id).list();
+        if (!list.isEmpty()) {
+            question = list.get(0);
+        }
+        return question;
     }
 
 }

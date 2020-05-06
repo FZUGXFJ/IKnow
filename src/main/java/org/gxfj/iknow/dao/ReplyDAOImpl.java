@@ -1,5 +1,6 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.Reply;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -62,5 +63,17 @@ public class ReplyDAOImpl implements ReplyDAO{
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select count(r) from Reply as r WHERE commentID = ?");
         return ((Long)query.setInteger(0,commentId).uniqueResult()).intValue();
+    }
+
+    @Override
+    public Reply getNotDelete(Integer id) {
+        Reply reply = null;
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Reply WHERE (id = ?) and (isDelete = 0)");
+        List<Reply> list = query.setInteger(0, id).list();
+        if (!list.isEmpty()) {
+            reply = list.get(0);
+        }
+        return reply;
     }
 }

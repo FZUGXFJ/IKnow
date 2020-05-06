@@ -31,7 +31,7 @@ public class AnswerServiceImpl implements AnswerService{
     final static private int QUESTION_STATE_SOLVE = 2;
     @Override
     public String getQuestiontitle(Integer questionId) {
-        Question question = questionDAO.get(questionId);
+        Question question = questionDAO.getNotDelete(questionId);
         return question.getTitle();
     }
 
@@ -42,7 +42,7 @@ public class AnswerServiceImpl implements AnswerService{
         answer.setDate(new Date());
         answer.setApprovalCount(0);
         answer.setUserByUserId(user);
-        Question q = questionDAO.get(questionId);
+        Question q = questionDAO.getNotDelete(questionId);
         answer.setQuestionByQuestionId(q);
         answer.setIsDelete((byte)0);
         answer.setIsRoof((byte)0);
@@ -77,7 +77,7 @@ public class AnswerServiceImpl implements AnswerService{
             resultMap.put("userHead" , "<img src='../../head/" + user.getHead() + "' width='100%'  height='100%' alt=''>");
         }
 
-        Answer answer=answerDAO.get(answerId);
+        Answer answer=answerDAO.getNotDelete(answerId);
         int viewerIsAnswerer = 0;
         int viewerIsQuestionOwner = 0;
         if (user != null) {
@@ -99,7 +99,7 @@ public class AnswerServiceImpl implements AnswerService{
      * @return 问题信息的json
      */
     private Map<String , Object> getQuestionMap(Integer questionId){
-        Question question = questionDAO.get(questionId);
+        Question question = questionDAO.getNotDelete(questionId);
         Map<String , Object> questionMap = new HashMap<>(MAP_NUM);
         //将问题变成json格式
         questionMap.put("id" , question.getId());
@@ -116,7 +116,7 @@ public class AnswerServiceImpl implements AnswerService{
      * @return json形式的答主信息
      */
     private Map<String , Object> getAnswererMap(Integer answerId){
-        Answer answer = answerDAO.get(answerId);
+        Answer answer = answerDAO.getNotDelete(answerId);
         User answerer = answer.getUserByUserId();
         Map<String , Object> answererMap = new HashMap<>(MAP_NUM);
         //答主的信息转化为Json格式
@@ -151,8 +151,8 @@ public class AnswerServiceImpl implements AnswerService{
      * @return json形式的回答信息
      */
     private Map<String , Object> getAnswerMap(Integer questionId, Integer answerId){
-        Answer answer = answerDAO.get(answerId);
-        Question question = questionDAO.get(questionId);
+        Answer answer = answerDAO.getNotDelete(answerId);
+        Question question = questionDAO.getNotDelete(questionId);
         Map<String , Object> answerMap = new HashMap<>(MAP_NUM);
         answerMap.put("content" , answer.getContent());
         answerMap.put("approveNum" , answer.getApprovalCount());
@@ -197,7 +197,7 @@ public class AnswerServiceImpl implements AnswerService{
 
             int isQuestionOwner = 0;
             int isAnswerer = 0;
-            if(comment.getUserByUserId().getId().equals(questionDAO.get(questionId).getUserByUserId().getId())){
+            if(comment.getUserByUserId().getId().equals(questionDAO.getNotDelete(questionId).getUserByUserId().getId())){
                 isQuestionOwner = 1;
                 if (comment.getAnswerByAnswerId().getQuestionByQuestionId().getIsAnonymous() == 1) {
                     commentMap.put("uName","匿名用户");
@@ -205,7 +205,7 @@ public class AnswerServiceImpl implements AnswerService{
                             "style='border-radius:100%' alt=''>");
                 }
             }
-            if(comment.getUserByUserId().getId().equals(answerDAO.get(answerId).getUserByUserId().getId())){
+            if(comment.getUserByUserId().getId().equals(answerDAO.getNotDelete(answerId).getUserByUserId().getId())){
                 isAnswerer = 1;
                 if (comment.getAnswerByAnswerId().getIsAnonymous() == 1) {
                     commentMap.put("uName","匿名用户");
@@ -222,7 +222,7 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Boolean adoptAnswer(User user, Integer answerId) {
-        Answer answer = answerDAO.get(answerId);
+        Answer answer = answerDAO.getNotDelete(answerId);
         Question question = answer.getQuestionByQuestionId();
 
         //构造已解决的问题状态对象
@@ -248,7 +248,7 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Boolean cancelAdopt(User user, Integer answerId) {
-        Answer answer = answerDAO.get(answerId);
+        Answer answer = answerDAO.getNotDelete(answerId);
         if (answer.getUserByUserId().getId().equals(user.getId())){
             answer.setIsAnonymous((byte)1);
             answerDAO.update(answer);

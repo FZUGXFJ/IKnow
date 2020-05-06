@@ -2,11 +2,8 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Comment;
-import org.gxfj.iknow.pojo.Level;
-import org.gxfj.iknow.pojo.User;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -48,14 +45,15 @@ public class CommentDAOImpl implements CommentDAO{
     @Override
     public Integer getCount(Integer answerId){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select count(c) from Comment as c WHERE answerID = ?");
+        String hql = "select count(c) from Comment as c WHERE (answerID = ?) and (isDelete = 0)";
+        Query query = session.createQuery(hql);
         return ((Long)query.setInteger(0,answerId).uniqueResult()).intValue();
     }
 
     @Override
     public List<Comment> listByAnswerId(int answerId, int start, int length){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Comment WHERE answerID = ?");
+        Query query = session.createQuery("from Comment WHERE (answerID = ?) and (isDelete = 0)");
         return query.setInteger(0,answerId).setFirstResult(start).setMaxResults(length).list();
     }
 
@@ -64,6 +62,18 @@ public class CommentDAOImpl implements CommentDAO{
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Comment WHERE answerID = ?");
         return query.setInteger(0,answerId).list();
+    }
+
+    @Override
+    public Comment getNotDelete(Integer id) {
+        Comment comment = null;
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Comment WHERE (id = ?) and (isDelete = 0)");
+        List<Comment> list = query.setInteger(0, id).list();
+        if (!list.isEmpty()) {
+            comment = list.get(0);
+        }
+        return comment;
     }
 
 }
