@@ -235,7 +235,7 @@ public class AnswerServiceImpl implements AnswerService{
             //更新问题状态为已解决
             question.setQuestionstateByStateId(questionstate);
             questionDAO.update(question);
-
+            
             //增加用户的徽章数
             user.setBadgeNum(user.getBadgeNum() + 1);
             userDAO.update(user);

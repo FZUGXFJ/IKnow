@@ -142,7 +142,7 @@ public class QuestionServiceImpl implements QuestionService{
         //Question的owner的JSON数据
         questionMap.put("owner",setQueOwnerByIfAnonymous(question));
         questionMap.put("isAnonymous",question.getIsAnonymous());
-        questionMap.put("isSolved",questionDAO.getQuestionStateId(question.getId()) == QUESTION_STATE_SOLVE ? 1 : 0);
+        questionMap.put("isSolved",question.getQuestionstateByStateId().getId()  == QUESTION_STATE_SOLVE ? 1 : 0);
         questionMap.put("title",question.getTitle());
         questionMap.put("content",question.getContent());
         questionMap.put("collectionCount",collectionProblemDAO.getCollectionCount(question.getId()));
