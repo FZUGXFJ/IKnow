@@ -29,15 +29,15 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public void postReply(Integer commentId, String content, Integer replyTarget, User user) {
-        User tu= userDAO.get(replyTarget);
-        Comment comment=commentDAO.get(commentId);
+        User targetUser= userDAO.get(replyTarget);
+        Comment comment = commentDAO.getNotDelete(commentId);
 
-        Reply reply=new Reply();
+        Reply reply = new Reply();
         reply.setContent(content);
         reply.setIsDelete((byte)0);
         reply.setCount(0);
         reply.setDate(new Date());
-        reply.setUserByTargetUserId(tu);
+        reply.setUserByTargetUserId(targetUser);
         reply.setCommentByCommentId(comment);
         reply.setUserByUserId(user);
 
@@ -60,7 +60,7 @@ public class ReplyServiceImpl implements ReplyService {
      */
     private Map<String , Object> getComment(Integer commentId, User visitor) {
         Map<String , Object> commentMap = new HashMap<>(MAP_NUM);
-        Comment comment = commentDAO.get(commentId);
+        Comment comment = commentDAO.getNotDelete(commentId);
         commentMap = commenterIsQAOwner(commentId );
         commentMap.put("userId" , comment.getUserByUserId().getId());
         commentMap.put("content",comment.getContent());
@@ -115,9 +115,9 @@ public class ReplyServiceImpl implements ReplyService {
      * @param commentId 评论id
      * @return commentMap 评论哈希表
      */
-    public Map<String , Object> commenterIsQAOwner(Integer commentId){
+    public Map<String , Object> commenterIsQAOwner(Integer commentId) {
         Map<String ,Object> commentMap = new HashMap<>(MAP_NUM);
-        Comment comment = commentDAO.get(commentId);
+        Comment comment = commentDAO.getNotDelete(commentId);
         //得到评论的用户的id
         Integer commentOwnerId = comment.getUserByUserId().getId();
         //获取回答
@@ -130,23 +130,23 @@ public class ReplyServiceImpl implements ReplyService {
         Integer answerOwnerId = answer.getUserByUserId().getId();
         boolean userIdentify = (commentOwnerId.equals(questionOwnerId) && question.getIsAnonymous() == 1) ||
                 (commentOwnerId.equals(answerOwnerId) && answer.getIsAnonymous() == 1);
-        if(userIdentify) {
+        if (userIdentify) {
             commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
                     "style='border-radius: 100%' alt=''>");
             commentMap.put("name","匿名用户");
-        }else{
+        } else {
             commentMap.put("head","<img src='../../head/"+comment.getUserByUserId().getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
             commentMap.put("name",comment.getUserByUserId().getName());
         }
-        if(commentOwnerId.equals(questionOwnerId)){
+        if (commentOwnerId.equals(questionOwnerId)) {
             commentMap.put("isQuestionOwner" , 1);
-        } else{
+        } else {
             commentMap.put("isQuestionOwner" , 0);
         }
-        if(commentOwnerId.equals(answerOwnerId)){
+        if (commentOwnerId.equals(answerOwnerId)) {
             commentMap.put("isAnswerer" , 1);
-        } else{
+        } else {
             commentMap.put("isAnswerer" , 0);
         }
         return commentMap;
@@ -157,8 +157,8 @@ public class ReplyServiceImpl implements ReplyService {
      * @param replyId 评论id
      * @return commentMap 评论哈希表
      */
-    public Map<String , Object> replierIsQAOwner(Integer replyId){
-        Reply reply = replyDAO.get(replyId);
+    public Map<String , Object> replierIsQAOwner(Integer replyId) {
+        Reply reply = replyDAO.getNotDelete(replyId);
         Map<String , Object> replyMap = new HashMap<>(MAP_NUM);
         //获取回答
         Answer answer = reply.getCommentByCommentId().getAnswerByAnswerId();
@@ -171,23 +171,23 @@ public class ReplyServiceImpl implements ReplyService {
         Integer replierId =reply.getUserByUserId().getId();
         boolean userIdentify = (replierId.equals(questionOwnerId) && question.getIsAnonymous() == 1) ||
                 (replierId.equals(answerOwnerId) && answer.getIsAnonymous() == 1);
-        if(userIdentify){
+        if (userIdentify) {
             replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
                     "style='border-radius: 100%' alt=''>");
             replyMap.put("name","匿名用户");
-        }else{
+        } else {
             replyMap.put("head","<img src='../../head/"+reply.getUserByUserId().getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
             replyMap.put("name",reply.getUserByUserId().getName());
         }
         if(replierId.equals(questionOwnerId)){
             replyMap.put("isQuestionOwner" , 1);
-        } else{
+        } else {
             replyMap.put("isQuestionOwner" , 0);
         }
         if(replierId.equals(answerOwnerId)){
             replyMap.put("isAnswerer" , 1);
-        } else{
+        } else {
             replyMap.put("isAnswerer" , 0);
         }
         return replyMap;
@@ -195,8 +195,8 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public boolean approveReply(Integer replyId, User user) {
-        if(approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId)==-1){
-            Reply reply=replyDAO.get(replyId);
+        if(approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId) == -1){
+            Reply reply=replyDAO.getNotDelete(replyId);
             Comment comment=reply.getCommentByCommentId();
             Approvalreply approvalreply=new Approvalreply();
             approvalreply.setDate(new Date());
@@ -214,11 +214,11 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public boolean cancelApprove(Integer replyId, User user) {
         Integer x = approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId);
-        if(x==-1){
+        if (x == -1) {
             return false;
         }
         approvalReplyDAO.delete(approvalReplyDAO.get(x));
-        Reply reply=replyDAO.get(replyId);
+        Reply reply = replyDAO.getNotDelete(replyId);
         reply.setCount(reply.getCount()-1);
         replyDAO.update(reply);
         return true;
