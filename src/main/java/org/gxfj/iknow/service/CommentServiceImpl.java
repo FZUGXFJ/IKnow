@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
         comment.setUserByUserId(user);
         comment.setContent(content);
-        comment.setAnswerByAnswerId(answerDAO.get(answerId));
+        comment.setAnswerByAnswerId(answerDAO.getNotDelete(answerId));
         comment.setDate(new Date());
         comment.setIsDelete((byte)0);
         comment.setCount(0);
@@ -53,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
         List<Map<String, Object>> commentListMap;
 
         //获取回答
-        Answer answer = answerDAO.get(answerId);
+        Answer answer = answerDAO.getNotDelete(answerId);
         //获取问题
         Question question = answer.getQuestionByQuestionId();
         //获取回答者
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public boolean approveComment(User user, Integer commentId) {
         if (user == null) {
             return false;
@@ -88,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         //更新评论记录中评论点赞数
-        Comment comment = commentDAO.get(commentId);
+        Comment comment = commentDAO.getNotDelete(commentId);
         comment.setCount(comment.getCount() + 1);
         commentDAO.update(comment);
 
@@ -115,7 +115,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         //更新评论记录中评论点赞数
-        Comment comment = commentDAO.get(commentId);
+        Comment comment = commentDAO.getNotDelete(commentId);
         comment.setCount(comment.getCount() - 1);
         commentDAO.update(comment);
 

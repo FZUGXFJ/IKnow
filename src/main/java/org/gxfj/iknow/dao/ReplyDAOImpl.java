@@ -47,21 +47,22 @@ public class ReplyDAOImpl implements ReplyDAO{
     @Override
     public List<Reply> listByCommentId(Integer commentId, Integer start, Integer count) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Reply WHERE commentID = ?");
+        Query query = session.createQuery("from Reply WHERE (ommentID = ?) and (isDelete = 0)");
         return query.setInteger(0,commentId).setFirstResult(start).setMaxResults(count).list();
     }
 
     @Override
     public List<Reply> getAllReplies(Integer commentId){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Reply WHERE commentID = ?");
+        Query query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0)");
         return query.setInteger(0,commentId).list();
     }
 
     @Override
     public Integer getCount(Integer commentId){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select count(r) from Reply as r WHERE commentID = ?");
+        String hql = "select count(r) from Reply as r WHERE (commentID = ?) and (isDelete = 0)";
+        Query query = session.createQuery(hql);
         return ((Long)query.setInteger(0,commentId).uniqueResult()).intValue();
     }
 
