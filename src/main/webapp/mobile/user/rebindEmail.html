@@ -195,8 +195,8 @@
                 $("#alert").slideUp();
             },
             verifyIdentity:function () {
-                let verifyCode = $("#identityVerifyCode").val();
-                if (verifyCode.length === 0) {
+                let verifyCode = $("#identityVerifyCode");
+                if (verifyCode.val().length === 0) {
                     this.verifyCodeErrorMsg = "验证码不得为空";
                     this.verifyCodeError = true;
                 } else {
@@ -205,7 +205,7 @@
                         type:"POST",
                         url:"../../user/resetPasswordVerify.action",
                         data:{
-                            verifyCode:verifyCode
+                            verifyCode:verifyCode.val()
                         },
                         dataType:"json",
                         success:function (result) {

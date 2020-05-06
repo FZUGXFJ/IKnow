@@ -233,6 +233,7 @@
                     success:function (result) {
                         if (result.resultCode === 0) {
                             question.isCollected = 1;
+                            question.collectionCount++;
                         } else if (result.resultCode === 1) {
                             if (confirm("登录后才能收藏问题")) {
                                 location.href = "../user/login.html";
@@ -258,6 +259,7 @@
                     success:function (result) {
                         if (result.resultCode === 0) {
                             question.isCollected = 0;
+                            question.collectionCount --;
                         }
                     },
                     error:function (request,status,error) {
