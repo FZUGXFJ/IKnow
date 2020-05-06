@@ -26,6 +26,9 @@ public class ReplyServiceImpl implements ReplyService {
     private ApprovalReplyDAO approvalReplyDAO;
 
     private final int MAP_NUM = 20;
+    private final int NO_SPECIAL_IDENTIFY = 0;
+    private final int IS_QUESTION_OWNER = 1;
+    private final int IS_ANSWERER = 2;
 
     @Override
     public void postReply(Integer commentId, String content, Integer replyTarget, User user) {
@@ -89,12 +92,20 @@ public class ReplyServiceImpl implements ReplyService {
     private List<Map<String , Object>> listReplies(Integer commentId, User visitor) {
         List<Map<String , Object>> repliesMap  = new ArrayList<>();
         List<Reply> replies = replyDAO.getAllReplies(commentId);
+        Comment comment = commentDAO.getNotDelete(commentId);
+        boolean isAnonymousOwner = (getUserIdentify(comment) != NO_SPECIAL_IDENTIFY && isAnonymous(comment));
         for (Reply reply : replies) {
             Map<String ,Object> replyMap = replierIsQAOwner(reply.getId());
             replyMap.put("id", reply.getId());
             replyMap.put("userId" , reply.getUserByUserId().getId());
-            replyMap.put("targetName" , reply.getUserByTargetUserId().getName());
-            replyMap.put("targetId" , reply.getUserByTargetUserId().getId());
+            if(isAnonymousOwner){
+                replyMap.put("targetName" ,"匿名用户");
+                replyMap.put("targetId" , "0");
+            }
+            else {
+                replyMap.put("targetName" , reply.getUserByTargetUserId().getName());
+                replyMap.put("targetId" , reply.getUserByTargetUserId().getId());
+            }
             replyMap.put("content" , reply.getContent());
             replyMap.put("approveNum" , reply.getCount());
             replyMap.put("time" , Time.getTime(reply.getDate()));
@@ -118,6 +129,36 @@ public class ReplyServiceImpl implements ReplyService {
     public Map<String , Object> commenterIsQAOwner(Integer commentId) {
         Map<String ,Object> commentMap = new HashMap<>(MAP_NUM);
         Comment comment = commentDAO.getNotDelete(commentId);
+        //获得用户的身份
+        Integer userIdentify = getUserIdentify(comment);
+        if (userIdentify != NO_SPECIAL_IDENTIFY && isAnonymous(comment)){
+            commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
+                    "style='border-radius: 100%' alt=''>");
+            commentMap.put("name","匿名用户");
+        } else {
+            commentMap.put("head","<img src='../../head/"+comment.getUserByUserId().getHead() +
+                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            commentMap.put("name",comment.getUserByUserId().getName());
+        }
+        if (userIdentify == IS_QUESTION_OWNER) {
+            commentMap.put("isQuestionOwner" , 1);
+        } else {
+            commentMap.put("isQuestionOwner" , 0);
+        }
+        if (userIdentify == IS_ANSWERER) {
+            commentMap.put("isAnswerer" , 1);
+        } else {
+            commentMap.put("isAnswerer" , 0);
+        }
+        return commentMap;
+    }
+
+    /**
+     * 获取用户的身份，是否为题主/答主
+     * @param comment 评论
+     * @return 用户的身份（用int表示）
+     */
+    private Integer getUserIdentify( Comment comment){
         //得到评论的用户的id
         Integer commentOwnerId = comment.getUserByUserId().getId();
         //获取回答
@@ -128,30 +169,28 @@ public class ReplyServiceImpl implements ReplyService {
         Integer questionOwnerId = answer.getQuestionByQuestionId().getUserByUserId().getId();
         //得到答主的id
         Integer answerOwnerId = answer.getUserByUserId().getId();
-        boolean userIdentify = (commentOwnerId.equals(questionOwnerId) && question.getIsAnonymous() == 1) ||
-                (commentOwnerId.equals(answerOwnerId) && answer.getIsAnonymous() == 1);
-        if (userIdentify) {
-            commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
-                    "style='border-radius: 100%' alt=''>");
-            commentMap.put("name","匿名用户");
-        } else {
-            commentMap.put("head","<img src='../../head/"+comment.getUserByUserId().getHead() +
-                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
-            commentMap.put("name",comment.getUserByUserId().getName());
+        if(commentOwnerId.equals(questionOwnerId)){
+            return IS_QUESTION_OWNER;
         }
-        if (commentOwnerId.equals(questionOwnerId)) {
-            commentMap.put("isQuestionOwner" , 1);
-        } else {
-            commentMap.put("isQuestionOwner" , 0);
+        if(commentOwnerId.equals(answerOwnerId)){
+            return IS_ANSWERER;
         }
-        if (commentOwnerId.equals(answerOwnerId)) {
-            commentMap.put("isAnswerer" , 1);
-        } else {
-            commentMap.put("isAnswerer" , 0);
-        }
-        return commentMap;
+        return NO_SPECIAL_IDENTIFY;
     }
 
+    /**
+     * 判断用户是否匿名
+     * @param comment 评论
+     * @return 是否匿名（boolean）
+     */
+    private boolean isAnonymous(Comment comment){
+        Answer answer = comment.getAnswerByAnswerId();
+        Question question = answer.getQuestionByQuestionId();
+        if(answer.getIsAnonymous() == 1 || question.getIsAnonymous() == 1){
+            return true;
+        }
+        return false;
+    }
     /**
      * 判断回复者是否为答主或题主，是否匿名，并相应的对hash表赋值
      * @param replyId 评论id
