@@ -66,7 +66,7 @@
                 <td style="width: 10%;text-align: center" @click="approveComment(comment)">
                     &nbsp;<i class="fas fa-thumbs-up" :class="{approved:comment.isApproved==1}"></i>
                 </td>
-                <td style="width: 10%;text-align: center" @click="doReply(reply)">
+                <td style="width: 10%;text-align: center" @click="doReplyComment(comment)">
                     <i class="fas fa-comment-dots"></i>
                 </td>
             </table>
@@ -108,7 +108,7 @@
                         <td style="width: 10%;text-align: center;" @click="approveReply(reply)">
                             &nbsp;<i class="fas fa-thumbs-up" :class="{approved:reply.isApproved==1}"></i>
                         </td>
-                        <td style="width: 10%;text-align: center" @click="doReply(reply.userId,reply.name,reply.id)">
+                        <td style="width: 10%;text-align: center" @click="doReplyReply(reply,comment.id)">
                             <i class="fas fa-comment-dots"></i>
                         </td>
                     </table>
@@ -224,10 +224,18 @@
             moreReply:function (commentId) {
                 location.href = "../reply/reply.html?commentId=" + commentId;
             },
-            doReply:function (targetId,targetName,commentId) {
-                this.targetName = targetName;
-                this.targetId = targetId;
+            doReplyReply:function (reply,commentId) {
+                this.targetName = reply.name;
+                this.targetId = reply.userId;
                 this.replyComment = commentId;
+                this.placeholder = "请输入回复内容";
+                this.postContent = "";
+                this.toReply = true;
+            },
+            doReplyComment:function (comment) {
+                this.targetName = comment.name;
+                this.targetId = comment.userId;
+                this.replyComment = comment.id;
                 this.placeholder = "请输入回复内容";
                 this.postContent = "";
                 this.toReply = true;

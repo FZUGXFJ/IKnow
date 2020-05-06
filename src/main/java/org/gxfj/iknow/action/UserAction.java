@@ -173,6 +173,7 @@ public class UserAction {
             if (verifyCode.equals(session.get(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME))) {
                 result.put(RESULT_CODE_NAME,SUCCESS_CODE);
                 session.put("resetPasswordVerify", true);
+                session.put(RESET_EMAIL_VERIFY_CODE_SESSION_NAME,null);
             } else {
                 result.put(RESULT_CODE_NAME,VARIFY_DEFAULT);
             }
@@ -189,11 +190,16 @@ public class UserAction {
         User user = (User) session.get("user");
         Boolean resetPasswordVerify = (Boolean)session.get("resetPasswordVerify");
         if (user != null && resetPasswordVerify != null && resetPasswordVerify) {
-            result.put(RESULT_CODE_NAME, userService.resetPassword(user, newPassword) ? SUCCESS_CODE : RESET_PASSWD_FAIL);
-            session.put("resetPasswordVerify", false);
+            if (userService.resetPassword(user, newPassword)) {
+                result.put(RESULT_CODE_NAME, SUCCESS_CODE);
+            } else {
+                result.put(RESULT_CODE_NAME, RESET_PASSWD_FAIL);
+            }
+
         } else {
-            result.put(RESULT_CODE_NAME,UN_LOGIN);
+            result.put(RESULT_CODE_NAME, UN_LOGIN);
         }
+        session.put("resetPasswordVerify", null);
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;

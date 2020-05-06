@@ -119,32 +119,26 @@
                     },
                     dataType:"json",
                     success:function (result) {
+                        al.removeClass("alert-success");
+                        al.removeClass("alert-danger");
                         if (result.response === 0) {
                             login.alertMsg.head = "登录成功";
                             login.alertMsg.body = "";
-                            al.removeClass("alert-success");
-                            al.removeClass("alert-danger");
                             al.addClass("alert-success");
                             al.slideDown();
                         } else if (result.response === 1) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "邮箱已修改，请重新发送验证码";
-                            al.removeClass("alert-success");
-                            al.removeClass("alert-danger");
                             al.addClass("alert-danger");
                             al.slideDown();
                         } else if (result.response === 2) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "验证码错误";
-                            al.removeClass("alert-success");
-                            al.removeClass("alert-danger");
                             al.addClass("alert-danger");
                             al.slideDown();
                         } else if (result.response === 3) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "该邮箱未注册";
-                            al.removeClass("alert-success");
-                            al.removeClass("alert-danger");
                             al.addClass("alert-danger");
                             al.slideDown();
                         }
@@ -164,15 +158,20 @@
                     },
                     dataType:"json",
                     success:function (result) {
+                        let al = $("#alert");
+                        al.removeClass("alert-danger");
+                        al.removeClass("alert-success");
                         if (result.response === 0) {
                             login.alertMsg.head = "登录成功";
                             login.alertMsg.body = "登录成功";
-                            $("#alert").slideDown();
+                            al.addClass("alert-success");
+                            al.slideDown();
                             history.go(-1);
                         } else if (result.response === 1) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "邮箱或密码错误";
-                            $("#alert").slideDown();
+                            al.addClass("alert-danger");
+                            al.slideDown();
                         }
                     },
                     error:function (e) {
@@ -246,7 +245,7 @@
                     if (!emailRegex.test(email1) && !this.useEmail) {
                         this.emailError1 = true;
                         this.emailErrorMsg1 = "邮箱格式错误，请重新输入";
-                    }else {
+                    } else {
                         this.emailError1 = false;
                     }
                     if (password.length === 0) {
@@ -255,7 +254,7 @@
                     } else {
                         this.passwordError = false;
                     }
-                    if (!this.emailError && !this.passwordError) {
+                    if (!this.emailError1 && !this.passwordError) {
                         this.loginByPassword(email1,password);
                     }
                 }
