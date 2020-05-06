@@ -168,6 +168,7 @@
                             login.alertMsg.head = "登录成功";
                             login.alertMsg.body = "登录成功";
                             $("#alert").slideDown();
+                            history.go(-1);
                         } else if (result.response === 1) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "邮箱或密码错误";

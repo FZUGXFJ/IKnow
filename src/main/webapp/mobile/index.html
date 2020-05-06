@@ -44,7 +44,7 @@
             <div class="item" v-for="recommend in recommends">
                 <div class="splitBox"></div>
                 <div class="itemBody">
-                    <h6 class="questionTitle"><b>{{recommend.questionTitle}}</b></h6>
+                    <h6 class="questionTitle" @click="toQuestionPage(recommend.questionId)"><b>{{recommend.questionTitle}}</b></h6>
                     <div class="userInf">
                         <table>
                             <tr>
@@ -103,7 +103,40 @@
             <div class="splitBox"></div>
         </div>
     </div>
-    <div id="myPage" v-if="pageIndex == 2"></div>
+    <div id="myPage" v-if="pageIndex == 2">
+        <div id="myInf">
+
+        </div>
+        <div id="myPageContent">
+            <div id="personal">
+                <span style="color: #12eee7">
+                    <i class="fas fa-user"></i>
+                    &nbsp;个人
+                </span>
+                <div class="splitLine"></div>
+                <div><button class="btn" @click="toModify">修改个人信息</button></div>
+            </div>
+            <br>
+            <div id="security">
+                <span style="color: #12eee7">
+                    <i class="fas fa-shield-alt"></i>
+                    &nbsp;安全
+                </span>
+                <div class="splitLine"></div>
+                <div><button class="btn" style="color: red" @click="toReset">修改密码</button></div>
+                <div><button class="btn" style="color: red" @click="toRebind">重新绑定邮箱</button></div>
+            </div>
+            <br>
+            <div id="system">
+                <span style="color: #12eee7">
+                    <i class="fas fa-cog"></i>
+                    &nbsp;系统
+                </span>
+                <div class="splitLine"></div>
+                <div><button class="btn" style="color: red" @click="logout">退出登录</button></div>
+            </div>
+        </div>
+    </div>
     <div id="footer">
         <table>
             <td style="width: 33%;text-align: center">
@@ -115,7 +148,7 @@
                 <div>添加</div>
             </td>
             <td style="width: 33%;text-align: center">
-                <i class="fas fa-user" :class="{selected:pageIndex == 2}" @click="pageIndex=2"></i>
+                <i class="fas fa-user" :class="{selected:pageIndex == 2}" @click="userCheck"></i>
                 <div>我的</div>
             </td>
         </table>
@@ -147,9 +180,43 @@
                     this.pageIndex = 2;
                 }
             },
+            toQuestionPage:function (questionId) {
+                location.href = "question/question.html?questionId=" +questionId;
+            },
             toAnswerPage:function (questionId,answerId) {
                 location.href = "answer/answer.html?questionId=" + questionId
                 + "&answerId=" +answerId;
+            },
+            logout:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"../user/logout.action",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            homePage.user.id = 0;
+                            homePage.user.head =
+                                "<img src='../head/0.jpg' width='100%' height='100%' style='border-radius: 100%'>";
+                            homePage.pageIndex = 1;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            toModify:function () {
+                location.href = "user/modifyUserInf.html";
+            },
+            toReset:function () {
+                location.href = "user/resetPassword.html";
+            },
+            toRebind:function () {
+                location.href = "user/rebindEmail.html";
             }
         },
         mounted:function () {

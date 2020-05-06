@@ -17,7 +17,7 @@
 <div id="modifyUserInf">
     <div id="header">
         <table>
-            <td style="width: 33%"><i class="fas fa-chevron-left" style="color: white"></i></td>
+            <td style="width: 33%"><i class="fas fa-chevron-left" style="color: white" @click="back"></i></td>
             <td style="width: 34%;text-align: center"><span >修改用户信息</span></td>
             <td style="width: 33%;text-align: right"><button  class="btn btn-link" @click="validator">保存</button></td>
         </table>
@@ -133,9 +133,12 @@
             },
             closeAlert:function () {
                 $("#alert").slideUp();
+            },
+            back:function () {
+                history.go(-1);
             }
         },
-        created:function () {
+        mounted:function () {
             $.ajax({
                 url:"../../user/userInf.action",
                 type:"POST",

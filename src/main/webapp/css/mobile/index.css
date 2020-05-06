@@ -106,3 +106,16 @@ table{
     border-radius: 100%;
     overflow: hidden;
 }
+#myPage{
+    margin: 1em 0;
+}
+#myPageContent{
+    width: 90%;
+    margin: 0 auto;
+}
+.splitLine{
+    background-color: #acacac;
+    opacity: 0.5;
+    height: 1px;
+    margin: 0.5em 0;
+}

@@ -8,6 +8,9 @@ label{
 div{
     width: 100%;
 }
+#login{
+    margin: 0.5em 0;
+}
 #choose{
     padding: 0 1em;
 }

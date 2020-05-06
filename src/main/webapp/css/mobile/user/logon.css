@@ -7,6 +7,9 @@ table{
 img{
     width: 100%;
 }
+#logon{
+    margin: 0.5em 0;
+}
 #logonArea{
     width: 80%;
     margin: 5% auto;
