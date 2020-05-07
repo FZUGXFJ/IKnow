@@ -3,6 +3,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.HtmlUtil;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,8 +72,7 @@ public class QuestionServiceImpl implements QuestionService{
         question.setIsDelete((byte)0);
         question.setIsAnonymous(isAnonymous);
 
-        Integer x=questionDAO.add(question);
-        return  x;
+        return questionDAO.add(question);
     }
 
     final static private int MAP_NUM = 20;
@@ -244,7 +244,7 @@ public class QuestionServiceImpl implements QuestionService{
             //所有设置
             questionAnswerMap.put("answerId",answer.getId());
             //回答
-            questionAnswerMap.put("answerView",answer.getContent());
+            questionAnswerMap.put("answerView", HtmlUtil.changeImgTag(answer.getContent()));
             questionAnswerMap.put("answerApprove",answer.getApprovalCount());
             //回答评论数
             questionAnswerMap.put("answerComment",commentDAO.getCount(answer.getId()));
