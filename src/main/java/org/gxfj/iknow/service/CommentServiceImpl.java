@@ -165,8 +165,13 @@ public class CommentServiceImpl implements CommentService {
         User replyUser = reply.getUserByUserId();
         User targetUser = reply.getUserByTargetUserId();
         Map<String, Object> replyMap = new HashMap<>(MAP_NUM);
-        boolean isAnonymous1 = question.getIsAnonymous() == 1;//题主匿名
-        boolean isAnonymous2 = answer.getIsAnonymous() == 1;//回答者匿名
+        //回复者
+        boolean isAnonymous1 = (questionOwner.getId().equals(replyUser.getId()) && question.getIsAnonymous() == 1)
+                ||(answerOwner.getId().equals(replyUser.getId()) && answer.getIsAnonymous() == 1);
+        //回复对象
+        boolean isAnonymous2 = (questionOwner.getId().equals(targetUser.getId()) && question.getIsAnonymous() == 1)
+                ||(answerOwner.getId().equals(targetUser.getId()) && answer.getIsAnonymous() == 1);
+
         if(isAnonymous1){
             replyMap.put("name", "匿名用户");
             replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
