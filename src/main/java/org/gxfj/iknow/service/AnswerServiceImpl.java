@@ -2,7 +2,9 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.HtmlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -29,6 +31,7 @@ public class AnswerServiceImpl implements AnswerService{
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
     final static private int QUESTION_STATE_SOLVE = 2;
+    final static private int ANONYMOUS = 1;
     @Override
     public String getQuestiontitle(Integer questionId) {
         Question question = questionDAO.getNotDelete(questionId);
@@ -270,7 +273,9 @@ public class AnswerServiceImpl implements AnswerService{
             recommend.put("questionId",question.getId());
             recommend.put("questionTitle",question.getTitle());
             recommend.put("answererId",user.getId());
-            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1);
+            //判断答主是否匿名
+//            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1) ;
+            boolean isAnonymous = (answer.getIsAnonymous() == ANONYMOUS);
             if(isAnonymous) {
                 recommend.put("answererHead","<img src='../head/0.jpg' width='100%' height='100%'" +
                         " style='border-radius: 100%' alt=''>");
@@ -285,7 +290,8 @@ public class AnswerServiceImpl implements AnswerService{
                 recommend.put("answererBadge",user.getBadgeNum());
             }
             recommend.put("answerId",answer.getId());
-            recommend.put("content",answer.getContent());
+            //使用HtmlUtil工具类，将图片转换掉
+            recommend.put("content", HtmlUtil.changeImgTag(answer.getContent()));
             recommend.put("approveNum",answer.getApprovalCount());
             recommend.put("commentNum",commentDAO.getCount(answer.getId()));
             Answer au=question.getAnswerByAdoptId();
@@ -308,5 +314,39 @@ public class AnswerServiceImpl implements AnswerService{
      */
     private List<Answer> selectRecommendAnswer(Integer count) {
         return answerDAO.list(0,count);
+    }
+
+    private final static int BIG_HASH_MAP_NUM = 655535;
+    //根据多少天的浏览记录来生成推荐
+    private final static int RECOMMENT_BY_DAYS = 3;
+
+    @Autowired
+    QuestionTypeDAO questionTypeDAO;
+    @Autowired
+    BrowsingHistoryDAO browsingHistoryDAO;
+
+    //存储所有用户的推荐回答表
+    private Map<Integer, Object> recommentAnswerMap;
+
+
+    /**
+     * 推荐问题，计划每十五分钟执行一次，更新所有用户的推荐问题表
+     */
+    @Scheduled(cron = "0/5 * * * * *")
+    private void createRecommendAnswer() {
+        if (recommentAnswerMap == null) {
+            recommentAnswerMap = new HashMap<>(BIG_HASH_MAP_NUM);
+        } else {
+            recommentAnswerMap.clear();
+        }
+
+        List<Questiontype> questiontypeList = questionTypeDAO.list();
+
+        List<Browsinghistory> browsinghistoryList = browsingHistoryDAO.listInLastDay(RECOMMENT_BY_DAYS);
+
+        //TODO: 完成剩下的推荐算法
+
+
+        System.out.println("定时器");
     }
 }
