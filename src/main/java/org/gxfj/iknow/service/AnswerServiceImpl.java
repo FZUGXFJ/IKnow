@@ -332,7 +332,7 @@ public class AnswerServiceImpl implements AnswerService{
     /**
      * 推荐问题，计划每十五分钟执行一次，更新所有用户的推荐问题表
      */
-    @Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0 0 0 0/1 * *")
     private void createRecommendAnswer() {
         if (recommentAnswerMap == null) {
             recommentAnswerMap = new HashMap<>(BIG_HASH_MAP_NUM);
