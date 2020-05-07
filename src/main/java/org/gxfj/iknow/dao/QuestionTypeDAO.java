@@ -2,6 +2,8 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Questiontype;
 
+import java.util.List;
+
 /**
  * @author qmbx
  */
@@ -16,5 +18,11 @@ public interface QuestionTypeDAO extends BaseDAO<Questiontype>{
      * @return 没有返回null
      */
     Questiontype get(Integer categoryTypeId, Integer subjectTypeId, Integer majorTypeId);
+
+    /**
+     * 列出所有的QuestionType
+     * @return 用List存储所有的QuestionType对象
+     */
+    List<Questiontype> list();
 
 }

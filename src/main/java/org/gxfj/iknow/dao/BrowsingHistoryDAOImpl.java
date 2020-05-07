@@ -7,6 +7,9 @@ import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Repository("browsingHistoryDAO")
@@ -48,4 +51,14 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
         return ((Long)query.setInteger(0,questionId).uniqueResult()).intValue();
     }
 
+    @Override
+    public List<Browsinghistory> listInLastDay(Integer day) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar=Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -day);
+        String hql = "FROM Browsinghistory as b WHERE b.date >= ?";
+        Query query = getSession().createQuery(hql);
+        System.out.println(simpleDateFormat.format(calendar.getTime()));
+        return query.setParameter(0, calendar.getTime()).list();
+    }
 }
