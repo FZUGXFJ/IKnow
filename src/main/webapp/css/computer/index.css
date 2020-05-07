@@ -1,20 +1,14 @@
 body{
-    height: 65em;
 }
 #contain{
     width: 75%;
-    height: 60%;
-    margin-left: 13%;
+    margin-left: 20%;
     margin-top: 3%;
-    position: relative;
 }
 .con1{
     width: 74%;
-    height: 100%;
     background-color: white;
     float: left;
-    position: relative;
-    overflow: hidden;
 }
 .con2{
     width: 25%;
@@ -46,7 +40,7 @@ body{
     resize: none;
 }
 #button1{
-     float: left;
+    float: left;
 }
 #button2{
     float: left;
@@ -130,5 +124,22 @@ span a{
 }
 .clear {
     clear:both;
+}
+.media{
+    background-color: cornsilk;
+    margin-bottom: 1%;
+}
+.hide{
+    background-color: cornsilk;
+    border: 0;
+}
+.dropdown{
+    margin-left: 20%;
+}
+.headPortrait{
+    border-radius: 100%;
+    overflow: hidden;
+    width: 3em;
+    height: 3em;
 }
 
