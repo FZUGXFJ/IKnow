@@ -8,9 +8,9 @@
     <link rel="stylesheet" type="text/css" href="../css/computer/Question/releaseQuetion.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
     <script type="text/javascript" src="../js/computer.js"></script>
     <script src="https://cdn.ckeditor.com/4.14.0/full/ckeditor.js"></script>
@@ -54,69 +54,278 @@
 </nav>
 <div id="contain">
     <div class="con1">
-        <form>
-            <div class="form-group guo-title-div">
-                <input type="text" class=" guo-title" id="exampleFormControlInput1"  placeholder="请输入标题">
+            <div class="form-group guo-title-div" id="postQuestion">
+                <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                    <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+                    <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <input type="text" class=" guo-title" id="questionTitle" id="questionTitle" v-model="questionTitle" placeholder="请输入标题">
             </div>
-            <!--<div class="form-group guo-text-div">&lt;!&ndash;
-                <label for="exampleFormControlTextarea1">问题详情</label>&ndash;&gt;
-                <textarea class="form-control guo-text" id="exampleFormControlTextarea1" rows="12" style="border-style: none" placeholder="请输入正文"></textarea>
-            </div>-->
-            <div class="guo-rich">
+            <div class="guo-rich" id="editor">
                 <textarea  id="richText" name="rich" placeholder="请输入正文"></textarea>
             </div>
-            <div class="selectDiv">
+            <div class="selectDivAll" id="choseClassification">
                 <div class="select">
                     <div class="selectDiv" >
-                        <select class="selectBut">
-                            <option>请选择门类</option>
-                            <option>哲学</option>
-                            <option>经济学</option>
-                            <option>法学</option>
-                            <option>工学</option>
-                            <option>文学</option>
+                        <select class="selectBut" id="categoriesType" v-model="selectedCatId" @change="categoriesTypeChange">
+                            <option disabled value="0" selected>请选择门类类别</option>
+                            <option v-for="obj in categoriesTypes" v-bind:value="obj.id">{{obj.name}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="select">
                     <div class="selectDiv" >
-                        <select class="selectBut">
-                            <option>请选择门类</option>
-                            <option>哲学</option>
-                            <option>经济学</option>
-                            <option>法学</option>
-                            <option>工学</option>
-                            <option>文学</option>
+                        <select class="selectBut" id="subjectType" v-model="selectedSubId" @change="subjectTypeChange">
+                            <option disabled value="0" selected>请选择学科类别</option>
+                            <option v-for="obj in subjectTypes" v-bind:value="obj.id">{{obj.name}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="select">
                     <div class="selectDiv" >
-                        <select class="selectBut">
-                            <option></option>
-                            <option></option>
-                            <option></option>
-                            <option></option>
-                            <option></option>
-                            <option></option>
+                        <select class="selectBut" id="majorType" v-model="selectedMajId">
+                            <option disabled value="0" selected>请选择专业类别</option>
+                            <option v-for="obj in majorTypes" v-bind:value="obj.id">{{obj.name}}</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="form-group guo-but">
-                <button type="submit" class="btn btn-primary" id="button1">发布</button>
+                <span id="release"><button class="btn btn-primary" id="button1" @click="validator">发布</button></span>
+                <span style="color: #444444;font-size: 1.5em;margin-left: 65%" id="choseAnon">
+                        <i class="fas fa-toggle-on" v-if="isAnonymous" v-on:click="turnAnonymous" style="color: aqua;"></i>
+                        <i class="fas fa-toggle-off" v-else v-on:click="turnAnonymous" style="color: aqua"></i>
+                        匿名
+                </span>
             </div>
-        </form>
     </div>
-    <script>
-        CKEDITOR.replace('rich', {
-            toolbar:
-                [
-                    ['Bold','Italic','Underline'], ['Cut','Copy','Paste'],
-                    ['Image']
-                ]
-        });
-    </script>
 </div>
+<script>
+    var cked = CKEDITOR.replace('rich', {
+        toolbar:
+            [
+                ['Bold','Italic','Underline'], ['Cut','Copy','Paste'],
+                ['Image']
+            ]
+    });
+    let postQuestion = new Vue({
+        el:"#postQuestion",
+        data:{
+            questionTitle:"",
+            alertMsg:{head:"",body:""}
+        },
+        methods:{
+            closeTips:function () {
+                $("#tips").slideUp();
+            },
+            post:function (questionTitle,questionContent,isAnonymous,categoriesType,subjectType,majorType) {
+                $.ajax({
+                    url:"../question/postQuestion.action",
+                    type:"POST",
+                    data:{
+                        questionTitle,
+                        questionContent,
+                        isAnonymous,
+                        categoriesType,
+                        subjectType,
+                        majorType
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            location.href = "question.html?questionId=" + result.questionId;
+                        }
+                        console.log("post!");
+                    },
+                    error:function (e) {
+                        alert("系统异常，请稍后重试");
+                    }
+                });
+            },
+            // validator:function () {
+            //     let questionTitle = postQuestion.questionTitle.trim();
+            //     let questionContent = editor.container.firstChild.innerHTML;
+            //     let isAnonymous = choseAnon.isAnonymous ? 1 : 0;
+            //     let categoriesType = choseClassification.selectedCatId;
+            //     let subjectType = choseClassification.selectedSubId;
+            //     let majorType = choseClassification.selectedMajId;
+            //     if (questionTitle.length <= 0) {
+            //         postQuestion.alertMsg.head = "问题标题不能为空";
+            //         postQuestion.alertMsg.body = "";
+            //         $("#alert").slideDown();
+            //     } else if (!questionTitle.endsWith("?") && !questionTitle.endsWith("？")) {
+            //         postQuestion.alertMsg.head = "问题必须以问号结尾";
+            //         postQuestion.alertMsg.body = "";
+            //         $("#alert").slideDown();
+            //     }else if (questionTitle.length >50) {
+            //         postQuestion.alertMsg.head = "问题标题不能多于50字";
+            //         postQuestion.alertMsg.body = "";
+            //         $("#alert").slideDown();
+            //     } else if (questionContent.length > 15000) {
+            //         postQuestion.alertMsg.head = "问题内容不能多于15000字";
+            //         postQuestion.alertMsg.body = "";
+            //         $("#alert").slideDown();
+            //     } else if (categoriesType === "") {
+            //         postQuestion.alertMsg.head = "门类分类不能为空";
+            //         postQuestion.alertMsg.body = "";
+            //         $("#alert").slideDown();
+            //     } else if (subjectType === "") {
+            //         postQuestion.alertMsg.head = "科目分类不能为空";
+            //         postQuestion.alertMsg.body = "";
+            //         $("#alert").slideDown();
+            //     } else if (majorType === "") {
+            //         postQuestion.alertMsg.head = "专业分类不能为空";
+            //         postQuestion.alertMsg.body = "";
+            //         $("#alert").slideDown();
+            //     } else {
+            //         postQuestion.post(questionTitle,questionContent,isAnonymous,categoriesType,subjectType,majorType);
+            //     }
+            //     console.log("validator!");
+            // },
+            closeAlert:function () {
+                $("#alert").slideUp();
+            },
+            back:function () {
+                history.go(-1);
+            }
+        },
+    });
+    let choseAnon = new Vue({
+        el:"#choseAnon",
+        data:{
+            isAnonymous:false
+        },
+        methods:{
+            turnAnonymous : function () {
+                this.isAnonymous = !this.isAnonymous && confirm("确定要匿名吗？");
+            }
+        }
+    });
+    let release = new Vue({
+        el:"#release",
+        methods:{
+            validator:function () {
+                let questionTitle = postQuestion.questionTitle.trim();
+                // let questionContent = editor.container.firstChild.innerHTML;
+                let questionContent = cked.document.getBody().getHtml();
+                let isAnonymous = choseAnon.isAnonymous ? 1 : 0;
+                let categoriesType = choseClassification.selectedCatId;
+                let subjectType = choseClassification.selectedSubId;
+                let majorType = choseClassification.selectedMajId;
+                if (questionTitle.length <= 0) {
+                    postQuestion.alertMsg.head = "问题标题不能为空";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (!questionTitle.endsWith("?") && !questionTitle.endsWith("？")) {
+                    postQuestion.alertMsg.head = "问题必须以问号结尾";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                }else if (questionTitle.length >50) {
+                    postQuestion.alertMsg.head = "问题标题不能多于50字";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (questionContent.length > 15000) {
+                    postQuestion.alertMsg.head = "问题内容不能多于15000字";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (categoriesType === "") {
+                    postQuestion.alertMsg.head = "门类分类不能为空";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (subjectType === "") {
+                    postQuestion.alertMsg.head = "科目分类不能为空";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else if (majorType === "") {
+                    postQuestion.alertMsg.head = "专业分类不能为空";
+                    postQuestion.alertMsg.body = "";
+                    $("#alert").slideDown();
+                } else {
+                    postQuestion.post(questionTitle,questionContent,isAnonymous,categoriesType,subjectType,majorType);
+                }
+                console.log("validator!");
+            },
+            closeAlert:function () {
+                $("#alert").slideUp();
+            },
+            back:function () {
+                history.go(-1);
+            }
+        },
+    })
+    let choseClassification = new Vue({
+        el:"#choseClassification",
+        data:{
+            categoriesTypes:[{
+                id:1,
+                name:"哲学",
+                subjectTypes:[{
+                    id:1,
+                    name:"哲学类",
+                    majorTypes:[{
+                        id:1,
+                        name:"哲学"
+                    },{
+                        id:2,
+                        name:"逻辑学"
+                    }
+                    ],
+                }
+                ],
+            }
+            ],
+            subjectTypes:[],
+            majorTypes:[],
+            selectedCatId:"",
+            selectedSubId:"",
+            selectedMajId:"",
+        },
+        methods:{
+            categoriesTypeChange:function () {
+                for (let i = 0;i< this.categoriesTypes.length;i++) {
+                    if (this.categoriesTypes[i].id === this.selectedCatId) {
+                        this.subjectTypes = this.categoriesTypes[i].subjectTypes;
+                    }
+                }
+            },
+            subjectTypeChange:function () {
+                for (let i = 0;i< this.subjectTypes.length;i++) {
+                    if (this.subjectTypes[i].id === this.selectedSubId) {
+                        this.majorTypes = this.subjectTypes[i].majorTypes;
+                    }
+                }
+            }
+        },
+        mounted:function () {
+            $.ajax({
+                url:"../question/questionType.action",
+                type:"POST",
+                data:{
+
+                },
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        choseClassification.categoriesTypes = result.categoriesTypes;
+                    } else if (result.resultCode === 1) {
+                        alert("请先登录后再发布提问！");
+                        window.location.href = "../user/login.html";
+                    }
+                    console.log("mounted!");
+                },
+                error:function (a,b,c) {
+                    postQuestion.alertMsg.head = "请求数据异常";
+                    postQuestion.alertMsg.body = "请稍后重试";
+                    $("#alert").slideDown();
+                    console.log(a);
+                    console.log(b);
+                    console.log(c);
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
