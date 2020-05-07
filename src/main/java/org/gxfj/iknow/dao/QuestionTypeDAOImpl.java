@@ -52,8 +52,17 @@ public class QuestionTypeDAOImpl implements QuestionTypeDAO{
         }
     }
 
+
+
     @Override
     public void update(Questiontype bean) {
         getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public List<Questiontype> list() {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Questiontype");
+        return query.list();
     }
 }

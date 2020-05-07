@@ -253,7 +253,7 @@ public class CommentServiceImpl implements CommentService {
      */
     private List<Map<String, Object>> getCommentReplyMapArray(List<Reply> replies, User questionOwner, User answerOwner,
                                                               Question question, Answer answer, User visitor) {
-        List<Map<String, Object>> replyListMap = new ArrayList<>();;
+        List<Map<String, Object>> replyListMap = new ArrayList<>();
         Map<String, Object> replyMap;
         User replyUser;
         User targetUser;
