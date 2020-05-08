@@ -1,6 +1,9 @@
 body{
     height: 1000px;
 }
+.fix{
+    position: fixed;
+}
 .navigation{
     height: 10%;
     background: aliceblue;

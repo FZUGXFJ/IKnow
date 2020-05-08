@@ -14,7 +14,7 @@
     <script type="text/javascript" src="../js/computer.js"></script>
 </head>
 <body style="background-color: aliceblue">
-<nav class="navbar navbar-expand-lg navbar-light">
+<nav class="navbar navbar-expand-lg navbar-light fix">
     <a class="navbar-brand" href="#" style="margin-left: 250PX"><img src="../img/LOGO透明%20(1).png"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -63,7 +63,7 @@
     </div>
     <div class="typeChoice">
         <div id="freeLogin" @click="useEmail=!useEmail"><a href="#" id="free">免密登录</a></div>
-        <div id="keyLogin" @click="useEmail=!useEmail"><a href="#" id="key">密码登录</a></form></div>
+        <div id="keyLogin" @click="useEmail=!useEmail"><a href="#" id="key">密码登录</a></div>
     </div>
     <div id="loginUnderline" v-if="useEmail"></div>
     <div id="loginUnderline1" v-if="!useEmail"></div>
