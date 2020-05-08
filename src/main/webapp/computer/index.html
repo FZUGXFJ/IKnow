@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>首页</title>
     <link rel="stylesheet" type="text/css" href="../css/global.css">
-    <link rel="stylesheet" type="text/css" href="../css/computer/computer.css">
     <link rel="stylesheet" type="text/css" href="../css/computer/index.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
@@ -22,105 +21,182 @@
     </script>
 </head>
 <body style="background-color: aliceblue">
-<nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="#" style="margin-left: 13%"><img src="../img/LOGO透明%20(1).png"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<div id="index">
+    <div id="homePage">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="#" style="margin-left: 13%"><img src="../img/LOGO透明%20(1).png"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active" style="margin-left: 10px">
-                <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">问答</a>
-            </li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active" style="margin-left: 10px">
+                        <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">问答</a>
+                    </li>
 
-            <!--            <li class="nav-item">-->
-            <!--                <a class="nav-link" href="#">登录</a>-->
-            <!--            </li>-->
-            <!--            <li class="nav-item">-->
-            <!--                <a class="nav-link" href="#">注册</a>-->
-            <!--            </li>-->
-        </ul>
-        <a class="navbar-brand" href="#"><img src="../img/qq.PNG"></a>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
-            <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
-        </form>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item dropdown" style="margin-left: 10PX">
-                <select class="form-control form-control-lg">
-                    <option>按题目查找</option>
-                    <option>按回答查找</option>
-                </select>
-            </li>
-        </ul>
+                    <!--            <li class="nav-item">-->
+                    <!--                <a class="nav-link" href="#">登录</a>-->
+                    <!--            </li>-->
+                    <!--            <li class="nav-item">-->
+                    <!--                <a class="nav-link" href="#">注册</a>-->
+                    <!--            </li>-->
+                </ul>
+                <div class="headPortrait" v-html="user.head" @click="userCheck"></div>
+        <!--        <a class="navbar-brand" href="#"><img src="../img/qq.PNG"></a>-->
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
+                    <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
+                </form>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown" style="margin-left: 10PX">
+                        <select class="form-control form-control-lg">
+                            <option>按题目查找</option>
+                            <option>按回答查找</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
-</nav>
 <div id="contain">
     <div class="con1">
         <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-primary" id="button1">推荐</button>
-            <button type="button" class="btn btn-light" id="button2">收藏</button>
+            <button type="button" class="btn btn-primary" id="button1" v-bind:class="{selected:recommendPage}" v-on:click="recommendPage=!recommendPage">推荐</button>
+            <button type="button" class="btn btn-light" id="button2" v-bind:class="{selected:!recommendPage}" v-on:click="recommendPage=!recommendPage">收藏</button>
         </div>
-        <div class="que1">
-            <p class="title"></p>
-            <p class="content"></p>
+        <div id="recommendPage" v-if="recommendPage">
+            <div class="media" v-for="recommend in recommends">
+<!--                <img src="../img/qq.PNG" class="align-self-start mr-3" alt="...">-->
+                <div class="headPortrait" v-html="recommend.answererHead"></div>
+                <div class="media-body">
+                    <span>{{recommend.answererName}}</span>
+                    <span class="lb">
+                        <b style="color: #12eee7">&nbsp;&nbsp;LV</b>
+                        <i>{{recommend.answererLevel}}</i>
+                    </span>
+                    <span class="lb">
+                        <i class="fas fa-award" style="color: #12eee7"></i>
+                        <i>{{recommend.answererBadge}}</i>
+                    </span>
+                    <h5 class="mt-0" @click="toQuestionPage(recommend.questionId)">{{recommend.questionTitle}}</h5>
+                    <p v-html="recommend.content"
+                       @click="toAnswerPage(recommend.questionId,recommend.answerId)
+                       width:20em; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;"></p>
+                    <span>{{recommend.approveNum}}赞同-{{recommend.commentNum}}评论</span>
+                    <span class="dropdown">
+                        <button class="hide" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">不感兴趣</a>
+                            <a class="dropdown-item" href="#">举报</a>
+                        </div>
+                    </span>
+                </div>
+            </div>
         </div>
-        <div class="que2">
-            <p class="title"></p>
-            <p class="content"></p>
+        <div style="text-align: center;font-size: 0.7em">
+            <span v-if="loading == 0">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            <span style="opacity: 0.5" v-if="loading == 1">没有更多内容</span>
         </div>
-        <div class="que3">
-            <p class="title"></p>
-            <p class="content"></p>
-        </div>
-        <div class="que4">
-            <p class="title"></p>
-            <p class="content"></p>
-        </div>
-        <nav aria-label="Page navigation example" id="page" style="float: left;margin-top: 1%">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <div class="con4">
-        <span id="pen">
-            <a href="releaseQuestion.html">
-                <i class="fas fa-feather"><h6 style="margin-top: 0.1em">提问</h6></i>
-            </a>
-        </span>
-        <span id="star">
-            <a href="#">
-                <i class="fas fa-star"><h6 style="margin-top: 0.1em">收藏</h6></i>
-            </a>
-        </span>
-    </div>
-    <div class="con2">
-        <textarea class="form-control" id="exampleFormControlTextarea2" rows="13">
-            相关介绍
-        </textarea>
-    </div>
-    <div class="con3">
-        <textarea class="form-control" id="exampleFormControlTextarea3" rows="4">
-            版权介绍
-        </textarea>
     </div>
 </div>
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover({
+            trigger: 'focus'
+        })
+    });
+    let homePage = new Vue({
+        el:"#index",
+        data:{
+            recommends:[],
+            user:{},
+            recommendPage:true,
+            pageIndex:1,
+            loading:0,
+        },
+        methods:{
+            add:function () {
+                if (this.user.id === 0) {
+                    location.href = "user/login.html";
+                } else if (this.loading === 0) {
+                    this.pageIndex = 1;
+                } else {
+                    location.href = "add.html";
+                }
+            },
+            userCheck:function () {
+                if (this.user.id === 0) {
+                    location.href = "user/login.html";
+                } else if (this.loading === 0) {
+                    this.pageIndex = 1;
+                } else {
+                    this.pageIndex = 2;
+                }
+            },
+            toQuestionPage:function (questionId) {
+                location.href = "question/question.html?questionId=" +questionId;
+            },
+            toAnswerPage:function (questionId,answerId) {
+                location.href = "answer/answer.html?questionId=" + questionId
+                    + "&answerId=" +answerId;
+            },
+            logout:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"../user/logout.action",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            history.go(0);
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            toModify:function () {
+                location.href = "user/modifyUserInf.html";
+            },
+            toReset:function () {
+                location.href = "user/resetPassword.html";
+            },
+            toRebind:function () {
+                location.href = "user/rebindEmail.html";
+            }
+        },
+        mounted:function () {
+            $.ajax({
+                url:"../answer/recommendAnswer.action",
+                type:"POST",
+                data:{},
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        homePage.recommends = result.recommends;
+                        homePage.user = result.user;
+                        homePage.loading = 1;
+                    }
+                },
+                error:function (request,status,error) {
+                    alert("系统异常！");
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
