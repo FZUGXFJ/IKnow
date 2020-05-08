@@ -13,4 +13,8 @@ public class HtmlUtil {
         Matcher matcher = Pattern.compile(regex).matcher(originHtml);
         return matcher.replaceAll("[图片]");
     }
+
+    public static String Html2Text(String originHtml) {
+        return null;
+    }
 }

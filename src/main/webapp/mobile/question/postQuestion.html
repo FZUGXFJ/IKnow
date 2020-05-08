@@ -205,24 +205,7 @@
     let choseClassification = new Vue({
         el:"#choseClassification",
         data:{
-            categoriesTypes:[{
-                    id:1,
-                    name:"哲学",
-                    subjectTypes:[{
-                            id:1,
-                            name:"哲学类",
-                            majorTypes:[{
-                                    id:1,
-                                    name:"哲学"
-                                },{
-                                    id:2,
-                                    name:"逻辑学"
-                                }
-                            ],
-                        }
-                    ],
-                }
-            ],
+            categoriesTypes:[],
             subjectTypes:[],
             majorTypes:[],
             selectedCatId:"",
@@ -251,7 +234,7 @@
                 type:"POST",
                 data:{
 
-                },
+                 },
                 dataType:"json",
                 success:function (result) {
                     if (result.resultCode === 0) {
