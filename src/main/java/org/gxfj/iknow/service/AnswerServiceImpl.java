@@ -359,13 +359,11 @@ public class AnswerServiceImpl implements AnswerService{
      * TODO: 现在采用的算法是基于物品的协同过滤算法，但评价采用的是回答浏览次数，出现冷启动。
      * @return
      */
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0/10 * * * * *")
     @Override
     public void createRecommendAnswer() {
         if (recommentAnswerMap == null) {
             recommentAnswerMap = new HashMap<>(BIG_HASH_MAP_NUM);
-        } else {
-            recommentAnswerMap.clear();
         }
 
         //获得所有的回答
