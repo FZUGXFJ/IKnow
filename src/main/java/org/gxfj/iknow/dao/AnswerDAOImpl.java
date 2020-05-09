@@ -63,6 +63,20 @@ public class AnswerDAOImpl implements AnswerDAO{
     }
 
     @Override
+    public List<Answer> list(Integer count) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Answer where isDelete = 0 ORDER BY date DESC");
+        return query.setMaxResults(count).list();
+    }
+
+    @Override
+    public List<Answer> list() {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Answer where isDelete = 0");
+        return query.list();
+    }
+
+    @Override
     public Answer getNotDelete(Integer id) {
         Answer answer = null;
         Session session = sessionFactory.getCurrentSession();

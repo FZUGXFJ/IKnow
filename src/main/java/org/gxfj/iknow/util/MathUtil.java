@@ -17,7 +17,7 @@ public class MathUtil {
      * @param mapY
      * @return
      */
-    private double caculatePearson(Map<BigInteger, Double> mapX, Map<BigInteger, Double> mapY) {
+    public static double caculatePearson(Map<BigInteger, Double> mapX, Map<BigInteger, Double> mapY) {
         // (sum(X*Y) - (sum(X)*sum(Y)/N))/sqr((sum(pow(X))-(pow(sum(X))/N)) * ((sum(pow(Y))-(pow(sum(Y))/N))))
         double sumXY = 0d;
         double sumX = 0d;

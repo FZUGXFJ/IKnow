@@ -2,6 +2,7 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Level;
 import org.gxfj.iknow.pojo.User;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import java.util.List;
 @Repository("userDAO")
 public class UserDAOImpl implements UserDAO {
 
+    private final static int ACTIVATE_STATE = 1;
+    private final static int FORBIDDEN_WORD_STATE = 3;
     private HibernateTemplate ht = null;
 
     @Autowired
@@ -87,5 +90,13 @@ public class UserDAOImpl implements UserDAO {
         User user = new User();
         user.setEmail(email);
         return getHibernateTemplate().findByExample(user).size() != 0;
+    }
+
+    @Override
+    public List<Integer> getActiveUserId() {
+        String hql = "SELECT u.id FROM User AS u WHERE (stateID = ?) or (stateID = ?)";
+        Query query = getSession().createQuery(hql);
+
+        return query.setInteger(0,ACTIVATE_STATE).setInteger(1,FORBIDDEN_WORD_STATE).list();
     }
 }

@@ -3,10 +3,12 @@ package org.gxfj.iknow.service;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.HtmlUtil;
+import org.gxfj.iknow.util.MathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -261,8 +263,8 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> getRecommendAnswer(Integer count) {
-        List<Answer> answers = selectRecommendAnswer(count);
+    public Map<String, Object> getRecommendAnswer(Integer userId, Integer count) {
+        List<Answer> answers = selectRecommendAnswer(userId, count);
         List<Map<String,Object>> recommendList = new ArrayList<>();
         Map<String,Object> recommend;
         for(Answer answer:answers){
@@ -312,13 +314,36 @@ public class AnswerServiceImpl implements AnswerService{
      * @param count 推荐问题的条数
      * @return 推荐的问题，没有则内容为空
      */
-    private List<Answer> selectRecommendAnswer(Integer count) {
-        return answerDAO.list(0,count);
+    private List<Answer> selectRecommendAnswer(Integer userId, Integer count) {
+        List<Answer> result = new ArrayList<>();
+        if (userId == null) {
+            // 对于未登录的浏览者，依旧采用推荐最先的回答
+            return answerDAO.list(count);
+        } else {
+            List<Answer> answerList = (List<Answer>) recommentAnswerMap.get(userId);
+            for (int i = 0; i < count && answerList.size() != 0; i++) {
+                result.add(answerList.get(0));
+                answerList.remove(0);
+            }
+        }
+        return result;
     }
 
     private final static int BIG_HASH_MAP_NUM = 655535;
-    //根据多少天的浏览记录来生成推荐
-    private final static int RECOMMENT_BY_DAYS = 3;
+    private final static int SMALL_HASH_MAP_NUM = 100;
+    /**
+     * 根据多少天的浏览记录来生成推荐
+     */
+    private final static int RECOMMENT_BY_DAYS = 60;
+    /**
+     * 预生成多少个推荐回答
+     */
+
+    private final static int PRE_RECOMMENT_NUM = 100;
+    /**
+     * 推荐需要满足相关性下限
+     */
+    private final static double CORRELATION_LOWER_LIMIT = 0.5;
 
     @Autowired
     QuestionTypeDAO questionTypeDAO;
@@ -330,23 +355,196 @@ public class AnswerServiceImpl implements AnswerService{
 
 
     /**
-     * 推荐问题，计划每十五分钟执行一次，更新所有用户的推荐问题表
+     * 推荐问题，计划每十分钟执行一次，更新所有用户的推荐问题表
+     * TODO: 现在采用的算法是基于物品的协同过滤算法，但评价采用的是回答浏览次数，出现冷启动。
+     * @return
      */
-    @Scheduled(cron = "0 0 0 0/1 * *")
-    private void createRecommendAnswer() {
+    @Scheduled(cron = "0 0/1 * * * *")
+    @Override
+    public void createRecommendAnswer() {
         if (recommentAnswerMap == null) {
             recommentAnswerMap = new HashMap<>(BIG_HASH_MAP_NUM);
         } else {
             recommentAnswerMap.clear();
         }
 
-        List<Questiontype> questiontypeList = questionTypeDAO.list();
-
+        //获得所有的回答
+        List<Answer> answerList = answerDAO.list();
+        int answersLength = answerList.size();
+        //获得所有的非封禁用户uid
+        List<Integer> userIdList = userDAO.getActiveUserId();
+        int usersLength = userIdList.size();
+        //获得所有用户的近RECOMMENT_BY_DAYS天的浏览记录
         List<Browsinghistory> browsinghistoryList = browsingHistoryDAO.listInLastDay(RECOMMENT_BY_DAYS);
+        //记录用户最后的回答
+        Map<Integer, Answer> lastBrowsinghistoryMap = new HashMap<>(BIG_HASH_MAP_NUM);
 
-        //TODO: 完成剩下的推荐算法
+        //将回答的id应映射到answerList的下标
+        Map<Integer, Integer> answerMap = new HashMap<>(BIG_HASH_MAP_NUM);
+        //将用户的uid映射到userIdList下标
+        Map<Integer, Integer> userIdMap = new HashMap<>(BIG_HASH_MAP_NUM);
+        //初始化映射
+        for (int i = 0; i < answersLength; i++) {
+            answerMap.put(answerList.get(i).getId(), i);
+        }
+        for (int i = 0; i < usersLength; i++) {
+            userIdMap.put(userIdList.get(i), i);
+        }
 
+        //List存储回答浏览记录的表
+        List<List<Integer>> browsingHistoryStatistic = new ArrayList<>();
+        //初始化
+        for (int i = 0; i < answersLength; i++) {
+            List<Integer> row = new ArrayList<>();
+            for (int j = 0; j < usersLength; j++) {
+                row.add(0);
+            }
+            browsingHistoryStatistic.add(row);
+        }
 
-        System.out.println("定时器");
+        //构建浏览表，行是回答id，列是用户id
+        for (Browsinghistory browsinghistory : browsinghistoryList) {
+            //通过浏览记录获得浏览的问题的问题分类id
+            Integer questiontypeId = browsinghistory.getQuestionByQuestionId().getQuestiontypeByTypeId().getId();
+            //通过浏览记录获得浏览的回答的id
+            Integer answerId = browsinghistory.getAnswerByAnswerId().getId();
+            //通过浏览记录获得浏览的用户的uid
+            Integer userId = browsinghistory.getUserByUserId().getId();
+            //将用户uid转化为List中的下标
+            Integer userIdListPoint = userIdMap.get(userId);
+            //获得回答对应的行的List
+            List<Integer> row = browsingHistoryStatistic.get(answerMap.get(answerId));
+            //将行中用户的浏览记录+1
+            row.set(userIdListPoint, row.get(userIdListPoint) + 1);
+            lastBrowsinghistoryMap.put(userId, browsinghistory.getAnswerByAnswerId());
+        }
+
+        //DEBUG：查看构建的浏览表
+        int indextmp = 0;
+        String tmp_str = "    ";
+        for (Integer userid : userIdList) {
+            tmp_str += userid + ",";
+        }
+        System.out.println(tmp_str);
+        for (List<Integer> list : browsingHistoryStatistic) {
+            String strout = answerList.get(indextmp).getId() + " : ";
+
+            for (Integer integer : list) {
+                strout += integer + ",";
+            }
+            System.out.println(strout);
+            indextmp++;
+        }
+
+        //2) 计算回答与回答之间的pearson系数
+        double pearsonMatrix[][] = getPearsonMatrix(answersLength,usersLength,browsingHistoryStatistic);
+
+        //DEBUG：查看计算完的Pearson矩阵
+        System.out.println("\n\n");
+        for (int i = 0; i < answersLength; i++) {
+            String str_tmp = "";
+            for (int j = 0; j < answersLength; j++) {
+                str_tmp += pearsonMatrix[i][j] + ", ";
+            }
+            System.out.println(str_tmp);
+        }
+
+        generateRecommendAnswerTable(usersLength,answersLength,userIdList,answerList,pearsonMatrix,
+                browsingHistoryStatistic);
+
+        //通知完成推荐更新
+        System.out.println("推荐表更新完毕");
     }
+
+    /**
+     * 计算问题之间的Pearson
+     * @param answersLength 问题的个数，即矩阵的长度
+     * @param usersLength 用户的个数
+     * @param browsingHistoryStatistic 问题被用户浏览的记录表，问题为行，用户为列
+     * @return 问题的Pearson矩阵
+     */
+    private double[][] getPearsonMatrix(int answersLength, int usersLength,
+                                        List<List<Integer>> browsingHistoryStatistic) {
+        double[][] pearsonMatrix = new double[answersLength][answersLength];
+        Map<BigInteger, Double> mapX = new HashMap<>(BIG_HASH_MAP_NUM);
+        Map<BigInteger, Double> mapY = new HashMap<>(BIG_HASH_MAP_NUM);
+        //初始化为0
+        for (int i = 0; i < usersLength; i++) {
+            mapX.put(BigInteger.valueOf(i),0.0);
+            mapY.put(BigInteger.valueOf(i), 0.0);
+        }
+        //两重for循环，计算整个矩阵
+        for (int i = 0; i < answersLength; i++) {
+            for (int j = 0; j < answersLength; j++) {
+                if (i < j) {
+                    for (int k = 0; k < usersLength; k++) {
+
+                        mapX.put(BigInteger.valueOf(k), Double.valueOf(browsingHistoryStatistic.get(i).get(k)));
+                    }
+                    for (int k = 0; k < usersLength; k++) {
+                        mapY.put(BigInteger.valueOf(k), Double.valueOf(browsingHistoryStatistic.get(j).get(k)));
+                    }
+                    pearsonMatrix[i][j] = MathUtil.caculatePearson(mapX, mapY);
+                } else if (i == j) {
+                    //自己与自己的为0
+                    pearsonMatrix[i][j] = 0;
+                } else if (i > j) {
+                    //计算结果上i与j的Pearson跟j与i的Pearson相同
+                    pearsonMatrix[i][j] = pearsonMatrix[j][i];
+                }
+            }
+        }
+        return pearsonMatrix;
+    }
+
+    private void generateRecommendAnswerTable(int usersLength, int answersLength, List<Integer> userIdList,
+                                              List<Answer> answerList, double [][] pearsonMatrix,
+                                              List<List<Integer>> browsingHistoryStatistic) {
+        //TODO: 当前推荐仅根据最多浏览的一个回答推荐，后面可以修改成多个不同的回答来推荐。
+        //对所有用户，根据浏览记录顺序推荐
+        for (int i = 0; i < usersLength; i++) {
+            Integer userId = userIdList.get(i);
+
+            //找出浏览最多的回答，根据改回答进行推荐，不足 PRE_RECOMMENT_NUM 个数时，推荐最新的回答
+            int max = 0;
+            for (int j = 1; j < answersLength; j++) {
+                if (browsingHistoryStatistic.get(j).get(i) > browsingHistoryStatistic.get(max).get(i)) {
+                    max = j;
+                }
+            }
+
+            //已推荐数
+            int recommendnum = 0;
+            List<Answer> recommendList = new ArrayList<>();
+            if (browsingHistoryStatistic.get(max).get(i) != 0) {
+                //对所有的问题与用户浏览最多的回答进行计算，并推荐
+                for (int j = 0; j < answersLength; j++) {
+                    //这里采用了加权总分大于一定值就推荐。改进：相关系数前 PRE_RECOMMENT_NUM 个推荐
+                    if (browsingHistoryStatistic.get(j).get(i) == 0 &&
+                            pearsonMatrix[max][j] > CORRELATION_LOWER_LIMIT && recommendnum < PRE_RECOMMENT_NUM) {
+                        recommendList.add(answerList.get(j));
+                        recommendnum++;
+                    }
+                }
+            }
+
+            List<Answer> lastNewAnswer = answerDAO.list(PRE_RECOMMENT_NUM - recommendnum);
+            for (Answer answer : lastNewAnswer) {
+                recommendList.add(answer);
+            }
+            recommentAnswerMap.put(userId, recommendList);
+        }
+
+        //DEBUG：查看生成的推荐表
+        for (Map.Entry entry : recommentAnswerMap.entrySet()) {
+            String tmp_str2 = entry.getKey().toString() + " : " ;
+            List<Answer> list = (List)entry.getValue();
+
+            for (Answer answer : list) {
+                tmp_str2 += answer.getId() + ",";
+            }
+            System.out.println(tmp_str2);
+        }
+    }
+
 }

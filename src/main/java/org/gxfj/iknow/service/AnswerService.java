@@ -1,10 +1,7 @@
 package org.gxfj.iknow.service;
 
-import org.gxfj.iknow.pojo.Answer;
-import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,5 +54,8 @@ public interface AnswerService {
      * @param count 推荐数
      * @return 问题表
      */
-    public Map<String,Object> getRecommendAnswer(Integer count);
+    public Map<String,Object> getRecommendAnswer(Integer userId, Integer count);
+
+
+    void createRecommendAnswer();
 }

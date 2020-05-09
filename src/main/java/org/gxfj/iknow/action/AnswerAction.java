@@ -26,6 +26,7 @@ public class AnswerAction {
     private InputStream inputStream;
     private Integer answerId;
 
+    private final String SESSION_USER = "user";
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
     private final int MISS_QUESTIONID = 2;
@@ -41,7 +42,7 @@ public class AnswerAction {
     public String questionTitle(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get("user");
+        User user = (User)session.get(SESSION_USER);
         if(user == null){
             response.put("resultCode" , UN_LOGIN);
         }
@@ -60,7 +61,7 @@ public class AnswerAction {
     public String postAnswer() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get("user");
+        User user = (User)session.get(SESSION_USER);
         if(user == null){
             response.put("resultCode" , UN_LOGIN);
         }
@@ -81,7 +82,7 @@ public class AnswerAction {
 
     public String viewAnswer() {
         Map<String,Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get("user");
+        User user = (User) session.get(SESSION_USER);
         Map<String,Object> response = answerService.getRecommendAnswer(questionId,answerId,user);
         response.put("resultCode",SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -92,7 +93,7 @@ public class AnswerAction {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(MAP_NUM);
         //从Session中获得当前用户对象
-        User user = (User) session.get("user");
+        User user = (User) session.get(SESSION_USER);
 
 
         if (user != null) {
@@ -115,7 +116,7 @@ public class AnswerAction {
     public String cancelAdopt(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(MAP_NUM);
-        User user = (User) session.get("user");
+        User user = (User) session.get(SESSION_USER);
 
         if (user != null) {
             if (answerService.cancelAdopt(user, answerId)) {
@@ -134,9 +135,13 @@ public class AnswerAction {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
         Map<String,Object> cUser=new HashMap<>(2);
-        response=answerService.getRecommendAnswer(20);
+        User user = (User) session.get(SESSION_USER);
+        if (user != null) {
+            response=answerService.getRecommendAnswer(user.getId(),20);
+        } else {
+            response=answerService.getRecommendAnswer(null,20);
+        }
         response.put("resultCode",SUCCESS);
-        User user=(User)session.get("user");
         if (user != null) {
             cUser.put("id",user.getId());
             cUser.put("head","<img src='../head/" + user.getHead() +

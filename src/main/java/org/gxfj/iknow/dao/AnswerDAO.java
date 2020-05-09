@@ -24,12 +24,25 @@ public interface AnswerDAO extends BaseDAO<Answer>{
     List<Answer> listByQuestionId(int questionId,int start,int length);
 
     /**
-     * 得到未删除的问题列表
+     * 得到未删除的回答列表
      * @param count 数量
      * @param start 开始元素
-     * @return 问题列表
+     * @return 回答列表
      */
     List<Answer> list(Integer start,Integer count);
+
+    /**
+     * 得到最新的未删除的回答
+     * @param count 回答个数
+     * @return 回答列表
+     */
+    List<Answer> list(Integer count);
+
+    /**
+     * 获得所有的回答列表
+     * @return 回答列表
+     */
+    List<Answer> list();
 
     /**
      * 在未删除的数据中查找记录

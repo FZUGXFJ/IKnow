@@ -2,6 +2,8 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.User;
 
+import java.util.List;
+
 public interface UserDAO extends BaseDAO<User>{
     /**
      * 根据用户名获取用户
@@ -37,4 +39,10 @@ public interface UserDAO extends BaseDAO<User>{
      * @return  是否存在
      */
     boolean hasUserEmail(String email);
+
+    /**
+     * 获得所有非封禁用户的uid
+     * @return 非封禁用户的uid的列表
+     */
+    List<Integer> getActiveUserId();
 }
