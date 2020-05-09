@@ -33,12 +33,14 @@ public class MailUtil {
         Properties props = new Properties();
         //设置发送的协议
         //普通SMTP
-        props.setProperty("mail.transport.protocol", "SMTP");
+//        props.setProperty("mail.transport.protocol", "SMTP");
         //设置发送邮件的服务器
-//        props.setProperty("mail.host", "localhost");//本地
-//        props.setProperty("mail.host", "smtp.qq.com"); //// 设置QQ邮件服务器
+        //本地
+//        props.setProperty("mail.host", "localhost");
+        //// 设置QQ邮件服务器
+        props.setProperty("mail.host", "smtp.qq.com");
         //163邮箱
-        props.setProperty("mail.host", "smtp.163.com");
+//        props.setProperty("mail.host", "smtp.163.com");
         // 指定验证为true
         props.setProperty("mail.smtp.auth", "true");
 
