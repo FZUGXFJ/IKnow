@@ -129,7 +129,7 @@
                             login.alertMsg.body = "";
                             al.addClass("alert-success");
                             al.slideDown();
-                            location.href = "../index.html";
+                            history.go(-1);
                         } else if (result.response === 1) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "邮箱已修改，请重新发送验证码";
@@ -171,7 +171,6 @@
                             al.addClass("alert-success");
                             al.slideDown();
                             history.go(-1);
-                            location.href = "../index.html";
                         } else if (result.response === 1) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "邮箱或密码错误";
