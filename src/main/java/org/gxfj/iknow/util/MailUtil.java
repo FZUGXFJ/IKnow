@@ -67,6 +67,8 @@ public class MailUtil {
         message.setRecipient(RecipientType.TO, new InternetAddress(email));
         message.addRecipients(MimeMessage.RecipientType.CC, InternetAddress.parse(userName));
 
+        //设置邮箱标题
+        message.setSubject(subject);
         //设置邮件内容
         message.setContent(content, "text/html;charset=utf-8");
 
