@@ -1,0 +1,38 @@
+#contain{
+    width: 60%;
+    height: 100%;
+    margin-left: 20%;
+    margin-top: 3%;
+    border-style: none;
+
+
+}
+.con1{
+    width: 100%;
+    height: 80%;
+    background-color: white;
+    border-style: none;
+}
+.page{
+    margin-left: 5%;
+}
+.con2{
+    width: 100%;
+    height: 10%;
+    background-color: white;
+    border-style: none;
+}
+.accuseInfo{
+    padding-left: 5%;
+    padding-right: 5%;
+    height: 5%;
+    padding-top: 3%;
+}
+.deal {
+    background-color: #6affe1;
+    color: white;
+    border-radius: 10px;
+    border-style: none;
+    height: 100%;
+    width: 80%;
+}
