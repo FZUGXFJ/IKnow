@@ -423,14 +423,14 @@ public class AnswerServiceImpl implements AnswerService{
         for (Integer userid : userIdList) {
             tmp_str += userid + ",";
         }
-        System.out.println(tmp_str);
+//        System.out.println(tmp_str);
         for (List<Integer> list : browsingHistoryStatistic) {
             String strout = answerList.get(indextmp).getId() + " : ";
 
             for (Integer integer : list) {
                 strout += integer + ",";
             }
-            System.out.println(strout);
+//            System.out.println(strout);
             indextmp++;
         }
 
@@ -438,20 +438,20 @@ public class AnswerServiceImpl implements AnswerService{
         double pearsonMatrix[][] = getPearsonMatrix(answersLength,usersLength,browsingHistoryStatistic);
 
         //DEBUG：查看计算完的Pearson矩阵
-        System.out.println("\n\n");
+//        System.out.println("\n\n");
         for (int i = 0; i < answersLength; i++) {
             String str_tmp = "";
             for (int j = 0; j < answersLength; j++) {
                 str_tmp += pearsonMatrix[i][j] + ", ";
             }
-            System.out.println(str_tmp);
+//            System.out.println(str_tmp);
         }
 
         generateRecommendAnswerTable(usersLength,answersLength,userIdList,answerList,pearsonMatrix,
                 browsingHistoryStatistic);
 
         //通知完成推荐更新
-        System.out.println("推荐表更新完毕");
+//        System.out.println("推荐表更新完毕");
     }
 
     /**
@@ -541,7 +541,7 @@ public class AnswerServiceImpl implements AnswerService{
             for (Answer answer : list) {
                 tmp_str2 += answer.getId() + ",";
             }
-            System.out.println(tmp_str2);
+//            System.out.println(tmp_str2);
         }
     }
 

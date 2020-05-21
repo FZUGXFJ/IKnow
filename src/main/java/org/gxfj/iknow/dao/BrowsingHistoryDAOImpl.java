@@ -58,7 +58,7 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
         calendar.add(Calendar.DAY_OF_MONTH, -day);
         String hql = "FROM Browsinghistory as b WHERE b.date >= ?";
         Query query = getSession().createQuery(hql);
-        System.out.println(simpleDateFormat.format(calendar.getTime()));
+//        System.out.println(simpleDateFormat.format(calendar.getTime()));
         return query.setParameter(0, calendar.getTime()).list();
     }
 }

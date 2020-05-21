@@ -2,6 +2,7 @@ package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
+import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.UserService;
 import org.gxfj.iknow.util.MailUtil;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.Cookie;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +31,7 @@ public class UserAction {
     String head;
     String gender;
     String introduction;
-    boolean remember;
+    Integer remember;
     String newPassword;
     String newEmail;
     @Autowired
@@ -312,5 +314,13 @@ public class UserAction {
 
     public void setNewEmail(String newEmail) {
         this.newEmail = newEmail;
+    }
+
+    public Integer getRemember() {
+        return remember;
+    }
+
+    public void setRemember(Integer remember) {
+        this.remember = remember;
     }
 }

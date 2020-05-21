@@ -70,7 +70,7 @@
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut expression="execution(* org.gxfj.iknow.dao..*.*(..))" id="txPointcut"/>
+        <aop:pointcut expression="execution(* org.gxfj.iknow.service..*.*(..))" id="txPointcut"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 
