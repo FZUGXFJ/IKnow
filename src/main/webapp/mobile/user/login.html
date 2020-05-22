@@ -306,10 +306,10 @@
             }
         },
         mounted:function () {
-            let boot = 0;
+            let boot = 1;
             let loc = location.href;
             loc = loc.replace("?","&").split("&")[1];
-            if (loc.indexOf("boot=")!==-1) {
+            if (!loc === undefined && loc.indexOf("boot=")!==-1) {
                 let bootStr = loc.replace("boot=","");
                 boot = parseInt(bootStr);
             }

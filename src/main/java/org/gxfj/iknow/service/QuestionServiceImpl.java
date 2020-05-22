@@ -279,18 +279,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public void collectProblem(User user,Integer questionId){
-        Collectionproblem collectionproblem = new Collectionproblem();
-        collectionproblem.setDate(new Date());
-        collectionproblem.setQuestionByQuestionId(questionDAO.getNotDelete(questionId));
-        collectionproblem.setUserByUserId(user);
-        collectionProblemDAO.add(collectionproblem);
+    public User get(Integer questionId) {
+        return questionDAO.get(questionId).getUserByUserId();
     }
-
-    @Override
-    public void cancelCollect(User user,Integer questionId){
-        Collectionproblem collectionproblem = collectionProblemDAO.getCollectionQuestion(user.getId(),questionId);
-        collectionProblemDAO.delete(collectionproblem);
-    }
-
 }

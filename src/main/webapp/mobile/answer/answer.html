@@ -111,14 +111,16 @@
     <div id="footer" v-if="load">
         <table>
             <td style="text-align: left;width: 45%">
-                <div style="border-radius: 2em;border: #acacac solid 0.05em;padding: 0.1em 0.5em;background-color: white">
-                    <span><i class="fas fa-thumbs-up" style="color: #acacac"></i>&nbsp;赞同</span>
-                    <span><i class="fas fa-thumbs-down" style="color:#acacac;"></i>&nbsp;反对</span>
+                <div style="padding: 0.1em 0.5em;background-color: white">
+                    <span><i class="fas fa-angle-up" style="color: #acacac"></i>&nbsp;赞同</span>
+                    <span><i class="fas fa-angle-down" style="color:#acacac;"></i>&nbsp;反对</span>
                     |&nbsp;{{answer.approveNum}}
                 </div>
+                <div></div>
+                <div></div>
             </td>
             <td style="width: 55%;text-align: right">
-                <span><i class="fas fa-comment-dots" style="color: #12eee7"></i>评论{{answer.commentNum}}</span>
+                <span><i class="fas fa-comment-dots" style="color: rgba(45,8,238,0.86)"></i>&nbsp;评论{{answer.commentNum}}</span>
             </td>
         </table>
     </div>
@@ -310,6 +312,16 @@
             },
             backToQuestion:function () {
                 location.href = "../question/question.html?questionId=" + answer.questionId;
+            },
+            oppose:function () {
+                $.ajax({
+
+                });
+            },
+            approve:function () {
+                $.ajax({
+
+                });
             }
         },
         mounted:function () {

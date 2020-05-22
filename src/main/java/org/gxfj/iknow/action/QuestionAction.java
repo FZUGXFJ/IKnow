@@ -9,10 +9,14 @@ import org.gxfj.iknow.dao.UserDAO;
 import org.gxfj.iknow.pojo.Collectionproblem;
 import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.service.CollectionService;
 import org.gxfj.iknow.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -36,13 +40,9 @@ public class QuestionAction {
     private Byte isAnonymous;
     private InputStream inputStream;
     @Autowired
-    QuestionService questionService;
+    private QuestionService questionService;
     @Autowired
-    QuestionDAO questionDAO;
-    @Autowired
-    CollectionProblemDAO collectionProblemDAO;
-    @Autowired
-    UserDAO userDAO;
+    private CollectionService collectionService;
 
     private static final int QUESTION_SHOW_ANSWER_NUM = 10;
     private final int SUCCESS = 0;
@@ -105,7 +105,7 @@ public class QuestionAction {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         //题主
-        User viewUser = questionDAO.get(questionId).getUserByUserId();
+        User viewUser = questionService.get(questionId);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         response.put("question",questionService.getQuestion(user,questionId, 10));
@@ -123,7 +123,7 @@ public class QuestionAction {
     public String cancelAdopt(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
-        User viewUser = questionDAO.get(questionId).getUserByUserId();
+        User viewUser = questionService.get(questionId);
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
         if(user == null || !isQuestionUser){
@@ -142,11 +142,11 @@ public class QuestionAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
             response.put("resultCode",UN_LOGIN);
-        } else if(collectionProblemDAO.getCollectionQuestion(user.getId(),questionId) != null){
+        } else if(collectionService.getCollectionQuestion(user.getId(),questionId) != null){
             //resultCode = 2 表示已收藏无法再次收藏
             response.put("resultCode", 2);
         } else {
-            questionService.collectProblem(user,questionId);
+            collectionService.collectProblem(user,questionId);
             response.put("resultCode", SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -159,11 +159,11 @@ public class QuestionAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
             response.put("resultCode",UN_LOGIN);
-        } else if(collectionProblemDAO.getCollectionQuestion(user.getId(),questionId) == null){
+        } else if(collectionService.getCollectionQuestion(user.getId(),questionId) == null){
             //resultCode = 2 表示未收藏无法取消收藏
             response.put("resultCode", 2);
         } else {
-            questionService.cancelCollect(user,questionId);
+            collectionService.cancelCollect(user,questionId);
             response.put("resultCode", SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
