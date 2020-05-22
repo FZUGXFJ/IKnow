@@ -251,7 +251,7 @@
         methods:{
             add:function () {
                 if (this.user.id === 0) {
-                    location.href = "user/login.html";
+                    location.href = "user/login.html?boot=0";
                 } else if (this.loading === 0) {
                     this.pageIndex = 1;
                 } else {
@@ -260,7 +260,7 @@
             },
             userCheck:function () {
                 if (this.user.id === 0) {
-                    location.href = "user/login.html";
+                    location.href = "user/login.html?boot=0";
                 } else if (this.loading === 0) {
                     this.pageIndex = 1;
                 } else {

@@ -181,7 +181,7 @@
                             location.href = "../reply/reply.html?commentId=" + commentId;
                         } else if (result.resultCode === 1) {
                             if (confirm("登录后才能发送回复")) {
-                                location.href = "../user/login.html"
+                                location.href = "../user/login.html?boot=0"
                             }
                         }
                     },
@@ -228,7 +228,7 @@
                                 comment.approveNum += 1;
                             } else if (result.resultCode === 1) {
                                 if (confirm("请先登录")) {
-                                    location.href = "../user/login.html";
+                                    location.href = "../user/login.html?boot=0";
                                 }
                             }
                             allReply.noAction = false;
@@ -253,7 +253,7 @@
                                 comment.approveNum -= 1;
                             } else if (result.resultCode === 1) {
                                 if (confirm("请先登录")) {
-                                    location.href = "../user/login.html";
+                                    location.href = "../user/login.html?boot=0";
                                 }
                             }
                             allReply.noAction = false;
@@ -290,7 +290,7 @@
                                 reply.approveNum += 1;
                             } else if (result.resultCode === 1) {
                                 if (confirm("请先登录")) {
-                                    location.href = "../user/login.html";
+                                    location.href = "../user/login.html?boot=0";
                                 }
                             }
                             allReply.noAction = false;
@@ -315,7 +315,7 @@
                                 reply.approveNum -= 1;
                             } else if (result.resultCode === 1) {
                                 if (confirm("请先登录")) {
-                                    location.href = "../user/login.html";
+                                    location.href = "../user/login.html?boot=0";
                                 }
                             }
                             allReply.noAction = false;
