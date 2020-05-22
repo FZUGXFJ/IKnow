@@ -28,7 +28,8 @@ public class AnswerServiceImpl implements AnswerService{
     private ApprovalCommentDAO approvalCommentDAO;
     @Autowired
     private UserDAO userDAO;
-
+    @Autowired
+    private ApprovalAnswerDAO approvalAnswerDAO;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -545,4 +546,33 @@ public class AnswerServiceImpl implements AnswerService{
         }
     }
 
+    @Override
+    public boolean approveAnswer(Integer answerId, User user) {
+        if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
+            Answer answer=answerDAO.get(answerId);
+            Approvalanswer approvalanswer=new Approvalanswer();
+            approvalanswer.setDate(new Date());
+            approvalanswer.setUserByUserId(user);
+            approvalanswer.setAnswerByAnswerId(answer);
+
+            approvalAnswerDAO.add(approvalanswer);
+            answer.setApprovalCount(answer.getApprovalCount()+1);
+            answerDAO.update(answer);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean oppositionAnswer(Integer answerId, User user) {
+        Integer x = approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId);
+        if (x == -1) {
+            return false;
+        }
+        approvalAnswerDAO.delete(approvalAnswerDAO.get(x));
+        Answer answer=answerDAO.get(answerId);
+        answer.setApprovalCount(answer.getApprovalCount()-1);
+        answerDAO.update(answer);
+        return true;
+    }
 }

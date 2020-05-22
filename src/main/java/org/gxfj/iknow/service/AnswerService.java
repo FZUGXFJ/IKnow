@@ -58,4 +58,20 @@ public interface AnswerService {
 
 
     void createRecommendAnswer();
+
+    /**
+     * 点赞回答
+     * @param answerId 回答id
+     * @param user 点赞用户
+     * @return 是否点赞
+     */
+    public boolean approveAnswer(Integer answerId,User user);
+
+    /**
+     * 取消赞同
+     * @param answerId 回答id
+     * @param user 用户
+     * @return 是否取消成功
+     */
+    public boolean oppositionAnswer(Integer answerId,User user);
 }
