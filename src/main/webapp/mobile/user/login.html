@@ -159,7 +159,7 @@
                     type:"POST",
                     data:{
                         email:email,
-                        password:password
+                        password:password,
                     },
                     dataType:"json",
                     success:function (result) {
@@ -178,6 +178,10 @@
                             login.alertMsg.body = "邮箱或密码错误";
                             al.addClass("alert-danger");
                             al.slideDown();
+                        }
+                        if (login.isRmb) {
+                            document.cookie = "email=" + email;
+                            document.cookie = "password=" + password;
                         }
                     },
                     error:function (e) {
@@ -269,6 +273,20 @@
                 history.go(-1);
             }
         },
+        mounted:function () {
+            $.ajax({
+                type:"POST",
+                url:"../../user/isLogin.action",
+                data:{},
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        location.href = "../index.html";
+                    }
+                },
+                error:function () {}
+            });
+        }
     });
 </script>
 </body>

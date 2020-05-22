@@ -156,6 +156,39 @@ public class AnswerAction {
         return "success";
     }
 
+    public String approveAnswer(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else if(!answerService.approveAnswer(answerId,user)){
+            response.put("resultCode" , 2 );
+        }
+        else{
+            response.put("resultCode" , SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String oppositionAnswer(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else if(!answerService.oppositionAnswer(answerId,user)){
+            response.put("resultCode" , 2 );
+        }
+        else{
+            response.put("resultCode" , SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
     public Integer getQuestionId() {
         return questionId;
     }

@@ -28,7 +28,8 @@ public class AnswerServiceImpl implements AnswerService{
     private ApprovalCommentDAO approvalCommentDAO;
     @Autowired
     private UserDAO userDAO;
-
+    @Autowired
+    private ApprovalAnswerDAO approvalAnswerDAO;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -423,14 +424,14 @@ public class AnswerServiceImpl implements AnswerService{
         for (Integer userid : userIdList) {
             tmp_str += userid + ",";
         }
-        System.out.println(tmp_str);
+//        System.out.println(tmp_str);
         for (List<Integer> list : browsingHistoryStatistic) {
             String strout = answerList.get(indextmp).getId() + " : ";
 
             for (Integer integer : list) {
                 strout += integer + ",";
             }
-            System.out.println(strout);
+//            System.out.println(strout);
             indextmp++;
         }
 
@@ -438,20 +439,20 @@ public class AnswerServiceImpl implements AnswerService{
         double pearsonMatrix[][] = getPearsonMatrix(answersLength,usersLength,browsingHistoryStatistic);
 
         //DEBUG：查看计算完的Pearson矩阵
-        System.out.println("\n\n");
+//        System.out.println("\n\n");
         for (int i = 0; i < answersLength; i++) {
             String str_tmp = "";
             for (int j = 0; j < answersLength; j++) {
                 str_tmp += pearsonMatrix[i][j] + ", ";
             }
-            System.out.println(str_tmp);
+//            System.out.println(str_tmp);
         }
 
         generateRecommendAnswerTable(usersLength,answersLength,userIdList,answerList,pearsonMatrix,
                 browsingHistoryStatistic);
 
         //通知完成推荐更新
-        System.out.println("推荐表更新完毕");
+//        System.out.println("推荐表更新完毕");
     }
 
     /**
@@ -541,8 +542,37 @@ public class AnswerServiceImpl implements AnswerService{
             for (Answer answer : list) {
                 tmp_str2 += answer.getId() + ",";
             }
-            System.out.println(tmp_str2);
+//            System.out.println(tmp_str2);
         }
     }
 
+    @Override
+    public boolean approveAnswer(Integer answerId, User user) {
+        if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
+            Answer answer=answerDAO.get(answerId);
+            Approvalanswer approvalanswer=new Approvalanswer();
+            approvalanswer.setDate(new Date());
+            approvalanswer.setUserByUserId(user);
+            approvalanswer.setAnswerByAnswerId(answer);
+
+            approvalAnswerDAO.add(approvalanswer);
+            answer.setApprovalCount(answer.getApprovalCount()+1);
+            answerDAO.update(answer);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean oppositionAnswer(Integer answerId, User user) {
+        Integer x = approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId);
+        if (x == -1) {
+            return false;
+        }
+        approvalAnswerDAO.delete(approvalAnswerDAO.get(x));
+        Answer answer=answerDAO.get(answerId);
+        answer.setApprovalCount(answer.getApprovalCount()-1);
+        answerDAO.update(answer);
+        return true;
+    }
 }
