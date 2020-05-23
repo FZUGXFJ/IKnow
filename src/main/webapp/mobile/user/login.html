@@ -104,6 +104,7 @@
             verifyCodeError:false,
             verifyCodeErrorMsg:"",
             alertMsg:{head:"",body:""},
+            boot:1
         },
         methods:{
             validateVerify:function () {
@@ -129,8 +130,14 @@
                             login.alertMsg.body = "";
                             al.addClass("alert-success");
                             al.slideDown();
-                            history.go(-1);
-                            location.href = "../index.html";
+                            if (login.isRmb && !login.hasCookie()) {
+                                login.setCookie(result.email, result.password);
+                            }
+                            if (login.boot === 1) {
+                                location.href = "../home.html";
+                            } else {
+                                history.go(-1);
+                            }
                         } else if (result.response === 1) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "邮箱已修改，请重新发送验证码";
@@ -166,22 +173,24 @@
                         let al = $("#alert");
                         al.removeClass("alert-danger");
                         al.removeClass("alert-success");
-                        if (result.response === 0) {
+                        if (result.resultCode === 0) {
                             login.alertMsg.head = "登录成功";
                             login.alertMsg.body = "登录成功";
                             al.addClass("alert-success");
                             al.slideDown();
-                            history.go(-1);
-                            location.href = "../index.html";
-                        } else if (result.response === 1) {
+                            if (login.isRmb && !login.hasCookie()) {
+                                login.setCookie(result.email,result.password);
+                            }
+                            if (login.boot === 1) {
+                                location.href = "../home.html";
+                            } else {
+                                history.go(-1);
+                            }
+                        } else if (result.resultCode === 1) {
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "邮箱或密码错误";
                             al.addClass("alert-danger");
                             al.slideDown();
-                        }
-                        if (login.isRmb) {
-                            document.cookie = "email=" + email;
-                            document.cookie = "password=" + password;
                         }
                     },
                     error:function (e) {
@@ -271,9 +280,40 @@
             },
             back:function () {
                 history.go(-1);
+            },
+            hasCookie:function () {
+                let email = null;
+                let password = null;
+                let cookies = document.cookie.split(";");
+                cookies.forEach(function (co) {
+                    co = co.trim();
+                    if (co.indexOf("email=") === 0) {
+                        email = co.substring("email=".length,co.length);
+                    }
+                    if (co.indexOf("password=") === 0) {
+                        password = co.substring("password=".length,co.length);
+                    }
+                });
+                return email != null && password != null;
+            },
+            setCookie:function (email,password) {
+                let exp = new Date();
+                exp.setTime((exp.getTime()) + 1000*60*60*24*15);
+                document.cookie = "email=" + email + ";expires="
+                    + exp.toGMTString() + ";path=/";
+                document.cookie = "password=" + password + ";expires="
+                    + exp.toGMTString() + ";path=/";
             }
         },
         mounted:function () {
+            let boot = 1;
+            let loc = location.href;
+            loc = loc.replace("?","&").split("&")[1];
+            if (!loc === undefined && loc.indexOf("boot=")!==-1) {
+                let bootStr = loc.replace("boot=","");
+                boot = parseInt(bootStr);
+            }
+            this.boot = boot;
             $.ajax({
                 type:"POST",
                 url:"../../user/isLogin.action",
@@ -281,7 +321,23 @@
                 dataType:"json",
                 success:function (result) {
                     if (result.resultCode === 0) {
-                        location.href = "../index.html";
+                        location.href = "../home.html";
+                    } else {
+                        let email = null;
+                        let password = null;
+                        let cookies = document.cookie.split(";");
+                        cookies.forEach(function (co) {
+                            co = co.trim();
+                            if (co.indexOf("email=") === 0) {
+                                email = co.substring("email=".length,co.length);
+                            }
+                            if (co.indexOf("password=") === 0) {
+                                password = co.substring("password=".length,co.length);
+                            }
+                        });
+                        if (email!=null && password!=null) {
+                            login.loginByPassword(email,password);
+                        }
                     }
                 },
                 error:function () {}

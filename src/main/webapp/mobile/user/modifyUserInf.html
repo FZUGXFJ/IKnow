@@ -152,7 +152,7 @@
                         modifyUserInf.introduction = result.userInf.introduction;
                     } else if (result.resultCode === 1) {
                         alert("请先登录后再修改信息！");
-                        window.location.href = "login.html";
+                        window.location.href = "login.html?boot=0";
                     }
                 },
                 error:function (e) {

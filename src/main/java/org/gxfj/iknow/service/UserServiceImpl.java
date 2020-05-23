@@ -95,8 +95,20 @@ public class UserServiceImpl<result> implements UserService{
     @Override
     public User loginByPassword(User loginInf) {
         User user = userDAO.getUserByEmail(loginInf.getEmail());
-        if (user != null && SecurityUtil.md5Compare(loginInf.getPasswd(),user.getPasswd())) {
-            return user;
+        if (user != null) {
+            if (loginInf.getPasswd().length() == 32) {
+                if (loginInf.getPasswd().equals(user.getPasswd())) {
+                    return user;
+                } else {
+                    return null;
+                }
+            } else {
+                  if (SecurityUtil.md5Compare(loginInf.getPasswd(),user.getPasswd())) {
+                      return user;
+                  } else {
+                      return null;
+                  }
+            }
         } else {
             return null;
         }

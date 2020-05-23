@@ -119,3 +119,37 @@ table{
     height: 1px;
     margin: 0.5em 0;
 }
+#myPageHead{
+    background-color: rgba(53, 238, 214, 0.47);
+    padding-bottom: 0.1em;
+}
+#control{
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 0.5em;
+}
+.redDot{
+    width: 0.5em;
+    height: 0.5em;
+    background-color: red;
+    border-radius: 100%;
+    position: relative;
+    top: -0.3em;
+    left: -0.2em;
+}
+#myInf{
+    width: 90%;
+    margin: 0 auto 1em;
+    border-radius: 1em;
+    background-color: white;
+    padding: 1em;
+}
+.recordSpan{
+    width: 25%;
+    text-align: center;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+.recordSpanText{
+    font-size: 0.8em;
+}

@@ -64,12 +64,16 @@ public class UserAction {
         loginInf.setEmail(email);
         loginInf.setPasswd(password);
         User user = userService.loginByPassword(loginInf);
+        Map<String,Object> resultMap = new HashMap<>(MIN_HASH_MAP_NUM);
         if (user != null) {
             ActionContext.getContext().getSession().put("user",user);
-            inputStream = new ByteArrayInputStream("{\"response\":0}".getBytes(StandardCharsets.UTF_8));
+            resultMap.put("resultCode",0);
+            resultMap.put("email",user.getEmail());
+            resultMap.put("password",user.getPasswd());
         } else {
-            inputStream = new ByteArrayInputStream("{\"response\":1}".getBytes(StandardCharsets.UTF_8));
+            resultMap.put("resultCode",1);
         }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
     }
 
@@ -79,14 +83,18 @@ public class UserAction {
         Map<String,Object> session = ActionContext.getContext().getSession();
         Map<String,Object> result = userService.loginByNoPassword(email,(String)session.get(EMAIL), verifyCode
                 , (String) session.get(VERIFY_CODE));
+        Map<String,Object> resultMap = new HashMap<>(MIN_HASH_MAP_NUM);
         User user = (User) result.get("user");
         if (user != null) {
             ActionContext.getContext().getSession().put("user",user);
-            inputStream = new ByteArrayInputStream("{\"response\":0}".getBytes(StandardCharsets.UTF_8));
+            resultMap.put("response",0);
+            resultMap.put("email",user.getEmail());
+            resultMap.put("password",user.getPasswd());
         } else {
             String response = "{\"response\":" + result.get("value") + "}";
-            inputStream = new ByteArrayInputStream(response.getBytes(StandardCharsets.UTF_8));
+            resultMap.put("response",result.get("value"));
         }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
     }
 

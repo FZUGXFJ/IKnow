@@ -210,7 +210,19 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="cancelApprove" class="org.gxfj.iknow.action.AnswerAction" method="cancelApprove">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
         <action name="oppositionAnswer" class="org.gxfj.iknow.action.AnswerAction" method="oppositionAnswer">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="cancelOppose" class="org.gxfj.iknow.action.AnswerAction" method="cancelOppose">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>

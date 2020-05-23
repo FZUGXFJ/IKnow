@@ -241,7 +241,7 @@
                         choseClassification.categoriesTypes = result.categoriesTypes;
                     } else if (result.resultCode === 1) {
                         alert("请先登录后再发布提问！");
-                        window.location.href = "../user/login.html";
+                        window.location.href = "../user/login.html?boot=0";
                     }
                 },
                 error:function (a,b,c) {

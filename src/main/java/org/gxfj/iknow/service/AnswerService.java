@@ -68,10 +68,26 @@ public interface AnswerService {
     public boolean approveAnswer(Integer answerId,User user);
 
     /**
-     * 取消赞同
+     * 取消点赞
      * @param answerId 回答id
      * @param user 用户
      * @return 是否取消成功
      */
+    public boolean cancelApprove(Integer answerId,User user);
+
+    /**
+     * 反对回答
+     * @param answerId 回答id
+     * @param user 用户
+     * @return 是否成功
+     */
     public boolean oppositionAnswer(Integer answerId,User user);
+
+    /**
+     * 取消反对
+     * @param answerId 回答id
+     * @param user 用户
+     * @return 是否取消成功
+     */
+    public boolean cancelOppose(Integer answerId,User user);
 }
