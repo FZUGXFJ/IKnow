@@ -30,6 +30,8 @@ public class AnswerServiceImpl implements AnswerService{
     private UserDAO userDAO;
     @Autowired
     private ApprovalAnswerDAO approvalAnswerDAO;
+    @Autowired
+    private OppositionAnswerDAO oppositionAnswerDAO;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -276,6 +278,16 @@ public class AnswerServiceImpl implements AnswerService{
             recommend.put("questionId",question.getId());
             recommend.put("questionTitle",question.getTitle());
             recommend.put("answererId",user.getId());
+            Integer x=approvalAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
+            Integer y=oppositionAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
+            Integer z=0;
+            if (x != -1) {
+                z=1;
+            }
+            else if(y!=-1){
+                z=2;
+            }
+            recommend.put("approveState",z);
             //判断答主是否匿名
 //            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1) ;
             boolean isAnonymous = (answer.getIsAnonymous() == ANONYMOUS);
@@ -564,7 +576,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public boolean oppositionAnswer(Integer answerId, User user) {
+    public boolean cancelApprove(Integer answerId, User user) {
         Integer x = approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId);
         if (x == -1) {
             return false;
@@ -573,6 +585,31 @@ public class AnswerServiceImpl implements AnswerService{
         Answer answer=answerDAO.get(answerId);
         answer.setApprovalCount(answer.getApprovalCount()-1);
         answerDAO.update(answer);
+        return true;
+    }
+
+    @Override
+    public boolean oppositionAnswer(Integer answerId, User user) {
+        if(oppositionAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
+            Answer answer=answerDAO.get(answerId);
+            Oppositionanswer oppositionanswer=new Oppositionanswer();
+            oppositionanswer.setDate(new Date());
+            oppositionanswer.setUserByUserId(user);
+            oppositionanswer.setAnswerByAnswerId(answer);
+
+            oppositionAnswerDAO.add(oppositionanswer);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean cancelOppose(Integer answerId, User user) {
+        Integer x = oppositionAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId);
+        if (x == -1) {
+            return false;
+        }
+        oppositionAnswerDAO.delete(oppositionAnswerDAO.get(x));
         return true;
     }
 }
