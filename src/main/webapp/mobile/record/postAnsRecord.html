@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>回答记录</title>
     <link rel="stylesheet" type="text/css" href="../../css/global.css">
-    <link rel="stylesheet" type="text/css" href="">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/record/general.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/record/postAnsRecord.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
@@ -14,19 +16,74 @@
 </head>
 <body>
 <div id="postAnsRecord">
-
+    <div class="header">
+        <table>
+            <td style="width: 33%;color: #acacac;font-size: 1.5em">
+                <i class="fas fa-times" @click="back"></i>
+            </td>
+            <td style="width: 34%;text-align: center">
+                <span v-if="!loading">回答记录</span>
+                <span v-else="">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            </td>
+            <td style="width: 33%;"></td>
+        </table>
+    </div>
+    <br><br>
+    <div class="records">
+        <div class="record" v-for="record in records">
+            <div style="text-align: right" v-if="record.isAdopt === 1">
+                <i class="fas fa-award" style="color: #00caba">&nbsp;您的回答已被采纳</i>
+            </div>
+            <div>
+                <h5 @click="turnQuePage(record.questionId)"><b>{{record.questionTitle}}</b></h5>
+                <p class="contentView" v-html="record.answerContent" @click="turnAnsPage(record.id)"></p>
+            </div>
+            <div class="time">
+                <table>
+                    <td>{{record.approveNum}}赞同-{{record.commentNum}}评论</td>
+                    <td style="text-align: right">发布于{{record.time}}</td>
+                </table>
+            </div>
+            <div class="splitLine"></div>
+        </div>
+    </div>
+    <br>
+    <div class="loadOpera">
+        <span v-if="hasMore === 0 && !loadingMore" class="btn-link" @click="load" style="cursor: pointer">加载更多</span>
+        <span v-if="loadingMore" style="opacity: 0.5">
+            <i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i>&nbsp;加载中...
+        </span>
+        <span v-if="hasMore === 1 && !loadingMore" style="opacity: 0.5">没有更多内容</span>
+    </div>
 </div>
 <script>
     let postAnsRecord = new Vue({
         el:"#postAnsRecord",
         data:{
-
+            loading:false,
+            loadingMore:false,
+            records:[],
+            hasMore:0
         },
         methods:{
+            back:function () {
+                history.go(-1);
+            },
+            load:function (start) {
 
+            },
+            turnQuePage:function (id) {
+
+            },
+            turnAnsPage:function (id) {
+
+            },
+            loadMore:function () {
+
+            }
         },
         mounted:function () {
-
+            this.load(0);
         }
     })
 </script>
