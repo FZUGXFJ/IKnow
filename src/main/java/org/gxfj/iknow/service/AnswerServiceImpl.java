@@ -333,7 +333,12 @@ public class AnswerServiceImpl implements AnswerService{
             // 对于未登录的浏览者，依旧采用推荐最先的回答
             return answerDAO.list(count);
         } else {
-            List<Answer> answerList = (List<Answer>) recommentAnswerMap.get(userId);
+            List<Answer> answerList = null;
+            if (recommentAnswerMap.containsKey(userId)) {
+                answerList = (List<Answer>) recommentAnswerMap.get(userId);
+            } else {
+                answerList = (List<Answer>) recommentAnswerMap.get(NEW_USER_RECOMMEND_KEY);
+            }
             for (int i = 0; i < count && answerList.size() != 0; i++) {
                 result.add(answerList.get(0));
                 answerList.remove(0);
@@ -363,8 +368,14 @@ public class AnswerServiceImpl implements AnswerService{
     @Autowired
     BrowsingHistoryDAO browsingHistoryDAO;
 
-    //存储所有用户的推荐回答表
+    /**
+     * 存储所有用户的推荐回答表
+     */
     private Map<Integer, Object> recommentAnswerMap;
+    /**
+     * 推荐回答表黎没有的用户，统一获取该key
+     */
+    private final static int NEW_USER_RECOMMEND_KEY = 0;
 
 
     /**
@@ -545,6 +556,10 @@ public class AnswerServiceImpl implements AnswerService{
             }
             recommentAnswerMap.put(userId, recommendList);
         }
+
+        //对新注册的用户由于历史浏览为空，所以推荐只能统一用最新的数据，存储在key为0的list中
+        List<Answer> lastNewAnswer = answerDAO.list(PRE_RECOMMENT_NUM);
+        recommentAnswerMap.put(NEW_USER_RECOMMEND_KEY, lastNewAnswer);
 
         //DEBUG：查看生成的推荐表
         for (Map.Entry entry : recommentAnswerMap.entrySet()) {
