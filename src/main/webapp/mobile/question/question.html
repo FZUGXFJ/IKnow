@@ -187,6 +187,7 @@
             headLastPart:"' width='100%' height='100%' alt=''>",
             loading:0,
             isCollected:0,
+            noAction:false,
         },
         methods:{
             postAnswer:function () {
@@ -223,6 +224,10 @@
                     + "&answerId=" + answerId;
             },
             collect:function () {
+                if (question.noAction) {
+                    return;
+                }
+                question.noAction = true;
                 $.ajax({
                     type:"POST",
                     url:"../../question/collectQuestion.action",
@@ -234,10 +239,12 @@
                         if (result.resultCode === 0) {
                             question.isCollected = 1;
                             question.collectionCount++;
+                            question.noAction = false;
                         } else if (result.resultCode === 1) {
                             if (confirm("登录后才能收藏问题")) {
                                 location.href = "../user/login.html?boot=0";
                             }
+                            question.noAction = false;
                         }
                     },
                     error:function (request,status,error) {
@@ -245,10 +252,15 @@
                         console.log(request.status);
                         console.log(request.readyState);
                         console.log(status);
+                        question.noAction = false;
                     }
                 });
             },
             cancelCollect:function () {
+                if (question.noAction) {
+                    return;
+                }
+                question.noAction = true;
                 $.ajax({
                     type:"POST",
                     url:"../../question/cancelCollect.action",
@@ -260,6 +272,7 @@
                         if (result.resultCode === 0) {
                             question.isCollected = 0;
                             question.collectionCount --;
+                            question.noAction = false;
                         }
                     },
                     error:function (request,status,error) {
@@ -267,6 +280,7 @@
                         console.log(request.status);
                         console.log(request.readyState);
                         console.log(status);
+                        question.noAction = false;
                     }
                 });
             },

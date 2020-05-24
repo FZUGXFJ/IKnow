@@ -1,0 +1,31 @@
+div{
+    width: 100%;
+}
+table{
+    width: 100%;
+}
+.header{
+    background-color: white;
+    padding: 0.2em 1em;
+    box-shadow: 0 0.2em 0.3em #d6d6d6;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+}
+.records{
+    width: 90%;
+    margin: 0 auto;
+}
+.record{
+    padding-top: 1em;
+}
+.splitLine{
+    background-color: #acacac;
+    opacity: 0.5;
+    height: 1px;
+    margin: 0.5em 0;
+}
+.loadOpera{
+    text-align: center;
+    font-size: 0.7em;
+}

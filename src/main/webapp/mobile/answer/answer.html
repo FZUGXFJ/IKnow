@@ -31,7 +31,7 @@
     </div>
     <br><br><br>
     <div id="questionInf" v-if="load">
-        <h5>{{question.title}}</h5>
+        <h5><b>{{question.title}}</b></h5>
         <div id="questionContent" class="hidePart" v-html="question.content"></div>
         <br>
         <table>
@@ -315,12 +315,74 @@
             },
             oppose:function () {
                 $.ajax({
+                    type:"POST",
+                    url:"",
+                    data:{answerId:answer.answerId},
+                    dataType:"json",
+                    success:function (result) {
 
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        answer.noAction = false;
+                    }
                 });
             },
             approve:function () {
                 $.ajax({
+                    type:"POST",
+                    url:"",
+                    data:{answerId:answer.answerId},
+                    dataType:"json",
+                    success:function (result) {
 
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        answer.noAction = false;
+                    }
+                });
+            },
+            cancelApprove:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"",
+                    data:{answerId:answer.answerId},
+                    dataType:"json",
+                    success:function (result) {
+
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        answer.noAction = false;
+                    }
+                });
+            },
+            cancelOppose:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"",
+                    data:{answerId:answer.answerId},
+                    dataType:"json",
+                    success:function (result) {
+
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        answer.noAction = false;
+                    }
                 });
             }
         },
