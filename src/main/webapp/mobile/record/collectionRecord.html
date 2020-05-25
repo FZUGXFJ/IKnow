@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>收藏记录</title>
     <link rel="stylesheet" type="text/css" href="../../css/global.css">
-    <link rel="stylesheet" type="text/css" href="">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/record/general.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/record/collectionRecord.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
@@ -14,19 +16,131 @@
 </head>
 <body>
 <div id="collectionRecord">
-
+    <div class="header">
+        <table>
+            <td style="width: 33%;color: #acacac;font-size: 1.5em">
+                <i class="fas fa-times" @click="back"></i>
+            </td>
+            <td style="width: 34%;text-align: center">
+                <span v-if="!loading">收藏记录</span>
+                <span v-else="">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            </td>
+            <td style="width: 33%;"></td>
+        </table>
+    </div>
+    <br><br>
+    <div class="records">
+        <div class="record" v-for="record in records">
+            <table>
+                <td>
+                    <span v-if="record.isSolved === 1">
+                        <i class="fas fa-check" style="color: #00caba">&nbsp;问题已解决</i>
+                    </span>
+                            <span v-else>
+                        <i class="fas fa-times" style="color: #acacac">&nbsp;问题未解决</i>
+                    </span>
+                </td>
+                <td style="text-align: right">
+                    <button class="btn btn-link">取消收藏</button>
+                </td>
+            </table>
+            <h5 style="cursor: pointer" @click="turnQuePage(record.id)"><b>{{record.questionTitle}}</b></h5>
+            <div class="time">
+                <table>
+                    <td>{{record.answerNum}}回答-{{record.collectionNum}}收藏-{{record.browsingNum}}浏览</td>
+                    <td style="text-align: right">收藏于{{record.time}}</td>
+                </table>
+            </div>
+            <div class="splitLine"></div>
+        </div>
+        <br>
+        <div class="loadOpera">
+            <span v-if="hasMore === 0 && !loadingMore" class="btn-link" @click="load" style="cursor: pointer">加载更多</span>
+            <span v-if="loadingMore" style="opacity: 0.5">
+            <i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i>&nbsp;加载中...
+        </span>
+            <span v-if="hasMore === 1 && !loadingMore" style="opacity: 0.5">没有更多内容</span>
+        </div>
+    </div>
 </div>
 <script>
     let collectionRecord = new Vue({
         el:"#collectionRecord",
         data:{
-
+            loading:false,
+            loadingMore:false,
+            hasMore:0,
+            records:[
+                {
+                    questionId:0,
+                    questionTitle:"只是标题吗？我怎么不知道？",
+                    answerNum:0,
+                    browsingNum:0,
+                    collectionNum:0,
+                    isSolved:0,
+                    time:"2020-1-1 20:18:32"
+                },
+                {
+                    questionId:0,
+                    questionTitle:"只是标题吗？我怎么不知道？",
+                    answerNum:0,
+                    browsingNum:0,
+                    collectionNum:0,
+                    isSolved:0,
+                    time:"2020-1-1 20:18:32"
+                },
+                {
+                    questionId:0,
+                    questionTitle:"只是标题吗？我怎么不知道？",
+                    answerNum:0,
+                    browsingNum:0,
+                    collectionNum:0,
+                    isSolved:0,
+                    time:"2020-1-1 20:18:32"
+                }
+            ]
         },
         methods:{
+            back:function () {
 
+            },
+            load:function (start) {
+
+            },
+            turnQuePage:function (id) {
+
+            },
+            cancelCollect:function (id) {
+                if (collectionRecord.noAction) {
+                    return;
+                }
+                collectionRecord.noAction = true;
+                $.ajax({
+                    type:"POST",
+                    url:"../../question/cancelCollect.action",
+                    data:{
+                        questionId:id
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            //TODO:删除数组元素
+
+                            collectionRecord.noAction = false;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        collectionRecord.noAction = false;
+                    }
+                });
+            }
         },
         mounted:function () {
-
+            this.load(0);
         }
     })
 </script>
