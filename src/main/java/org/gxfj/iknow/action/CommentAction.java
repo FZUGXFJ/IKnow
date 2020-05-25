@@ -2,7 +2,6 @@ package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
-import jdk.nashorn.internal.ir.IdentNode;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;

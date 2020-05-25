@@ -111,13 +111,24 @@
     <div id="footer" v-if="load">
         <table>
             <td style="text-align: left;width: 45%">
-                <div style="padding: 0.1em 0.5em;background-color: white">
-                    <span><i class="fas fa-angle-up" style="color: #acacac"></i>&nbsp;赞同</span>
-                    <span><i class="fas fa-angle-down" style="color:#acacac;"></i>&nbsp;反对</span>
-                    |&nbsp;{{answer.approveNum}}
+                <div style="padding: 0.1em 0.5em;border-radius: 1em;opacity: 0.7" v-if="answer.approveState === 0">
+                    <span @click="approve">
+                        <i class="fas fa-angle-up" style="color: #2100ff"></i>&nbsp;赞同&nbsp;{{answer.approveNum}}&nbsp;|
+                    </span>
+                    <span  @click="oppose">
+                        <i class="fas fa-angle-down" style="color: #2100ff;"></i>&nbsp;反对
+                    </span>
                 </div>
-                <div></div>
-                <div></div>
+                <div v-if="answer.approveState === 1">
+                    <span style="padding: 0.1em 0.5em;border-radius: 1em" @click="cancelApprove">
+                        <i class="fas fa-angle-down" style="color: #2100ff;"></i>&nbsp;已赞同&nbsp;{{answer.approveNum}}
+                    </span>
+                </div>
+                <div v-if="answer.approveState === 2">
+                    <span style="padding: 0.1em 0.5em;border-radius: 1em" @click="cancelOppose">
+                        <i class="fas fa-angle-up" style="color: #2100ff;"></i>&nbsp;已反对
+                    </span>
+                </div>
             </td>
             <td style="width: 55%;text-align: right">
                 <span><i class="fas fa-comment-dots" style="color: rgba(45,8,238,0.86)"></i>&nbsp;评论{{answer.commentNum}}</span>
@@ -314,13 +325,24 @@
                 location.href = "../question/question.html?questionId=" + answer.questionId;
             },
             oppose:function () {
+                if (answer.noAction) {
+                    return;
+                }
+                answer.noAction = true;
                 $.ajax({
                     type:"POST",
-                    url:"",
+                    url:"../../answer/oppositionAnswer.action",
                     data:{answerId:answer.answerId},
                     dataType:"json",
                     success:function (result) {
-
+                        if (result.resultCode === 0) {
+                            answer.answer.approveState = 2;
+                            answer.noAction = false;
+                        } else if (result.resultCode === 1) {
+                            if (confirm("请先登录")) {
+                                location.href = "../user/login.action?boot=0";
+                            }
+                        }
                     },
                     error:function (request,status,error) {
                         alert("系统异常！");
@@ -332,13 +354,25 @@
                 });
             },
             approve:function () {
+                if (answer.noAction) {
+                    return;
+                }
+                answer.noAction = true;
                 $.ajax({
                     type:"POST",
-                    url:"",
+                    url:"../../answer/approveAnswer.action",
                     data:{answerId:answer.answerId},
                     dataType:"json",
                     success:function (result) {
-
+                        if (result.resultCode === 0) {
+                            answer.answer.approveState = 1;
+                            answer.answer.approveNum++;
+                            answer.noAction = false;
+                        } else if (result.resultCode === 1) {
+                            if (confirm("请先登录")) {
+                                location.href = "../user/login.action?boot=0";
+                            }
+                        }
                     },
                     error:function (request,status,error) {
                         alert("系统异常！");
@@ -350,13 +384,25 @@
                 });
             },
             cancelApprove:function () {
+                if (answer.noAction) {
+                    return;
+                }
+                answer.noAction = true;
                 $.ajax({
                     type:"POST",
-                    url:"",
+                    url:"../../answer/cancelApprove.action",
                     data:{answerId:answer.answerId},
                     dataType:"json",
                     success:function (result) {
-
+                        if (result.resultCode === 0) {
+                            answer.answer.approveState = 0;
+                            answer.answer.approveNum --;
+                            answer.noAction = false;
+                        } else if (result.resultCode === 1) {
+                            if (confirm("请先登录")) {
+                                location.href = "../user/login.action?boot=0";
+                            }
+                        }
                     },
                     error:function (request,status,error) {
                         alert("系统异常！");
@@ -368,13 +414,24 @@
                 });
             },
             cancelOppose:function () {
+                if (answer.noAction) {
+                    return;
+                }
+                answer.noAction = true;
                 $.ajax({
                     type:"POST",
-                    url:"",
+                    url:"../../answer/cancelOppose.action",
                     data:{answerId:answer.answerId},
                     dataType:"json",
                     success:function (result) {
-
+                        if (result.resultCode === 0) {
+                            answer.answer.approveState = 0;
+                            answer.noAction = false;
+                        } else if (result.resultCode === 1) {
+                            if (confirm("请先登录")) {
+                                location.href = "../user/login.action?boot=0";
+                            }
+                        }
                     },
                     error:function (request,status,error) {
                         alert("系统异常！");
