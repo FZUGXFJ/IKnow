@@ -282,4 +282,38 @@ public class QuestionServiceImpl implements QuestionService{
     public User get(Integer questionId) {
         return questionDAO.get(questionId).getUserByUserId();
     }
+
+    @Override
+    public Map<String, Object> moreAnswers(User user, Integer questionId,int start, int length) {
+        Map<String, Object> moreAns = new HashMap<>(MAP_NUM);
+        //根据问题id查询到的问题
+        Question question = questionDAO.getNotDelete(questionId);
+        //问题的回答
+        List<Answer> answers = answerDAO.listByQuestionId(question.getId(),start, length);
+        if (answers.size()<=20){
+            return null;
+        }
+        //JSON成员
+        //JSON中的数组
+        List<Map<String, Object>> questionAnswers;
+        //包含采纳回答的列表
+        List<Answer> nAnswers = new ArrayList<>();
+        //将采纳的回答放入列表第一位
+        if(question.getAnswerByAdoptId() != null){
+            nAnswers.add(question.getAnswerByAdoptId());
+        }
+        //填充剩余的回答
+        for(Answer answer : answers) {
+            //将采纳的回答放入列表第一位
+            if(!(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId()))) {
+//                continue;
+//            } else {
+                nAnswers.add(answer);
+            }
+        }
+        //获取回答者json数据数组即map类型的list
+        questionAnswers = setAnswersJson(nAnswers,question);
+        moreAns.put("Answers",questionAnswers);
+        return moreAns;
+    }
 }

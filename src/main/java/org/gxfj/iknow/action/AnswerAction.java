@@ -26,6 +26,7 @@ public class AnswerAction {
     private InputStream inputStream;
     private Integer answerId;
 
+
     private final String SESSION_USER = "user";
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
@@ -222,6 +223,7 @@ public class AnswerAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
     public Integer getQuestionId() {
         return questionId;
     }
@@ -261,5 +263,6 @@ public class AnswerAction {
     public InputStream getInputStream() {
         return inputStream;
     }
+
 
 }

@@ -39,6 +39,7 @@ public class QuestionAction {
     private Integer majorType;
     private Byte isAnonymous;
     private InputStream inputStream;
+    private Integer start;
     @Autowired
     private QuestionService questionService;
     @Autowired
@@ -47,6 +48,7 @@ public class QuestionAction {
     private static final int QUESTION_SHOW_ANSWER_NUM = 10;
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
+    private final int NO_MORE = 1;
     private final int MISS_QUESTION_INF = 2;
 
     public InputStream getInputStream() {
@@ -108,7 +110,7 @@ public class QuestionAction {
         User viewUser = questionService.get(questionId);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        response.put("question",questionService.getQuestion(user,questionId, 10));
+        response.put("question",questionService.getQuestion(user,questionId, 20));
         response.put("resultCode",SUCCESS);
         if(user == null || !isQuestionUser){
             response.put("viewerIsOwner",0);
@@ -170,6 +172,21 @@ public class QuestionAction {
         return "success";
     }
 
+    public String moreAnswer(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        if (questionService.moreAnswers(user,questionId,start,20)==null){
+            response.put("resultCode",NO_MORE);
+        }
+        else {
+            response=questionService.moreAnswers(user,questionId,start,20);
+            response.put("resultCode",SUCCESS);
+        }
+
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
     public String getQuestionTitle() {
         return questionTitle;
     }
@@ -224,5 +241,13 @@ public class QuestionAction {
 
     public void setQuestionId(Integer questionId) {
         this.questionId = questionId;
+    }
+
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
     }
 }

@@ -72,7 +72,7 @@ public class AnswerServiceImpl implements AnswerService{
         //获得回答答主
         resultMap.put("answerer" , getAnswererMap(answerId));
         //回答的信息转化为json格式
-        resultMap.put("answer" , getAnswerMap(questionId, answerId));
+        resultMap.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
         //获得一个存储评论列表
         resultMap.put("comments" , getCommentsMap(questionId, answerId,user));
         //获得查看回答的用户的头像
@@ -158,7 +158,7 @@ public class AnswerServiceImpl implements AnswerService{
      * @param answerId 回答id
      * @return json形式的回答信息
      */
-    private Map<String , Object> getAnswerMap(Integer questionId, Integer answerId){
+    private Map<String , Object> getAnswerMap(Integer questionId, Integer answerId,Integer userId){
         Answer answer = answerDAO.getNotDelete(answerId);
         Question question = questionDAO.getNotDelete(questionId);
         Map<String , Object> answerMap = new HashMap<>(MAP_NUM);
@@ -171,6 +171,16 @@ public class AnswerServiceImpl implements AnswerService{
             answerMap.put("isAdopt" , 0);
         }
         answerMap.put("isAnonymous",answer.getIsAnonymous() == 0 ? 0 : 1);
+        Integer x=approvalAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
+        Integer y=oppositionAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
+        Integer z=0;
+        if (x != -1) {
+            z=1;
+        }
+        else if(y!=-1){
+            z=2;
+        }
+        answerMap.put("approveState",z);
         return answerMap;
     }
 
@@ -278,16 +288,6 @@ public class AnswerServiceImpl implements AnswerService{
             recommend.put("questionId",question.getId());
             recommend.put("questionTitle",question.getTitle());
             recommend.put("answererId",user.getId());
-            Integer x=approvalAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
-            Integer y=oppositionAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
-            Integer z=0;
-            if (x != -1) {
-                z=1;
-            }
-            else if(y!=-1){
-                z=2;
-            }
-            recommend.put("approveState",z);
             //判断答主是否匿名
 //            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1) ;
             boolean isAnonymous = (answer.getIsAnonymous() == ANONYMOUS);
