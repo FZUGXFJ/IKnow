@@ -40,4 +40,13 @@ public interface CommentService {
      */
     public boolean cancelApprove(User user, Integer commentId);
 
+    /**
+     * 获取更多回答的评论(评论数方法中指定）
+     * @param answerId 回答Id
+     * @param user 发起查看请求的用户
+     * @param start 起始地址
+     * @return 构造好的MAP
+     */
+    public Map<String, Object> moreComments(Integer answerId, User user,Integer start);
+
 }

@@ -2,6 +2,7 @@ package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
+import jdk.nashorn.internal.ir.IdentNode;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class CommentAction {
     private String content;
     private Integer commentId;
     private InputStream inputStream;
+    private Integer start;
     @Autowired
     CommentService commentService;
 
@@ -30,6 +32,7 @@ public class CommentAction {
     private final String RESULT_CODE = "resultCode";
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
+    private final int NO_MORE = 1;
     private final int MISS_COMMENT_INF = 2;
     private final int RESULT_CODE_APPROVED = 2;
     private final int RESULT_CODE_NOT_APPROVED = 2;
@@ -103,6 +106,19 @@ public class CommentAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
+    public String moreComment(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
+        if (commentService.moreComments(answerId, (User) session.get(SESSION_USER),start)==null){
+            response.put(RESULT_CODE,NO_MORE);
+        }
+        else {
+            response=commentService.moreComments(answerId, (User) session.get(SESSION_USER),start);
+            response.put(RESULT_CODE, SUCCESS);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return RETURN_STRING;
+    }
 
     public Integer getAnswerId() {
         return answerId;
@@ -130,5 +146,13 @@ public class CommentAction {
 
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
+    public Integer getStart() {
+        return start;
     }
 }

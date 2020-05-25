@@ -170,6 +170,12 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="moreComment" class="org.gxfj.iknow.action.CommentAction" method="moreComment">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
 
     </package>
 

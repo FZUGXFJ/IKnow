@@ -285,4 +285,36 @@ public class CommentServiceImpl implements CommentService {
         }
         return replyListMap;
     }
+    @Override
+    public Map<String, Object> moreComments(Integer answerId, User visitor,Integer start){
+        Map<String, Object> response = new HashMap<>(MAP_NUM);
+        boolean userIdentify;
+        //获取问题下的20条评论
+        List<Comment> comments = commentDAO.listByAnswerId(answerId,start,20);
+        if(comments.size()<=20){
+            return null;
+        }
+        //json数组
+        List<Map<String, Object>> commentListMap;
+        //获取回答
+        Answer answer = answerDAO.getNotDelete(answerId);
+        //获取问题
+        Question question = answer.getQuestionByQuestionId();
+        //获取回答者
+        User answerOwner = answer.getUserByUserId();
+        //获取题主
+        User questionOwner = question.getUserByUserId();
+
+        //获取问题评论数
+        Integer count = commentDAO.getCount(answerId);
+        response.put("commentNum",count);
+        if (count != 0) {
+            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, visitor);
+        } else {
+            commentListMap = new ArrayList<>();
+        }
+
+        response.put("comments",commentListMap);
+        return response;
+    }
 }
