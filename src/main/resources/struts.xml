@@ -240,6 +240,12 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="moreRecommend" class="org.gxfj.iknow.action.AnswerAction" method="moreRecommend">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
 
     <package name="reply" namespace="/reply" extends="default">

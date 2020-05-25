@@ -90,4 +90,13 @@ public interface AnswerService {
      * @return 是否取消成功
      */
     public boolean cancelOppose(Integer answerId,User user);
+
+    /**
+     * 获得count条问题信息
+     * @param count 推荐数
+     * @param userId 用户id
+     * @param start 起始下标
+     * @return 问题表
+     */
+    public Map<String,Object> moreRecommendAnswer(Integer userId, Integer count,Integer start);
 }

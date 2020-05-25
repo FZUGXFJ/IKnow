@@ -25,11 +25,12 @@ public class AnswerAction {
     private String questionTitle;
     private InputStream inputStream;
     private Integer answerId;
-
+    private Integer start;
 
     private final String SESSION_USER = "user";
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
+    private final int NO_MORE = 1;
     private final int MISS_QUESTIONID = 2;
     private final int MISS_ANSWER_IF = 3;
     private final int USER_IS_NOT_QUESTIONER = 2;
@@ -224,6 +225,32 @@ public class AnswerAction {
         return "success";
     }
 
+    public String moreRecommend(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response=new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get(SESSION_USER);
+        if (user != null) {
+            if(answerService.moreRecommendAnswer(user.getId(),20,start)==null){
+                response.put("resultCode",NO_MORE);
+            }
+            else{
+                response=answerService.moreRecommendAnswer(user.getId(),20,start);
+                response.put("resultCode",SUCCESS);
+            }
+
+        } else {
+            if(answerService.moreRecommendAnswer(null,20,start)==null){
+                response.put("resultCode",NO_MORE);
+            }
+            else{
+                response=answerService.moreRecommendAnswer(null,20,start);
+                response.put("resultCode",SUCCESS);
+            }
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
     public Integer getQuestionId() {
         return questionId;
     }
@@ -264,5 +291,11 @@ public class AnswerAction {
         return inputStream;
     }
 
+    public Integer getStart() {
+        return start;
+    }
 
+    public void setStart(Integer start) {
+        this.start = start;
+    }
 }
