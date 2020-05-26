@@ -94,8 +94,9 @@
             </div>
             <br>
             <div style="text-align: center;font-size: 0.7em">
-                <span v-if="loading == 0">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
-                <span style="opacity: 0.5" v-if="loading == 1">没有更多内容</span>
+                <span v-if="loading === 0">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+                <span style="opacity: 0.5" v-if="loading === 1">没有更多内容</span>
+                <span @click="loadMore(start)" class="btn-link" v-if="loading === 2">加载更多</span>
             </div>
             <br><br><br>
         </div>
@@ -247,6 +248,7 @@
             recommendPage:true,
             pageIndex:1,
             loading:0,
+            start:0,
         },
         methods:{
             add:function () {
@@ -307,6 +309,40 @@
             },
             toRebind:function () {
                 location.href = "user/rebindEmail.html";
+            },
+            loadMore:function (start) {
+                homePage.loading = 0;
+                $.ajax({
+                    url:"../answer/moreRecommend.action",
+                    type:"POST",
+                    data:{
+                        start:start
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            let size = result.recommends.length;
+                            result.recommends.forEach(function (item) {
+                                homePage.recommends.push(item);
+                            });
+                            if (size < 20) {
+                                homePage.loading = 1;
+                            } else {
+                                homePage.start += size;
+                                homePage.loading = 2;
+                            }
+                        } else if (result.resultCode === 1) {
+                            homePage.loading = 1;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        homePage.loading = 2;
+                    }
+                });
             }
         },
         mounted:function () {
@@ -319,7 +355,8 @@
                     if (result.resultCode === 0) {
                         homePage.recommends = result.recommends;
                         homePage.user = result.user;
-                        homePage.loading = 1;
+                        homePage.loading = 2;
+                        homePage.start= result.recommends.length;
                     }
                 },
                 error:function (request,status,error) {
