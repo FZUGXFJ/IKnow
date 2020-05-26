@@ -120,7 +120,11 @@
         </div>
     </div>
     <br>
-    <div style="text-align: center;font-size: 0.7em;opacity: 0.5">没有更多内容</div>
+    <div style="text-align: center;font-size: 0.7em;opacity: 0.5">
+        <span v-if="!hasMore && !loadingMore">没有更多内容</span>
+        <span v-if="loadingMore">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+        <span v-if="hasMore && !loadingMore" class="btn-link" @click="loadMore">点击加载更多</span>
+    </div>
     <br><br><br>
     <div id="postComment" v-if="load">
         <div class="errorBox" v-if="postError">{{postErrorMsg}}</div>
@@ -142,8 +146,7 @@
         el:"#allComment",
         data:{
             commentNum: 0,
-            comments: [
-            ],
+            comments: [],
             answerId:0,
             postError:false,
             postErrorMsg:"",
@@ -154,7 +157,10 @@
             targetId:0,
             replyComment:0,
             placeholder:"请输入评论内容",
-            noAction:false
+            noAction:false,
+            start:0,
+            loadingMore:false,
+            hasMore:false
         },
         methods:{
             post:function () {
@@ -372,7 +378,55 @@
                 }
             },
             back:function () {
+                sessionStorage.removeItem("comments");
+                sessionStorage.removeItem("commentsInfo");
                 history.go(-1);
+            },
+            loadMore:function () {
+                allComment.loadingMore = true;
+                $.ajax({
+                    url:"../../comment/moreComment.action",
+                    type:"POST",
+                    data:{
+                        start:allComment.start,
+                        answerId:allComment.answerId
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        result.comments.forEach(function (item) {
+                            allComment.comments.push(item);
+                        });
+                        if (result.resultCode === 0) {
+                            allComment.hasMore = result.comments.length >= 20;
+                        } else {
+                            allComment.hasMore = false;
+                        }
+                        allComment.loadingMore = false;
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        allComment.loadingMore = false;
+                    }
+                });
+            },
+            saveToLocal:function () {
+                sessionStorage.setItem("comments",JSON.stringify(this.comments));
+                let commentsInfo = {
+                    commentNum:this.commentNum,
+                    start:this.start,
+                    hasMore:this.hasMore
+                };
+                sessionStorage.setItem("commentsInfo",JSON.stringify(commentsInfo));
+            },
+            loadLocalData:function () {
+                this.comments = JSON.parse(sessionStorage.getItem("comments"));
+                let commentsInfo = JSON.parse(sessionStorage.getItem("commentsInfo"));
+                this.commentNum = commentsInfo.commentNum;
+                this.start = commentsInfo.start;
+                this.hasMore = commentsInfo.hasMore;
             }
         },
         mounted:function () {
@@ -385,6 +439,11 @@
             } else {
                 location.href = "../../error/mobile/404error.html"
             }
+            if (sessionStorage.getItem("comments") != null && sessionStorage.getItem("commentsInfo") != null) {
+                this.loadLocalData();
+                this.load = true;
+                return;
+            }
             $.ajax({
                 url:"../../comment/viewComments.action",
                 type:"POST",
@@ -396,7 +455,10 @@
                     if (result.resultCode === 0) {
                         allComment.commentNum = result.commentNum;
                         allComment.comments = result.comments;
+                        allComment.saveToLocal();
                         allComment.load = true;
+                        allComment.start += result.comments.length;
+                        allComment.hasMore = result.comments.length >= 20;
                     }
                 },
                 error:function (request,status,error) {
