@@ -44,7 +44,7 @@ public class Time {
     }
 
     /**
-     * 时间转换
+     * 时间转换(出bug了用下面那个）
      * @param date 数据库时间
      * @return
      */
