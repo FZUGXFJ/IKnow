@@ -65,5 +65,11 @@ public class CollectionProblemDAOImpl implements CollectionProblemDAO{
                 .setParameter("questionId",questionId).uniqueResult();
     }
 
-
+    @Override
+    public List<Collectionproblem> getCollectionQuestionByUserId(Integer userId, Integer start) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Collectionproblem as c WHERE" +
+                " userID = :userId");
+        return (List)query.setParameter("userId",userId).setFirstResult(start).setMaxResults(20).list();
+    }
 }
