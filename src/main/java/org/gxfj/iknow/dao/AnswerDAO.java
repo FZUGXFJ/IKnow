@@ -2,6 +2,7 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Comment;
+import org.gxfj.iknow.pojo.Question;
 
 import java.util.List;
 
@@ -50,4 +51,13 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      * @return 没有则为null
      */
     Answer getNotDelete(Integer id);
+
+    /**
+     * 列出指定用户id发布的回答
+     * @param userId 用户ID
+     * @param start 起始位置
+     * @param length 问题个数
+     * @return 问题列表没有则为null
+     */
+    List<Answer> listPartByUserId(Integer userId, Integer start, Integer length);
 }
