@@ -65,5 +65,11 @@ public class CollectionProblemDAOImpl implements CollectionProblemDAO{
                 .setParameter("questionId",questionId).uniqueResult();
     }
 
+    @Override
+    public Integer getUserCollectCount(Integer userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select count(c) from Collectionproblem as c WHERE userID = ?");
+        return ((Long)query.setInteger(0,userId).uniqueResult()).intValue();
 
+    }
 }
