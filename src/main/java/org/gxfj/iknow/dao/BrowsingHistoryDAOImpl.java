@@ -61,4 +61,11 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
 //        System.out.println(simpleDateFormat.format(calendar.getTime()));
         return query.setParameter(0, calendar.getTime()).list();
     }
+
+    @Override
+    public Integer getUserBrowseNum(Integer userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select count(b) from Browsinghistory as b WHERE userID = ?");
+        return ((Long)query.setInteger(0,userId).uniqueResult()).intValue();
+    }
 }

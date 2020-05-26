@@ -18,4 +18,11 @@ public interface BrowsingHistoryDAO extends BaseDAO<Browsinghistory>{
      * @return 用List存储了所有用户在近day天内的所有浏览记录
      */
     List<Browsinghistory> listInLastDay(Integer day);
+
+    /**
+     * 获取用户的浏览记录数
+     * @param userId 用户的Id
+     * @return 用户的浏览记录数
+     */
+    Integer getUserBrowseNum(Integer userId);
 }
