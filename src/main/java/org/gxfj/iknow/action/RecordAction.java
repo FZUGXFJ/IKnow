@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -79,6 +80,51 @@ public class RecordAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
+    public String postQueRecord(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User)session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else {
+            List<Map<String, Object>> records = recordService.listPostQuestionRecord(user,start);
+            Integer x=(Integer)records.size();
+            if(x<20){
+                response.put("resultCode",NO_MORE);
+            }
+            else
+            {
+                response.put("resultCode",SUCCESS);
+            }
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String postAnsRecord(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User)session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else {
+            List<Map<String, Object>> records = recordService.listPostAnswerRecord(user,start);
+            Integer x=(Integer)records.size();
+            if(x<20){
+                response.put("resultCode",NO_MORE);
+            }
+            else
+            {
+                response.put("resultCode",SUCCESS);
+            }
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
     public void setStart(Integer start) {
         this.start = start;
     }
