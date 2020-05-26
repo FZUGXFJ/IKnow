@@ -167,6 +167,7 @@
     let question = new Vue({
         el:"#question",
         data:{
+            questionData:{},
             questionId:0,
             viewerIsOwner:0,
             isAnonymous:1,
@@ -291,6 +292,8 @@
                 location.href = "../answer/postAnswer.html?questionId=" + this.questionId;
             },
             back:function () {
+                sessionStorage.removeItem("questionData");
+                sessionStorage.removeItem("questionInfo");
                 history.go(-1);
             },
             loadMore:function () {
@@ -311,14 +314,17 @@
                             let size = result.answers.length;
                             result.answers.forEach(function (item) {
                                 question.answers.push(item);
+                                question.questionData.questionAnswers.push(item);
                             });
                             question.hasMore = size >= 20;
                         } else {
                             result.answers.forEach(function (item) {
                                 question.answers.push(item);
+                                question.questionData.questionAnswers.push(item);
                             });
                             question.hasMore = false;
                         }
+                        sessionStorage.setItem("questionData",JSON.stringify(question.questionData));
                         question.loadingMore = false;
                     },
                     error:function (request,status,error) {
@@ -330,20 +336,37 @@
                     }
                 });
             },
-            installData:function (result) {
-                question.isAnonymous = result.question.isAnonymous;
-                question.owner.id = result.question.owner.id;
-                question.owner.username = result.question.owner.username;
-                question.owner.head = result.question.owner.head;
-                question.title = result.question.title;
-                question.content = result.question.content;
-                question.collectionCount = result.question.collectionCount;
-                question.browsingCount = result.question.browsingCount;
-                question.answerCount = result.question.answerCount;
-                question.answers = result.question.questionAnswers;
-                question.isSolved = result.question.isSolved;
-                question.isCollected = result.question.isCollected;
-                question.viewerIsOwner = result.viewerIsOwner;
+            installData:function (data) {
+                this.questionData = data;
+                this.isAnonymous = data.isAnonymous;
+                this.owner.id = data.owner.id;
+                this.owner.username = data.owner.username;
+                this.owner.head = data.owner.head;
+                this.title = data.title;
+                this.content = data.content;
+                this.collectionCount = data.collectionCount;
+                this.browsingCount = data.browsingCount;
+                this.answerCount = data.answerCount;
+                this.answers = data.questionAnswers;
+                this.isSolved = data.isSolved;
+                this.isCollected = data.isCollected;
+            },
+            saveInfo:function () {
+                let questionInfo = {
+                    viewerIsOwner:question.viewerIsOwner,
+                    hasMore:question.hasMore,
+                    start:question.start
+                };
+                sessionStorage.setItem("questionInfo",JSON.stringify(questionInfo));
+            },
+            loadLocalData:function () {
+                let questionData = JSON.parse(sessionStorage.getItem("questionData"));
+                this.installData(questionData);
+                let questionInfo = JSON.parse(sessionStorage.getItem("questionInfo"));
+                this.viewerIsOwner = questionInfo.viewerIsOwner;
+                this.start = questionInfo.start;
+                this.hasMore = questionInfo.hasMore;
+                this.loading = 1;
             }
         },
         mounted:function () {
@@ -356,6 +379,10 @@
             } else {
                 location.href = "../../error/mobile/404error.html"
             }
+            if (sessionStorage.getItem("questionInfo") != null && sessionStorage.getItem("questionData") != null) {
+                this.loadLocalData();
+                return;
+            }
             $.ajax({
                 url:"../../question/viewQuestion.action",
                 type:"POST",
@@ -365,13 +392,16 @@
                 dataType:"json",
                 success:function (result) {
                     if (result.resultCode === 0) {
-                        question.installData(result);
+                        question.installData(result.question);
+                        question.viewerIsOwner = result.viewerIsOwner;
                         question.loading = 1;
                         question.loadingMore = false;
                         question.start += result.question.questionAnswers.length;
                         if (result.question.questionAnswers.length === 20) {
                             question.hasMore = true;
                         }
+                        sessionStorage.setItem("questionData",JSON.stringify(question.questionData));
+                        question.saveInfo();
                     } else if (result.resultCode === 1) {
                         alert("问题找不到！")
                     }
