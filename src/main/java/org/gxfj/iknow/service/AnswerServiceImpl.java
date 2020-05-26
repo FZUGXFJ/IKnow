@@ -617,9 +617,9 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> moreRecommendAnswer(Integer userId, Integer count, Integer start) {
         List<Answer> answers = selectRecommendAnswer1(userId, count, start);
-        if (answers.size() == 0){
-            return null;
-        }
+//        if (answers.size() == 0){
+//            return null;
+//        }
         return getRecommendJsonItems(answers);
     }
 
