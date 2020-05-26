@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta charset="UTF-8">
     <title>修改个人信息</title>
-    <link rel="stylesheet" type="text/css" href="../css/global.css">
-    <link rel="stylesheet" type="text/css" href="../css/computer/user/modifyUserInf.css">
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../css/computer/user/modifyUserInf.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
 </head>
 <body style="background-color: aliceblue">
 <nav class="navbar navbar-expand-lg navbar-light fix">
-    <a class="navbar-brand" href="#" style="margin-left: 13%"><img src="../img/LOGO透明%20(1).png"></a>
+    <a class="navbar-brand" href="#" style="margin-left: 13%"><img src="../../img/LOGO透明%20(1).png"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -36,7 +36,6 @@
             <!--                <a class="nav-link" href="#">注册</a>-->
             <!--            </li>-->
         </ul>
-        <a class="navbar-brand" href="#"><img src="../img/qq.PNG"></a>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
             <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
@@ -109,7 +108,7 @@
         el:"#modifyUserInf",
         data:{
             head:"1.jpg",
-            headFirstPart:"<img src='../head/",
+            headFirstPart:"<img src='../../head/",
             headLastPart:"' width='100%' height='100%' alt=''>",
             username:"",
             gender:"",
@@ -129,7 +128,7 @@
             },
             save:function () {
                 $.ajax({
-                    url:"../user/editInf.action",
+                    url:"../../user/editInf.action",
                     type:"POST",
                     data:{
                         head:modifyUserInf.head.trim(),
@@ -177,7 +176,7 @@
         },
         created:function () {
             $.ajax({
-                url:"../user/userInf.action",
+                url:"../../user/userInf.action",
                 type:"POST",
                 data:{},
                 dataType:"json",
