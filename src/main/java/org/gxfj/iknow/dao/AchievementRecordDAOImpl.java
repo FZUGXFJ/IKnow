@@ -1,11 +1,15 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.Achievement;
 import org.gxfj.iknow.pojo.Achievementrecord;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("achievementRecordDAO")
 public class AchievementRecordDAOImpl implements AchievementRecordDAO{
@@ -37,5 +41,12 @@ public class AchievementRecordDAOImpl implements AchievementRecordDAO{
     @Override
     public void update(Achievementrecord bean) {
         getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public List<Achievement> ListlistAchievementsByUserId(Integer userId, Integer start) {
+        Query query = getSession().createQuery("from Achievementrecord as a WHERE" +
+                " userID = :userId");
+        return (List)query.setParameter("userId",userId).setFirstResult(start).list();
     }
 }
