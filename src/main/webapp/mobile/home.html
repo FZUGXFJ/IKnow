@@ -15,7 +15,7 @@
 </head>
 <body>
 <div id="index">
-    <div id="homePage"  v-if="pageIndex == 1">
+    <div id="homePage">
         <div id="homeHeader">
             <table>
                 <td style="width: 85%">
@@ -26,7 +26,7 @@
                 </td>
                 <td style="width: 3%"></td>
                 <td style="width: 12%;text-align: center">
-                    <div class="headPortrait" v-html="user.head" @click="userCheck"></div>
+                    <div class="headPortrait" v-html="user.head" @click="toMyPage"></div>
                 </td>
             </table>
             <br>
@@ -68,6 +68,10 @@
                             </tr>
                         </table>
                     </div>
+                    <div v-if="recommend.isAdopt">
+                        <i class="fas fa-award" style="color: #ff0000"></i>
+                        <span style="color: #2f4bff">&nbsp;此回答已被采纳</span>
+                    </div>
                     <div class="answerInf">
                         <p class="answerView" v-html="recommend.content"
                            @click="toAnswerPage(recommend.questionId,recommend.answerId)"></p>
@@ -104,108 +108,10 @@
             <div class="splitBox"></div>
         </div>
     </div>
-    <div id="myPage" v-if="pageIndex == 2">
-        <div id="myPageHead">
-            <div id="control">
-                <table>
-                    <td style="width: 75%"></td>
-                    <td style="width: 10%;text-align: right">
-                        <i class="fas fa-bell" style="color: rgba(90,55,255,0.58)"></i>
-                    </td>
-                    <td style="width: 5%;">
-                        <div class="redDot"></div>
-                    </td>
-                    <td style="width: 10%">
-                        <i class="fas fa-pen" style="color: rgba(90,55,255,0.58)" @click="toModify"></i>
-                    </td>
-                </table>
-            </div>
-            <div id="myInf">
-                <table>
-                    <td style="width: 20%">
-                        <div v-html="inf.head"></div>
-                    </td>
-                    <td style="width: 50%;text-align: center">
-                        <div><h3>{{inf.name}}</h3></div>
-                        <div style="border-radius: 0.5em">
-                            <i class="fas fa-location-arrow" style="color: rgba(90,55,255,0.58);"></i>
-                            <span style="color: #2f4bff;text-align: left">当前等级&nbsp;</span>{{user.level}}
-                        </div>
-                    </td>
-                    <td style="width: 30%;text-align: center;font-size: 0.8em;opacity: 0.5">
-                        <span>个人主页></span>
-                    </td>
-                </table>
-                <br>
-                <table>
-                    <td class="recordSpan">
-                        <h5>{{inf.postQueNum}}</h5>
-                        <div class="recordSpanText">我的提问</div>
-                    </td>
-                    <td class="recordSpan">
-                        <h5>{{inf.postQueNum}}</h5>
-                        <div class="recordSpanText">我的回答</div>
-                    </td>
-                    <td class="recordSpan">
-                        <h5>{{inf.postQueNum}}</h5>
-                        <div class="recordSpanText">收藏夹</div>
-                    </td>
-                    <td class="recordSpan">
-                        <h5>{{inf.postQueNum}}</h5>
-                        <div class="recordSpanText">浏览记录</div>
-                    </td>
-                </table>
-            </div>
-        </div>
-        <br>
-        <div id="myPageContent">
-            <div id="achievement">
-                <span style="color: rgba(91,0,238,0.96)">
-                    <i class="fas fa-crown"></i>
-                    &nbsp;我的成就
-                </span>
-                <div class="splitLine"></div>
-                <table>
-                    <td style="text-align: left"><span class="btn">徽章数量</span></td>
-                    <td style="text-align: right">{{inf.badgeNum}}</td>
-                </table>
-                <div id="achievementList">
-                    <span v-for="inf.achievementList" class="achievementItem"></span>
-                </div>
-            </div>
-            <br>
-            <div id="security">
-                <span style="color: rgba(91,0,238,0.96)">
-                    <i class="fas fa-shield-alt"></i>
-                    &nbsp;安全
-                </span>
-                <div class="splitLine"></div>
-                <div><button class="btn" style="color: red" @click="toReset">修改密码</button></div>
-                <div><button class="btn" style="color: red" @click="toRebind">重新绑定邮箱</button></div>
-            </div>
-            <br>
-            <div id="identification">
-                <span style="color: rgba(91,0,238,0.96)">
-                    <i class="fas fa-shield-alt"></i>
-                    &nbsp;认证
-                </span>
-                <div class="splitLine"></div>
-            </div>
-            <br>
-            <div id="system">
-                <span style="color: rgba(91,0,238,0.96)">
-                    <i class="fas fa-cog"></i>
-                    &nbsp;系统
-                </span>
-                <div class="splitLine"></div>
-                <div><button class="btn" style="color: red" @click="logout">退出登录</button></div>
-            </div>
-        </div>
-    </div>
     <div id="footer">
         <table>
             <td style="width: 33%;text-align: center">
-                <i class="fas fa-home" :class="{selected:pageIndex == 1}" @click="pageIndex=1"></i>
+                <i class="fas fa-home selected" @click="toRecommend"></i>
                 <div>首页</div>
             </td>
             <td style="width: 34%;text-align: center">
@@ -213,7 +119,7 @@
                 <div>添加</div>
             </td>
             <td style="width: 33%;text-align: center">
-                <i class="fas fa-user" :class="{selected:pageIndex == 2}" @click="userCheck"></i>
+                <i class="fas fa-user" @click="toMyPage"></i>
                 <div>我的</div>
             </td>
         </table>
@@ -229,45 +135,25 @@
         el:"#index",
         data:{
             recommends:[],
-            user:{
-
-            },
-            inf:{
-                name:"hero",
-                head:"<img src='../head/1.jpg' style='border-radius: 100%' width='100%' height='100%'>",
-                badgeNum:0,
-                level:0,
-                postQueNum:0,
-                postAnsNum:0,
-                collectNum:0,
-                browseNum:0,
-                achievementList:[],
-                isAuthentication:0,
-                identity:{}
-            },
+            user:{},
             recommendPage:true,
-            pageIndex:1,
             loading:0,
             start:0,
         },
         methods:{
             add:function () {
+                if (this.loading === 0) {
+                    return;
+                }
                 if (this.user.id === 0) {
                     location.href = "user/login.html?boot=0";
-                } else if (this.loading === 0) {
-                    this.pageIndex = 1;
                 } else {
                     location.href = "add.html";
                 }
             },
-            userCheck:function () {
-                if (this.user.id === 0) {
-                    location.href = "user/login.html?boot=0";
-                } else if (this.loading === 0) {
-                    this.pageIndex = 1;
-                } else {
-                    this.pageIndex = 2;
-                }
+            toRecommend:function () {
+                sessionStorage.clear();
+                location.reload();
             },
             toQuestionPage:function (questionId) {
                 location.href = "question/question.html?questionId=" +questionId;
@@ -275,40 +161,6 @@
             toAnswerPage:function (questionId,answerId) {
                 location.href = "answer/answer.html?questionId=" + questionId
                 + "&answerId=" +answerId;
-            },
-            logout:function () {
-                $.ajax({
-                    type:"POST",
-                    url:"../user/logout.action",
-                    data:{},
-                    dataType:"json",
-                    success:function (result) {
-                        if (result.response === 0) {
-                            let exp = new Date();
-                            exp.setTime((exp.getTime()) - 1);
-                            document.cookie = "email=" + result.email + ";expires="
-                                + exp.toGMTString() + ";path=/";
-                            document.cookie = "password=" + result.password + ";expires="
-                                + exp.toGMTString() + ";path=/";
-                            location.href = "home.html";
-                        }
-                    },
-                    error:function (request,status,error) {
-                        alert("系统异常！");
-                        console.log(request.status);
-                        console.log(request.readyState);
-                        console.log(status);
-                    }
-                });
-            },
-            toModify:function () {
-                location.href = "user/modifyUserInf.html";
-            },
-            toReset:function () {
-                location.href = "user/resetPassword.html";
-            },
-            toRebind:function () {
-                location.href = "user/rebindEmail.html";
             },
             loadMore:function (start) {
                 homePage.loading = 0;
@@ -331,8 +183,10 @@
                                 homePage.start += size;
                                 homePage.loading = 2;
                             }
+                            homePage.saveToSession();
                         } else if (result.resultCode === 1) {
                             homePage.loading = 1;
+                            sessionStorage.setItem("loading",homePage.loading);
                         }
                     },
                     error:function (request,status,error) {
@@ -343,29 +197,53 @@
                         homePage.loading = 2;
                     }
                 });
+            },
+            saveToSession:function () {
+                sessionStorage.setItem("recommends",JSON.stringify(homePage.recommends));
+                sessionStorage.setItem("user",JSON.stringify(homePage.user));
+                sessionStorage.setItem("loading",homePage.loading);
+                sessionStorage.setItem("start",homePage.start);
+            },
+            toMyPage:function () {
+                if (this.loading === 0) {
+                    return;
+                }
+                if (this.user.id === 0) {
+                    location.href = "user/login.html?boot=1";
+                } else {
+                    location.href = "my.html";
+                }
             }
         },
         mounted:function () {
-            $.ajax({
-                url:"../answer/recommendAnswer.action",
-                type:"POST",
-                data:{},
-                dataType:"json",
-                success:function (result) {
-                    if (result.resultCode === 0) {
-                        homePage.recommends = result.recommends;
-                        homePage.user = result.user;
-                        homePage.loading = 2;
-                        homePage.start= result.recommends.length;
+            if (sessionStorage.getItem("recommends") != null) {
+                this.recommends = JSON.parse(sessionStorage.getItem("recommends"));
+                this.user = JSON.parse(sessionStorage.getItem("user"));
+                this.loading = parseInt(sessionStorage.getItem("loading"));
+                this.start = parseInt(sessionStorage.getItem("start"));
+            } else {
+                $.ajax({
+                    url: "../answer/recommendAnswer.action",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            homePage.recommends = result.recommends;
+                            homePage.user = result.user;
+                            homePage.loading = 2;
+                            homePage.start = result.recommends.length;
+                            homePage.saveToSession();
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
                     }
-                },
-                error:function (request,status,error) {
-                    alert("系统异常！");
-                    console.log(request.status);
-                    console.log(request.readyState);
-                    console.log(status);
-                }
-            });
+                });
+            }
         }
     });
 </script>

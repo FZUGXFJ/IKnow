@@ -113,6 +113,7 @@
                 val.length > 6 ? verifyCode.val(val.slice(0,6)) : "";
             },
             loginByEmail:function (email,verifyCode) {
+                sessionStorage.clear();
                 let al = $("#alert");
                 $.ajax({
                     url:"../../user/emailLogin.action",
@@ -161,6 +162,7 @@
                 });
             },
             loginByPassword:function (email,password) {
+                sessionStorage.clear();
                 $.ajax({
                     url:"../../user/passwordLogin.action",
                     type:"POST",
