@@ -22,6 +22,7 @@ public class RecordServiceImpl implements RecordService {
     @Autowired
     BrowsingHistoryDAO browsingHistoryDAO;
 
+
     @Override
     public Map<String, Object> collectionRecord(User user, Integer start) {
         List<Collectionproblem> cproblems=collectionProblemDAO.getCollectionQuestionByUserId(user.getId(),start);
@@ -37,8 +38,7 @@ public class RecordServiceImpl implements RecordService {
             record.put("broswingNum",browsingHistoryDAO.getBrowsingCount(question.getId()));
             record.put("collectionNum",collectionProblemDAO.getCollectionCount(question.getId()));
             record.put("isSolved",question.getQuestionstateByStateId().getId()-1);
-            record.put("time",collectionProblem.getDate());
-
+            record.put("time",Time.getNowDate(collectionProblem.getDate()));
             records.add(record);
         }
         Map<String,Object> response=new HashMap<>(20);
