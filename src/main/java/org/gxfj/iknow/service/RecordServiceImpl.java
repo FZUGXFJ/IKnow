@@ -21,8 +21,10 @@ public class RecordServiceImpl implements RecordService {
     AnswerDAO answerDAO;
     @Autowired
     BrowsingHistoryDAO browsingHistoryDAO;
+    @Autowired
+    QuestionDAO questionDAO;
 
-
+    final static private int MAP_NUM = 20;
     @Override
     public Map<String, Object> collectionRecord(User user, Integer start) {
         List<Collectionproblem> cproblems=collectionProblemDAO.getCollectionQuestionByUserId(user.getId(),start);
@@ -38,7 +40,7 @@ public class RecordServiceImpl implements RecordService {
             record.put("broswingNum",browsingHistoryDAO.getBrowsingCount(question.getId()));
             record.put("collectionNum",collectionProblemDAO.getCollectionCount(question.getId()));
             record.put("isSolved",question.getQuestionstateByStateId().getId()-1);
-            record.put("time",Time.getNowDate(collectionProblem.getDate()));
+            record.put("time",Time.getTime1(collectionProblem.getDate()));
             records.add(record);
         }
         Map<String,Object> response=new HashMap<>(20);
@@ -77,5 +79,45 @@ public class RecordServiceImpl implements RecordService {
         response.put("records",records);
         response.put("Num",bHistorys.size());
         return response;
+    }
+
+    @Override
+    public List<Map<String,Object>> listPostQuestionRecord(User user, Integer start){
+        List<Question> questions  = questionDAO.listPartByUserId(user.getId(),start,20);
+        List<Map<String, Object>> records = new ArrayList<>();
+
+        for(Question question:questions){
+            Map<String, Object> record = new HashMap<>(MAP_NUM);
+            record.put("id",question.getId());
+            record.put("title",question.getTitle());
+            record.put("answerNum",question.getAnswersById().size());
+            record.put("isSolved",question.getAnswerByAdoptId() == null?1:0);
+            record.put("collectNum",question.getCollectionproblemsById().size());
+            record.put("browsingNum",question.getBrowsinghistoriesById().size());
+            record.put("time",Time.getTime1(question.getDate()));
+            records.add(record);
+        }
+        return records;
+    }
+
+    @Override
+    public List<Map<String,Object>> listPostAnswerRecord(User user, Integer start){
+        List<Answer> answers  = answerDAO.listPartByUserId(user.getId(),start,20);
+        List<Map<String, Object>> records = new ArrayList<>();
+
+        for(Answer answer:answers){
+            Map<String, Object> record = new HashMap<>(MAP_NUM);
+            record.put("id",answer.getId());
+            record.put("questionId",answer.getQuestionByQuestionId().getId());
+            record.put("questionTitle",answer.getQuestionByQuestionId().getTitle());
+            record.put("answerContent",HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContent())));
+            record.put("commentNum",answer.getCommentsById().size());
+            record.put("approveNum",answer.getApprovalanswersById().size());
+            record.put("isAdopt",answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().
+                    equals(answer.getId())?1:0);
+            record.put("time",Time.getTime1(answer.getDate()));
+            records.add(record);
+        }
+        return records;
     }
 }
