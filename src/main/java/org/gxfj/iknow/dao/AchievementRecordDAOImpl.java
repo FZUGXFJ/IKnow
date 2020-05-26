@@ -44,7 +44,7 @@ public class AchievementRecordDAOImpl implements AchievementRecordDAO{
     }
 
     @Override
-    public List<Achievement> ListlistAchievementsByUserId(Integer userId, Integer start) {
+    public List<Achievement> listAchievementsByUserId(Integer userId, Integer start) {
         Query query = getSession().createQuery("from Achievementrecord as a WHERE" +
                 " userID = :userId");
         return (List)query.setParameter("userId",userId).setFirstResult(start).list();
