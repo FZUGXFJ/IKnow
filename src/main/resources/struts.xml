@@ -281,5 +281,11 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="browsingRecord" class="org.gxfj.iknow.action.RecordAction" method="browsingRecord">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
 </struts>

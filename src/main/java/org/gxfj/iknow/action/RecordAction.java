@@ -57,6 +57,28 @@ public class RecordAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
+    public String browsingRecord(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User)session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else {
+            response=recordService.browsingRecord(user,start);
+            Integer x=(Integer)response.get("Num");
+            if(x<20){
+                response.put("resultCode",NO_MORE);
+            }
+            else
+            {
+                response.put("resultCode",SUCCESS);
+            }
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
     public void setStart(Integer start) {
         this.start = start;
     }
