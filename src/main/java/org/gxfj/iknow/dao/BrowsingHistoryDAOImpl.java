@@ -63,9 +63,10 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
     }
 
     @Override
-    public Integer getUserBrowseNum(Integer userId) {
+    public List<Browsinghistory> getBrowsingHistoryByUserId(Integer userId, Integer start) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select count(b) from Browsinghistory as b WHERE userID = ?");
-        return ((Long)query.setInteger(0,userId).uniqueResult()).intValue();
+        Query query = session.createQuery("from BrowsingHistory as b WHERE" +
+                " userID = :userId order by date desc");
+        return (List)query.setParameter("userId",userId).setFirstResult(start).setMaxResults(20).list();
     }
 }

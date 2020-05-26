@@ -114,9 +114,9 @@
     </div>
     <br>
     <div style="text-align: center;font-size: 0.7em;">
-        <span v-if="loading == 2"><button class="btn btn-lin">点击加载更多</button></span>
-        <span style="opacity: 0.5" v-if="loading == 1">没有更多内容</span>
-        <span v-if="loading == 0">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+        <span v-if="hasMore&&!loadingMore" class="btn-link" @click="loadMore">点击加载更多</span>
+        <span style="opacity: 0.5" v-if="!hasMore&&!loadingMore">没有更多内容</span>
+        <span v-if="loadingMore">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
     </div>
     <br><br><br>
     <div id="footer">
@@ -188,6 +188,9 @@
             loading:0,
             isCollected:0,
             noAction:false,
+            start:0,
+            hasMore:false,
+            loadingMore:true
         },
         methods:{
             postAnswer:function () {
@@ -289,6 +292,58 @@
             },
             back:function () {
                 history.go(-1);
+            },
+            loadMore:function () {
+                if (!this.hasMore || this.loadingMore) {
+                    return;
+                }
+                this.loadingMore = true;
+                $.ajax({
+                    url:"../../question/moreAnswer.action",
+                    type:"POST",
+                    data:{
+                        start:question.start,
+                        questionId:question.questionId
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            let size = result.answers.length;
+                            result.answers.forEach(function (item) {
+                                question.answers.push(item);
+                            });
+                            question.hasMore = size >= 20;
+                        } else {
+                            result.answers.forEach(function (item) {
+                                question.answers.push(item);
+                            });
+                            question.hasMore = false;
+                        }
+                        question.loadingMore = false;
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        question.loadingMore = false;
+                    }
+                });
+            },
+            installData:function (result) {
+                question.isAnonymous = result.question.isAnonymous;
+                question.owner.id = result.question.owner.id;
+                question.owner.username = result.question.owner.username;
+                question.owner.head = result.question.owner.head;
+                question.title = result.question.title;
+                question.content = result.question.content;
+                question.collectionCount = result.question.collectionCount;
+                question.browsingCount = result.question.browsingCount;
+                question.answerCount = result.question.answerCount;
+                question.answers = result.question.questionAnswers;
+                question.isSolved = result.question.isSolved;
+                question.isCollected = result.question.isCollected;
+                question.viewerIsOwner = result.viewerIsOwner;
             }
         },
         mounted:function () {
@@ -310,20 +365,13 @@
                 dataType:"json",
                 success:function (result) {
                     if (result.resultCode === 0) {
-                        question.isAnonymous = result.question.isAnonymous;
-                        question.owner.id = result.question.owner.id;
-                        question.owner.username = result.question.owner.username;
-                        question.owner.head = result.question.owner.head;
-                        question.title = result.question.title;
-                        question.content = result.question.content;
-                        question.collectionCount = result.question.collectionCount;
-                        question.browsingCount = result.question.browsingCount;
-                        question.answerCount = result.question.answerCount;
-                        question.answers = result.question.questionAnswers;
-                        question.isSolved = result.question.isSolved;
-                        question.isCollected = result.question.isCollected;
-                        question.viewerIsOwner = result.viewerIsOwner;
+                        question.installData(result);
                         question.loading = 1;
+                        question.loadingMore = false;
+                        question.start += result.question.questionAnswers.length;
+                        if (result.question.questionAnswers.length === 20) {
+                            question.hasMore = true;
+                        }
                     } else if (result.resultCode === 1) {
                         alert("问题找不到！")
                     }

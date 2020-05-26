@@ -278,48 +278,7 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> getRecommendAnswer(Integer userId, Integer count) {
         List<Answer> answers = selectRecommendAnswer(userId, count);
-        List<Map<String,Object>> recommendList = new ArrayList<>();
-        Map<String,Object> recommend;
-        for(Answer answer:answers){
-            recommend = new HashMap<>(MAP_NUM);
-            Question question = answer.getQuestionByQuestionId();
-            User user = answer.getUserByUserId();
-            User quser = question.getUserByUserId();
-            recommend.put("questionId",question.getId());
-            recommend.put("questionTitle",question.getTitle());
-            recommend.put("answererId",user.getId());
-            //判断答主是否匿名
-//            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1) ;
-            boolean isAnonymous = (answer.getIsAnonymous() == ANONYMOUS);
-            if(isAnonymous) {
-                recommend.put("answererHead","<img src='../head/0.jpg' width='100%' height='100%'" +
-                        " style='border-radius: 100%' alt=''>");
-                recommend.put("answererName","匿名用户");
-                recommend.put("answererLevel",0);
-                recommend.put("answererBadge",0);
-            } else {
-                recommend.put("answererHead","<img src='../head/" + user.getHead() +
-                        "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
-                recommend.put("answererName",user.getName());
-                recommend.put("answererLevel",levelDAO.getLevelByExp(user.getExp()));
-                recommend.put("answererBadge",user.getBadgeNum());
-            }
-            recommend.put("answerId",answer.getId());
-            //使用HtmlUtil工具类，将图片转换掉
-            recommend.put("content", HtmlUtil.changeImgTag(answer.getContent()));
-            recommend.put("approveNum",answer.getApprovalCount());
-            recommend.put("commentNum",commentDAO.getCount(answer.getId()));
-            Answer au=question.getAnswerByAdoptId();
-            if (au!=null&&au.getId().equals(answer.getId())) {
-                recommend.put("isAdopt",1);
-            } else {
-                recommend.put("isAdopt",0);
-            }
-            recommendList.add(recommend);
-        }
-        Map<String,Object> result = new HashMap<>(MAP_NUM);
-        result.put("recommends",recommendList);
-        return result;
+        return getRecommendJsonItems(answers);
     }
 
     /**
@@ -658,9 +617,13 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> moreRecommendAnswer(Integer userId, Integer count, Integer start) {
         List<Answer> answers = selectRecommendAnswer1(userId, count, start);
-        if (answers.size()<=20){
+        if (answers.size() == 0){
             return null;
         }
+        return getRecommendJsonItems(answers);
+    }
+
+    private Map<String, Object> getRecommendJsonItems(List<Answer> answers) {
         List<Map<String,Object>> recommendList = new ArrayList<>();
         Map<String,Object> recommend;
         for(Answer answer:answers){
@@ -689,7 +652,7 @@ public class AnswerServiceImpl implements AnswerService{
             }
             recommend.put("answerId",answer.getId());
             //使用HtmlUtil工具类，将图片转换掉
-            recommend.put("content", HtmlUtil.changeImgTag(answer.getContent()));
+            recommend.put("content", HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContent())));
             recommend.put("approveNum",answer.getApprovalCount());
             recommend.put("commentNum",commentDAO.getCount(answer.getId()));
             Answer au=question.getAnswerByAdoptId();

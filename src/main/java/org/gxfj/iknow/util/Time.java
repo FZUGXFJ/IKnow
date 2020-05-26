@@ -1,6 +1,10 @@
 package org.gxfj.iknow.util;
 
 import java.util.Date;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+
 
 public class Time {
     final static private int MILLIS_PER_YEAR = 366*24*60*60;
@@ -36,5 +40,18 @@ public class Time {
             return ("数据库时间超过了当前时间！！");
         }
 
+    }
+
+    /**
+     * 时间转换
+     * @param date 数据库时间
+     * @return
+     */
+    public static Date getNowDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(date);
+        ParsePosition pos = new ParsePosition(8);
+        Date currentTime_2 = formatter.parse(dateString, pos);
+        return currentTime_2;
     }
 }

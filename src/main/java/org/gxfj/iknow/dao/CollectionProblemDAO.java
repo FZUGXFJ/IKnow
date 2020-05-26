@@ -3,6 +3,8 @@ package org.gxfj.iknow.dao;
 import org.gxfj.iknow.pojo.Approvalreply;
 import org.gxfj.iknow.pojo.Collectionproblem;
 
+import java.util.List;
+
 public interface CollectionProblemDAO extends BaseDAO<Collectionproblem>{
 
     /**
@@ -33,4 +35,11 @@ public interface CollectionProblemDAO extends BaseDAO<Collectionproblem>{
      */
     void delete(Collectionproblem bean);
 
+    /**
+     * 根据用户id获取所有收藏记录
+     * @param userId 用户id
+     * @param start 起始地址
+     * @return  收藏问题记录
+     */
+    List<Collectionproblem> getCollectionQuestionByUserId(Integer userId,Integer start);
 }

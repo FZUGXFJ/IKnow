@@ -1,6 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Browsinghistory;
+import org.gxfj.iknow.pojo.Collectionproblem;
 
 import java.util.List;
 
@@ -20,9 +21,10 @@ public interface BrowsingHistoryDAO extends BaseDAO<Browsinghistory>{
     List<Browsinghistory> listInLastDay(Integer day);
 
     /**
-     * 获取用户的浏览记录数
-     * @param userId 用户的Id
-     * @return 用户的浏览记录数
+     * 根据用户id获取所有浏览记录
+     * @param userId 用户id
+     * @param start 起始地址
+     * @return  浏览记录
      */
-    Integer getUserBrowseNum(Integer userId);
+    List<Browsinghistory> getBrowsingHistoryByUserId(Integer userId, Integer start);
 }
