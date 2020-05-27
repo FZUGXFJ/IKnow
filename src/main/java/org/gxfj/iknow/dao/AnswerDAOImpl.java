@@ -100,4 +100,12 @@ public class AnswerDAOImpl implements AnswerDAO{
         //session.close();
         return answers;
     }
+
+    @Override
+    public List<Answer> listPartByUserId(Integer userId) {
+        Query query = getSession().createQuery("from Answer as a WHERE ( userID= " + userId + " )" +
+                " and  order by a.id desc");
+        List<Answer> answers = query.list();
+        return answers;
+    }
 }
