@@ -36,7 +36,7 @@
             </div>
             <div>
                 <h5 @click="turnQuePage(record.questionId)"><b>{{record.questionTitle}}</b></h5>
-                <p class="contentView" v-html="record.answerContent" @click="turnAnsPage(record.id)"></p>
+                <p class="contentView" v-html="record.answerContent" @click="turnAnsPage(record.questionId,record.id)"></p>
             </div>
             <div class="time">
                 <table>
@@ -49,12 +49,13 @@
     </div>
     <br>
     <div class="loadOpera">
-        <span v-if="hasMore === 0 && !loadingMore" class="btn-link" @click="load" style="cursor: pointer">加载更多</span>
+        <span v-if="hasMore && !loadingMore" class="btn-link" @click="load" style="cursor: pointer">加载更多</span>
         <span v-if="loadingMore" style="opacity: 0.5">
             <i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i>&nbsp;加载中...
         </span>
-        <span v-if="hasMore === 1 && !loadingMore" style="opacity: 0.5">没有更多内容</span>
+        <span v-if="!hasMore && !loadingMore" style="opacity: 0.5">没有更多内容</span>
     </div>
+    <br><br>
 </div>
 <script>
     let postAnsRecord = new Vue({
@@ -63,27 +64,66 @@
             loading:false,
             loadingMore:false,
             records:[],
-            hasMore:0
+            hasMore:false,
+            start:0,
         },
         methods:{
             back:function () {
                 history.go(-1);
             },
-            load:function (start) {
-
+            load:function () {
+                let start = this.start;
+                this.loadingMore = true;
+                $.ajax({
+                    type:"POST",
+                    url:"../../record/postAnsRecord.action",
+                    data:{
+                        start:start
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            result.records.forEach(function (item) {
+                                postAnsRecord.records.push(item);
+                            });
+                            let size = result.records.length;
+                            postAnsRecord.hasMore = size >= 20;
+                            postAnsRecord.start += size;
+                            postAnsRecord.loadingMore = false;
+                        } else if (result.resultCode === 1) {
+                            result.records.forEach(function (item) {
+                                postAnsRecord.records.push(item);
+                            });
+                            postAnsRecord.hasMore = false;
+                            let size = result.records.length;
+                            postAnsRecord.start += size;
+                            postAnsRecord.loadingMore = false;
+                        } else {
+                            postAnsRecord.loadingMore = false;
+                            if (confirm("请先登录")) {
+                                location.href = "../user/login.html?boot=0"
+                            }
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             },
             turnQuePage:function (id) {
-
+                location.href = "../question/question.html?questionId=" + id;
             },
-            turnAnsPage:function (id) {
-
+            turnAnsPage:function (qid,aid) {
+                location.href = "../answer/answer.html?questionId=" + qid + "&answerId=" + aid;
             },
-            loadMore:function () {
-
-            }
         },
         mounted:function () {
-            this.load(0);
+            this.loading = true;
+            this.load();
+            this.loading = false;
         }
     })
 </script>

@@ -113,8 +113,12 @@ public class RecordServiceImpl implements RecordService {
             record.put("answerContent",HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContent())));
             record.put("commentNum",answer.getCommentsById().size());
             record.put("approveNum",answer.getApprovalanswersById().size());
-            record.put("isAdopt",answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().
-                    equals(answer.getId())?1:0);
+            int isAdopt = 0;
+            if (answer.getQuestionByQuestionId().getAnswerByAdoptId() != null &&
+                    answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(user.getId())) {
+                isAdopt = 1;
+            }
+            record.put("isAdopt",isAdopt);
             record.put("time",Time.getTime1(answer.getDate()));
             records.add(record);
         }
