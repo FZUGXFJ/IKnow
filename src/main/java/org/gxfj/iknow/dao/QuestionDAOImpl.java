@@ -102,4 +102,12 @@ public class QuestionDAOImpl implements QuestionDAO {
         //session.close();
         return questions;
     }
+
+    @Override
+    public List<Question> listPartByUserId(Integer userId) {
+        Query query = getSession().createQuery("from Question as q WHERE ( userID= " + userId + " ) " +
+                "order by q.id desc");
+        List<Question> questions = questions = query.list();
+        return questions;
+    }
 }
