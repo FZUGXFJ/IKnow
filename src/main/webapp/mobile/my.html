@@ -49,7 +49,7 @@
                 </table>
                 <br>
                 <table>
-                    <td class="recordSpan">
+                    <td class="recordSpan" @click="toPostQueRecord">
                         <h5>{{inf.postQueNum}}</h5>
                         <div class="recordSpanText">我的提问</div>
                     </td>
@@ -192,6 +192,9 @@
             },
             toRecommendPage:function () {
                 history.go(-1);
+            },
+            toPostQueRecord:function () {
+                location.href = "record/postQueRecord.html";
             }
         },
         mounted:function () {

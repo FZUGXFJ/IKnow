@@ -90,6 +90,7 @@ public class RecordAction {
         }
         else {
             List<Map<String, Object>> records = recordService.listPostQuestionRecord(user,start);
+            response.put("records",records);
             Integer x=(Integer)records.size();
             if(x<20){
                 response.put("resultCode",NO_MORE);
