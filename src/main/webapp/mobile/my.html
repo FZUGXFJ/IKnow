@@ -57,7 +57,7 @@
                         <h5>{{inf.postQueNum}}</h5>
                         <div class="recordSpanText">我的回答</div>
                     </td>
-                    <td class="recordSpan">
+                    <td class="recordSpan" @click="toCollectionRecord">
                         <h5>{{inf.postQueNum}}</h5>
                         <div class="recordSpanText">收藏夹</div>
                     </td>
@@ -199,6 +199,9 @@
             toPostAnsRecord:function () {
                 location.href = "record/postAnsRecord.html";
             },
+            toCollectionRecord:function () {
+                location.href = "record/collectionRecord.html";
+            }
         },
         mounted:function () {
         }

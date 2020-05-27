@@ -55,11 +55,11 @@
         </div>
         <br>
         <div class="loadOpera">
-            <span v-if="hasMore === 0 && !loadingMore" class="btn-link" @click="load" style="cursor: pointer">加载更多</span>
+            <span v-if="hasMore && !loadingMore" class="btn-link" @click="load" style="cursor: pointer">加载更多</span>
             <span v-if="loadingMore" style="opacity: 0.5">
             <i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i>&nbsp;加载中...
         </span>
-            <span v-if="hasMore === 1 && !loadingMore" style="opacity: 0.5">没有更多内容</span>
+            <span v-if="!hasMore && !loadingMore" style="opacity: 0.5">没有更多内容</span>
         </div>
     </div>
 </div>
@@ -70,42 +70,54 @@
             loading:false,
             loadingMore:false,
             hasMore:0,
-            records:[
-                {
-                    questionId:0,
-                    questionTitle:"只是标题吗？我怎么不知道？",
-                    answerNum:0,
-                    browsingNum:0,
-                    collectionNum:0,
-                    isSolved:0,
-                    time:"2020-1-1 20:18:32"
-                },
-                {
-                    questionId:0,
-                    questionTitle:"只是标题吗？我怎么不知道？",
-                    answerNum:0,
-                    browsingNum:0,
-                    collectionNum:0,
-                    isSolved:0,
-                    time:"2020-1-1 20:18:32"
-                },
-                {
-                    questionId:0,
-                    questionTitle:"只是标题吗？我怎么不知道？",
-                    answerNum:0,
-                    browsingNum:0,
-                    collectionNum:0,
-                    isSolved:0,
-                    time:"2020-1-1 20:18:32"
-                }
-            ]
+            records:[],
+            start:0,
         },
         methods:{
             back:function () {
-
+                history.go(-1);
             },
-            load:function (start) {
-
+            load:function () {
+                let start = this.start;
+                this.loadingMore = true;
+                $.ajax({
+                    type:"POST",
+                    url:"../../record/collectionRecord.action",
+                    data:{
+                        start:start
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            result.records.forEach(function (item) {
+                                collectionRecord.records.push(item);
+                            });
+                            let size = result.records.length;
+                            collectionRecord.hasMore = size >= 20;
+                            collectionRecord.start += size;
+                            collectionRecord.loadingMore = false;
+                        } else if (result.resultCode === 1) {
+                            result.records.forEach(function (item) {
+                                collectionRecord.records.push(item);
+                            });
+                            collectionRecord.hasMore = false;
+                            let size = result.records.length;
+                            collectionRecord.start += size;
+                            collectionRecord.loadingMore = false;
+                        } else {
+                            collectionRecord.loadingMore = false;
+                            if (confirm("请先登录")) {
+                                location.href = "../user/login.html?boot=0"
+                            }
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             },
             turnQuePage:function (id) {
 
@@ -140,7 +152,9 @@
             }
         },
         mounted:function () {
-            this.load(0);
+            this.loading = true;
+            this.load();
+            this.loading = false;
         }
     })
 </script>
