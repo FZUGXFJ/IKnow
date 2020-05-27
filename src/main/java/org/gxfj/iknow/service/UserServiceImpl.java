@@ -1,18 +1,19 @@
 package org.gxfj.iknow.service;
 
-import com.alibaba.fastjson.JSONObject;
-import org.gxfj.iknow.dao.UserDAO;
-import org.gxfj.iknow.pojo.User;
-import org.gxfj.iknow.pojo.Userstate;
+import com.alibaba.fastjson.JSON;
+import org.gxfj.iknow.dao.*;
+import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.MailUtil;
 import org.gxfj.iknow.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +25,20 @@ public class UserServiceImpl<result> implements UserService{
 
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private LevelDAO levelDAO;
+    @Autowired
+    private CollectionProblemDAO collectionProblemDAO;
+    @Autowired
+    private BrowsingHistoryDAO browsingHistoryDAO;
+    @Autowired
+    private AchievementRecordDAO achievementRecordDAO;
+    @Autowired
+    private QuestionDAO questionDAO;
+    @Autowired
+    private AnswerDAO answerDAO;
+    @Autowired
+    private UserIdentityDAO userIdentityDAO;
     @Autowired
     private MailUtil mailUtil;
 
@@ -135,21 +150,46 @@ public class UserServiceImpl<result> implements UserService{
     }
 
     @Override
-    public String getUserInf(User userInf) {
+    public String getSimpleUserInf(User user) {
         String result;
-        if(userInf==null) {
+        if(user ==null) {
             return "{\"resultCode\":1}";
         }
         else {
-            if (userInf.getIntroduction() == null) {
-                result = "{\"resultCode\":0,\"userInf\": {\"head\":\"" + userInf.getHead() +
-                        "\",\"username\":\"" + userInf.getName() + "\",\"gender\":\"" + userInf.getGender() +
-                        "\",\"introduction\":" + userInf.getIntroduction() + "}}";
+            if (user.getIntroduction() == null) {
+                result = "{\"resultCode\":0,\"user\": {\"head\":\"" + user.getHead() +
+                        "\",\"username\":\"" + user.getName() + "\",\"gender\":\"" + user.getGender() +
+                        "\",\"introduction\":" + user.getIntroduction() + "}}";
             } else {
-                result = "{\"resultCode\":0,\"userInf\": { \"head\": \"" + userInf.getHead() +
-                        "\",\"username\":\"" + userInf.getName() + "\",\"gender\":\"" + userInf.getGender() +
-                        "\",\"introduction\":\"" + userInf.getIntroduction() + "\"}}";
+                result = "{\"resultCode\":0,\"user\": { \"head\": \"" + user.getHead() +
+                        "\",\"username\":\"" + user.getName() + "\",\"gender\":\"" + user.getGender() +
+                        "\",\"introduction\":\"" + user.getIntroduction() + "\"}}";
             }
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getAllUserInf(User user) {
+        Map<String, Object> result = new HashMap<>(MAP_NUM);
+        if(user == null){
+            result.put("resultCode" , 1 );
+        }
+        else{
+            result.put("resultCode" , 0);
+            Integer userId = user.getId();
+            Map<String, Object> userInf = new HashMap<>(MAP_NUM);
+            userInf.put("name" , user.getName());
+            userInf.put("head" , user.getHead());
+            userInf.put("badgeNum" , user.getBadgeNum());
+            userInf.put("level" , levelDAO.getLevelByExp(user.getExp()));
+            userInf.put("postQueNum" , questionDAO.listPartByUserId(userId).size());
+            userInf.put("postAnsNum" , answerDAO.listPartByUserId(userId).size());
+            userInf.put("collectNum" , collectionProblemDAO.getCollectionQuestionByUserId(userId , 0).size());
+            userInf.put("browseNum" , browsingHistoryDAO.getBrowsingHistoryByUserId(userId, 0).size());
+            userInf.put("achievementList" , listUserAchievements(userId));
+            userInf.put("identity" , getUserIdentity(userId));
+            result.put("information" , userInf);System.out.println("12");
         }
         return result;
     }
@@ -194,5 +234,41 @@ public class UserServiceImpl<result> implements UserService{
             return false;
         }
         return true;
+    }
+
+    /**
+     * 获取用户获得的成就
+     * @return 哈希表的列表形式的用户成就
+     */
+    private List<Map> listUserAchievements(Integer userId){
+        List<Achievement> achievements = achievementRecordDAO.listAchievementsByUserId(userId , 0);
+        List<Map> achievementsMap = new ArrayList<>();
+        Map<String, Object> achievementMap = new HashMap<>(MAP_NUM);
+        for(Achievement achievement :achievements){
+            achievementMap.put("achievementName" , achievement.getName());
+            achievementMap.put("achievementId" , achievement.getId());
+            achievementsMap.add(achievementMap);
+        }
+        return  achievementsMap;
+    }
+
+    /**
+     * 获得用户的身份（暂时不允许多身份）
+     * @param userId 用户id
+     * @return 用户的真实姓名，学校，学院;没有身份返回空
+     */
+    private Map<String, Object> getUserIdentity(Integer userId){
+        Map<String, Object> userIdentityMap = new HashMap<>(MAP_NUM);
+        List<Useridentity> userIdentities = userIdentityDAO.listUserIdentitiesByUserId(userId);
+        if(userIdentities == null || userIdentities.size() ==0){
+            return null;
+        }
+        else{
+           Useridentity useridentity = userIdentities.get(0);
+           userIdentityMap.put("realName" , useridentity.getName());
+           userIdentityMap.put("school" , useridentity.getSchoolBySchoolId().getName());
+           userIdentityMap.put("college" , useridentity.getCollegeByCollegeId().getName());
+           return userIdentityMap;
+        }
     }
 }

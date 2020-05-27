@@ -27,7 +27,7 @@ public interface UserService {
     public Map<String,String> sendVerifyCode(String email);
 
     /**
-     * 无密码登录
+     * 用密码登录
      * @param loginInf 登录信息
      * @return 返回user，如果登录失败user为空
      */
@@ -44,11 +44,18 @@ public interface UserService {
     public Map<String,Object> loginByNoPassword(String email,String sessionEmail,String verifyCode,String sessionVerifyCode);
 
     /**
-     *查看用户信息
-     * @param userInf 用户信息
-     * @return json数据 user, resultCode：响应数据码，0表示成功，1表示用户未登录
+     *获得简略的用户信息
+     * @param user 用户
+     * @return json数据 包含头像，用户名，性别和介绍
      */
-    public String getUserInf(User userInf);
+    public String getSimpleUserInf(User user);
+
+    /**
+     * 获得用户的全部信息
+     * @param user 用户
+     * @return json形式的用户信息
+     */
+    public Map<String, Object> getAllUserInf(User user);
 
     /**
      *修改用户信息
