@@ -63,8 +63,10 @@ public class RecordServiceImpl implements RecordService {
             record.put("questionId",question.getId());
             record.put("questionTitile",question.getTitle());
 
-            List<Answer> answers=answerDAO.getAnswersbyQid(question.getId());
-            for (Answer answer:answers){
+            List<Browsinghistory> browsinghistory1s=browsingHistoryDAO.getBrowsingHistoryByUserIdAndquestionId(user.getId(),
+                    question.getId());
+            for (Browsinghistory browsinghistory1:browsinghistory1s){
+                Answer answer=browsinghistory1.getAnswerByAnswerId();
                 answerRecord=new HashMap<>(3);
                 answerRecord.put("answerId",answer.getId());
                 answerRecord.put("answererName",answer.getUserByUserId().getName());
