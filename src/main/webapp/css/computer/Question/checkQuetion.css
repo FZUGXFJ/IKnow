@@ -1,26 +1,27 @@
+body{
+}
 #contain{
     width: 75%;
-    height: 60%;
-    margin-left: 13%;
+    margin-left: 20%;
     margin-top: 3%;
-    position: relative;
 }
+
 .con1{
     width: 74%;
-    height: 100%;
-    float: left;
     background-color: white;
+    float: left;
 }
 .con2{
     width: 25%;
-    height: 49%;
+    height: 57%;
     float: left;
     background-color: white;
     margin-left: 1%;
+    margin-top: 1%;
 }
 .con3{
     width: 25%;
-    height: 49%;
+    height: 19%;
     float: left;
     background-color: white;
     margin-left: 1%;
@@ -32,74 +33,114 @@
     float: left;
     background-color: white;
     margin-left: 1%;
+    position: relative;
+    padding: 1%;
+    overflow: hidden;
 }
 .form-control{
     resize: none;
 }
 #button1{
     float: left;
-    margin-left: 5%;
-    width: 23%;
-    margin-top: 5%;
-    margin-bottom: 1%;
 }
 #button2{
     float: left;
-    margin-left: 5%;
-    width: 23%;
-    background-color: lemonchiffon;
-    margin-top: 5%;
-    margin-bottom: 1%;
-}
-#button3{
-    float: left;
-    width: 23%;
-    margin-bottom: 1%;
 }
 #page{
-    width: 70%;
     position: absolute;
     bottom: 0;
     float: left;
 }
 #pen{
-    width: 20%;
-    float: left;
+    position: absolute;
+    left: 10%;
+    top: 20%;
+    bottom: 20%;
 }
 #star{
-    width: 20%;
-    margin-left: 25%;
-    margin-top: 10%;
-    float: left;
+    position: absolute;
+    left: 80%;
+    top: 20%;
+    bottom: 20%;
 }
 .fa-feather{
     color: aqua;
-    font-size: 1em;
+    font-size: 2em;
+}
+.fa-star{
+    color: gold;
+    font-size: 2em;
 }
 span a{
     text-decoration: none;
     color: black;
 }
-.que{
+.que1{
     float: left;
-    width: 100%;
+    width: 96%;
     height: 20%;
     margin-bottom: 1%;
-    background-color: white;
+    background-color: cornsilk;
+    position: absolute;
+    overflow: auto;
+}
+.que2{
+    float: left;
+    width: 96%;
+    height: 20%;
+    margin-bottom: 21%;
+    background-color: cornsilk;
+    position: absolute;
+    margin-top: 8.4em;
+    overflow: auto;
+}
+.que3{
+    float: left;
+    width: 96%;
+    height: 20%;
+    margin-bottom: 11%;
+    background-color: cornsilk;
+    position: absolute;
+    margin-top: 16.8em;
+    overflow: auto;
+}
+.que4{
+    float: left;
+    width: 96%;
+    height: 20%;
+    margin-bottom: 1%;
+    background-color: cornsilk;
+    position: absolute;
+    margin-top: 25.2em;
+    overflow: auto;
 }
 .title{
     margin-top: 2%;
     margin-left: 2%;
 }
 .content{
-    margin-top: 5%;
     margin-left: 3%;
+    margin-bottom: 1%;
     color: #444444;
 }
-#answer{
-    height: 50%;
-    width: 100%;
-    float: left;
-    margin-top: 5%;
+.clear {
+    clear:both;
+}
+.media{
+    background-color: cornsilk;
+    margin-bottom: 1%;
+}
+.hide{
+    background-color: cornsilk;
+    border: 0;
+}
+.dropdown{
+    margin-left: 20%;
+}
+.headPortrait{
+    border-radius: 100%;
+    overflow: hidden;
+    width: 3em;
+    height: 3em;
 }
 

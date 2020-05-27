@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>问题</title>
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../css/computer/Question/checkQuetion.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+</head>
+<body style="background-color: aliceblue">
+<div id="question">
+    <div id="header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="#" style="margin-left: 13%"><img src="../../img/LOGO透明%20(1).png"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active" style="margin-left: 10px">
+                        <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">问答</a>
+                    </li>
+
+                    <!--            <li class="nav-item">-->
+                    <!--                <a class="nav-link" href="#">登录</a>-->
+                    <!--            </li>-->
+                    <!--            <li class="nav-item">-->
+                    <!--                <a class="nav-link" href="#">注册</a>-->
+                    <!--            </li>-->
+                </ul>
+<!--                <div class="headPortrait" v-html="user.head" @click="toMyPage"></div>-->
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
+                    <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
+                </form>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown" style="margin-left: 10PX">
+                        <select class="form-control form-control-lg">
+                            <option>按题目查找</option>
+                            <option>按回答查找</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div id="contain">
+        <div class="con1">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary" id="button1" @click="back">返回</button>
+                <button type="button" class="btn btn-light" id="button2">收藏问题</button>
+            </div>
+            <div id="que" v-if="loading > 0">
+                <div class="media">
+                    <div class="headPortrait" v-html="headPortrait"></div>
+                    <div class="media-body">
+                        <span>{{owner.username}}的提问</span>
+                        <span v-if="isSolved" style="color: #12eee7;margin-left: 1em"><i class="fas fa-check-circle"></i>&nbsp;问题已解决</span>
+                        <span v-else style="color: #acacac;margin-left: 1em"><i class="fas fa-times-circle"></i>&nbsp;问题未解决</span>
+                        <h5 class="mt-0">{{title}}</h5>
+                        <h6 v-html="content"></h6>
+                        <span>{{collectionCount}}收藏-{{browsingCount}}浏览</span>
+                        <span style="color: #12eee7" v-if="isCollected == 1" @click="cancelCollect">
+                            <i class="fas fa-star" style="font-size: 1em"></i>&nbsp;问题已收藏
+                        </span>
+                        <span @click="collect" v-else>
+                            <i class="fas fa-star" style="font-size: 1em"></i>&nbsp;收藏问题
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-left: 3em">
+                <span style="opacity: 0.6">回答{{answerCount}}</span>
+                <span class="dropdown">
+                    <span style="opacity: 0.6">{{sortMethod}}</span>
+                    <button class="hide" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: white">
+                        <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">默认排序</a>
+                        <a class="dropdown-item" href="#">按时间排序</a>
+                    </div>
+                </span>
+            </div>
+            <div id="answerList">
+                <div class="media" v-for="answer in answers">
+                    <div class="headPortrait" v-html="answer.answererHead"></div>
+                    <div class="media-body">
+                        <span>{{answer.answererName}}</span>
+                        <span class="lb">
+                             <b style="color: #12eee7">&nbsp;&nbsp;LV</b>
+                            <i>{{answer.answererLevel}}</i>
+                        </span>
+                        <span class="lb">
+                            <i class="fas fa-award" style="color: #12eee7"></i>
+                            <i>{{answer.answererBadge}}</i>
+                        </span>
+                        <span class="lb" style="color: #12eee7;margin-left: 1em" v-if="answer.isAdopt == 1">
+                            <i class="fas fa-check"></i>&nbsp;此回答已被采纳
+                        </span>
+                        <p v-html="answer.answerView" @click="answerPage(answer.answerId)"
+                           style="width:20em; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;"></p>
+                        <span>{{answer.answerApprove}}赞同-{{answer.answerComment}}评论-{{answer.answerTime}}</span>
+                        <span class="dropdown">
+                        <button class="hide" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">举报</a>
+                        </div>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center;font-size: 0.7em;">
+                <span v-if="hasMore&&!loadingMore" class="btn-link" @click="loadMore">点击加载更多</span>
+                <span style="opacity: 0.5" v-if="!hasMore&&!loadingMore">没有更多内容</span>
+                <span v-if="loadingMore">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    let question = new Vue({
+        el:"#question",
+        data:{
+            questionData:{},
+            questionId:0,
+            viewerIsOwner:0,
+            isAnonymous:1,
+            isSolved:1,
+            owner:{
+                id:1,
+                username:"",
+                head:"0.jpg",
+            },
+            title:"",
+            content:"",
+            collectionCount:0,
+            browsingCount:0,
+            answerCount:0,
+            answers:[],
+            sortMethod:"默认排序",
+            headFirstPart:"<img src='../../head/",
+            headLastPart:"' width='100%' height='100%' alt=''>",
+            loading:0,
+            isCollected:0,
+            noAction:false,
+            start:0,
+            hasMore:false,
+            loadingMore:true
+        },
+        methods:{
+            postAnswer:function () {
+                location.href = "../answer/postAnswer.html?questionId=" + this.questionId;
+            },
+            showOperateMenu:function () {
+                $("#operateMenu").slideToggle();
+            },
+            cancelAnonymous:function () {
+                if (confirm("确定取消匿名吗？")) {
+                    $.ajax({
+                        url:"../../question/cancelAdopt.action",
+                        type:"POST",
+                        data:{
+                            questionId:question.questionId
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                history.go(0);
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }
+            },
+            answerPage: function (answerId) {
+                location.href = "../answer/answer.html?questionId=" + this.questionId
+                    + "&answerId=" + answerId;
+            },
+            collect:function () {
+                if (question.noAction) {
+                    return;
+                }
+                question.noAction = true;
+                $.ajax({
+                    type:"POST",
+                    url:"../../question/collectQuestion.action",
+                    data:{
+                        questionId:question.questionId
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            question.isCollected = 1;
+                            question.collectionCount++;
+                            question.noAction = false;
+                        } else if (result.resultCode === 1) {
+                            if (confirm("登录后才能收藏问题")) {
+                                location.href = "../user/login.html?boot=0";
+                            }
+                            question.noAction = false;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        question.noAction = false;
+                    }
+                });
+            },
+            cancelCollect:function () {
+                if (question.noAction) {
+                    return;
+                }
+                question.noAction = true;
+                $.ajax({
+                    type:"POST",
+                    url:"../../question/cancelCollect.action",
+                    data:{
+                        questionId:question.questionId
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            question.isCollected = 0;
+                            question.collectionCount --;
+                            question.noAction = false;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        question.noAction = false;
+                    }
+                });
+            },
+            addAnswer:function () {
+                location.href = "../answer/postAnswer.html?questionId=" + this.questionId;
+            },
+            back:function () {
+                sessionStorage.removeItem("questionData");
+                sessionStorage.removeItem("questionInfo");
+                history.go(-1);
+            },
+            loadMore:function () {
+                if (!this.hasMore || this.loadingMore) {
+                    return;
+                }
+                this.loadingMore = true;
+                $.ajax({
+                    url:"../../question/moreAnswer.action",
+                    type:"POST",
+                    data:{
+                        start:question.start,
+                        questionId:question.questionId
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            let size = result.answers.length;
+                            result.answers.forEach(function (item) {
+                                question.answers.push(item);
+                                question.questionData.questionAnswers.push(item);
+                            });
+                            question.hasMore = size >= 20;
+                        } else {
+                            result.answers.forEach(function (item) {
+                                question.answers.push(item);
+                                question.questionData.questionAnswers.push(item);
+                            });
+                            question.hasMore = false;
+                        }
+                        sessionStorage.setItem("questionData",JSON.stringify(question.questionData));
+                        question.loadingMore = false;
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                        question.loadingMore = false;
+                    }
+                });
+            },
+            installData:function (data) {
+                this.questionData = data;
+                this.isAnonymous = data.isAnonymous;
+                this.owner.id = data.owner.id;
+                this.owner.username = data.owner.username;
+                this.owner.head = data.owner.head;
+                this.title = data.title;
+                this.content = data.content;
+                this.collectionCount = data.collectionCount;
+                this.browsingCount = data.browsingCount;
+                this.answerCount = data.answerCount;
+                this.answers = data.questionAnswers;
+                this.isSolved = data.isSolved;
+                this.isCollected = data.isCollected;
+            },
+            saveInfo:function () {
+                let questionInfo = {
+                    viewerIsOwner:question.viewerIsOwner,
+                    hasMore:question.hasMore,
+                    start:question.start
+                };
+                sessionStorage.setItem("questionInfo",JSON.stringify(questionInfo));
+            },
+            loadLocalData:function () {
+                let questionData = JSON.parse(sessionStorage.getItem("questionData"));
+                this.installData(questionData);
+                let questionInfo = JSON.parse(sessionStorage.getItem("questionInfo"));
+                this.viewerIsOwner = questionInfo.viewerIsOwner;
+                this.start = questionInfo.start;
+                this.hasMore = questionInfo.hasMore;
+                this.loading = 1;
+            }
+        },
+        mounted:function () {
+            let loc = location.href;
+            loc = loc.replace("?","&").split("&")[1];
+            let questionId;
+            if (loc.indexOf("questionId=")!==-1) {
+                questionId = loc.replace("questionId=","");
+                this.questionId = questionId;
+            } else {
+                location.href = "../../error/mobile/404error.html"
+            }
+            if (sessionStorage.getItem("questionInfo") != null && sessionStorage.getItem("questionData") != null) {
+                this.loadLocalData();
+                return;
+            }
+            $.ajax({
+                url:"../../question/viewQuestion.action",
+                type:"POST",
+                data:{
+                    questionId:questionId
+                },
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        question.installData(result.question);
+                        question.viewerIsOwner = result.viewerIsOwner;
+                        question.loading = 1;
+                        question.loadingMore = false;
+                        question.start += result.question.questionAnswers.length;
+                        if (result.question.questionAnswers.length === 20) {
+                            question.hasMore = true;
+                        }
+                        sessionStorage.setItem("questionData",JSON.stringify(question.questionData));
+                        question.saveInfo();
+                    } else if (result.resultCode === 1) {
+                        alert("问题找不到！")
+                    }
+                },
+                error:function (e) {
+                    alert("系统错误");
+                }
+            });
+        },
+        computed:{
+            headPortrait:function () {
+                return this.headFirstPart + this.owner.head + this.headLastPart;
+            }
+        }
+    });
+</script>
+</body>
+</html>
