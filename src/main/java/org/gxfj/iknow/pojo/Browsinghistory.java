@@ -81,7 +81,7 @@ public class Browsinghistory {
     }
 
     @ManyToOne
-    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "answerID", referencedColumnName = "id", nullable = true)
     public Answer getAnswerByAnswerId() {
         return answerByAnswerId;
     }

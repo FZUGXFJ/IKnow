@@ -62,4 +62,11 @@ public interface QuestionService {
      * @return json格式的问题信息
      */
     Map<String,Object> moreAnswers(User user, Integer questionId,int start, int length);
+
+    /**
+     * 插入浏览记录
+     * @param userId 用户id
+     * @param questionId 问题id
+     */
+    void insertBrowsing(Integer userId,Integer questionId);
 }

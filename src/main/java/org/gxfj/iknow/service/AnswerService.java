@@ -1,5 +1,7 @@
 package org.gxfj.iknow.service;
 
+import org.gxfj.iknow.pojo.Answer;
+import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
 
 import java.util.Map;
@@ -99,4 +101,12 @@ public interface AnswerService {
      * @return 问题表
      */
     public Map<String,Object> moreRecommendAnswer(Integer userId, Integer count,Integer start);
+
+    /**
+     * 插入浏览记录
+     * @param user 用户
+     * @param question 问题
+     * @param answer 回答
+     */
+    void insertBrowsing(User user, Question question, Answer answer);
 }

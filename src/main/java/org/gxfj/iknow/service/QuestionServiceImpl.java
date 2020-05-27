@@ -126,7 +126,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Map<String, Object> getQuestion(User user, Integer questionId, int length){
         Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
-
+        insertBrowsing(user.getId(),questionId);
         //根据问题id查询到的问题
         Question question = questionDAO.getNotDelete(questionId);
         //问题的回答
@@ -298,4 +298,15 @@ public class QuestionServiceImpl implements QuestionService{
         moreAns.put("answers",questionAnswers);
         return moreAns;
     }
+
+    @Override
+    public void insertBrowsing(Integer userId, Integer questionId) {
+        Browsinghistory browsinghistory=new Browsinghistory();
+        browsinghistory.setDate(new Date());
+        browsinghistory.setUserByUserId(userDAO.get(userId));
+        browsinghistory.setQuestionByQuestionId(questionDAO.get(questionId));
+
+        browsingHistoryDAO.add(browsinghistory);
+    }
+
 }
