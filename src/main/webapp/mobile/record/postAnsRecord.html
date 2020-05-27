@@ -35,8 +35,14 @@
                 <i class="fas fa-award" style="color: #00caba">&nbsp;您的回答已被采纳</i>
             </div>
             <div>
-                <h5 @click="turnQuePage(record.questionId)"><b>{{record.questionTitle}}</b></h5>
-                <p class="contentView" v-html="record.answerContent" @click="turnAnsPage(record.questionId,record.id)"></p>
+                <h5 @click="turnQuePage(record.questionId)">
+                    <i class="fas fa-question" style="color: #4b62ff"></i>&nbsp;
+                    <b>{{record.questionTitle}}</b>
+                </h5>
+                <p class="contentView" @click="turnAnsPage(record.questionId,record.id)">
+                    <i class="fas fa-file-alt" style="color: #4b62ff"></i>&nbsp;
+                    <span v-html="record.answerContent"></span>
+                </p>
             </div>
             <div class="time">
                 <table>
