@@ -53,7 +53,7 @@
                         <h5>{{inf.postQueNum}}</h5>
                         <div class="recordSpanText">我的提问</div>
                     </td>
-                    <td class="recordSpan">
+                    <td class="recordSpan" @click="toPostAnsRecord">
                         <h5>{{inf.postQueNum}}</h5>
                         <div class="recordSpanText">我的回答</div>
                     </td>
@@ -195,7 +195,10 @@
             },
             toPostQueRecord:function () {
                 location.href = "record/postQueRecord.html";
-            }
+            },
+            toPostAnsRecord:function () {
+                location.href = "record/postAnsRecord.html";
+            },
         },
         mounted:function () {
         }
