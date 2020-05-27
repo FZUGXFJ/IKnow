@@ -35,9 +35,9 @@ public class RecordServiceImpl implements RecordService {
             Question question=collectionProblem.getQuestionByQuestionId();
 
             record.put("questionId",question.getId());
-            record.put("questionTitile",question.getTitle());
+            record.put("questionTitle",question.getTitle());
             record.put("answerNum",answerDAO.getAnswersbyQid(question.getId()).size());
-            record.put("broswingNum",browsingHistoryDAO.getBrowsingCount(question.getId()));
+            record.put("browsingNum",browsingHistoryDAO.getBrowsingCount(question.getId()));
             record.put("collectionNum",collectionProblemDAO.getCollectionCount(question.getId()));
             record.put("isSolved",question.getQuestionstateByStateId().getId()-1);
             record.put("time",Time.getTime1(collectionProblem.getDate()));

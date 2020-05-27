@@ -39,7 +39,10 @@
                     <i class="fas fa-times" style="color: #acacac">&nbsp;问题未解决</i>
                 </span>
             </div>
-            <h5 style="cursor: pointer" @click="turnQuePage(record.id)"><b>{{record.title}}</b></h5>
+            <h5 style="cursor: pointer" @click="turnQuePage(record.id)">
+                <i class="fas fa-question" style="color: #4b62ff"></i>&nbsp;
+                <b>{{record.title}}</b>
+            </h5>
             <div class="time">
                 <table>
                     <td>{{record.answerNum}}回答-{{record.collectNum}}收藏-{{record.browsingNum}}浏览</td>

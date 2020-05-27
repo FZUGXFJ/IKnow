@@ -30,21 +30,24 @@
     </div>
     <br><br>
     <div class="records">
-        <div class="record" v-for="record in records">
+        <div class="record" v-for="(record,index) in records">
             <table>
                 <td>
                     <span v-if="record.isSolved === 1">
                         <i class="fas fa-check" style="color: #00caba">&nbsp;问题已解决</i>
                     </span>
-                            <span v-else>
+                    <span v-else>
                         <i class="fas fa-times" style="color: #acacac">&nbsp;问题未解决</i>
                     </span>
                 </td>
                 <td style="text-align: right">
-                    <button class="btn btn-link">取消收藏</button>
+                    <button class="btn btn-link" @click="cancelCollect(record.questionId,index)">取消收藏</button>
                 </td>
             </table>
-            <h5 style="cursor: pointer" @click="turnQuePage(record.id)"><b>{{record.questionTitle}}</b></h5>
+            <h5 style="cursor: pointer" @click="turnQuePage(record.id)">
+                <i class="fas fa-question" style="color: #4b62ff"></i>&nbsp;
+                <b>{{record.questionTitle}}</b>
+            </h5>
             <div class="time">
                 <table>
                     <td>{{record.answerNum}}回答-{{record.collectionNum}}收藏-{{record.browsingNum}}浏览</td>
@@ -72,6 +75,7 @@
             hasMore:0,
             records:[],
             start:0,
+            noAction:false
         },
         methods:{
             back:function () {
@@ -122,7 +126,7 @@
             turnQuePage:function (id) {
 
             },
-            cancelCollect:function (id) {
+            cancelCollect:function (id,index) {
                 if (collectionRecord.noAction) {
                     return;
                 }
@@ -136,8 +140,7 @@
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
-                            //TODO:删除数组元素
-
+                            collectionRecord.records = collectionRecord.records.slice(index,1);
                             collectionRecord.noAction = false;
                         }
                     },
