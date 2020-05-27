@@ -4,6 +4,7 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 
 public class Time {
@@ -43,7 +44,7 @@ public class Time {
     }
 
     /**
-     * 时间转换
+     * 时间转换(出bug了用下面那个）
      * @param date 数据库时间
      * @return
      */
@@ -53,5 +54,23 @@ public class Time {
         ParsePosition pos = new ParsePosition(8);
         Date currentTime_2 = formatter.parse(dateString, pos);
         return currentTime_2;
+    }
+
+    /**
+     * 时间转换
+     * @param data
+     * @return
+     */
+    public static String getTime1(Date data) {
+        String sDate = "";
+        SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
+        try {
+            Date date = sdf1.parse(sdf1.format(data));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sDate = sdf.format(date);
+        } catch (ParseException e) {
+            System.out.println("时间转换失败");
+        }
+        return sDate;
     }
 }

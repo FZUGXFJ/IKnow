@@ -15,8 +15,9 @@ public class HtmlUtil {
     }
 
     public static String Html2Text(String originHtml) {
-        String regex = "<[a-zA-Z][^>]*>";
+        String regex = "<[/]*[a-zA-Z][^>]*>";
         Matcher matcher = Pattern.compile(regex).matcher(originHtml);
         return matcher.replaceAll("");
     }
+
 }

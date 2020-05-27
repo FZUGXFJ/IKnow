@@ -3,6 +3,8 @@ package org.gxfj.iknow.dao;
 import org.gxfj.iknow.pojo.Comment;
 import org.gxfj.iknow.pojo.Question;
 
+import java.util.List;
+
 public interface QuestionDAO extends BaseDAO<Question>{
 
     /**
@@ -30,4 +32,13 @@ public interface QuestionDAO extends BaseDAO<Question>{
      * @return 没有则为null
      */
     Question getNotDelete(Integer id);
+
+    /**
+     * 列出指定用户id提出的问题
+     * @param userId 用户ID
+     * @param start 起始位置
+     * @param length 问题个数
+     * @return 问题列表没有则为null
+     */
+    List<Question> listPartByUserId(Integer userId, Integer start, Integer length);
 }

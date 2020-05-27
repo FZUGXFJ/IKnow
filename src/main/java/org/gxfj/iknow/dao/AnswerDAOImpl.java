@@ -1,6 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Answer;
+import org.gxfj.iknow.pojo.Question;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -86,5 +87,17 @@ public class AnswerDAOImpl implements AnswerDAO{
             answer = list.get(0);
         }
         return answer;
+    }
+
+    @Override
+    public List<Answer> listPartByUserId(Integer userId, Integer start, Integer length){
+        List<Answer> answers = null;
+        String hql = "from Answer as a WHERE ( userID= " + userId + " ) and (a.isDelete = 0) order by a.id desc";
+        //Session session = sessionFactory.openSession();
+        Query query = getSession().createQuery(hql);
+        //Query query = session.createQuery(hql);
+        answers = query.setFirstResult(start).setMaxResults(length).list();
+        //session.close();
+        return answers;
     }
 }

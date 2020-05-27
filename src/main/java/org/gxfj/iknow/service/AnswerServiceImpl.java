@@ -72,16 +72,17 @@ public class AnswerServiceImpl implements AnswerService{
         //获得回答答主
         resultMap.put("answerer" , getAnswererMap(answerId));
         //回答的信息转化为json格式
-        resultMap.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
         //获得一个存储评论列表
         resultMap.put("comments" , getCommentsMap(questionId, answerId,user));
         //获得查看回答的用户的头像
         //未登录
         if(user == null){
             resultMap.put("userHead" , "<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
+            resultMap.put("answer" , getAnswerMap(questionId, answerId,null));
         }
         //已登录
         else{
+            resultMap.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
             resultMap.put("userHead" , "<img src='../../head/" + user.getHead() + "' width='100%'  height='100%' alt=''>");
         }
 
@@ -617,9 +618,6 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> moreRecommendAnswer(Integer userId, Integer count, Integer start) {
         List<Answer> answers = selectRecommendAnswer1(userId, count, start);
-        if (answers.size() == 0){
-            return null;
-        }
         return getRecommendJsonItems(answers);
     }
 

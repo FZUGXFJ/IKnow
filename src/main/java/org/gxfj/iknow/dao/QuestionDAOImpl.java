@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+@Transactional
 @Repository("questionDAO")
 public class QuestionDAOImpl implements QuestionDAO {
 
@@ -89,4 +91,15 @@ public class QuestionDAOImpl implements QuestionDAO {
         return question;
     }
 
+    @Override
+    public List<Question> listPartByUserId(Integer userId, Integer start, Integer length){
+        List<Question> questions = null;
+        String hql = "from Question as q WHERE ( userID= " + userId + " ) and (q.isDelete = 0) order by q.id desc";
+        //Session session = sessionFactory.openSession();
+        Query query = getSession().createQuery(hql);
+        //Query query = session.createQuery(hql);
+        questions = query.setFirstResult(start).setMaxResults(length).list();
+        //session.close();
+        return questions;
+    }
 }

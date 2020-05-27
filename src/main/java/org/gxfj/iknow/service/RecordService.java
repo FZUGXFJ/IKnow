@@ -24,4 +24,20 @@ public interface RecordService {
      * @return 浏览数据
      */
     public Map<String,Object> browsingRecord(User user, Integer start);
+
+    /**
+     *  获取用户发表的问题记录
+     * @param start 起始地址
+     * @param user 用户
+     * @return 用户发表问题列表
+     */
+    public List<Map<String,Object>> listPostQuestionRecord(User user, Integer start);
+
+    /**
+     *  获取用户发表的回答记录
+     * @param start 起始地址
+     * @param user 用户
+     * @return 用户发表问题列表
+     */
+    public List<Map<String,Object>> listPostAnswerRecord(User user, Integer start);
 }
