@@ -108,4 +108,19 @@ public class AnswerDAOImpl implements AnswerDAO{
         List<Answer> answers = query.list();
         return answers;
     }
+
+    @Override
+    public List<Answer> listByQuestionIdSort(int questionId, int start, int length, int sort) {
+        Session session=sessionFactory.openSession();
+        Query query;
+        if (sort==0){
+            query = session.createQuery("from Answer WHERE (questionID = ?) and (isDelete = 0) " +
+                    "order by approvalCount DESC");
+        }
+        else {
+            query = session.createQuery("from Answer WHERE (questionID = ?) and (isDelete = 0) " +
+                    "order by date DESC");
+        }
+        return query.setInteger(0,questionId).setFirstResult(start).setMaxResults(length).list();
+    }
 }

@@ -40,6 +40,7 @@ public class QuestionAction {
     private Byte isAnonymous;
     private InputStream inputStream;
     private Integer start;
+    private Integer sort;
     @Autowired
     private QuestionService questionService;
     @Autowired
@@ -50,6 +51,7 @@ public class QuestionAction {
     private final int UN_LOGIN = 1;
     private final int NO_MORE = 1;
     private final int MISS_QUESTION_INF = 2;
+    private final int DEFAULT_SORT = 1;
 
     public InputStream getInputStream() {
         return inputStream;
@@ -106,11 +108,20 @@ public class QuestionAction {
         System.out.println(questionId);
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
+        Integer Sort;
+        if (sort==null){
+            session.put("sort",DEFAULT_SORT);
+            Sort=DEFAULT_SORT;
+        }
+        else {
+            Sort=sort;
+            session.put("sort",sort);
+        }
         //题主
         User viewUser = questionService.get(questionId);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        response.put("question",questionService.getQuestion(user,questionId, 20));
+        response.put("question",questionService.getQuestion(user,questionId, 20,Sort));
         response.put("resultCode",SUCCESS);
         if(user == null || !isQuestionUser){
             response.put("viewerIsOwner",0);
@@ -249,5 +260,13 @@ public class QuestionAction {
 
     public void setStart(Integer start) {
         this.start = start;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

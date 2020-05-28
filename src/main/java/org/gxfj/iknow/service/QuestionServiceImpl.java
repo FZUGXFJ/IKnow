@@ -124,13 +124,13 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> getQuestion(User user, Integer questionId, int length){
+    public Map<String, Object> getQuestion(User user, Integer questionId, int length,int sort){
         Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
         insertBrowsing(user.getId(),questionId);
         //根据问题id查询到的问题
         Question question = questionDAO.getNotDelete(questionId);
         //问题的回答
-        List<Answer> answers = answerDAO.listByQuestionId(question.getId(),0, length);
+        List<Answer> answers = answerDAO.listByQuestionIdSort(question.getId(),0, length,sort);
         //JSON成员
         //题主
         Map<String, Object> owner = new HashMap<>(MAP_NUM);

@@ -67,4 +67,15 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      * @return 回答列表，没有为null
      */
     List<Answer> listPartByUserId(Integer userId);
+
+    /**
+     * 获得未删除的回答列表（排序）
+     * @param questionId 问题id
+     * @param start 开始index
+     * @param length 记录数
+     * @param sort 排序方式
+     * @return  回答列表（部分回答）
+     */
+    List<Answer> listByQuestionIdSort(int questionId,int start,int length,int sort);
+
 }
