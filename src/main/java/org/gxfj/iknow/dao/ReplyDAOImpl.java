@@ -14,6 +14,10 @@ import java.util.List;
 @Repository("replyDAO")
 public class ReplyDAOImpl implements ReplyDAO{
     private HibernateTemplate ht = null;
+    //按时间顺序排序,即先发的先显示
+    private static Integer SORT_BY_TIME = 1;
+    //按时间逆序排序
+    private static Integer SORT_BY_TIME_REVERSE = 0;
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -45,16 +49,38 @@ public class ReplyDAOImpl implements ReplyDAO{
     }
 
     @Override
-    public List<Reply> listByCommentId(Integer commentId, Integer start, Integer count) {
+    public List<Reply> listByCommentIdSort(Integer commentId, Integer start, Integer length, Integer sortType) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0)");
-        return query.setInteger(0,commentId).setFirstResult(start).setMaxResults(count).list();
+        Query query ;
+        if(sortType.equals(SORT_BY_TIME)){
+            query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0) " +
+                    "order by date ASC");
+        }
+        else if(sortType.equals(SORT_BY_TIME_REVERSE)){
+            query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0) " +
+                    "order by date DESC");
+        }
+        else{
+            query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0) ");
+        }
+        return query.setInteger(0,commentId).setFirstResult(start).setMaxResults(length).list();
     }
 
     @Override
-    public List<Reply> getAllReplies(Integer commentId){
+    public List<Reply> getAllRepliesSort(Integer commentId, Integer sortType){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0)");
+        Query query ;
+        if(sortType.equals(SORT_BY_TIME)){
+            query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0) " +
+                    "order by date ASC");
+        }
+        else if(sortType.equals(SORT_BY_TIME_REVERSE)){
+            query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0) " +
+                    "order by date DESC");
+        }
+        else{
+            query = session.createQuery("from Reply WHERE (commentID = ?) and (isDelete = 0) ");
+        }
         return query.setInteger(0,commentId).list();
     }
 

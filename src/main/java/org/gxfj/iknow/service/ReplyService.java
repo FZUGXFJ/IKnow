@@ -29,9 +29,10 @@ public interface ReplyService {
      * 查看全部回复
      * @param commentId 评论
      * @param visitor 浏览的用户
+     * @param sortType 排序的方式
      * @return json格式的评论信息和所有回复信息
      */
-    public Map<String , Object> showAllReplys(Integer commentId, User visitor);
+    public Map<String , Object> showAllReplys(Integer commentId, User visitor, Integer sortType);
 
     /**
      * 点赞回复

@@ -48,10 +48,10 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public Map<String, Object> showAllReplys(Integer commentId, User visitor) {
+    public Map<String, Object> showAllReplys(Integer commentId, User visitor, Integer sortType) {
         Map<String , Object> resultMap = new HashMap<>(MAP_NUM);
         resultMap.put("comment" , getComment(commentId, visitor));
-        resultMap.put("replies" , listReplies(commentId, visitor));
+        resultMap.put("replies" , listReplies(commentId, visitor, sortType));
         return resultMap;
 
     }
@@ -89,9 +89,9 @@ public class ReplyServiceImpl implements ReplyService {
      * @param commentId 评论id
      * @return 评论的所有回复
      */
-    private List<Map<String , Object>> listReplies(Integer commentId, User visitor) {
+    private List<Map<String , Object>> listReplies(Integer commentId, User visitor, Integer sortType) {
         List<Map<String , Object>> repliesMap  = new ArrayList<>();
-        List<Reply> replies = replyDAO.getAllReplies(commentId);
+        List<Reply> replies = replyDAO.getAllRepliesSort(commentId, sortType);
         Comment comment = commentDAO.getNotDelete(commentId);
         boolean isAnonymousOwner = (getUserIdentify(comment) != NO_SPECIAL_IDENTIFY && isAnonymous(comment));
         for (Reply reply : replies) {

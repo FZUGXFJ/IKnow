@@ -20,6 +20,7 @@ public class ReplyAction {
     private Integer replyTarget;
     private InputStream inputStream;
     private Integer replyId;
+    private Integer sortType;
     @Autowired
     private ReplyService replyService;
 
@@ -50,7 +51,9 @@ public class ReplyAction {
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
         User user = (User) session.get(SESSION_USER);
-        response = replyService.showAllReplys(commentId, user);
+        response = replyService.showAllReplys(commentId, user, sortType);
+        //在session中保存排序的方式
+        session.put("sortType", sortType);
         response.put("resultCode" , SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
