@@ -4,7 +4,9 @@ import org.gxfj.iknow.dao.AdminDAO;
 import org.gxfj.iknow.pojo.Admin;
 import org.gxfj.iknow.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service("adminService")
 public class AdminServiceImpl implements AdminService{
 
     @Autowired
