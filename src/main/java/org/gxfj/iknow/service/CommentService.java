@@ -20,9 +20,10 @@ public interface CommentService {
      * 获取回答的评论(评论数方法中指定）
      * @param answerId 回答Id
      * @param user 发起查看请求的用户
+     * @param sort 排序方式
      * @return 构造好的MAP
      */
-    public Map<String, Object> getComments(Integer answerId, User user);
+    public Map<String, Object> getComments(Integer answerId, User user,Integer sort);
 
     /**
      * 验证用户是否点过赞，如果点过，则更新数据库中点赞相关记录
@@ -45,8 +46,9 @@ public interface CommentService {
      * @param answerId 回答Id
      * @param user 发起查看请求的用户
      * @param start 起始地址
+     * @param sort 排序方式
      * @return 构造好的MAP
      */
-    public Map<String, Object> moreComments(Integer answerId, User user,Integer start);
+    public Map<String, Object> moreComments(Integer answerId, User user,Integer start,Integer sort);
 
 }

@@ -23,6 +23,7 @@ public class CommentAction {
     private Integer commentId;
     private InputStream inputStream;
     private Integer start;
+    private Integer sort;
     @Autowired
     CommentService commentService;
 
@@ -35,6 +36,7 @@ public class CommentAction {
     private final int MISS_COMMENT_INF = 2;
     private final int RESULT_CODE_APPROVED = 2;
     private final int RESULT_CODE_NOT_APPROVED = 2;
+    private final int DEFAULT_SORT = 0;
 
     public InputStream getInputStream() { return inputStream; }
 
@@ -63,7 +65,16 @@ public class CommentAction {
     public String viewComments(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
-        response = commentService.getComments(answerId, (User) session.get(SESSION_USER));
+        Integer Sort;
+        if(sort==null){
+            Sort=DEFAULT_SORT;
+            session.put("sort",Sort);
+        }
+        else {
+            Sort=sort;
+            session.put("sort",Sort);
+        }
+        response = commentService.getComments(answerId, (User) session.get(SESSION_USER),Sort);
         response.put(RESULT_CODE, SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
@@ -108,11 +119,15 @@ public class CommentAction {
     public String moreComment(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
-        if (commentService.moreComments(answerId, (User) session.get(SESSION_USER),start)==null){
+        Integer Sort=(Integer)session.get("sort");
+        if(Sort==null){
+            Sort=DEFAULT_SORT;
+        }
+        if (commentService.moreComments(answerId, (User) session.get(SESSION_USER),start,Sort)==null){
             response.put(RESULT_CODE,NO_MORE);
         }
         else {
-            response=commentService.moreComments(answerId, (User) session.get(SESSION_USER),start);
+            response=commentService.moreComments(answerId, (User) session.get(SESSION_USER),start,Sort);
             response.put(RESULT_CODE, SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -153,5 +168,13 @@ public class CommentAction {
 
     public Integer getStart() {
         return start;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public Integer getSort() {
+        return sort;
     }
 }

@@ -43,11 +43,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<String, Object> getComments(Integer answerId, User visitor){
+    public Map<String, Object> getComments(Integer answerId, User visitor,Integer sort){
         Map<String, Object> response = new HashMap<>(MAP_NUM);
         boolean userIdentify;
         //获取问题下的20条评论
-        List<Comment> comments = commentDAO.listByAnswerId(answerId,0,20);
+        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,0,20,sort);
 
         //json数组
         List<Map<String, Object>> commentListMap;
@@ -286,11 +286,11 @@ public class CommentServiceImpl implements CommentService {
         return replyListMap;
     }
     @Override
-    public Map<String, Object> moreComments(Integer answerId, User visitor,Integer start){
+    public Map<String, Object> moreComments(Integer answerId, User visitor,Integer start,Integer sort){
         Map<String, Object> response = new HashMap<>(MAP_NUM);
         boolean userIdentify;
         //获取问题下的20条评论
-        List<Comment> comments = commentDAO.listByAnswerId(answerId,start,20);
+        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,start,20,sort);
         if(comments.size()<=20){
             return null;
         }

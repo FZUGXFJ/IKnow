@@ -36,4 +36,14 @@ public interface CommentDAO extends BaseDAO<Comment>{
      * @return 没有则为null
      */
     Comment getNotDelete(Integer id);
+
+    /**
+     * 获得问题下未被删除的评论列表
+     * @param answerId 回答id
+     * @param start 开始index
+     * @param length 记录数
+     * @param sort 排序方式
+     * @return  评论列表
+     */
+    List<Comment> listByAnswerIdSort(int answerId, int start, int length,Integer sort);
 }

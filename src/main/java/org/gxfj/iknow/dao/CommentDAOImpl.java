@@ -76,4 +76,18 @@ public class CommentDAOImpl implements CommentDAO{
         return comment;
     }
 
+    @Override
+    public List<Comment> listByAnswerIdSort(int answerId, int start, int length, Integer sort) {
+        Session session = sessionFactory.openSession();
+        Query query ;
+        if(sort==0){
+            query=session.createQuery("from Comment WHERE (answerID = ?) and (isDelete = 0)" +
+                    " order by date asc");
+        }
+        else {
+            query=session.createQuery("from Comment WHERE (answerID = ?) and (isDelete = 0)" +
+                    " order by date desc");
+        }
+        return query.setInteger(0,answerId).setFirstResult(start).setMaxResults(length).list();
+    }
 }
