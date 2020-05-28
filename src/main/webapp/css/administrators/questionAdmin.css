@@ -1,0 +1,91 @@
+body{
+    height: 700px;
+}
+body a{
+    text-decoration: none;
+    color: #444444;
+}
+.navs{
+    float: left;
+    height: 100%;
+    border-style: solid;
+    border-color: #d6d6d6;
+    border-width: medium;
+    width: 8%;
+}
+.search{
+    float: left;
+    background-color: #e9e9e9;
+    height: 10%;
+    width: 90%;
+    margin-left: 1%;
+}
+.content{
+    float: left;
+    background-color: white;
+    height: 90%;
+    width: 90%;
+    margin-left: 1%;
+}
+.field{
+    float: left;
+    background-color: #e9e9e9;
+    height: 10%;
+    width: 90%;
+    margin-left: 1%;
+}
+.sel1{
+    width: 10%;
+    margin-left: 1%;
+    margin-top: 1%;
+}
+.sel2{
+    width: 10%;
+    margin-left: 10%;
+    margin-top: 1%;
+}
+tr{
+    border-style: solid;
+    border-color: #d6d6d6;
+    border-width: thin;
+}
+tr td{
+    height: 12%;
+}
+
+.shadow_css {
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 10;
+    /* 为mozilla firefox 设置透明度  */
+    -moz-opacity: 0.6;
+    /* 设置透明度 */
+    opacity: .60;
+    /* 为IE 设置透明度  */
+    filter: alpha(opacity=66);
+}
+
+.window_css {
+    display: none;
+    position: absolute;
+    top: 20%;
+    left: 25%;
+    width: 60%;
+    height: 60%;
+    border: 3px solid honeydew;
+    background-color: aliceblue;
+    z-index: 11;
+}
+.userInfo{
+    margin-top: 2%;
+}
+.btn{
+    margin-top: 3%;
+    margin-left: 3%;
+}
+
