@@ -180,7 +180,8 @@ public class UserServiceImpl<result> implements UserService{
             Integer userId = user.getId();
             Map<String, Object> userInf = new HashMap<>(MAP_NUM);
             userInf.put("name" , user.getName());
-            userInf.put("head" , user.getHead());
+            userInf.put("head" , "<img src='../head/" + user.getHead() +
+                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
             userInf.put("badgeNum" , user.getBadgeNum());
             userInf.put("level" , levelDAO.getLevelByExp(user.getExp()));
             userInf.put("postQueNum" , questionDAO.listPartByUserId(userId).size());
@@ -189,7 +190,7 @@ public class UserServiceImpl<result> implements UserService{
             userInf.put("browseNum" , browsingHistoryDAO.getBrowsingHistoryByUserId(userId, 0).size());
             userInf.put("achievementList" , listUserAchievements(userId));
             userInf.put("identity" , getUserIdentity(userId));
-            result.put("information" , userInf);System.out.println("12");
+            result.put("information" , userInf);
         }
         return result;
     }
