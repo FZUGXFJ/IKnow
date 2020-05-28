@@ -24,7 +24,7 @@
                     <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">问答</a>
+                    <a class="nav-link" href="#">登出</a>
                 </li>
                 <li class="nav-item">
                     <div class="dropdown">
@@ -34,21 +34,6 @@
                             <li><a class="set" href="#">退出登录</a></li>
                         </ul>
                     </div>
-                </li>
-            </ul>
-            <script>
-                $('.dropdown-toggle').dropdown()
-            </script>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
-                <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
-            </form>
-            <ul class="navbar-nav mr-auto ">
-                <li class="nav-item dropdown" style="margin-left: 10PX">
-                    <select class="form-control form-control-lg">
-                        <option>按题目查找</option>
-                        <option>按回答查找</option>
-                    </select>
                 </li>
             </ul>
         </div>
@@ -133,7 +118,7 @@
                     <span>1</span>
                 </td>
                 <td style="width: 15%;text-align: center">
-                    <span>处理/查看</span>
+                    <span>处理/<a href="javascript:void(0)" onclick="displayWindow()">查看</a></span>
                 </td>
             </tr>
             <tr>
@@ -363,5 +348,104 @@
             </ul>
         </nav>
     </div>
+    <!--悬浮窗口-->
+    <div id="window" class="window_css">
+        <div>
+            <span style="font-size: 1.2em;font-weight: bold">用户信息</span>
+            <a href="javascript:void(0)" onclick="hideWindow()">
+                <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 0"></i>
+            </a>
+        </div>
+        <div class="userInfo">
+            <h5>基本信息：</h5>
+            <div class="form-row">
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="ID:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="number" readonly class="form-control-plaintext" value="1">
+                </div>
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="用户名:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="password" class="form-control">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="个人介绍:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="text" class="form-control" value="春翔的父亲">
+                </div>
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="性别:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select id="inputState" class="form-control">
+                        <option selected>保密</option>
+                        <option>男/option>
+                        <option>女/option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="用户身份:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select class="form-control">
+                        <option selected>学生</option>
+                        <option>老师</option>
+                    </select>
+                </div>
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="用户状态:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select class="form-control">
+                        <option selected>正常</option>
+                        <option>停封</option>
+                        <option>禁言</option>
+                    </select>
+                </div>
+            </div>
+            <h5>设置账户密码：</h5>
+            <div class="form-row">
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="邮箱:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="email" class="form-control" value="1185229277@qq.com">
+                </div>
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="密码:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="text" class="form-control" value="123456">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">保存</button>
+            <button type="submit" class="btn btn-danger">删除</button>
+        </div>
+    </div>
+    <!--出现悬浮窗口后,背景变暗-->
+    <div id="shadow" class="shadow_css"></div>
 </body>
+<script>
+    /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
+    function displayWindow() {
+        /*悬浮窗口的显示,需要将display变成block*/
+        document.getElementById("window").style.display = "block";
+        /*将背景变暗*/
+        document.getElementById("shadow").style.display = "block";
+    }
+
+    /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+    function hideWindow() {
+        document.getElementById("window").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+</script>
 </html>
