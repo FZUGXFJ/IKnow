@@ -2,6 +2,9 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.pojo.Admin;
 
+/**
+ * @author hhj
+ */
 public interface AdminService {
 
     /**

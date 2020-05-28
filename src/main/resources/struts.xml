@@ -306,4 +306,20 @@
             </result>
         </action>
     </package>
+
+    <package name="admin" namespace="/admin" extends="default">
+        <action name="login" class="org.gxfj.iknow.action.AdminAction" method="login">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="logout" class="org.gxfj.iknow.action.AdminAction" method="logout">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+    </package>
+
 </struts>
