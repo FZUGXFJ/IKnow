@@ -74,4 +74,12 @@ public class AdminAction {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
 }
