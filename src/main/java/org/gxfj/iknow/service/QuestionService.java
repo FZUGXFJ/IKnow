@@ -60,9 +60,11 @@ public interface QuestionService {
      * @param user 用户
      * @param questionId 要获得的问题
      * @param length 要加载的回答个数
+     * @param start 起始地址
+     * @param sort 排序方式
      * @return json格式的问题信息
      */
-    Map<String,Object> moreAnswers(User user, Integer questionId,int start, int length);
+    Map<String,Object> moreAnswers(User user, Integer questionId,int start, int length,int sort);
 
     /**
      * 插入浏览记录

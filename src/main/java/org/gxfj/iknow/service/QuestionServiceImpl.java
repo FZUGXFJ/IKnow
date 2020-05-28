@@ -284,12 +284,12 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> moreAnswers(User user, Integer questionId,int start, int length) {
+    public Map<String, Object> moreAnswers(User user, Integer questionId,int start, int length,int sort) {
         Map<String, Object> moreAns = new HashMap<>(MAP_NUM);
         //根据问题id查询到的问题
         Question question = questionDAO.getNotDelete(questionId);
         //问题的回答
-        List<Answer> answers = answerDAO.listByQuestionId(question.getId(),start, length);
+        List<Answer> answers = answerDAO.listByQuestionIdSort(question.getId(),start, length,sort);
         if (answers.size() == 0){
             return null;
         }

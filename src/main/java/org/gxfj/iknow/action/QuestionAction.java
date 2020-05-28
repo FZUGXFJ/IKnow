@@ -186,6 +186,10 @@ public class QuestionAction {
     public String moreAnswer(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
+        Integer Sort=(Integer)session.get("sort");
+        if(Sort==null){
+            Sort=DEFAULT_SORT;
+        }
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (questionService.moreAnswers(user,questionId,start,20)==null){
             response.put("resultCode",NO_MORE);

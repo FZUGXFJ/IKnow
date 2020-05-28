@@ -78,4 +78,5 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      */
     List<Answer> listByQuestionIdSort(int questionId,int start,int length,int sort);
 
+
 }
