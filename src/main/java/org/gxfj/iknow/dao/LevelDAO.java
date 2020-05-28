@@ -2,6 +2,8 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Level;
 
+import java.util.List;
+
 public interface LevelDAO extends BaseDAO<Level>{
 
     /**
@@ -10,4 +12,6 @@ public interface LevelDAO extends BaseDAO<Level>{
      * @return 等级
      */
     Integer getLevelByExp(Integer exp);
+
+    List<Level> list();
 }

@@ -60,4 +60,11 @@ public class LevelDAOImpl implements LevelDAO {
             return level;
         }
     }
+
+    @Override
+    public List<Level> list() {
+        String hql = "FROM Level";
+        Query query = getSession().createQuery(hql);
+        return query.list();
+    }
 }
