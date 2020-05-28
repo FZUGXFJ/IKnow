@@ -233,7 +233,8 @@ public class CommentServiceImpl implements CommentService {
             int num = replyDAO.getCount(comment.getId());
             commentMap.put("replyNum", num);
             if (num != 0) {
-                 replies = replyDAO.listByCommentId(comment.getId(), 0, REPLY_NUM);
+                //TODO:这里用了魔法值，后面考虑用枚举来解决
+                 replies = replyDAO.listByCommentIdSort(comment.getId(), 0, REPLY_NUM,1);
                 replyListMap = getCommentReplyMapArray(replies,questionOwner,answerOwner,question,answer, visitor);
             } else {
                 replyListMap = new ArrayList<>();
