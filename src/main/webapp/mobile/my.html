@@ -204,6 +204,9 @@
                 success:function (result) {
                     if (result.resultCode === 0) {
                         myInfo.inf = result.information;
+                        myInfo.loaded = true;
+                    } else {
+                        location.href = "user/login.html?boot=0";
                     }
                 },
                 error: function (request, status, error) {
