@@ -58,4 +58,20 @@ public class AdminAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
     }
+
+    public Integer getAccountNum() {
+        return accountNum;
+    }
+
+    public void setAccountNum(Integer accountNum) {
+        this.accountNum = accountNum;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
