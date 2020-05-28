@@ -413,6 +413,9 @@ public class AnswerServiceImpl implements AnswerService{
 
         //构建浏览表，行是回答id，列是用户id
         for (Browsinghistory browsinghistory : browsinghistoryList) {
+            if (browsinghistory.getAnswerByAnswerId() == null) {
+                continue;
+            }
             //通过浏览记录获得浏览的问题的问题分类id
             Integer questiontypeId = browsinghistory.getQuestionByQuestionId().getQuestiontypeByTypeId().getId();
             //通过浏览记录获得浏览的回答的id
@@ -446,14 +449,14 @@ public class AnswerServiceImpl implements AnswerService{
         }
 
         //2) 计算回答与回答之间的pearson系数
-        double pearsonMatrix[][] = getPearsonMatrix(answersLength,usersLength,browsingHistoryStatistic);
+        double[][] pearsonMatrix = getPearsonMatrix(answersLength,usersLength,browsingHistoryStatistic);
 
         //DEBUG：查看计算完的Pearson矩阵
 //        System.out.println("\n\n");
         for (int i = 0; i < answersLength; i++) {
-            String str_tmp = "";
+            String strTmp = "";
             for (int j = 0; j < answersLength; j++) {
-                str_tmp += pearsonMatrix[i][j] + ", ";
+                strTmp += pearsonMatrix[i][j] + ", ";
             }
 //            System.out.println(str_tmp);
         }
