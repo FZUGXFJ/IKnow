@@ -270,4 +270,27 @@ public class UserServiceImpl<result> implements UserService{
            return userIdentityMap;
         }
     }
+
+    @Override
+    public Map<String, String> sendVerifyCoderesetemail(String email) {
+        Map<String,String> map = new HashMap<>(MAP_NUM);
+        String subject = "IKnow验证邮件";
+        String verifyCode = SecurityUtil.generatorVerifyCode(6);
+        map.put("email_verifyCode",verifyCode);
+        String content = "您的验证码是<h1>" +
+                verifyCode +
+                "</h1>请在15分钟内完成验证";
+        String result;
+        try {
+            mailUtil.sendMail(email,subject,content);
+        } catch (Exception e) {
+            result = "{\"head\":\"发送失败\",\"body\":\"服务器异常\"}";
+            map.put("result",result);
+            e.printStackTrace();
+            return map;
+        }
+        result = "{\"head\":\"发送成功\",\"body\":\"请进入邮箱查看验证码\"}";
+        map.put("result",result);
+        return map;
+    }
 }
