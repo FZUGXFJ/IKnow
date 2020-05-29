@@ -13,6 +13,7 @@
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 </head>
 <body>
+<div id="index" style="width: 100%;height: 100%">
     <nav class="navbar navbar-expand-lg navbar-light fix" style="background-color: aliceblue">
         <a class="navbar-brand" href="#" style="margin-left: 250PX"><img src="../img/LOGO透明%20(1).png"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +25,7 @@
                     <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">登出</a>
+                    <a class="nav-link" href="#" @click="logout">登出</a>
                 </li>
                 <li class="nav-item">
                     <div class="dropdown">
@@ -37,8 +38,8 @@
                 </li>
             </ul>
         </div>
-
     </nav>
+
     <div class="navs">
         <ul class="nav flex-column">
             <li class="nav-item">
@@ -432,6 +433,7 @@
     </div>
     <!--出现悬浮窗口后,背景变暗-->
     <div id="shadow" class="shadow_css"></div>
+</div>
 </body>
 <script>
     /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
@@ -447,5 +449,38 @@
         document.getElementById("window").style.display = "none";
         document.getElementById("shadow").style.display = "none";
     }
+
+    let index=new Vue({
+        el:"#index",
+        data:{
+            isRmb:false,
+            accountNumError:false,
+            accountNumErrorMsg:"",
+            passwordError:false,
+            passwordErrorMsg:"",
+            alertMsg:{head:"",body:""},
+        },
+        methods:{
+            logout:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/logout.action",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            location.href = "login.html";
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+        }
+    });
 </script>
 </html>

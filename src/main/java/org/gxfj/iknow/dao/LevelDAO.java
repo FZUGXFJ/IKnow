@@ -13,5 +13,9 @@ public interface LevelDAO extends BaseDAO<Level>{
      */
     Integer getLevelByExp(Integer exp);
 
+    /**
+     * 查询所有的等级
+     * @return 所有等级
+     */
     List<Level> list();
 }

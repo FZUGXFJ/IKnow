@@ -52,6 +52,8 @@ public class QuestionAction {
     private final int NO_MORE = 1;
     private final int MISS_QUESTION_INF = 2;
     private final int DEFAULT_SORT = 1;
+    private final int USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT = 2;
+
 
     public InputStream getInputStream() {
         return inputStream;
@@ -133,7 +135,7 @@ public class QuestionAction {
         return "success";
     }
 
-    public String cancelAdopt(){
+    public String cancelAdopt() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         User viewUser = questionService.get(questionId);
@@ -149,7 +151,7 @@ public class QuestionAction {
         return "success";
     }
 
-    public String collectQuestion(){
+    public String collectQuestion() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
@@ -166,7 +168,7 @@ public class QuestionAction {
         return "success";
     }
 
-    public String cancelCollect(){
+    public String cancelCollect() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
@@ -183,7 +185,7 @@ public class QuestionAction {
         return "success";
     }
 
-    public String moreAnswer(){
+    public String moreAnswer() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         Integer Sort=(Integer)session.get("sort");
@@ -202,6 +204,24 @@ public class QuestionAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
+    public String deleteQuestion() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        if (user == null) {
+            response.put("resultCode", UN_LOGIN);
+        } else {
+            if (questionService.deleteQuestion(user, questionId)) {
+                response.put("resultCode", SUCCESS);
+            } else {
+                response.put("resultCode", USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT);
+            }
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
     public String getQuestionTitle() {
         return questionTitle;
     }

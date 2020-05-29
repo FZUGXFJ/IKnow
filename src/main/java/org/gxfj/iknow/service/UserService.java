@@ -91,4 +91,11 @@ public interface UserService {
      * @return 是否存在:0不存在可以更新，1存在
      */
     public boolean existEmail(String email);
+
+    /**
+     * 发送验证码到邮箱
+     * @param email 目标邮箱
+     * @return 返回结果集合
+     */
+    public Map<String,String> sendVerifyCoderesetemail(String email);
 }

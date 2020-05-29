@@ -41,6 +41,8 @@ public class QuestionServiceImpl implements QuestionService{
     BrowsingHistoryDAO browsingHistoryDAO;
     @Autowired
     CollectionProblemDAO collectionProblemDAO;
+    @Autowired
+    ReplyDAO replyDAO;
 
     final static private int QUESTION_STATE_UNSOLVE = 1;
     final static private int QUESTION_STATE_SOLVE = 2;
@@ -126,7 +128,9 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Map<String, Object> getQuestion(User user, Integer questionId, int length,int sort){
         Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
-        insertBrowsing(user.getId(),questionId);
+        if(user!=null){
+            insertBrowsing(user.getId(),questionId);
+        }
         //根据问题id查询到的问题
         Question question = questionDAO.getNotDelete(questionId);
         //问题的回答
@@ -308,5 +312,38 @@ public class QuestionServiceImpl implements QuestionService{
 
         browsingHistoryDAO.add(browsinghistory);
     }
+
+    @Override
+    public boolean deleteQuestion(User user, Integer questionId) {
+        if (user == null || user.getId() == null) {
+            return false;
+        }
+        Question question = questionDAO.get(questionId);
+        if (question == null || !question.getUserByUserId().getId().equals(user.getId())) {
+            return false;
+        }
+
+
+        Collection<Answer> answerCollection = question.getAnswersById();
+
+        for (Answer answer : answerCollection) {
+            Collection<Comment> commentCollection = answer.getCommentsById();
+
+            for (Comment comment : commentCollection) {
+                Collection<Reply> replyCollection = comment.getRepliesById();
+
+                for (Reply reply : replyCollection) {
+                    replyDAO.delete(reply);
+                }
+                commentDAO.delete(comment);
+            }
+
+            answerDAO.delete(answer);
+        }
+        questionDAO.delete(question);
+
+        return true;
+    }
+
 
 }

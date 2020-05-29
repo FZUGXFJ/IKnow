@@ -43,7 +43,7 @@ public class UserAction {
     private final String SUCCESS = "success";
     private final static String RESULT_CODE = "resultCode";
     private final static String RESET_PASSWORD_VERIFY_CODE_SESSION_NAME = "verifyCode";
-    private final static String RESET_EMAIL_VERIFY_CODE_SESSION_NAME = "verifyCode";
+    private final static String RESET_EMAIL_VERIFY_CODE_SESSION_NAME = "email_verifyCode";
     private final static int SUCCESS_CODE = 0;
     private final static int RESET_PASSWD_FAIL = 1;
     private final static int UN_LOGIN = 1;
@@ -215,7 +215,7 @@ public class UserAction {
 
     public String newEmailVerify(){
         Map<String,Object> session = ActionContext.getContext().getSession();
-        Map<String,String> resultMap = userService.sendVerifyCode(newEmail);
+        Map<String,String> resultMap = userService.sendVerifyCoderesetemail(newEmail);
         session.put("newEmail",newEmail);
         session.put(VERIFY_CODE,resultMap.get(RESET_EMAIL_VERIFY_CODE_SESSION_NAME));
         inputStream = new ByteArrayInputStream(resultMap.get("result").getBytes(StandardCharsets.UTF_8));

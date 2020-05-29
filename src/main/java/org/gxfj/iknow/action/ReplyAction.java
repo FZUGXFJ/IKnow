@@ -28,6 +28,8 @@ public class ReplyAction {
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
     private final int MISS_COMMENT_INF = 2;
+    private final String RESULT_CODE="resultCode";
+    private final int NO_REPLYER = 2;
 
     public InputStream getInputStream() { return inputStream; }
     final static private int RESPONSE_NUM = 20;
@@ -93,6 +95,24 @@ public class ReplyAction {
         return "success";
     }
 
+    public String deleteReply(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
+        User user=(User)session.get("user");
+        if(user==null){
+            response.put(RESULT_CODE,UN_LOGIN);
+        }
+        else {
+            if (replyService.deleteReply(replyId,user)){
+                response.put(RESULT_CODE,SUCCESS);
+            }
+            else {
+                response.put(RESULT_CODE,NO_REPLYER);
+            }
+        }
+        return "success";
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
@@ -123,5 +143,13 @@ public class ReplyAction {
 
     public void setReplyId(Integer replyId) {
         this.replyId = replyId;
+    }
+
+    public Integer getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(Integer sortType) {
+        this.sortType = sortType;
     }
 }

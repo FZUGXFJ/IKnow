@@ -30,19 +30,21 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      * @param start 开始元素
      * @return 回答列表
      */
-    List<Answer> list(Integer start,Integer count);
+    List<Answer> listNoDelete(Integer start, Integer count);
 
     /**
      * 得到最新的未删除的回答
      * @param count 回答个数
      * @return 回答列表
      */
-    List<Answer> list(Integer count);
+    List<Answer> listNoDelete(Integer count);
 
     /**
      * 获得所有的回答列表
      * @return 回答列表
      */
+    List<Answer> listNoDelete();
+
     List<Answer> list();
 
     /**
@@ -78,5 +80,9 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      */
     List<Answer> listByQuestionIdSort(int questionId,int start,int length,int sort);
 
-
+    /**
+     * 删除回答
+     * @param answer 要删除的回答
+     */
+    void delete(Answer answer);
 }

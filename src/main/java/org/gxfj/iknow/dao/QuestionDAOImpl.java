@@ -20,6 +20,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     static final int SOLVED = 1;
     static final int UNSOLVED = 2;
+    static final int DELETED = 1;
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -51,6 +52,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public void delete(Question bean) {
+        bean.setIsDelete((byte)DELETED);
         update(bean);
     }
 
