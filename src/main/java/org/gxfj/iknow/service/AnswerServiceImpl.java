@@ -66,7 +66,9 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> getRecommendAnswer(Integer questionId, Integer answerId, User user) {
         Map<String , Object> resultMap = new HashMap<>(MAP_NUM);
-        insertBrowsing(user,questionDAO.get(questionId),answerDAO.get(answerId));
+        if(user!=null) {
+            insertBrowsing(user,questionDAO.get(questionId),answerDAO.get(answerId));
+        }
         //获得回答关联的问题
         resultMap.put("question" , getQuestionMap(questionId));
         //获得回答答主

@@ -128,7 +128,9 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Map<String, Object> getQuestion(User user, Integer questionId, int length,int sort){
         Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
-        insertBrowsing(user.getId(),questionId);
+        if(user!=null){
+            insertBrowsing(user.getId(),questionId);
+        }
         //根据问题id查询到的问题
         Question question = questionDAO.getNotDelete(questionId);
         //问题的回答
