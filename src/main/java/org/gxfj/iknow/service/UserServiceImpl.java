@@ -276,7 +276,7 @@ public class UserServiceImpl<result> implements UserService{
         Map<String,String> map = new HashMap<>(MAP_NUM);
         String subject = "IKnow验证邮件";
         String verifyCode = SecurityUtil.generatorVerifyCode(6);
-        map.put("email_verifyCode",verifyCode);
+        map.put("verifyCode",verifyCode);
         String content = "您的验证码是<h1>" +
                 verifyCode +
                 "</h1>请在15分钟内完成验证";

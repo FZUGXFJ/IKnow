@@ -62,7 +62,9 @@
                     <param name="inputName">inputStream</param>
                 </result>
             </action>
-            <action name="sendVerifyEmail" class="org.gxfj.iknow.action.UserAction" method="sendVerifyEmail">
+
+            <!-- 修改密码 -->
+            <action name="sendResetPasswordVerifyEmail" class="org.gxfj.iknow.action.UserAction" method="sendResetPasswordVerifyEmail">
                 <result name="success" type="stream">
                     <param name="contentType">application/json;charset=utf-8</param>
                     <param name="inputName">inputStream</param>
@@ -80,6 +82,20 @@
                     <param name="inputName">inputStream</param>
                 </result>
             </action>
+
+            <!-- 修改绑定邮箱 -->
+            <action name="sendRebindEmailVerifyEmail" class="org.gxfj.iknow.action.UserAction" method="sendRebindEmailVerifyEmail">
+                <result name="success" type="stream">
+                    <param name="contentType">application/json;charset=utf-8</param>
+                    <param name="inputName">inputStream</param>
+                </result>
+            </action>
+            <action name="reBindEmailVerify" class="org.gxfj.iknow.action.UserAction" method="reBindEmailVerify">
+                <result name="success" type="stream">
+                    <param name="contentType">application/json;charset=utf-8</param>
+                    <param name="inputName">inputStream</param>
+                </result>
+            </action>
             <action name="newEmailVerify" class="org.gxfj.iknow.action.UserAction" method="newEmailVerify">
                 <result name="success" type="stream">
                     <param name="contentType">application/json;charset=utf-8</param>
@@ -92,12 +108,15 @@
                     <param name="inputName">inputStream</param>
                 </result>
             </action>
+            <!-- 退出登录 -->
             <action name="logout" class="org.gxfj.iknow.action.UserAction" method="logout">
                 <result name="success" type="stream">
                     <param name="contentType">application/json;charset=utf-8</param>
                     <param name="inputName">inputStream</param>
                 </result>
             </action>
+
+            <!-- 个人信息 -->
             <action name="myInformation" class="org.gxfj.iknow.action.UserAction" method="getAllUserInf">
                 <result name="success" type="stream">
                     <param name="contentType">application/json;charset=utf-8</param>
