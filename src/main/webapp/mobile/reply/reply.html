@@ -24,7 +24,10 @@
                 <span v-if="load">评论详情</span>
                 <span v-else>加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
             </td>
-            <td style="width: 33%;"></td>
+            <td style="width: 33%;;color: #acacac;font-size: 1.5em;text-align: right">
+                <i class="fas fa-sort-amount-up" v-if="sortType===0" @click="reverse"></i>
+                <i class="fas fa-sort-amount-down" v-else="" @click="reverse"></i>
+            </td>
         </table>
     </div>
     <br><br><br>
@@ -150,6 +153,7 @@
             targetId: 0,
             targetName:"",
             noAction:false,
+            sortType:0,
         },
         methods:{
             send:function () {
@@ -330,6 +334,41 @@
                     });
                 }
             },
+            loadAll:function () {
+                let commentId = this.commentId;
+                let sortType = this.sortType;
+                $.ajax({
+                    type:"POST",
+                    url:"../../reply/showMoreReply.action",
+                    data:{
+                        commentId:commentId,
+                        sortType:sortType
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            allReply.comment = result.comment;
+                            allReply.replies = result.replies;
+                            allReply.load = true;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            reverse:function () {
+                if (this.sortType === 0) {
+                    this.sortType = 1;
+                } else {
+                    this.sortType = 0;
+                }
+                this.load = false;
+                this.loadAll();
+            }
         },
         mounted:function () {
             let loc = location.href;
@@ -341,27 +380,7 @@
             } else {
                 location.href = "../../error/mobile/404error.html"
             }
-            $.ajax({
-                type:"POST",
-                url:"../../reply/showMoreReply.action",
-                data:{
-                    commentId:commentId
-                },
-                dataType:"json",
-                success:function (result) {
-                    if (result.resultCode === 0) {
-                        allReply.comment = result.comment;
-                        allReply.replies = result.replies;
-                        allReply.load = true;
-                    }
-                },
-                error:function (request,status,error) {
-                    alert("系统异常！");
-                    console.log(request.status);
-                    console.log(request.readyState);
-                    console.log(status);
-                }
-            });
+            this.loadAll();
         }
     });
 </script>
