@@ -72,4 +72,12 @@ public interface QuestionService {
      * @param questionId 问题id
      */
     void insertBrowsing(Integer userId,Integer questionId);
+
+    /**
+     * 删除问题
+     * @param user 执行操作的用户
+     * @param questionId 要删除问题
+     * @return 删除的结果
+     */
+    boolean deleteQuestion(User user, Integer questionId);
 }
