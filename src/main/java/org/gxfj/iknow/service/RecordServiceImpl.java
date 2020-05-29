@@ -70,7 +70,7 @@ public class RecordServiceImpl implements RecordService {
                 answerRecord=new HashMap<>(3);
                 answerRecord.put("answerId",answer.getId());
                 answerRecord.put("answererName",answer.getUserByUserId().getName());
-                answerRecord.put("answerContent",answer.getContent());
+                answerRecord.put("answerContent",HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContent())));
 
                 answerRecords.add(answerRecord);
             }
