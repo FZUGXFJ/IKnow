@@ -3,6 +3,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.ExpUtil;
 import org.gxfj.iknow.util.HtmlUtil;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class QuestionServiceImpl implements QuestionService{
     CollectionProblemDAO collectionProblemDAO;
     @Autowired
     ReplyDAO replyDAO;
+    @Autowired
+    ExpUtil expUtil;
 
     final static private int QUESTION_STATE_UNSOLVE = 1;
     final static private int QUESTION_STATE_SOLVE = 2;
@@ -224,7 +227,7 @@ public class QuestionServiceImpl implements QuestionService{
         else{
             questionAnswerMap.put("answererName",answer.getUserByUserId().getName());
             ////用户等级
-            questionAnswerMap.put("answererLevel",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
+            questionAnswerMap.put("answererLevel",expUtil.getLevelLabel(answer.getUserByUserId().getExp()));
             questionAnswerMap.put("answererBadge",answer.getUserByUserId().getBadgeNum());
             questionAnswerMap.put("answererId",answer.getUserByUserId().getId());
             questionAnswerMap.put("answererHead","<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");

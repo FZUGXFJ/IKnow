@@ -44,19 +44,6 @@ public class ExpUtil {
     }
 
     /**
-     * 根据用户获得用户的等级
-     * @param user 要获取等级的用户
-     * @return 用户的等级，如果用户对象为空 或者 用户对象中的经验为空 或者 用户的经验不在等级表中，则返回null
-     */
-    public Level getLevel(User user) {
-        if (user == null || user.getExp() == null) {
-            return null;
-        }
-
-        return getLevel(user.getExp());
-    }
-
-    /**
      * 根据经验值获得用户的等级
      * @param exp 要判断的经验
      * @return 经验对应的等级，如果经验为空 或者 经验的值不在所有等级的范围中，则返回null
@@ -73,4 +60,41 @@ public class ExpUtil {
         }
         return null;
     }
+
+    /**
+     * 根据用户获得用户的等级
+     * @param user 要获取等级的用户
+     * @return 用户的等级，如果用户对象为空 或者 用户对象中的经验为空 或者 用户的经验不在等级表中，则返回null
+     */
+    public Level getLevel(User user) {
+        if (user == null || user.getExp() == null) {
+            return null;
+        }
+
+        return getLevel(user.getExp());
+    }
+
+    /**
+     * 根据经验值获得用户的等级标签
+     * @param exp 要判断的经验
+     * @return 经验对应的等级标签，如果经验为空 或者 经验的值不在所有等级的范围中，则返回null
+     */
+    public String getLevelLabel(Integer exp) {
+        return getLevel(exp).getLevel().toString();
+    }
+
+    /**
+     * 根据用户获得用户的等级标签
+     * @param user 要获取等级的用户
+     * @return 用户的等级标签，如果用户对象为空 或者 用户对象中的经验为空 或者 用户的经验不在等级表中，则返回null
+     */
+    public String getLevelLabel(User user) {
+        if (user == null || user.getExp() == null) {
+            return null;
+        }
+
+        return getLevelLabel(user.getExp());
+    }
+
+
 }

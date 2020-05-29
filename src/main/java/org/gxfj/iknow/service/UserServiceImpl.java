@@ -3,6 +3,7 @@ package org.gxfj.iknow.service;
 import com.alibaba.fastjson.JSON;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.ExpUtil;
 import org.gxfj.iknow.util.MailUtil;
 import org.gxfj.iknow.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class UserServiceImpl<result> implements UserService{
     private UserIdentityDAO userIdentityDAO;
     @Autowired
     private MailUtil mailUtil;
+    @Autowired
+    private ExpUtil expUtil;
 
     private static int MAP_NUM = 20;
 
@@ -181,7 +184,7 @@ public class UserServiceImpl<result> implements UserService{
             userInf.put("head" , "<img src='../head/" + user.getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
             userInf.put("badgeNum" , user.getBadgeNum());
-            userInf.put("level" , levelDAO.getLevelByExp(user.getExp()));
+            userInf.put("level" , expUtil.getLevelLabel(user.getExp()));
             userInf.put("postQueNum" , questionDAO.getUserQuestionCount(userId));
             userInf.put("postAnsNum" , answerDAO.getUserAnswersCount(userId));
             userInf.put("collectNum" , collectionProblemDAO.getUserCollectCount(userId));
