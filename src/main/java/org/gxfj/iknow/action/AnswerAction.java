@@ -35,6 +35,7 @@ public class AnswerAction {
     private final int MISS_ANSWER_IF = 3;
     private final int USER_IS_NOT_QUESTIONER = 2;
     private final int USER_IS_NOT_ANSWERER = 1;
+    private final int USER_IS_NOT_ANSWERER_TWO = 2;
 
     final static private int RESPONSE_NUM = 20;
     private static int MAP_NUM = 20;
@@ -251,6 +252,23 @@ public class AnswerAction {
         return "success";
     }
 
+    public String deleteAnswer(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response=new HashMap<>(RESPONSE_NUM);
+        User user = (User) session.get(SESSION_USER);
+        if (user == null) {
+            response.put("resultCode",UN_LOGIN);
+        } else {
+            if(answerService.isAnswerer(answerId,user)) {
+                answerService.deleteAnswer(answerId);
+                response.put("resultCode", SUCCESS);
+            } else{
+                response.put("resultCode",USER_IS_NOT_ANSWERER_TWO);
+            }
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
     public Integer getQuestionId() {
         return questionId;
     }
