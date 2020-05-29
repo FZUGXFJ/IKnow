@@ -26,12 +26,14 @@ import java.util.Map;
 public class AdminAction {
     private Integer accountNum;
     private String password;
-
+    private String dateNow;
+    private Integer typeSum;
     @Autowired
     private AdminService adminService;
 
     private InputStream inputStream;
     private final String SUCCESS = "success";
+    private final Integer UNLOGIN = 1;
     private static Integer HASH_MAP_NUM = 20;
 
     public String logout(){
@@ -59,6 +61,21 @@ public class AdminAction {
         return SUCCESS;
     }
 
+    public String statistics(){
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        Admin admin=(Admin)session.get("admin");
+        Map<String,Object> result=new HashMap<>(HASH_MAP_NUM);
+        if(admin==null){
+            result.put("resultCode",UNLOGIN);
+        }
+        else {
+            result=adminService.getData(dateNow,typeSum);
+            result.put("resultCode",0);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -81,5 +98,21 @@ public class AdminAction {
 
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
+    }
+
+    public Integer getTypeSum() {
+        return typeSum;
+    }
+
+    public void setTypeSum(Integer typeSum) {
+        this.typeSum = typeSum;
+    }
+
+    public String getDateNow() {
+        return dateNow;
+    }
+
+    public void setDateNow(String dateNow) {
+        this.dateNow = dateNow;
     }
 }
