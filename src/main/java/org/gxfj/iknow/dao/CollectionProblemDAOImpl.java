@@ -72,4 +72,11 @@ public class CollectionProblemDAOImpl implements CollectionProblemDAO{
                 " userID = :userId");
         return (List)query.setParameter("userId",userId).setFirstResult(start).setMaxResults(20).list();
     }
+
+    @Override
+    public Integer getUserCollectCount(Integer userId) {
+        Query query = getSession().createQuery("select count(c) from Collectionproblem WHERE "+
+                "(userID = "+ userId +")");
+        return ((Long)query.uniqueResult()).intValue();
+    }
 }
