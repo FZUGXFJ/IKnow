@@ -135,4 +135,11 @@ public class AnswerDAOImpl implements AnswerDAO{
         answer.setIsDelete((byte)1);
         update(answer);
     }
+
+    @Override
+    public Integer getUserAnswersCount(Integer userId) {
+        Query query = getSession().createQuery("select count(a) from Answer as a WHERE " +
+                "( userID= " + userId + " ) ");
+        return ((Long)query.uniqueResult()).intValue();
+    }
 }
