@@ -291,7 +291,7 @@ public class AnswerServiceImpl implements AnswerService{
         List<Answer> result = new ArrayList<>();
         if (userId == null) {
             // 对于未登录的浏览者，依旧采用推荐最先的回答
-            return answerDAO.list(count);
+            return answerDAO.listNoDelete(count);
         } else {
             List<Answer> answerList = null;
             if (recommentAnswerMap.containsKey(userId)) {
@@ -318,7 +318,7 @@ public class AnswerServiceImpl implements AnswerService{
         List<Answer> result = new ArrayList<>();
         if (userId == null) {
             // 对于未登录的浏览者，依旧采用推荐最先的回答
-            return answerDAO.list(start,count);
+            return answerDAO.listNoDelete(start,count);
         } else {
             List<Answer> answerList = null;
             if (recommentAnswerMap.containsKey(userId)) {
@@ -413,7 +413,7 @@ public class AnswerServiceImpl implements AnswerService{
 
         //构建浏览表，行是回答id，列是用户id
         for (Browsinghistory browsinghistory : browsinghistoryList) {
-            if (browsinghistory.getAnswerByAnswerId() == null) {
+            if (browsinghistory.getAnswerByAnswerId() == null || browsinghistory.getAnswerByAnswerId().getId() == null) {
                 continue;
             }
             //通过浏览记录获得浏览的问题的问题分类id
@@ -540,7 +540,7 @@ public class AnswerServiceImpl implements AnswerService{
                 }
             }
 
-            List<Answer> lastNewAnswer = answerDAO.list(PRE_RECOMMENT_NUM - recommendnum);
+            List<Answer> lastNewAnswer = answerDAO.listNoDelete(PRE_RECOMMENT_NUM - recommendnum);
             for (Answer answer : lastNewAnswer) {
                 recommendList.add(answer);
             }
@@ -548,7 +548,7 @@ public class AnswerServiceImpl implements AnswerService{
         }
 
         //对新注册的用户由于历史浏览为空，所以推荐只能统一用最新的数据，存储在key为0的list中
-        List<Answer> lastNewAnswer = answerDAO.list(PRE_RECOMMENT_NUM);
+        List<Answer> lastNewAnswer = answerDAO.listNoDelete(PRE_RECOMMENT_NUM);
         recommentAnswerMap.put(NEW_USER_RECOMMEND_KEY, lastNewAnswer);
 
         //DEBUG：查看生成的推荐表
