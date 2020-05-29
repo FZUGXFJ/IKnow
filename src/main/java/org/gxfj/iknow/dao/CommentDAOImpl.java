@@ -90,4 +90,5 @@ public class CommentDAOImpl implements CommentDAO{
         }
         return query.setInteger(0,answerId).setFirstResult(start).setMaxResults(length).list();
     }
+
 }

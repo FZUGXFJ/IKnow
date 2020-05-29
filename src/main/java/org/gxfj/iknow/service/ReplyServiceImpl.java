@@ -115,7 +115,7 @@ public class ReplyServiceImpl implements ReplyService {
                 isApproved = approvalReplyDAO.searchByUserIdandReplyId(visitor.getId(), reply.getId());
             }
             replyMap.put("isApproved", isApproved);
-
+            replyMap.put("viewerIsOwner",visitor.getId().equals(reply.getId()) ? 1 : 0);
             repliesMap.add(replyMap);
         }
         return repliesMap;
@@ -261,5 +261,16 @@ public class ReplyServiceImpl implements ReplyService {
         reply.setCount(reply.getCount()-1);
         replyDAO.update(reply);
         return true;
+    }
+
+    @Override
+    public boolean deleteReply(Integer replyId, User user) {
+        Reply reply=replyDAO.get(replyId);
+        if(user.getId().equals(reply.getUserByUserId().getId())){
+            reply.setIsDelete((byte)1);
+            replyDAO.update(reply);
+            return true;
+        }
+        return false;
     }
 }

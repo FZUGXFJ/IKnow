@@ -50,4 +50,11 @@ public interface ReplyService {
      */
     public boolean cancelApprove(Integer replyId,User user);
 
+    /**
+     * 删除回复
+     * @param replyId 回复id
+     * @param user 用户
+     * @return 是否删除
+     */
+    public boolean deleteReply(Integer replyId,User user);
 }

@@ -37,6 +37,7 @@ public class CommentAction {
     private final int RESULT_CODE_APPROVED = 2;
     private final int RESULT_CODE_NOT_APPROVED = 2;
     private final int DEFAULT_SORT = 0;
+    private final int NO_COMMENTER = 2;
 
     public InputStream getInputStream() { return inputStream; }
 
@@ -132,6 +133,24 @@ public class CommentAction {
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
+    }
+
+    public String deleteComment(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
+        User user=(User)session.get("user");
+        if(user==null){
+            response.put(RESULT_CODE,UN_LOGIN);
+        }
+        else {
+            if (commentService.deleteComment(commentId,user)){
+                response.put(RESULT_CODE,SUCCESS);
+            }
+            else {
+                response.put(RESULT_CODE,NO_COMMENTER);
+            }
+        }
+        return "success";
     }
 
     public Integer getAnswerId() {

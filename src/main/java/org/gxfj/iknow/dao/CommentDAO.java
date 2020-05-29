@@ -46,4 +46,5 @@ public interface CommentDAO extends BaseDAO<Comment>{
      * @return  评论列表
      */
     List<Comment> listByAnswerIdSort(int answerId, int start, int length,Integer sort);
+
 }

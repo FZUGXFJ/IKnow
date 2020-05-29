@@ -242,6 +242,10 @@ public class CommentServiceImpl implements CommentService {
             //评论回复列表
 
             commentMap.put("replies",replyListMap);
+
+            //判断是否是本身
+            commentMap.put("viewerIsOwner",visitor.getId().equals(commentUser.getId())? 1 : 0);
+
             commentListMap.add(commentMap);
         }
         return commentListMap;
@@ -281,7 +285,8 @@ public class CommentServiceImpl implements CommentService {
                 isApproved = approvalReplyDAO.searchByUserIdandReplyId(visitor.getId(), reply.getId()) == -1 ? 0 : 1;
             }
             replyMap.put("isApproved", isApproved);
-
+            //是否是本身
+            replyMap.put("viewerIsOwner",replyUser.getId().equals(visitor.getId()) ? 1 : 0);
             replyListMap.add(replyMap);
         }
         return replyListMap;
@@ -317,5 +322,17 @@ public class CommentServiceImpl implements CommentService {
 
         response.put("comments",commentListMap);
         return response;
+    }
+
+    @Override
+    public boolean deleteComment(Integer commentId, User user) {
+        Comment comment=commentDAO.get(commentId);
+        User user1=comment.getUserByUserId();
+        if(user1.getId().equals(user.getId())){
+            comment.setIsDelete((byte)1);
+            commentDAO.update(comment);
+            return true;
+        }
+        return false;
     }
 }
