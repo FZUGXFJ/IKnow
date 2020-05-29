@@ -182,10 +182,10 @@ public class UserServiceImpl<result> implements UserService{
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
             userInf.put("badgeNum" , user.getBadgeNum());
             userInf.put("level" , levelDAO.getLevelByExp(user.getExp()));
-            userInf.put("postQueNum" , questionDAO.listPartByUserId(userId).size());
-            userInf.put("postAnsNum" , answerDAO.listPartByUserId(userId).size());
-            userInf.put("collectNum" , collectionProblemDAO.getCollectionQuestionByUserId(userId , 0).size());
-            userInf.put("browseNum" , browsingHistoryDAO.getBrowsingHistoryByUserId(userId, 0).size());
+            userInf.put("postQueNum" , questionDAO.getUserQuestionCount(userId));
+            userInf.put("postAnsNum" , answerDAO.getUserAnswersCount(userId));
+            userInf.put("collectNum" , collectionProblemDAO.getUserCollectCount(userId));
+            userInf.put("browseNum" , browsingHistoryDAO.getUserBrowseCount(userId));
             userInf.put("achievementList" , listUserAchievements(userId));
             userInf.put("identity" , getUserIdentity(userId));
             result.put("information" , userInf);
