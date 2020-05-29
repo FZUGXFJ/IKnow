@@ -51,17 +51,17 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Map<String, Object> browsingRecord(User user, Integer start) {
-        List<Browsinghistory> bHistorys=browsingHistoryDAO.getBrowsingHistoryByUserId(user.getId(),start);
+        List<Browsinghistory> bHistories=browsingHistoryDAO.getBrowsingHistoryByUserId(user.getId(),start);
         List<Map<String,Object>> records=new ArrayList<>();
         List<Map<String,Object>> answerRecords=new ArrayList<>();
         Map<String,Object> record;
         Map<String,Object> answerRecord;
-        for (Browsinghistory browsinghistory:bHistorys){
+        for (Browsinghistory browsinghistory:bHistories){
             record=new HashMap<>(3);
             Question question=browsinghistory.getQuestionByQuestionId();
 
             record.put("questionId",question.getId());
-            record.put("questionTitile",question.getTitle());
+            record.put("questionTitle",question.getTitle());
 
             List<Browsinghistory> browsinghistory1s=browsingHistoryDAO.getBrowsingHistoryByUserIdAndquestionId(user.getId(),
                     question.getId());
@@ -79,7 +79,7 @@ public class RecordServiceImpl implements RecordService {
         }
         Map<String,Object> response=new HashMap<>(20);
         response.put("records",records);
-        response.put("Num",bHistorys.size());
+        response.put("Num",bHistories.size());
         return response;
     }
 
