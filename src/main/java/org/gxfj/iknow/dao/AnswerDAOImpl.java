@@ -123,4 +123,10 @@ public class AnswerDAOImpl implements AnswerDAO{
         }
         return query.setInteger(0,questionId).setFirstResult(start).setMaxResults(length).list();
     }
+
+    @Override
+    public void delete(Answer answer){
+        answer.setIsDelete((byte)1);
+        update(answer);
+    }
 }

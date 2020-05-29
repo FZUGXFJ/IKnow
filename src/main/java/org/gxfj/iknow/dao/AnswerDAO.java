@@ -78,5 +78,9 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      */
     List<Answer> listByQuestionIdSort(int questionId,int start,int length,int sort);
 
-
+    /**
+     * 删除回答
+     * @param answer 要删除的回答
+     */
+    void delete(Answer answer);
 }
