@@ -109,4 +109,19 @@ public interface AnswerService {
      * @param answer 回答
      */
     void insertBrowsing(User user, Question question, Answer answer);
+
+    /**
+     * 判断用户是否是答主
+     * @param answerId 回答id
+     * @param user 用户
+     * @return 是否成功
+     */
+    public boolean isAnswerer(Integer answerId,User user);
+
+    /**
+     * 删除回答
+     * @param answerId 回答id
+     * @return 是否成功
+     */
+    public boolean deleteAnswer(Integer answerId);
 }

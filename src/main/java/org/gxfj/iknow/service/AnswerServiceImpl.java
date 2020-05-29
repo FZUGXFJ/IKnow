@@ -678,4 +678,21 @@ public class AnswerServiceImpl implements AnswerService{
         browsinghistory.setAnswerByAnswerId(answer);
         browsingHistoryDAO.add(browsinghistory);
     }
+
+    @Override
+    public boolean isAnswerer(Integer answerId,User user){
+        Answer answer = answerDAO.get(answerId);
+        User answerer = answer.getUserByUserId();
+        if(user.getId().equals(answerer.getId())){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAnswer(Integer answerId){
+        Answer answer = answerDAO.get(answerId);
+        answerDAO.delete(answer);
+        return true;
+    }
 }
