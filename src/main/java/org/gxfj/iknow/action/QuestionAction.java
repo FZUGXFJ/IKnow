@@ -133,7 +133,7 @@ public class QuestionAction {
         return "success";
     }
 
-    public String cancelAdopt(){
+    public String cancelAdopt() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         User viewUser = questionService.get(questionId);
@@ -149,7 +149,7 @@ public class QuestionAction {
         return "success";
     }
 
-    public String collectQuestion(){
+    public String collectQuestion() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
@@ -166,7 +166,7 @@ public class QuestionAction {
         return "success";
     }
 
-    public String cancelCollect(){
+    public String cancelCollect() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
@@ -183,7 +183,7 @@ public class QuestionAction {
         return "success";
     }
 
-    public String moreAnswer(){
+    public String moreAnswer() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         Integer Sort=(Integer)session.get("sort");
@@ -202,6 +202,11 @@ public class QuestionAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
+    public String deleteQuestion() {
+        return "success";
+    }
+
     public String getQuestionTitle() {
         return questionTitle;
     }
