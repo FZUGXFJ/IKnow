@@ -112,4 +112,11 @@ public class QuestionDAOImpl implements QuestionDAO {
         List<Question> questions = questions = query.list();
         return questions;
     }
+
+    @Override
+    public Integer getUserQuestionCount(Integer userId) {
+        Query query = getSession().createQuery("select count(q) from Question as q WHERE" +
+                "(userID = "+ userId +") ");
+        return ((Long)query.uniqueResult()).intValue();
+    }
 }

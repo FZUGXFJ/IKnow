@@ -48,4 +48,11 @@ public interface QuestionDAO extends BaseDAO<Question>{
      * @return 问题列表，没有为null
      */
     List<Question> listPartByUserId(Integer userId);
+
+    /**
+     * 获得用户发布的问题的数目
+     * @param userId 用户id
+     * @return 发布的回答数目
+     */
+    Integer getUserQuestionCount(Integer userId);
 }
