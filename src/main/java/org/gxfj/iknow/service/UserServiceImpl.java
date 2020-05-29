@@ -151,22 +151,20 @@ public class UserServiceImpl<result> implements UserService{
 
     @Override
     public String getSimpleUserInf(User user) {
-        String result;
+        Map<String,Object> resultMap = new HashMap<>();
         if(user ==null) {
-            return "{\"resultCode\":1}";
+            resultMap.put("resultCode",1);
         }
         else {
-            if (user.getIntroduction() == null) {
-                result = "{\"resultCode\":0,\"user\": {\"head\":\"" + user.getHead() +
-                        "\",\"username\":\"" + user.getName() + "\",\"gender\":\"" + user.getGender() +
-                        "\",\"introduction\":" + user.getIntroduction() + "}}";
-            } else {
-                result = "{\"resultCode\":0,\"user\": { \"head\": \"" + user.getHead() +
-                        "\",\"username\":\"" + user.getName() + "\",\"gender\":\"" + user.getGender() +
-                        "\",\"introduction\":\"" + user.getIntroduction() + "\"}}";
-            }
+            Map<String,Object> userMap = new HashMap<>();
+            userMap.put("username",user.getName());
+            userMap.put("gender",user.getGender());
+            userMap.put("introduction",user.getIntroduction());
+            userMap.put("head",user.getHead());
+            resultMap.put("userInf",userMap);
+            resultMap.put("resultCode",0);
         }
-        return result;
+        return JSON.toJSONString(resultMap);
     }
 
     @Override

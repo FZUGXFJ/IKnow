@@ -64,7 +64,7 @@
 
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="get*" read-only="true"/>
+            <tx:method name="get*"/>
             <tx:method name="*"/>
         </tx:attributes>
     </tx:advice>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员首页</title>
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/administrators/index.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light fix" style="background-color: aliceblue">
+    <a class="navbar-brand" href="#" style="margin-left: 250PX"><img src="../img/LOGO透明%20(1).png"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active" style="margin-left: 10px">
+                <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">登出</a>
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <ul class="dropdown-menu" aria-labelledby="dLabel">
+                        <li><a class="set" href="#">个人中心</a></li>
+                        <li><a class="set" href="#">切换账户</a></li>
+                        <li><a class="set" href="#">退出登录</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</nav>
+<div class="navs">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">用户管理</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">问题管理</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">举报管理</a>
+        </li>
+    </ul>
+</div>
+<div class="search ">
+    <select class="sel1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>
+    <select class="sel1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>
+    <select class="sel1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>
+    <button>搜索</button>
+    <select class="sel2">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>
+</div>
+<div class="content">
+    <table width="100%">
+        <tr style="background-color: #e9e9e9">
+            <th style="width: 17%;text-align: center">字段1</th>
+            <th style="width: 17%;text-align: center">字段2</th>
+            <th style="width: 17%;text-align: center">字段3</th>
+            <th style="width: 17%;text-align: center">字段4</th>
+            <th style="width: 17%;text-align: center">字段5</th>
+            <th style="width: 15%;text-align: center">操作</th>
+        </tr>
+    </table>
+    <table width="100%" style="height: 90%">
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/<a href="javascript:void(0)" onclick="displayWindow()">查看</a></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/查看</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/查看</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/查看</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/查看</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/查看</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/查看</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/查看</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 17%">
+                    <span class="media">
+                        <img src="../img/qq.PNG" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0">Media heading</h5>
+                            11111111
+                        </div>
+                    </span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 17%;text-align: center">
+                <span>1</span>
+            </td>
+            <td style="width: 15%;text-align: center">
+                <span>处理/查看</span>
+            </td>
+        </tr>
+    </table>
+    <nav aria-label="Page navigation example" style="position: fixed;right: 1%">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<!--悬浮窗口-->
+<div id="window" class="window_css">
+    <div>
+        <span style="font-size: 1.2em;font-weight: bold">用户信息</span>
+        <a href="javascript:void(0)" onclick="hideWindow()">
+            <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 0"></i>
+        </a>
+    </div>
+    <div class="userInfo">
+        <h5>基本信息：</h5>
+        <div class="form-row">
+            <div class="form-group col-1">
+                <input type="text" readonly class="form-control-plaintext" value="ID:" style="text-align: center;font-weight: bold">
+            </div>
+            <div class="form-group col-4">
+                <input type="number" readonly class="form-control-plaintext" value="1">
+            </div>
+            <div class="form-group col-1">
+                <input type="text" readonly class="form-control-plaintext" value="用户名:" style="text-align: center;font-weight: bold">
+            </div>
+            <div class="form-group col-4">
+                <input type="password" class="form-control">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-1">
+                <input type="text" readonly class="form-control-plaintext" value="个人介绍:" style="text-align: center;font-weight: bold">
+            </div>
+            <div class="form-group col-4">
+                <input type="text" class="form-control" value="春翔的父亲">
+            </div>
+            <div class="form-group col-1">
+                <input type="text" readonly class="form-control-plaintext" value="性别:" style="text-align: center;font-weight: bold">
+            </div>
+            <div class="form-group col-4">
+                <select id="inputState" class="form-control">
+                    <option selected>保密</option>
+                    <option>男/option>
+                    <option>女/option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-1">
+                <input type="text" readonly class="form-control-plaintext" value="用户身份:" style="text-align: center;font-weight: bold">
+            </div>
+            <div class="form-group col-4">
+                <select class="form-control">
+                    <option selected>学生</option>
+                    <option>老师</option>
+                </select>
+            </div>
+            <div class="form-group col-1">
+                <input type="text" readonly class="form-control-plaintext" value="用户状态:" style="text-align: center;font-weight: bold">
+            </div>
+            <div class="form-group col-4">
+                <select class="form-control">
+                    <option selected>正常</option>
+                    <option>停封</option>
+                    <option>禁言</option>
+                </select>
+            </div>
+        </div>
+        <h5>设置账户密码：</h5>
+        <div class="form-row">
+            <div class="form-group col-1">
+                <input type="text" readonly class="form-control-plaintext" value="邮箱:" style="text-align: center;font-weight: bold">
+            </div>
+            <div class="form-group col-4">
+                <input type="email" class="form-control" value="1185229277@qq.com">
+            </div>
+            <div class="form-group col-1">
+                <input type="text" readonly class="form-control-plaintext" value="密码:" style="text-align: center;font-weight: bold">
+            </div>
+            <div class="form-group col-4">
+                <input type="text" class="form-control" value="123456">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">保存</button>
+        <button type="submit" class="btn btn-danger">删除</button>
+    </div>
+</div>
+<!--出现悬浮窗口后,背景变暗-->
+<div id="shadow" class="shadow_css"></div>
+</body>
+<script>
+    /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
+    function displayWindow() {
+        /*悬浮窗口的显示,需要将display变成block*/
+        document.getElementById("window").style.display = "block";
+        /*将背景变暗*/
+        document.getElementById("shadow").style.display = "block";
+    }
+
+    /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+    function hideWindow() {
+        document.getElementById("window").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+</script>
+</html>

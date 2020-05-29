@@ -124,4 +124,12 @@ public class ReplyAction {
     public void setReplyId(Integer replyId) {
         this.replyId = replyId;
     }
+
+    public Integer getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(Integer sortType) {
+        this.sortType = sortType;
+    }
 }
