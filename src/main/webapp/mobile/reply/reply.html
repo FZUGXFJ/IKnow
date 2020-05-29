@@ -273,10 +273,10 @@
                 }
             },
             approveReply:function (reply) {
-                if (allComment.noAction) {
+                if (allReply.noAction) {
                     return;
                 }
-                allComment.noAction = true;
+                allReply.noAction = true;
                 let type = "POST";
                 let data = {
                     replyId:reply.id

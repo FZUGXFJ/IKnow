@@ -381,6 +381,7 @@
             }
             if (sessionStorage.getItem("questionInfo") != null && sessionStorage.getItem("questionData") != null) {
                 this.loadLocalData();
+                this.loadingMore = false;
                 return;
             }
             $.ajax({
