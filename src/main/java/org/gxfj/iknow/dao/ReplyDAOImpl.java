@@ -18,6 +18,7 @@ public class ReplyDAOImpl implements ReplyDAO{
     private static Integer SORT_BY_TIME = 1;
     //按时间逆序排序
     private static Integer SORT_BY_TIME_REVERSE = 0;
+    private final static int DELETED = 1;
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -102,5 +103,14 @@ public class ReplyDAOImpl implements ReplyDAO{
             reply = list.get(0);
         }
         return reply;
+    }
+
+    @Override
+    public void delete(Reply bean) {
+        if (bean == null || bean.getId() == null) {
+            return ;
+        }
+        bean.setIsDelete((byte)DELETED);
+        update(bean);
     }
 }

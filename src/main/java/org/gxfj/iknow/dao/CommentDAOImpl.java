@@ -12,6 +12,7 @@ import java.util.List;
 @Repository("commentDAO")
 public class CommentDAOImpl implements CommentDAO{
 
+    private final static int DELETED = 1;
     private HibernateTemplate ht = null;
 
     @Autowired
@@ -89,6 +90,15 @@ public class CommentDAOImpl implements CommentDAO{
                     " order by date desc");
         }
         return query.setInteger(0,answerId).setFirstResult(start).setMaxResults(length).list();
+    }
+
+    @Override
+    public void delete(Comment bean) {
+        if (bean == null || bean.getId() == null) {
+            return ;
+        }
+        bean.setIsDelete((byte)DELETED);
+        update(bean);
     }
 
 }

@@ -38,4 +38,10 @@ public interface ReplyDAO extends BaseDAO<Reply>{
      * @return 没有则为null
      */
     Reply getNotDelete(Integer id);
+
+    /**
+     * 删除回答
+     * @param bean 要删除的回答
+     */
+    void delete(Reply bean);
 }
