@@ -242,6 +242,7 @@
                         if(typeSum === 0)
                         {
                             index.userSums=result.userSums;
+                            console.log(index.userSums[0].sum);
                         }
                         if(typeSum === 1)
                         {
@@ -292,6 +293,13 @@
             let date = this.getBeforeDate(0);
             this.getStatistics(date,0);
             // Graphs
+            let day1=this.userSums[0].sum;
+            let day2=this.userSums[1].sum;
+            let day3=this.userSums[2].sum;
+            let day4=this.userSums[3].sum;
+            let day5=this.userSums[4].sum;
+            let day6=this.userSums[5].sum;
+            let day7=this.userSums[6].sum;
             var ctx = document.getElementById('myChart')
             // eslint-disable-next-line no-unused-vars
             var myChart = new Chart(ctx, {
@@ -308,13 +316,13 @@
                     ],
                     datasets: [{
                         data: [
-                            this.userSums[0].sum,
-                            this.userSums[1].sum,
-                            this.userSums[2].sum,
-                            this.userSums[3].sum,
-                            this.userSums[4].sum,
-                            this.userSums[5].sum,
-                            this.userSums[6].sum
+                            day1,
+                            day2,
+                            day3,
+                            day4,
+                            day5,
+                            day6,
+                            day7
                         ],
                         lineTension: 0,
                         backgroundColor: 'transparent',
