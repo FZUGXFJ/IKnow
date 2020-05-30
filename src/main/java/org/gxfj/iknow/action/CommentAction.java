@@ -66,16 +66,16 @@ public class CommentAction {
     public String viewComments(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
-        Integer Sort;
+        Integer sort1;
         if(sort==null){
-            Sort=DEFAULT_SORT;
-            session.put("sort",Sort);
+            sort1=DEFAULT_SORT;
+            session.put("commentsort",sort1);
         }
         else {
-            Sort=sort;
-            session.put("sort",Sort);
+            sort1=sort;
+            session.put("commentsort",sort1);
         }
-        response = commentService.getComments(answerId, (User) session.get(SESSION_USER),Sort);
+        response = commentService.getComments(answerId, (User) session.get(SESSION_USER),sort1);
         response.put(RESULT_CODE, SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
@@ -120,15 +120,15 @@ public class CommentAction {
     public String moreComment(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
-        Integer Sort=(Integer)session.get("sort");
-        if(Sort==null){
-            Sort=DEFAULT_SORT;
+        Integer sort1 =(Integer)session.get("commentsort");
+        if(sort1 ==null){
+            sort1 =DEFAULT_SORT;
         }
-        if (commentService.moreComments(answerId, (User) session.get(SESSION_USER),start,Sort)==null){
+        if (commentService.moreComments(answerId, (User) session.get(SESSION_USER),start,sort1 )==null){
             response.put(RESULT_CODE,NO_MORE);
         }
         else {
-            response=commentService.moreComments(answerId, (User) session.get(SESSION_USER),start,Sort);
+            response=commentService.moreComments(answerId, (User) session.get(SESSION_USER),start,sort1 );
             response.put(RESULT_CODE, SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
