@@ -63,10 +63,12 @@ public class AdminDAOImpl implements AdminDAO{
         Session session = getSession();
         List<Integer> nums = new ArrayList<>();
         //获取每天的发表问题数，记录数列表从七天前开始计数
-        String sql = "select count(*) from question where DateDiff('"+date+"',date) >= 1";
-        Query query = session.createSQLQuery(sql);
-        Integer num = ((Number)query.uniqueResult()).intValue();
-        nums.add(num);
+        for(int i = 7;i >= 1;i--){
+            String sql = "select count(*) from question where DateDiff('"+date+"',date) >= "+i;
+            Query query = session.createSQLQuery(sql);
+            Integer num = ((Number)query.uniqueResult()).intValue();
+            nums.add(num);
+        }
         return nums;
     }
 
@@ -74,10 +76,12 @@ public class AdminDAOImpl implements AdminDAO{
     public List<Integer> getUserSum(String date) {
         Session session = getSession();
         List<Integer> nums = new ArrayList<>();
-        String sql = "select count(*) from user where DateDiff('"+date+"',date) >= 1";
-        Query query = session.createSQLQuery(sql);
-        Integer num = ((Number)query.uniqueResult()).intValue();
-        nums.add(num);
+        for(int i = 7;i >=1;i--){
+            String sql = "select count(*) from user where DateDiff('"+date+"',date) >= "+i;
+            Query query = session.createSQLQuery(sql);
+            Integer num = ((Number)query.uniqueResult()).intValue();
+            nums.add(num);
+        }
         return nums;
     }
 }
