@@ -70,4 +70,45 @@ public class AdminServiceImpl implements AdminService{
         }
         return result;
     }
+
+    @Override
+    public Map<String, Object> getActiveData(String dateNow, Integer typeSum) {
+        Map<String,Object> record;
+        List<Map<String,Object>> records=new ArrayList<>();
+        Map<String,Object> result=new HashMap<>(5);
+        if(typeSum==0){
+            List<Integer> date=adminDAO.getUserdayActives(dateNow);
+            for (Integer i:date){
+                record=new HashMap<>();
+                record.put("sum",i);
+                records.add(record);
+            }
+            result.put("userDayActives",records);
+        }
+        else {
+            List<Integer> date=adminDAO.getUsermonActives(dateNow);
+            for (Integer i:date){
+                record=new HashMap<>();
+                record.put("sum",i);
+                records.add(record);
+            }
+            result.put("userMonActives",records);
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getQuestionTypesumData() {
+        Map<String,Object> record;
+        List<Map<String,Object>> records=new ArrayList<>();
+        Map<String,Object> result=new HashMap<>(5);
+        List<Integer> date=adminDAO.getQuestiontypeSums();
+        for (Integer i:date){
+            record=new HashMap<>();
+            record.put("sum",i);
+            records.add(record);
+        }
+        result.put("questionTypeSums",records);
+        return result;
+    }
 }

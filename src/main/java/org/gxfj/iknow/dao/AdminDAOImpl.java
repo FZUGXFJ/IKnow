@@ -84,4 +84,19 @@ public class AdminDAOImpl implements AdminDAO{
         }
         return nums;
     }
+
+    @Override
+    public List<Integer> getUserdayActives(String date) {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getUsermonActives(String date) {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getQuestiontypeSums() {
+        return null;
+    }
 }
