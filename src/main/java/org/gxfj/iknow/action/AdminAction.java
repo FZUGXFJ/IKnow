@@ -69,15 +69,8 @@ public class AdminAction {
 
     public String statistics(){
         Map<String,Object> session = ActionContext.getContext().getSession();
-        Admin admin=(Admin)session.get(LOGIN_ADMIN_SESSION_NAME);
-        Map<String,Object> result=new HashMap<>(HASH_MAP_NUM);
-        if(admin==null){
-            result.put("resultCode",UNLOGIN);
-        }
-        else {
-            result=adminService.getData(dateNow,typeSum);
-            result.put("resultCode",0);
-        }
+        Map<String,Object> result=adminService.getData(dateNow,typeSum);
+        result.put("resultCode",0);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
     }
