@@ -27,4 +27,26 @@ public interface AdminDAO extends BaseDAO<Admin>{
      */
     public List<Integer> getUserSum(String date);
 
+    /**
+     * 获取过去7天每天的活跃用户数
+     * @param date 日期
+     * @return 每天的个数
+     */
+    public List<Integer> getUserdayActives(String date);
+
+    /**
+     * 获取过去3个月（包含当月）天每天的活跃用户数
+     * @param date 日期
+     * @return 每月的个数
+     */
+    public List<Integer> getUsermonActives(String date);
+
+    /**
+     * 获取各种类别的问题数
+     * @return 各种类别分别的问题数
+     */
+    public List<Integer> getQuestiontypeSums();
+
+
+
 }

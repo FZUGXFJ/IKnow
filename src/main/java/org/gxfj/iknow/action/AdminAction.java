@@ -68,7 +68,6 @@ public class AdminAction {
     }
 
     public String statistics(){
-        Map<String,Object> session = ActionContext.getContext().getSession();
         Map<String,Object> result=adminService.getData(dateNow,typeSum);
         result.put("resultCode",0);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
@@ -85,6 +84,20 @@ public class AdminAction {
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         System.out.println(JSON.toJSONString(result));
+        return SUCCESS;
+    }
+
+    public String active() {
+        Map<String,Object> result=adminService.getActiveData(dateNow,typeSum);
+        result.put("resultCode",0);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+    public String questionTypeSum(){
+        Map<String,Object> result=adminService.getQuestionTypesumData();
+        result.put("resultCode",0);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
     }
 

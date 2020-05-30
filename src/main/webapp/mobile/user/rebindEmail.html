@@ -262,6 +262,7 @@
                                 rebindEmail.alertMsg.head = "绑定成功";
                                 rebindEmail.alertMsg.body = "";
                                 al.slideDown();
+                                rebindEmail.logout();
                             } else if (result.resultCode === 1) {
                                 al.addClass("alert-danger");
                                 rebindEmail.alertMsg.head = "验证码错误";
@@ -288,7 +289,33 @@
             },
             back:function () {
                 history.go(-1);
-            }
+            },
+            logout:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"../../user/logout.action",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            let exp = new Date();
+                            exp.setTime((exp.getTime()) - 1);
+                            document.cookie = "email=" + result.email + ";expires="
+                                + exp.toGMTString() + ";path=/";
+                            document.cookie = "password=" + result.password + ";expires="
+                                + exp.toGMTString() + ";path=/";
+                            sessionStorage.clear();
+                            location.href = "login.html";
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
         },
         mounted:function () {
             $.ajax({

@@ -222,11 +222,14 @@ public class CommentServiceImpl implements CommentService {
             commentMap.put("isAnswerer",answerOwner.getId().equals(commentUser.getId()) ? 1 : 0);
 
             //如果当前浏览者已登录，且评论有人点赞，且用户对该评论点过赞则为1,否则为0
-            if (visitor != null && comment.getCount() != 0 &&
-                    approvalCommentDAO.get(visitor.getId(), comment.getId()) != null) {
-                commentMap.put("isApproved", 1);
-            } else {
-                commentMap.put("isApproved", 0);
+            if (visitor != null) {
+                //判断浏览者是否为该评论的评论者
+                commentMap.put("viewerIsOwner",visitor.getId().equals(commentUser.getId())? 1 : 0);
+                if (comment.getCount() != 0 && approvalCommentDAO.get(visitor.getId(), comment.getId()) != null) {
+                    commentMap.put("isApproved", 1);
+                } else {
+                    commentMap.put("isApproved", 0);
+                }
             }
 
             commentMap.put("time", Time.getTime(comment.getDate()));
@@ -243,10 +246,6 @@ public class CommentServiceImpl implements CommentService {
 
             commentMap.put("replies",replyListMap);
 
-            if(visitor!=null){
-                //判断是否是本身
-                commentMap.put("viewerIsOwner",visitor.getId().equals(commentUser.getId())? 1 : 0);
-            }
 
 
             commentListMap.add(commentMap);

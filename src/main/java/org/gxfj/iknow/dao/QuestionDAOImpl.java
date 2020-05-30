@@ -121,8 +121,9 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public List<Question> listQuestionByMMC(Integer categoryId,Integer subjectId, Integer majorId,Integer start,
-        Integer length){
-        return null;
+    public List<Question> listByQuestionType(Integer questionTypeId, Integer start, Integer count) {
+        String hql = "FROM Question WHERE typeId = ?";
+        Query query = getSession().createQuery(hql);
+        return query.setInteger(0,questionTypeId).setFirstResult(start).setMaxResults(count).list();
     }
 }
