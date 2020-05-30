@@ -39,15 +39,21 @@
     <link href="dashboard.css" rel="stylesheet">
 </head>
 <body>
+<div id="index">
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Company name</a>
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">IKnow</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-    <ul class="navbar-nav px-3">
+    <input class="form-control form-control-dark w-100" type="text" placeholder="搜索" aria-label="Search">
+    <ul class="navbar-nav px-5">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Sign out</a>
+            <a class="nav-link" href="#">搜索</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav px-3" style="background-color: crimson">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#" @click="logout">登出</a>
         </li>
     </ul>
 </nav>
@@ -60,70 +66,70 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="#">
                             <span data-feather="home"></span>
-                            Dashboard <span class="sr-only">(current)</span>
+                            XX举报 <span class="sr-only">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="file"></span>
-                            Orders
+                            XX举报
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="shopping-cart"></span>
-                            Products
+                            XX举报
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="users"></span>
-                            Customers
+                            XX举报
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="bar-chart-2"></span>
-                            Reports
+                            XX举报
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="layers"></span>
-                            Integrations
+                            XX举报
                         </a>
                     </li>
                 </ul>
 
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Saved reports</span>
-                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                        <span data-feather="plus-circle"></span>
-                    </a>
+                    <span>相关统计</span>
+<!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+<!--                        <span data-feather="plus-circle"></span>-->
+<!--                    </a>-->
                 </h6>
                 <ul class="nav flex-column mb-2">
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="file-text"></span>
-                            Current month
+                            XX增长趋势图
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="file-text"></span>
-                            Last quarter
+                            XXX图
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="file-text"></span>
-                            Social engagement
+                            XXX图
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="file-text"></span>
-                            Year-end sale
+                            XXX图
                         </a>
                     </li>
                 </ul>
@@ -132,11 +138,11 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Dashboard</h1>
+                <h1 class="h2">举报管理</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">导出</button>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                         <span data-feather="calendar"></span>
@@ -145,17 +151,20 @@
                 </div>
             </div>
 
+<!--            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
 
             <h2>Section title</h2>
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
+                        <th>举报ID</th>
+                        <th>用户ID</th>
+                        <th>举报类别</th>
+                        <th>XXID</th>
+                        <th>举报日期</th>
+                        <th>举报日期</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -165,6 +174,8 @@
                         <td>ipsum</td>
                         <td>dolor</td>
                         <td>sit</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,002</td>
@@ -172,6 +183,8 @@
                         <td>consectetur</td>
                         <td>adipiscing</td>
                         <td>elit</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,003</td>
@@ -179,6 +192,8 @@
                         <td>nec</td>
                         <td>odio</td>
                         <td>Praesent</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,003</td>
@@ -186,6 +201,8 @@
                         <td>Sed</td>
                         <td>cursus</td>
                         <td>ante</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,004</td>
@@ -193,6 +210,8 @@
                         <td>diam</td>
                         <td>Sed</td>
                         <td>nisi</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,005</td>
@@ -200,6 +219,8 @@
                         <td>quis</td>
                         <td>sem</td>
                         <td>at</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,006</td>
@@ -207,6 +228,8 @@
                         <td>elementum</td>
                         <td>imperdiet</td>
                         <td>Duis</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,007</td>
@@ -214,6 +237,8 @@
                         <td>ipsum</td>
                         <td>Praesent</td>
                         <td>mauris</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,008</td>
@@ -221,6 +246,8 @@
                         <td>nec</td>
                         <td>tellus</td>
                         <td>sed</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,009</td>
@@ -228,6 +255,8 @@
                         <td>semper</td>
                         <td>porta</td>
                         <td>Mauris</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,010</td>
@@ -235,6 +264,8 @@
                         <td>Vestibulum</td>
                         <td>lacinia</td>
                         <td>arcu</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,011</td>
@@ -242,6 +273,8 @@
                         <td>nulla</td>
                         <td>Class</td>
                         <td>aptent</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,012</td>
@@ -249,6 +282,8 @@
                         <td>sociosqu</td>
                         <td>ad</td>
                         <td>litora</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,013</td>
@@ -256,6 +291,8 @@
                         <td>per</td>
                         <td>conubia</td>
                         <td>nostra</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,014</td>
@@ -263,6 +300,8 @@
                         <td>inceptos</td>
                         <td>himenaeos</td>
                         <td>Curabitur</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     <tr>
                         <td>1,015</td>
@@ -270,20 +309,112 @@
                         <td>ligula</td>
                         <td>in</td>
                         <td>libero</td>
+                        <td>2020-05-29</td>
+                        <td>处理</td>
                     </tr>
                     </tbody>
                 </table>
+                <div class="page-bar">
+                    <ul>
+                        <li v-if="cur>1"><a v-on:click="cur=1,pageClick()">首页</a></li>
+                        <li v-if="cur==1"><a class="banclick">首页</a></li>
+                        <li v-if="cur>1"><a v-on:click="cur--,pageClick()">上一页</a></li>
+                        <li v-if="cur==1"><a class="banclick">上一页</a></li>
+                        <!--当前页背景色为蓝色-->
+                        <li v-for="index in indexs"  v-bind:class="{ 'active': cur == index}">
+                            <a v-on:click="btnClick(index)">{{ index }}</a>
+                        </li>
+                        <li v-if="cur<all"><a v-on:click="cur++,pageClick()">下一页</a></li>
+                        <li v-if="cur == all"><a class="banclick">下一页</a></li>
+                        <li v-if="cur<all"><a v-on:click="cur=all,pageClick()">尾页</a></li>
+                        <li v-if="cur == all"><a class="banclick">尾页</a></li>
+                        <li><a>共<i>{{all}}</i>页</a></li>
+                    </ul>
+                </div>
             </div>
         </main>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="../assets/dist/js/bootstrap.bundle.js"></script>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <script>
-    /* globals Chart:false, feather:false */
-
+    let index=new Vue({
+        el:"#index",
+        data:{
+            isRmb:false,
+            accountNumError:false,
+            accountNumErrorMsg:"",
+            passwordError:false,
+            passwordErrorMsg:"",
+            alertMsg:{head:"",body:""},
+            all: 8, //总页数
+            cur: 1//当前页码
+        },
+        watch: {
+            cur: function(oldValue , newValue){
+                console.log(arguments);
+            }
+        },
+        methods:{
+            logout:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/logout.action",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            location.href = "login.html";
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            btnClick: function(data){
+                if(data != this.cur){
+                    this.cur = data;
+                }
+            },
+            pageClick: function(){
+                console.log('现在在'+this.cur+'页');
+            }
+        },
+        computed: {
+            indexs: function(){
+                var left = 1;
+                var right = this.all;
+                var ar = [];
+                if(this.all>= 5){
+                    //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
+                    if(this.cur > 3 && this.cur < this.all-1){
+                        //以4为参考基准，左面加2右边加2
+                        left = this.cur - 2
+                        right = this.cur + 2
+                    }else{
+                        if(this.cur<=3){
+                            left = 1
+                            right = 5
+                        }else{
+                            right = this.all
+                            left = this.all -4
+                        }
+                    }
+                }
+                while (left <= right){
+                    ar.push(left)
+                    left ++
+                }
+                console.log(ar);
+                return ar
+            }
+        }
+    });
     (function () {
         'use strict'
 
@@ -292,50 +423,8 @@
         // Graphs
         var ctx = document.getElementById('myChart')
         // eslint-disable-next-line no-unused-vars
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [
-                    'Sunday',
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday',
-                    'Saturday'
-                ],
-                datasets: [{
-                    data: [
-                        15339,
-                        21345,
-                        18483,
-                        24003,
-                        23489,
-                        24092,
-                        12034
-                    ],
-                    lineTension: 0,
-                    backgroundColor: 'transparent',
-                    borderColor: '#007bff',
-                    borderWidth: 4,
-                    pointBackgroundColor: '#007bff'
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: false
-                        }
-                    }]
-                },
-                legend: {
-                    display: false
-                }
-            }
-        })
-    }())
 
+    }())
 </script>
 </body>
 </html>
