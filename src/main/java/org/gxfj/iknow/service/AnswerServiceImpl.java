@@ -179,7 +179,7 @@ public class AnswerServiceImpl implements AnswerService{
         answerMap.put("isAnonymous",answer.getIsAnonymous() == 0 ? 0 : 1);
         Integer x=approvalAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
         Integer y=oppositionAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
-        Integer z=0;
+        int z=0;
         if (x != -1) {
             z=1;
         }
