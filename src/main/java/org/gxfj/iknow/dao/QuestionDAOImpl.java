@@ -119,4 +119,10 @@ public class QuestionDAOImpl implements QuestionDAO {
                 "(userID = "+ userId +") ");
         return ((Long)query.uniqueResult()).intValue();
     }
+
+    @Override
+    public List<Question> listQuestionByMMC(Integer categoryId,Integer subjectId, Integer majorId,Integer start,
+        Integer length){
+        return null;
+    }
 }
