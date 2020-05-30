@@ -34,7 +34,7 @@
     <br><br><br>
     <div id="questionInf" v-if="load">
         <h5><b>{{question.title}}</b></h5>
-        <div id="questionContent" class="hidePart" v-html="question.content"></div>
+        <div id="questionContent" class="hidePart" v-html="partContent"></div>
         <br>
         <table>
             <td style="text-align: left;font-size: 0.7em;opacity: 0.5">
@@ -256,7 +256,7 @@
                             console.log(status);
                         }
                     });
-                }).catch(action => {});;
+                }).catch(action => {});
             },
             back:function () {
                 history.go(-1);
@@ -485,6 +485,15 @@
                     console.log(status);
                 }
             });
+        },
+        computed:{
+            partContent:function () {
+                if (this.hidePart) {
+                    return this.question.content.replace(/<\/?.+?>/g, "");
+                } else {
+                    return this.question.content;
+                }
+            }
         }
     });
 </script>
