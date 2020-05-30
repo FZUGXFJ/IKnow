@@ -48,6 +48,7 @@ public class AdminAction {
     public String login(){
         Map resultMap = new HashMap(HASH_MAP_NUM);
         Admin adminInf = new Admin();
+        Map<String,Object> session = ActionContext.getContext().getSession();
         adminInf.setAccount(accountNum);
         adminInf.setPasswd(password);
         Admin admin = adminService.login(adminInf);
@@ -55,6 +56,7 @@ public class AdminAction {
             resultMap.put("resultCode" , 1);
         }
         else{
+            session.put("admin", admin);
             resultMap.put("resultCode" , 0);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
