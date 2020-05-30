@@ -101,7 +101,7 @@
                 }, 1000);
                 $.ajax({
                     type:"POST",
-                    url:"../../user/sendVerifyEmail.action",
+                    url:"../../user/sendRebindEmailVerifyEmail.action",
                     data:{},
                     dataType:"json",
                     success:function (result) {
@@ -203,7 +203,7 @@
                     this.verifyCodeError = false;
                     $.ajax({
                         type:"POST",
-                        url:"../../user/resetPasswordVerify.action",
+                        url:"../../user/reBindEmailVerify.action",
                         data:{
                             verifyCode:verifyCode.val()
                         },

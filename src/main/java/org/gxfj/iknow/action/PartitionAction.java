@@ -1,0 +1,109 @@
+package org.gxfj.iknow.action;
+
+import com.alibaba.fastjson.JSON;
+import com.opensymphony.xwork2.ActionContext;
+import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.service.PartitionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author erniumo
+ */
+
+@Controller
+public class PartitionAction {
+
+    @Autowired
+    PartitionService partitionService;
+
+    private Integer categoryId;
+    private Integer subjectId;
+
+    private InputStream inputStream;
+    private final Integer UN_LOGIN = 1;
+    private static Integer HASH_MAP_NUM = 20;
+    private final static int MIN_HASH_MAP_NUM = 10;
+    private final static String RESULTCODE = "resultCode";
+    private final static int SUCCESS = 0;
+    private final static int RESPONSE_NUM = 20;
+    private final static String SESSION_USER="user";
+
+    public String getCategories(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User)session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else {
+            response=partitionService.getCategories();
+            response.put(RESULTCODE,SUCCESS);
+        }
+
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String getSubjects(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User)session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else {
+            response=partitionService.getSubjects(categoryId);
+            response.put(RESULTCODE,SUCCESS);
+        }
+
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String getMajors(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        User user = (User)session.get(SESSION_USER);
+        if(user == null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else {
+            response=partitionService.getMajors(subjectId);
+            response.put(RESULTCODE,SUCCESS);
+        }
+
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Integer getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Integer subjectId) {
+        this.subjectId = subjectId;
+    }
+}

@@ -2,6 +2,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.ExpUtil;
 import org.gxfj.iknow.util.HtmlUtil;
 import org.gxfj.iknow.util.MathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class AnswerServiceImpl implements AnswerService{
     private ApprovalAnswerDAO approvalAnswerDAO;
     @Autowired
     private OppositionAnswerDAO oppositionAnswerDAO;
+    @Autowired
+    ExpUtil expUtil;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -147,7 +150,7 @@ public class AnswerServiceImpl implements AnswerService{
             answererMap.put("head" , "<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%'" +
                     " height='100%' alt=''>");
             answererMap.put("name" , answerer.getName());
-            answererMap.put("level",levelDAO.getLevelByExp(answer.getUserByUserId().getExp()));
+            answererMap.put("level",expUtil.getLevelLabel(answer.getUserByUserId().getExp()));
             answererMap.put("badgeNum" , answerer.getBadgeNum());
             /*
              * TODO β版本实现回答者的身份
@@ -176,7 +179,7 @@ public class AnswerServiceImpl implements AnswerService{
         answerMap.put("isAnonymous",answer.getIsAnonymous() == 0 ? 0 : 1);
         Integer x=approvalAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
         Integer y=oppositionAnswerDAO.searchByUserIdandAnswerId(userId,answer.getId());
-        Integer z=0;
+        int z=0;
         if (x != -1) {
             z=1;
         }
@@ -650,7 +653,7 @@ public class AnswerServiceImpl implements AnswerService{
                 recommend.put("answererHead","<img src='../head/" + user.getHead() +
                         "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 recommend.put("answererName",user.getName());
-                recommend.put("answererLevel",levelDAO.getLevelByExp(user.getExp()));
+                recommend.put("answererLevel",expUtil.getLevelLabel(user.getExp()));
                 recommend.put("answererBadge",user.getBadgeNum());
             }
             recommend.put("answerId",answer.getId());

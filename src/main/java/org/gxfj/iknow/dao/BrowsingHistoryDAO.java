@@ -35,4 +35,11 @@ public interface BrowsingHistoryDAO extends BaseDAO<Browsinghistory>{
      * @return  浏览记录
      */
     List<Browsinghistory> getBrowsingHistoryByUserIdAndquestionId(Integer userId, Integer questionId);
+
+    /**
+     * 获得用户浏览记录的数目
+     * @param userId 用户id
+     * @return 用户浏览的条数
+     */
+    Integer getUserBrowseCount(Integer userId);
 }

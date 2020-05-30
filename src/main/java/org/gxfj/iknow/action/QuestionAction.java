@@ -110,20 +110,20 @@ public class QuestionAction {
         System.out.println(questionId);
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
-        Integer Sort;
+        int sort1;
         if (sort==null){
-            session.put("sort",DEFAULT_SORT);
-            Sort=DEFAULT_SORT;
+            session.put("answersort",DEFAULT_SORT);
+            sort1=DEFAULT_SORT;
         }
         else {
-            Sort=sort;
-            session.put("sort",sort);
+            sort1=sort;
+            session.put("answersort",sort);
         }
         //题主
         User viewUser = questionService.get(questionId);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        response.put("question",questionService.getQuestion(user,questionId, 20,Sort));
+        response.put("question",questionService.getQuestion(user,questionId, 20,sort1));
         response.put("resultCode",SUCCESS);
         if(user == null || !isQuestionUser){
             response.put("viewerIsOwner",0);
@@ -188,16 +188,16 @@ public class QuestionAction {
     public String moreAnswer() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
-        Integer Sort=(Integer)session.get("sort");
-        if(Sort==null){
-            Sort=DEFAULT_SORT;
+        Integer sort1 =(Integer)session.get("answersort");
+        if(sort1 ==null){
+            sort1 = DEFAULT_SORT;
         }
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        if (questionService.moreAnswers(user,questionId,start,20,Sort)==null){
+        if (questionService.moreAnswers(user,questionId,start,20,sort1 )==null){
             response.put("resultCode",NO_MORE);
         }
         else {
-            response=questionService.moreAnswers(user,questionId,start,20,Sort);
+            response=questionService.moreAnswers(user,questionId,start,20,sort );
             response.put("resultCode",SUCCESS);
         }
 

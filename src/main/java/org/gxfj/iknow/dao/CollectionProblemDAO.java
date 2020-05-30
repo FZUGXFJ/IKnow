@@ -36,4 +36,11 @@ public interface CollectionProblemDAO extends BaseDAO<Collectionproblem>{
      * @return  收藏问题记录
      */
     List<Collectionproblem> getCollectionQuestionByUserId(Integer userId,Integer start);
+
+    /**
+     * 获得用户收藏问题的数目
+     * @param userId 用户id
+     * @return 收藏问题的数目
+     */
+    Integer getUserCollectCount(Integer userId);
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -12,9 +12,11 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/element-ui/2.12.0/theme-chalk/index.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/element-ui/2.12.0/index.js"></script>
 </head>
 <body>
-<div id="question">
+<div id="question" v-loading="loading === 0">
     <div id="header">
         <table style="color: #acacac;">
             <td style="width: 80%;"><i class="fas fa-chevron-left" @click="back"></i></td>
@@ -27,7 +29,7 @@
         </table>
     </div>
     <br>
-    <div id="questionInf" v-if="loading > 0">
+    <div id="questionInf">
         <table style="color: #12eee7;margin-bottom: 1em">
             <td style="width: 15%">
                 <div v-html="headPortrait" class="headPortrait"></div>
@@ -56,15 +58,24 @@
         <table style="font-size: 0.8em">
             <td style="width: 50%"><span style="opacity: 0.6">回答{{answerCount}}</span></td>
             <td style="width: 50%;text-align: right">
-                <div class="dropdown">
-                    <button class="noBorder dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span style="font-size: 0.8em;opacity: 0.6">{{sortMethod}}</span>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="sortDropdown" style="font-size: 0.8em;width: 5em">
-                        <button class="noBorder" style="display: block">默认排序</button>
-                        <button class="noBorder" style="display: block">按时间排序</button>
-                    </div>
-                </div>
+<!--                <div class="dropdown">-->
+<!--                    <button class="noBorder dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                        <span style="font-size: 0.8em;opacity: 0.6">{{sortMethod}}</span>-->
+<!--                    </button>-->
+<!--                    <div class="dropdown-menu" aria-labelledby="sortDropdown" style="font-size: 0.8em;width: 5em">-->
+<!--                        <button class="noBorder" style="display: block">默认排序</button>-->
+<!--                        <button class="noBorder" style="display: block">按时间排序</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <el-dropdown>
+                    <span class="el-dropdown-link">
+                        排序方式<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>默认排序</el-dropdown-item>
+                        <el-dropdown-item>按时间排序</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
             </td>
         </table>
     </div>
@@ -94,18 +105,11 @@
                 <div class="answerInf">
                     <div class="answerView" v-html="answer.answerView" @click="answerPage(answer.answerId)"></div>
                     <table>
-                        <td style="width: 80%;opacity: 0.5;font-size: 0.8em">
+                        <td style="width: 90%;opacity: 0.5;font-size: 0.8em">
                             {{answer.answerApprove}}赞同-{{answer.answerComment}}评论-{{answer.answerTime}}
                         </td>
-                        <td style="width: 20%;text-align: right;">
-                            <div class="dropdown">
-                                <button class="noBorder" type="button" id="reportDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="reportDropdown" style="font-size: 0.8em;width: 5em">
-                                    <button class="noBorder" style="display: block">举报</button>
-                                </div>
-                            </div>
+                        <td style="width: 10%;text-align: right;" data-toggle="modal" data-target="#operateModal1">
+                            <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
                         </td>
                     </table>
                 </div>
@@ -141,9 +145,9 @@
                     <div id="operateMenu">
                         <br>
                         <table>
-                            <td class="operateItem">
-                                <div><i class="fas fa-user-plus fa-2x"></i></div>
-                                <span>邀请回答</span>
+                            <td class="operateItem" v-if="viewerIsOwner==1">
+                                <div><i class="fas fa-trash-alt fa-2x"></i></div>
+                                <span>删除问题</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsOwner==0">
                                 <div><i class="fas fa-minus-circle fa-2x"></i></div>
@@ -162,6 +166,27 @@
             </div>
         </div>
     </div>
+    <div style="z-index: 9999;" class="modal fade" id="operateModal1" tabindex="-1"
+         role="dialog" aria-labelledby="topModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">操作</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="operateMenu1">
+                        <button class="btn btn-light" style="width: 100%;margin: 0 auto;text-align: left">
+                            <i class="fas fa-minus-circle" style="color: #acacac"></i>&nbsp;举报
+                        </button>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     let question = new Vue({
@@ -172,11 +197,7 @@
             viewerIsOwner:0,
             isAnonymous:1,
             isSolved:1,
-            owner:{
-                id:1,
-                username:"",
-                head:"0.jpg",
-            },
+            owner:{},
             title:"",
             content:"",
             collectionCount:0,
@@ -184,6 +205,7 @@
             answerCount:0,
             answers:[],
             sortMethod:"默认排序",
+            sortType:0,
             headFirstPart:"<img src='../../head/",
             headLastPart:"' width='100%' height='100%' alt=''>",
             loading:0,
@@ -371,10 +393,10 @@
         },
         mounted:function () {
             let loc = location.href;
-            loc = loc.replace("?","&").split("&")[1];
+            let qid = loc.replace("?","&").split("&")[1];
             let questionId;
-            if (loc.indexOf("questionId=")!==-1) {
-                questionId = loc.replace("questionId=","");
+            if (qid.indexOf("questionId=")!==-1) {
+                questionId = qid.replace("questionId=","");
                 this.questionId = questionId;
             } else {
                 location.href = "../../error/mobile/404error.html"

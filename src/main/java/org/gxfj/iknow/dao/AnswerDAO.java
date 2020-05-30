@@ -4,6 +4,7 @@ import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Comment;
 import org.gxfj.iknow.pojo.Question;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface AnswerDAO extends BaseDAO<Answer>{
@@ -85,4 +86,11 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      * @param answer 要删除的回答
      */
     void delete(Answer answer);
+
+    /**
+     * 获得用户发布的回答的数目
+     * @param userId 用户id
+     * @return 回答数量
+     */
+    public Integer getUserAnswersCount(Integer userId);
 }
