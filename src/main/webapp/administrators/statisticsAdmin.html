@@ -207,6 +207,25 @@
             pageClick: function(){
                 console.log('现在在'+this.cur+'页');
             },
+            isLogin:function(){
+                $.ajax({
+                    url: "../admin/isLogin.action",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 1) {
+                            location.href="login.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
             getBeforeDate:function(num, time) {
                 let n = num;
                 let d = '';
@@ -399,6 +418,7 @@
             }
         },
         mounted:function () {
+            this.isLogin();
             let date = this.getBeforeDate(0);
             this.getStatistics(date,0);
         }
