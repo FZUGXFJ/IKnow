@@ -2,14 +2,9 @@ package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
-import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.pojo.Admin;
-import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.AdminService;
-import org.gxfj.iknow.service.UserService;
-import org.gxfj.iknow.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 
@@ -88,14 +83,14 @@ public class AdminAction {
     }
 
     public String active() {
-        Map<String,Object> result=adminService.getActiveData(dateNow,typeSum);
+        Map<String,Object> result = adminService.getActiveData(dateNow,typeSum);
         result.put("resultCode",0);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;
     }
 
     public String questionTypeSum(){
-        Map<String,Object> result=adminService.getQuestionTypesumData();
+        Map<String,Object> result = adminService.getQuestionTypeSumData();
         result.put("resultCode",0);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return SUCCESS;

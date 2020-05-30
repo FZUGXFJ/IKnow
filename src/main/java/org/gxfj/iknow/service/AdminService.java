@@ -36,5 +36,5 @@ public interface AdminService {
      * 获取问题种类数量
      * @return 数据
      */
-    public Map<String,Object> getQuestionTypesumData();
+    public Map<String,Object> getQuestionTypeSumData();
 }

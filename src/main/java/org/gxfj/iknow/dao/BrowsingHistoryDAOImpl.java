@@ -84,4 +84,27 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
                 "userID = " + userId);
         return ((Long)query.uniqueResult()).intValue();
     }
+
+    @Override
+    public List<Long> getUserDailyActives(String date, Integer count) {
+        if(date == null || count == null) {
+            return null;
+        }
+        String hql = "SELECT count(DISTINCT userID) FROM Browsinghistory where DateDiff(?, date) < ? GROUP" +
+                " BY DATE_FORMAT(date, '%Y-%m-%d')";
+        Query query = getSession().createQuery(hql);
+        return query.setParameter(0,date).setParameter(1,count).list();
+    }
+
+    @Override
+    public List<Long> getUserMonthlyActives(String date, Integer count) {
+        if(date == null || count == null) {
+            return null;
+        }
+        String hql = "select count(DISTINCT userID) FROM Browsinghistory where PERIOD_DIFF(?, date) < ? GROUP BY " +
+                "DATE_FORMAT(date, '%Y-%m')";
+
+        Query query = getSession().createQuery(hql);
+        return query.setParameter(0,date).setParameter(1,count).list();
+    }
 }
