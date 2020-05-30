@@ -49,9 +49,19 @@ body {
     color: red;
 }
 #alert{
-    width: 80%;
+    width: 60%;
     font-size: 1em;
     margin: 0 auto;
     display: none;
     height: 20%;
+}
+#login{
+    margin-left: 40%;
+    width: 20%;
+}
+.input{
+    width: 60%;
+}
+.space{
+    margin-top: 3%;
 }
