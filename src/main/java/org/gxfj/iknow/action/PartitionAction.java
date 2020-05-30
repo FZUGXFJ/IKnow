@@ -19,7 +19,7 @@ public class PartitionAction {
     private final static String RESULTCODE = "resultCode";
     private final static int SUCCESS = 0;
 
-
+    
     public InputStream getInputStream() {
         return inputStream;
     }
