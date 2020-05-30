@@ -185,6 +185,7 @@
                             if (login.isRmb && !login.hasCookie()) {
                                 login.setCookie(result.email,result.password);
                             }
+                            alert(login.boot);
                             if (login.boot === 1) {
                                 location.href = "../home.html";
                             } else {
@@ -310,7 +311,7 @@
             let boot = 1;
             let loc = location.href;
             loc = loc.replace("?","&").split("&")[1];
-            if (!loc === undefined && loc.indexOf("boot=")!==-1) {
+            if (loc !== undefined && loc.indexOf("boot=")!==-1) {
                 let bootStr = loc.replace("boot=","");
                 boot = parseInt(bootStr);
             }
