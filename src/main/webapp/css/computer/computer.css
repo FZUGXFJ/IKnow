@@ -121,6 +121,15 @@ body{
     margin-top: 30px;
     margin-bottom: 50px;
 }
+#identify{
+    position: absolute;
+    left: 40%;
+    width: 430px;
+    height: 550px;
+    background-color: white;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
 #logon{
     position: absolute;
     left: 40%;
@@ -164,6 +173,14 @@ body{
     margin-top: 3px;
     margin-left: 40px;
 }
+#loginUnderline2{
+    height: 3px;
+    width: 120px;
+    background-color: aqua;
+    margin-top: 3px;
+    margin-left: 40px;
+}
+
 #loginUnderline1{
     height: 3px;
     width: 95px;
@@ -171,7 +188,16 @@ body{
     margin-top: 3px;
     margin-left: 145px;
 }
-
+#name{
+    border-style: none;
+    margin-left: 40px;
+    height: 40px;
+    margin-top: 40px;
+    color: #444444;
+    font-size: 22px;
+    width: 340px;
+    float: left;
+}
 #email{
     border-style: none;
     margin-left: 40px;
@@ -179,7 +205,7 @@ body{
     margin-top: 40px;
     color: #444444;
     font-size: 22px;
-    width: 220px;
+    width: 340px;
     float: left;
 }
 #email1{
@@ -189,7 +215,7 @@ body{
     margin-top: 40px;
     color: lightgrey;
     font-size: 22px;
-    width: 220px;
+    width: 340px;
     float: left;
 }
 #emailSelect{
@@ -200,6 +226,15 @@ body{
     font-size: 22px;
     margin-top: 45px;
     width: 130px;
+}
+.input{
+    margin-left: 40px;
+    height: 40px;
+    color: lightgrey;
+    font-size: 22px;
+    border-style: none;
+    float: left;
+    width:340px;
 }
 #emailSelect1{
     margin-left: 0px;
@@ -264,7 +299,6 @@ body{
     border-style: none;
     float: left;
     width:220px;
-
 }
 #username{
     margin-left: 40px;
@@ -314,6 +348,7 @@ body{
     float: left;
     width:340px;
 }
+
 .codeBut{
     margin-left: 0px;
     height: 40px;

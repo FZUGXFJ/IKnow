@@ -42,3 +42,16 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.errorMessage{
+    text-align: left;
+    font-size: 0.8em;
+    color: red;
+}
+#alert{
+    width: 80%;
+    font-size: 1em;
+    margin: 0 auto;
+    display: none;
+    height: 20%;
+}

@@ -35,6 +35,11 @@ public class AdminAction {
     private final String SUCCESS = "success";
     private final Integer UNLOGIN = 1;
     private static Integer HASH_MAP_NUM = 20;
+    private final static int MIN_HASH_MAP_NUM = 10;
+    private final static String LOGIN_ADMIN_SESSION_NAME = "admin";
+    private final static String NO_ADMIN = null;
+    private final static String RESULT_CODE = "resultCode";
+    private final static int SUCCESSLOGIN = 0;
 
     public String logout(){
         Map<String,Object> session = ActionContext.getContext().getSession();
@@ -55,6 +60,7 @@ public class AdminAction {
             resultMap.put("resultCode" , 1);
         }
         else{
+            ActionContext.getContext().getSession().put(LOGIN_ADMIN_SESSION_NAME,admin);
             resultMap.put("resultCode" , 0);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
@@ -63,16 +69,22 @@ public class AdminAction {
 
     public String statistics(){
         Map<String,Object> session = ActionContext.getContext().getSession();
-        Admin admin=(Admin)session.get("admin");
-        Map<String,Object> result=new HashMap<>(HASH_MAP_NUM);
-        if(admin==null){
-            result.put("resultCode",UNLOGIN);
-        }
-        else {
-            result=adminService.getData(dateNow,typeSum);
-            result.put("resultCode",0);
+        Map<String,Object> result=adminService.getData(dateNow,typeSum);
+        result.put("resultCode",0);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
+    public String isLogin() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        if (session.get(LOGIN_ADMIN_SESSION_NAME) == NO_ADMIN) {
+            result.put(RESULT_CODE, UNLOGIN);
+        } else {
+            result.put(RESULT_CODE, SUCCESSLOGIN);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        System.out.println(JSON.toJSONString(result));
         return SUCCESS;
     }
 

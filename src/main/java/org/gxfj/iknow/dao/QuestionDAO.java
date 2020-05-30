@@ -55,4 +55,15 @@ public interface QuestionDAO extends BaseDAO<Question>{
      * @return 发布的回答数目
      */
     Integer getUserQuestionCount(Integer userId);
+
+    /**
+     * 根据规定的门类、学科、专业来获取指定数量的问题
+     * @param categoryId 门类ID
+     * @param subjectId 学科ID
+     * @param majorId 专业ID
+     * @param start 起始记录位置
+     * @param length 问题数量
+     * @return 发布的回答数目
+     */
+    List<Question> listQuestionByMMC(Integer categoryId,Integer subjectId,Integer majorId,Integer start,Integer length);
 }

@@ -111,7 +111,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file-text"></span>
-                                XX增长趋势图
+                                用户/问题增长趋势图
                             </a>
                         </li>
                         <li class="nav-item">
@@ -138,22 +138,26 @@
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">举报管理</h1>
+                    <h1 class="h2">数据统计</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary">导出</button>
                         </div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                            <span data-feather="calendar"></span>
-                            This week
-                        </button>
+<!--                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
+<!--                            <span data-feather="calendar"></span>-->
+<!--                            统计-->
+<!--                        </button>-->
+                        <div class="btn-group mr-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),0);user=true;">用户统计</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),1);user=false">问题统计</button>
+                        </div>
                     </div>
                 </div>
-
+                <h2 v-if="user">用户总数</h2>
+                <h2 v-if="!user">问题总数</h2>
                 <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-                <h2>XX举报管理</h2>
             </main>
         </div>
     </div>
@@ -164,6 +168,7 @@
     let index=new Vue({
         el:"#index",
         data:{
+            user:true,
             userSums:[],
             questionSums:[],
             all: 8, //总页数
@@ -201,6 +206,25 @@
             },
             pageClick: function(){
                 console.log('现在在'+this.cur+'页');
+            },
+            isLogin:function(){
+                $.ajax({
+                    url: "../admin/isLogin.action",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 1) {
+                            location.href="login.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             },
             getBeforeDate:function(num, time) {
                 let n = num;
@@ -242,11 +266,115 @@
                         if(typeSum === 0)
                         {
                             index.userSums=result.userSums;
+                            // Graphs
+                            let day1=index.userSums[0].sum;
+                            let day2=index.userSums[1].sum;
+                            let day3=index.userSums[2].sum;
+                            let day4=index.userSums[3].sum;
+                            let day5=index.userSums[4].sum;
+                            let day6=index.userSums[5].sum;
+                            let day7=index.userSums[6].sum;
+                            var ctx = document.getElementById('myChart')
+                            // eslint-disable-next-line no-unused-vars
+                            var myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: [
+                                        index.getBeforeDate(7),
+                                        index.getBeforeDate(6),
+                                        index.getBeforeDate(5),
+                                        index.getBeforeDate(4),
+                                        index.getBeforeDate(3),
+                                        index.getBeforeDate(2),
+                                        index.getBeforeDate(1)
+                                    ],
+                                    datasets: [{
+                                        data: [
+                                            day1,
+                                            day2,
+                                            day3,
+                                            day4,
+                                            day5,
+                                            day6,
+                                            day7
+                                        ],
+                                        lineTension: 0,
+                                        backgroundColor: 'transparent',
+                                        borderColor: '#007bff',
+                                        borderWidth: 4,
+                                        pointBackgroundColor: '#007bff'
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: false
+                                            }
+                                        }]
+                                    },
+                                    legend: {
+                                        display: false
+                                    }
+                                }
+                            })
                             console.log(index.userSums[0].sum);
                         }
                         if(typeSum === 1)
                         {
                             index.questionSums=result.questionSums;
+                            // Graphs
+                            let day1=index.questionSums[0].sum;
+                            let day2=index.questionSums[1].sum;
+                            let day3=index.questionSums[2].sum;
+                            let day4=index.questionSums[3].sum;
+                            let day5=index.questionSums[4].sum;
+                            let day6=index.questionSums[5].sum;
+                            let day7=index.questionSums[6].sum;
+                            var ctx = document.getElementById('myChart')
+                            // eslint-disable-next-line no-unused-vars
+                            var myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: [
+                                        index.getBeforeDate(7),
+                                        index.getBeforeDate(6),
+                                        index.getBeforeDate(5),
+                                        index.getBeforeDate(4),
+                                        index.getBeforeDate(3),
+                                        index.getBeforeDate(2),
+                                        index.getBeforeDate(1)
+                                    ],
+                                    datasets: [{
+                                        data: [
+                                            day1,
+                                            day2,
+                                            day3,
+                                            day4,
+                                            day5,
+                                            day6,
+                                            day7
+                                        ],
+                                        lineTension: 0,
+                                        backgroundColor: 'transparent',
+                                        borderColor: '#007bff',
+                                        borderWidth: 4,
+                                        pointBackgroundColor: '#007bff'
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: false
+                                            }
+                                        }]
+                                    },
+                                    legend: {
+                                        display: false
+                                    }
+                                }
+                            })
                         }
                     }
                     console.log(result.resultCode);
@@ -290,60 +418,9 @@
             }
         },
         mounted:function () {
+            this.isLogin();
             let date = this.getBeforeDate(0);
             this.getStatistics(date,0);
-            // Graphs
-            let day1=this.userSums[0].sum;
-            let day2=this.userSums[1].sum;
-            let day3=this.userSums[2].sum;
-            let day4=this.userSums[3].sum;
-            let day5=this.userSums[4].sum;
-            let day6=this.userSums[5].sum;
-            let day7=this.userSums[6].sum;
-            var ctx = document.getElementById('myChart')
-            // eslint-disable-next-line no-unused-vars
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [
-                        this.getBeforeDate(7),
-                        this.getBeforeDate(6),
-                        this.getBeforeDate(5),
-                        this.getBeforeDate(4),
-                        this.getBeforeDate(3),
-                        this.getBeforeDate(2),
-                        this.getBeforeDate(1)
-                    ],
-                    datasets: [{
-                        data: [
-                            day1,
-                            day2,
-                            day3,
-                            day4,
-                            day5,
-                            day6,
-                            day7
-                        ],
-                        lineTension: 0,
-                        backgroundColor: 'transparent',
-                        borderColor: '#007bff',
-                        borderWidth: 4,
-                        pointBackgroundColor: '#007bff'
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: false
-                            }
-                        }]
-                    },
-                    legend: {
-                        display: false
-                    }
-                }
-            })
         }
 
     });

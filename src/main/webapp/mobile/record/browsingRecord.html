@@ -13,9 +13,11 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/element-ui/2.12.0/theme-chalk/index.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/element-ui/2.12.0/index.js"></script>
 </head>
 <body>
-<div id="collectionRecord">
+<div id="browsingRecord">
     <div class="header">
         <table>
             <td style="width: 33%;color: #acacac;font-size: 1.5em">
@@ -31,18 +33,17 @@
     <br><br>
     <div class="records">
         <div class="record" v-for="(record,index) in records">
-            <h5 @click="turnQuePage(record.questionId)">
+            <h6 @click="turnQuePage(record.questionId)">
                 <i class="fas fa-question" style="color: #4b62ff"></i>&nbsp;
                 <b>{{record.questionTitle}}</b>
-            </h5>
-            <div class="" v-for="answer in record.answerRecords" style="opacity: 0.5">
-                <span class="contentView" @click="turnAnsPage(record.questionId,answer.answerId)">
-                    {{answer.answererName}}：
-                    <span v-html="answer.answerContent"></span>
-                </span>
+            </h6>
+            <div class="splitLine"></div>
+            <div class="" v-for="answer in record.answerRecords">
+                <div class="contentView" @click="turnAnsPage(record.questionId,answer.answerId)">
+                    <b>{{answer.answererName}}：</b>{{answer.answerContent}}
+                </div>
                 <div class="splitLine"></div>
             </div>
-            <div class="splitBox"></div>
         </div>
         <br>
         <div class="loadOpera">
@@ -53,10 +54,11 @@
             <span v-if="!hasMore && !loadingMore" style="opacity: 0.5">没有更多内容</span>
         </div>
     </div>
+    <div class="footer" style="position: fixed;bottom: 0;height: 1em"></div>
 </div>
 <script>
-    let collectionRecord = new Vue({
-        el:"#collectionRecord",
+    let browsingRecord = new Vue({
+        el:"#browsingRecord",
         data:{
             loading:false,
             loadingMore:false,
@@ -82,22 +84,24 @@
                     success:function (result) {
                         if (result.resultCode === 0) {
                             result.records.forEach(function (item) {
-                                collectionRecord.records.push(item);
+                                browsingRecord.records.push(item);
                             });
                             let size = result.records.length;
-                            collectionRecord.hasMore = size >= 20;
-                            collectionRecord.start += size;
-                            collectionRecord.loadingMore = false;
+                            browsingRecord.hasMore = size >= 20;
+                            browsingRecord.start += size;
+                            browsingRecord.loadingMore = false;
+                            browsingRecord.loading = false;
                         } else if (result.resultCode === 1) {
                             result.records.forEach(function (item) {
-                                collectionRecord.records.push(item);
+                                browsingRecord.records.push(item);
                             });
-                            collectionRecord.hasMore = false;
+                            browsingRecord.hasMore = false;
                             let size = result.records.length;
-                            collectionRecord.start += size;
-                            collectionRecord.loadingMore = false;
+                            browsingRecord.start += size;
+                            browsingRecord.loadingMore = false;
+                            browsingRecord.loading = false;
                         } else {
-                            collectionRecord.loadingMore = false;
+                            browsingRecord.loadingMore = false;
                             if (confirm("请先登录")) {
                                 location.href = "../user/login.html?boot=0"
                             }
@@ -112,16 +116,15 @@
                 });
             },
             turnQuePage:function (id) {
-
+                location.href = "../question/question.html?questionId=" + id;
             },
             turnAnsPage:function (qid,aid) {
-
+                location.href = "../answer/answer.html?questionId=" + qid + "&answerId=" + aid;
             }
         },
         mounted:function () {
             this.loading = true;
             this.load();
-            this.loading = false;
         }
     })
 </script>

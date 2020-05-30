@@ -53,14 +53,14 @@
 <div id="logoContext">
     <img id="logoIn" src="../img/LOGO1.png">
 </div>
-<div id="login">
+<div id="identify">
     <div class="typeChoice">
         <div id="freeLogin"><input type="submit" value="学生实名" id="free"></div>
         <div id="keyLogin"><input type="submit" value="教师实名" id="key"></div>
     </div>
     <div id="loginUnderline"></div>
     <div id="account">
-        <input id="email1" type="email" placeholder="姓名" value="">
+        <input id="name" type="email" placeholder="姓名" value="">
     </div>
     <div id="emailUnderline"></div>
     <div id="keyDiv"><input type="password" placeholder="学号" id="keyInput"></div>
@@ -70,8 +70,19 @@
     </div>
     <div id="IDUnderline"></div>
     <div id="loginButDiv">
-        <input type="submit" value="确认" id="loginBut1">
+        <input type="submit" value="确认" id="loginBut1" @onlick="isValid()">
     </div>
 </div>
 </body>
+<script type="text/javascript">
+    let identify=new Vue({
+        el:identify,
+        data:{
+
+        },
+        method:{
+
+        },
+    })
+</script>
 </html>
