@@ -51,12 +51,17 @@ public class ReplyAction {
 
     public String showMoreReply(){
         Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response;
+        Map<String, Object> response=new HashMap<>(20);
         User user = (User) session.get(SESSION_USER);
-        response = replyService.showAllReplys(commentId, user, sortType);
+        if(user==null){
+            response.put("resultCode" , UN_LOGIN);
+        }
+        else {
+            response = replyService.showAllReplys(commentId, user, sortType);
+            response.put("resultCode" , SUCCESS);
+        }
         //在session中保存排序的方式
         session.put("sortType", sortType);
-        response.put("resultCode" , SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
