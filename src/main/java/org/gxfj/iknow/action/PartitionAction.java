@@ -25,26 +25,30 @@ public class PartitionAction {
 
     private Integer categoryId;
     private Integer subjectId;
+    private Integer majorId;
+    private Integer start;
 
     private InputStream inputStream;
     private final Integer UN_LOGIN = 1;
     private static Integer HASH_MAP_NUM = 20;
     private final static int MIN_HASH_MAP_NUM = 10;
-    private final static String RESULTCODE = "resultCode";
+    private final static String JSON_RESULT_CODE = "resultCode";
+    private final static String JSON_QUESIONTS = "questions";
     private final static int SUCCESS = 0;
     private final static int RESPONSE_NUM = 20;
     private final static String SESSION_USER="user";
+    private final static int PARTITION_QUESTION_COUNT = 20;
 
     public String getCategories(){
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get(SESSION_USER);
         if(user == null){
-            response.put("resultCode" , UN_LOGIN);
+            response.put(JSON_RESULT_CODE, UN_LOGIN);
         }
         else {
             response=partitionService.getCategories();
-            response.put(RESULTCODE,SUCCESS);
+            response.put(JSON_RESULT_CODE,SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -56,11 +60,11 @@ public class PartitionAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get(SESSION_USER);
         if(user == null){
-            response.put("resultCode" , UN_LOGIN);
+            response.put(JSON_RESULT_CODE, UN_LOGIN);
         }
         else {
             response=partitionService.getSubjects(categoryId);
-            response.put(RESULTCODE,SUCCESS);
+            response.put(JSON_RESULT_CODE,SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -72,14 +76,23 @@ public class PartitionAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get(SESSION_USER);
         if(user == null){
-            response.put("resultCode" , UN_LOGIN);
+            response.put(JSON_RESULT_CODE, UN_LOGIN);
         }
         else {
             response=partitionService.getMajors(subjectId);
-            response.put(RESULTCODE,SUCCESS);
+            response.put(JSON_RESULT_CODE,SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
+
+    public String getQuestion() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
+        response = partitionService.getQuestion(categoryId,subjectId,majorId,start,PARTITION_QUESTION_COUNT);
+        response.put(JSON_RESULT_CODE, SUCCESS);
+
         return "success";
     }
 
@@ -105,5 +118,21 @@ public class PartitionAction {
 
     public void setSubjectId(Integer subjectId) {
         this.subjectId = subjectId;
+    }
+
+    public Integer getMajorId() {
+        return majorId;
+    }
+
+    public void setMajorId(Integer majorId) {
+        this.majorId = majorId;
+    }
+
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
     }
 }
