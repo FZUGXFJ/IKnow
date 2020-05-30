@@ -192,6 +192,8 @@
                         dataType: "json",
                         success: function (result) {
                             if (result.resultCode === 0) {
+                                sessionStorage.removeItem("comments");
+                                sessionStorage.removeItem("commentsInfo");
                                 history.go(0);
                             } else if (result.resultCode === 1) {
                                 if (confirm("登录后才能发表评论")) {
@@ -218,6 +220,8 @@
                         dataType:"json",
                         success:function (result) {
                             if (result.resultCode === 0) {
+                                sessionStorage.removeItem("comments");
+                                sessionStorage.removeItem("commentsInfo");
                                 location.href = "../reply/reply.html?commentId=" + replyComment;
                             } else if (result.resultCode === 1) {
                                 if (confirm("登录后才能发送回复")) {

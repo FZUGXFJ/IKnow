@@ -21,7 +21,7 @@ public interface AdminDAO extends BaseDAO<Admin>{
     public List<Integer> getQuestionSum(String date);
 
     /**
-     * 获取过去7天每天的用户数
+     * 获取过去7天每天注册的用户数
      * @param date 日期
      * @return 每天的个数
      */

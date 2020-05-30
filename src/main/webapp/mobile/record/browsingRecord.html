@@ -61,19 +61,7 @@
             loading:false,
             loadingMore:false,
             hasMore:0,
-            records:[
-                {
-                    questionID:0,
-                    questionTitle:"这是问题？",
-                    answerRecords:[
-                        {
-                            answerId:0,
-                            answererName:"瓶子",
-                            answerContent:"这是回答"
-                        }
-                    ]
-                }
-            ],
+            records:[],
             start:0,
             noAction:false
         },
@@ -132,7 +120,7 @@
         },
         mounted:function () {
             this.loading = true;
-            //this.load();
+            this.load();
             this.loading = false;
         }
     })

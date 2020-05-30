@@ -54,30 +54,33 @@ public class RecordServiceImpl implements RecordService {
         List<Browsinghistory> bHistories=browsingHistoryDAO.getBrowsingHistoryByUserId(user.getId(),start);
         List<Map<String,Object>> records=new ArrayList<>();
         List<Map<String,Object>> answerRecords=new ArrayList<>();
-        Map<String,Object> record;
+        Map<String,Object> record = new HashMap<>(3);
         Map<String,Object> answerRecord;
-        for (Browsinghistory browsinghistory:bHistories){
-            record=new HashMap<>(3);
-            Question question=browsinghistory.getQuestionByQuestionId();
-
-            record.put("questionId",question.getId());
-            record.put("questionTitle",question.getTitle());
-
-            List<Browsinghistory> browsinghistory1s=browsingHistoryDAO.getBrowsingHistoryByUserIdAndquestionId(user.getId(),
-                    question.getId());
-            for (Browsinghistory browsinghistory1:browsinghistory1s){
-                Answer answer=browsinghistory1.getAnswerByAnswerId();
-                answerRecord=new HashMap<>(3);
+        Integer curQueId = -1;
+        for (Browsinghistory browsinghistory:bHistories) {
+            answerRecord = new HashMap<>(3);
+            if (!browsinghistory.getQuestionByQuestionId().getId().equals(curQueId)) {
+                record.put("answerRecords",answerRecords);
+                records.add(record);
+                record = new HashMap<>(3);
+                answerRecords = new ArrayList<>();
+                curQueId = browsinghistory.getQuestionByQuestionId().getId();
+                Question question=browsinghistory.getQuestionByQuestionId();
+                record.put("questionId",question.getId());
+                record.put("questionTitle",question.getTitle());
+            }
+            Answer answer = browsinghistory.getAnswerByAnswerId();
+            if (answer !=null) {
                 answerRecord.put("answerId",answer.getId());
-                answerRecord.put("answererName",answer.getUserByUserId().getName());
                 answerRecord.put("answerContent",HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContent())));
-
+                answerRecord.put("answererName",answer.getUserByUserId().getName());
                 answerRecords.add(answerRecord);
             }
-            record.put("answerRecords",answerRecords);
-            records.add(record);
         }
         Map<String,Object> response=new HashMap<>(20);
+        if (records.size() > 0) {
+            records.remove(0);
+        }
         response.put("records",records);
         response.put("Num",bHistories.size());
         return response;
