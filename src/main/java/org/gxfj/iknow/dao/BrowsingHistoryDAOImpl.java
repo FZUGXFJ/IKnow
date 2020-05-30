@@ -80,8 +80,8 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
 
     @Override
     public Integer getUserBrowseCount(Integer userId) {
-        Query query = getSession().createQuery("select count(b) from Browsinghistory as b WHERE" +
-                "userID = :userId");
+        Query query = getSession().createQuery("select count(b) from Browsinghistory as b WHERE " +
+                "userID = " + userId);
         return ((Long)query.uniqueResult()).intValue();
     }
 }

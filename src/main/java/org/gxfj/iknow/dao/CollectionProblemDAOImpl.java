@@ -75,7 +75,7 @@ public class CollectionProblemDAOImpl implements CollectionProblemDAO{
 
     @Override
     public Integer getUserCollectCount(Integer userId) {
-        Query query = getSession().createQuery("select count(c) from Collectionproblem WHERE "+
+        Query query = getSession().createQuery("select count(c) from Collectionproblem as c WHERE "+
                 "(userID = "+ userId +")");
         return ((Long)query.uniqueResult()).intValue();
     }
