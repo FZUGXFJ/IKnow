@@ -54,4 +54,14 @@ public class AdminDAOImpl implements AdminDAO{
             return adminList.get(0);
         }
     }
+
+    @Override
+    public List<Integer> getQuestionSum(String date) {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getUserSum(String date) {
+        return null;
+    }
 }

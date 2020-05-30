@@ -357,6 +357,12 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="statistics" class="org.gxfj.iknow.action.AdminAction" method="statistics">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
 
 </struts>

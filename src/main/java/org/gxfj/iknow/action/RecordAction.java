@@ -72,8 +72,7 @@ public class RecordAction {
             if(x<20){
                 response.put("resultCode",NO_MORE);
             }
-            else
-            {
+            else {
                 response.put("resultCode",SUCCESS);
             }
         }

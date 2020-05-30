@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -94,18 +94,11 @@
                 <div class="answerInf">
                     <div class="answerView" v-html="answer.answerView" @click="answerPage(answer.answerId)"></div>
                     <table>
-                        <td style="width: 80%;opacity: 0.5;font-size: 0.8em">
+                        <td style="width: 90%;opacity: 0.5;font-size: 0.8em">
                             {{answer.answerApprove}}赞同-{{answer.answerComment}}评论-{{answer.answerTime}}
                         </td>
-                        <td style="width: 20%;text-align: right;">
-                            <div class="dropdown">
-                                <button class="noBorder" type="button" id="reportDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="reportDropdown" style="font-size: 0.8em;width: 5em">
-                                    <button class="noBorder" style="display: block">举报</button>
-                                </div>
-                            </div>
+                        <td style="width: 10%;text-align: right;" data-toggle="modal" data-target="#operateModal1">
+                            <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
                         </td>
                     </table>
                 </div>
@@ -141,9 +134,9 @@
                     <div id="operateMenu">
                         <br>
                         <table>
-                            <td class="operateItem">
-                                <div><i class="fas fa-user-plus fa-2x"></i></div>
-                                <span>邀请回答</span>
+                            <td class="operateItem" v-if="viewerIsOwner==1">
+                                <div><i class="fas fa-trash-alt fa-2x"></i></div>
+                                <span>删除问题</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsOwner==0">
                                 <div><i class="fas fa-minus-circle fa-2x"></i></div>
@@ -156,6 +149,27 @@
                                 <span>取消匿名</span>
                             </td>
                         </table>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="z-index: 9999;" class="modal fade" id="operateModal1" tabindex="-1"
+         role="dialog" aria-labelledby="topModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">操作</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="operateMenu1">
+                        <button class="btn btn-light" style="width: 100%;margin: 0 auto;text-align: left">
+                            <i class="fas fa-minus-circle" style="color: #acacac"></i>&nbsp;举报
+                        </button>
                         <br>
                     </div>
                 </div>
