@@ -1,6 +1,8 @@
 package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
+import com.opensymphony.xwork2.ActionContext;
+import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +34,13 @@ public class SearchAction {
     }
 
     public String searchResult(String keyword) {
-        Map<String,Object> response = searchService.searchResult(keyword);
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get("user");
+        Integer userId=-1;
+        if (user != null) {
+            userId=user.getId();
+        }
+        Map<String,Object> response = searchService.searchResult(keyword,userId);
         response.put("resultCode",0);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
