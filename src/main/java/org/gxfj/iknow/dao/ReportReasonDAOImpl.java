@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("reportReasonDAO")
 public class ReportReasonDAOImpl implements ReportReasonDAO{
     private HibernateTemplate ht = null;
@@ -37,5 +39,10 @@ public class ReportReasonDAOImpl implements ReportReasonDAO{
     @Override
     public void update(Reportreason bean) {
         getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public List<Reportreason> list() {
+        return getHibernateTemplate().findByExample(new Reportreason());
     }
 }

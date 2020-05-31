@@ -424,5 +424,19 @@
             </result>
         </action>
     </package>
+    <package name="report" namespace="/report" extends="default">
+        <action name="getReportReason" class="org.gxfj.iknow.action.ReportAction" method="getReportReason">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="doReport" class="org.gxfj.iknow.action.ReportAction" method="doReport">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+    </package>
 
 </struts>

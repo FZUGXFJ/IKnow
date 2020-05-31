@@ -7,6 +7,7 @@ import org.gxfj.iknow.service.SearchService;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import static org.gxfj.iknow.util.ConstantUtil.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -35,21 +36,21 @@ public class SearchAction {
     }
     public String searchHistory() {
         Map<String,Object> response = searchService.searchHistory();
-        response.put("resultCode",0);
+        response.put(RESULT_CODE,SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return ConstantUtil.RETURN_STRING;
+        return RETURN_STRING;
     }
 
     public String searchResult() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        Integer userId=-1;
+        User user = (User) session.get(SESSION_USER);
+        Integer userId = -1;
         if (user != null) {
-            userId=user.getId();
+            userId = user.getId();
         }
         Map<String,Object> response = searchService.searchResult(keyword,userId);
-        response.put("resultCode",0);
+        response.put(RESULT_CODE,SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return ConstantUtil.RETURN_STRING;
+        return RETURN_STRING;
     }
 }
