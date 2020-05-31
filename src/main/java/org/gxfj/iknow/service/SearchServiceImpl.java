@@ -87,13 +87,14 @@ public class SearchServiceImpl implements SearchService{
             question.put("title",q.getTitle());
             if(q.getIsAnonymous() == 1) {
                 question.put("ownerId",0);
-                question.put("ownerHead","0.jpg");
+                question.put("ownerHead","<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
                 question.put("ownerName","匿名用户");
             }
             else{
                 question.put("ownerId",q.getUserByUserId().getId());
-                question.put("ownerHead",q.getUserByUserId().getName());
-                question.put("ownerName",q.getUserByUserId().getHead());
+                question.put("ownerHead","<img src='../../head/"+
+                        q.getUserByUserId().getHead()+"' width='100%'");
+                question.put("ownerName",q.getUserByUserId().getName());
             }
             question.put("collectNum",collectionProblemDAO.getCollectionCount(q.getId()));
             if (answers == null) {

@@ -120,8 +120,9 @@ public interface AnswerService {
 
     /**
      * 删除回答
+     * @param user 用户
      * @param answerId 回答id
      * @return 是否成功
      */
-    public boolean deleteAnswer(Integer answerId);
+    public boolean deleteAnswer(User user , Integer answerId);
 }

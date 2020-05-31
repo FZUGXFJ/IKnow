@@ -261,7 +261,7 @@ public class AnswerAction {
             response.put("resultCode",ConstantUtil.UN_LOGIN);
         } else {
             if(answerService.isAnswerer(answerId,user)) {
-                answerService.deleteAnswer(answerId);
+                answerService.deleteAnswer(user, answerId);
                 response.put("resultCode", ConstantUtil.SUCCESS);
             } else{
                 response.put("resultCode",ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
