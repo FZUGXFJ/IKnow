@@ -60,7 +60,7 @@ public interface QuestionDAO extends BaseDAO<Question>{
      * 根据规定的门类、学科、专业来获取指定数量的问题
      * @param questionTypeId 问题类别id
      * @param start 起始记录位置
-     * @param length 问题数量
+     * @param count 问题数量
      * @return 发布的回答数目
      */
     List<Question> listByQuestionType(Integer questionTypeId, Integer start, Integer count);
