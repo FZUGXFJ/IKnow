@@ -1,0 +1,62 @@
+div{
+    width: 100%;
+}
+table{
+    width: 100%;
+}
+#search{
+    margin: 0.5em auto;
+}
+#searchBar{
+    padding: 0.2em 1em;
+    background-color: #f2f2f2;
+    border-radius: 0.2em;
+    font-size: 1.2em;
+    width: 96%;
+    margin: 0 auto;
+}
+.noBorder{
+    width: 100%;
+    border: 0;
+    background-color: #f2f2f2;
+}
+#hotSearch{
+    width: 90%;
+    margin: 0 auto;
+}
+#searchHistory{
+    width: 90%;
+    margin: 0 auto;
+}
+.splitLine{
+    background-color: #acacac;
+    opacity: 0.5;
+    height: 1px;
+    margin: 0.5em 0;
+}
+.hotItem{
+    padding: 0.2em;
+    text-align: left;
+    overflow: hidden;;
+    text-overflow: ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    margin: 0.2em 0em;
+}
+.one{
+    color: red;
+    font-weight: bolder;
+}
+.two{
+    color: orangered;
+    font-weight: bolder;
+}
+.three{
+    color: orange;
+    font-weight: bolder;
+}
+.other{
+    color: #acacac;
+    font-weight: bolder;
+}
