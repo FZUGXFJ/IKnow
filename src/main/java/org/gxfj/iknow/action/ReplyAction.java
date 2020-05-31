@@ -13,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.gxfj.iknow.util.ConstantUtil.*;
+
 @Controller
 public class ReplyAction {
     private Integer commentId;
@@ -24,12 +26,12 @@ public class ReplyAction {
     @Autowired
     private ReplyService replyService;
 
-    private final String SESSION_USER = "user";
+    /*private final String SESSION_USER = "user";
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
     private final int MISS_COMMENT_INF = 2;
     private final String RESULT_CODE="resultCode";
-    private final int NO_REPLYER = 2;
+    private final int NO_REPLYER = 2;*/
 
     public InputStream getInputStream() { return inputStream; }
     final static private int RESPONSE_NUM = 20;
