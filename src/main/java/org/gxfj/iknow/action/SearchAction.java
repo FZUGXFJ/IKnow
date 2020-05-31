@@ -17,15 +17,21 @@ public class SearchAction {
     @Autowired
     private SearchService searchService;
     private InputStream inputStream;
+    private String keyword;
 
     public InputStream getInputStream() {
         return inputStream;
     }
-
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 
+    public String getKeyword() {
+        return keyword;
+    }
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
     public String searchHistory() {
         Map<String,Object> response = searchService.searchHistory();
         response.put("resultCode",0);
@@ -33,7 +39,7 @@ public class SearchAction {
         return "success";
     }
 
-    public String searchResult(String keyword) {
+    public String searchResult() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get("user");
         Integer userId=-1;
