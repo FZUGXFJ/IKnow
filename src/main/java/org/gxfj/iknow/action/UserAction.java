@@ -42,6 +42,29 @@ public class UserAction {
     MailUtil mailUtil;
     private InputStream inputStream;
 
+    /*
+    private final String EMAIL = "email";
+    private final String VERIFY_CODE = "verifyCode";
+    private final String SUCCESS = "success";
+    private final static String RESULT_CODE = "resultCode";
+    private final static String LOGIN_USER_SESSION_NAME = "user";
+    private final static String RESET_PASSWORD_VERIFY_CODE_SESSION_NAME = "resetPasswordVerifyCode";
+    private final static String RESET_PASSWORD_VERIFY_STATE_SESSION_NAME = "resetPasswordVerifyState";
+    private final static String REBIND_EMAIL_VERIFY_CODE_SESSION_NAME = "rebindEmailVerifyCode";
+    private final static String REBIND_EMAIL_VERIFY_STATE_SESSION_NAME = "rebindEmailVerifyState";
+    private final static String NEW_EMAIL_SESSION_NAME = "newEmail";
+    private final static String NEW_EMAIL_VERIFY_CODE_SESSION_NAME = "newEmailVerifyCode";
+    private final static String NEW_EMAIL_VERIFY_STATE_SESSION_NAME = "newEmailVerifyState";
+
+    private final static String SESSION_NAME = "";
+    private final static int SUCCESS_CODE = 0;
+    private final static int RESET_PASSWORD_FAIL = 1;
+    private final static int UN_LOGIN = 1;
+    private final static int VERIFY_DEFAULT = 1;
+    private final static int MIN_HASH_MAP_NUM = 10;
+    private final static int SUCCESS_LOGON = 0;
+    private final static String NO_USER = null;
+     */
 
     public String passwordLogin() {
         User loginInf = new User();

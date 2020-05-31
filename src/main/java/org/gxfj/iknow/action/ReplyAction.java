@@ -27,6 +27,13 @@ public class ReplyAction {
     @Autowired
     private ReplyService replyService;
 
+    /*private final String SESSION_USER = "user";
+    private final int SUCCESS = 0;
+    private final int UN_LOGIN = 1;
+    private final int MISS_COMMENT_INF = 2;
+    private final String RESULT_CODE="resultCode";
+    private final int NO_REPLYER = 2;*/
+
     public InputStream getInputStream() { return inputStream; }
     final static private int RESPONSE_NUM = 20;
     public String sendReply(){

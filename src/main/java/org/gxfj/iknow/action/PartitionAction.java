@@ -31,7 +31,17 @@ public class PartitionAction {
 
     private InputStream inputStream;
 
-
+    /*
+    private final Integer UN_LOGIN = 1;
+    private static Integer HASH_MAP_NUM = 20;
+    private final static int MIN_HASH_MAP_NUM = 10;
+    private final static String JSON_RESULT_CODE = "resultCode";
+    private final static String JSON_QUESIONTS = "questions";
+    private final static int SUCCESS = 0;
+    private final static int RESPONSE_NUM = 20;
+    private final static String SESSION_USER="user";
+    private final static int PARTITION_QUESTION_COUNT = 20;
+     */
 
     public String getCategories(){
         Map<String, Object> session = ActionContext.getContext().getSession();
