@@ -410,4 +410,13 @@
         </action>
     </package>
 
+    <package name="search" namespace="/search" extends="default">
+        <action name="searchHistory" class="org.gxfj.iknow.action.SearchAction" method="searchHistory">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+    </package>
+
 </struts>
