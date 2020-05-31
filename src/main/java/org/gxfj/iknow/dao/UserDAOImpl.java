@@ -45,7 +45,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void update(User bean) {
-        getHibernateTemplate().update(bean);
+        getHibernateTemplate().merge(bean);
     }
 
     @Override
