@@ -134,10 +134,11 @@ public class AdminServiceImpl implements AdminService{
             for (Questiontype questiontype : categoriestype.getQuestiontypesById()) {
                 sum += questiontype.getQuestionsById().size();
             }
-
-            record.put("sum", sum);
-            record.put("type", categoriestype.getName());
-            records.add(record);
+            if (sum > 0) {
+                record.put("value", sum);
+                record.put("name", categoriestype.getName());
+                records.add(record);
+            }
         }
         result.put("questionTypeSums",records);
         return result;
