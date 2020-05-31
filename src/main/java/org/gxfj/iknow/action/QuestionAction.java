@@ -11,6 +11,7 @@ import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.CollectionService;
 import org.gxfj.iknow.service.QuestionService;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -46,6 +47,7 @@ public class QuestionAction {
     @Autowired
     private CollectionService collectionService;
 
+    /*
     private static final int QUESTION_SHOW_ANSWER_NUM = 10;
     private final int SUCCESS = 0;
     private final int UN_LOGIN = 1;
@@ -53,6 +55,11 @@ public class QuestionAction {
     private final int MISS_QUESTION_INF = 2;
     private final int DEFAULT_SORT = 1;
     private final int USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT = 2;
+     */
+
+
+
+
 
 
     public InputStream getInputStream() {
@@ -75,17 +82,17 @@ public class QuestionAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get("user");
         if (user == null) {
-            response.put("resultCode",UN_LOGIN);
+            response.put("resultCode",ConstantUtil.UN_LOGIN);
         }
         else if (questionTitle == null || questionContent == null || categoriesType == null || subjectType == null
             || majorType == null || isAnonymous == null) {
-            response.put("resultCode",MISS_QUESTION_INF);
+            response.put("resultCode",ConstantUtil.MISS_QUESTION_INF);
         }
         else {
             Integer x=questionService.postQuestion(user, questionTitle, questionContent, categoriesType, subjectType
                     , majorType, isAnonymous);
             response.put("questionId",x);
-            response.put("resultCode",SUCCESS);
+            response.put("resultCode", ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
@@ -96,10 +103,10 @@ public class QuestionAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get("user");
         if (user == null) {
-            response.put("resultCode",UN_LOGIN);
+            response.put("resultCode",ConstantUtil.UN_LOGIN);
         } else {
             response = questionService.getQuestionType();
-            response.put("resultCode", SUCCESS);
+            response.put("resultCode", ConstantUtil.SUCCESS);
         }
         System.out.println(JSON.toJSONString(response));
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -112,8 +119,8 @@ public class QuestionAction {
         User user = (User) session.get("user");
         int sort1;
         if (sort==null){
-            session.put("answersort",DEFAULT_SORT);
-            sort1=DEFAULT_SORT;
+            session.put("answersort",ConstantUtil.QUESTION_DEFAULT_SORT);
+            sort1=ConstantUtil.QUESTION_DEFAULT_SORT;
         }
         else {
             sort1=sort;
@@ -124,7 +131,7 @@ public class QuestionAction {
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         response.put("question",questionService.getQuestion(user,questionId, 20,sort1));
-        response.put("resultCode",SUCCESS);
+        response.put("resultCode",ConstantUtil.SUCCESS);
         if(user == null || !isQuestionUser){
             response.put("viewerIsOwner",0);
         }
@@ -145,7 +152,7 @@ public class QuestionAction {
             response.put("resultCode",1);
         }else{
             questionService.cancelAdopt(questionId);
-            response.put("resultCode",SUCCESS);
+            response.put("resultCode",ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
@@ -156,13 +163,13 @@ public class QuestionAction {
         User user = (User) session.get("user");
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
-            response.put("resultCode",UN_LOGIN);
+            response.put("resultCode",ConstantUtil.UN_LOGIN);
         } else if(collectionService.getCollectionQuestion(user.getId(),questionId) != null){
             //resultCode = 2 表示已收藏无法再次收藏
             response.put("resultCode", 2);
         } else {
             collectionService.collectProblem(user,questionId);
-            response.put("resultCode", SUCCESS);
+            response.put("resultCode", ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
@@ -173,13 +180,13 @@ public class QuestionAction {
         User user = (User) session.get("user");
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
-            response.put("resultCode",UN_LOGIN);
+            response.put("resultCode",ConstantUtil.UN_LOGIN);
         } else if(collectionService.getCollectionQuestion(user.getId(),questionId) == null){
             //resultCode = 2 表示未收藏无法取消收藏
             response.put("resultCode", 2);
         } else {
             collectionService.cancelCollect(user,questionId);
-            response.put("resultCode", SUCCESS);
+            response.put("resultCode", ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
@@ -190,15 +197,15 @@ public class QuestionAction {
         User user = (User) session.get("user");
         Integer sort1 =(Integer)session.get("answersort");
         if(sort1 ==null){
-            sort1 = DEFAULT_SORT;
+            sort1 = ConstantUtil.QUESTION_DEFAULT_SORT;
         }
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (questionService.moreAnswers(user,questionId,start,20,sort1 )==null){
-            response.put("resultCode",NO_MORE);
+            response.put("resultCode",ConstantUtil.NO_MORE);
         }
         else {
             response=questionService.moreAnswers(user,questionId,start,20,sort );
-            response.put("resultCode",SUCCESS);
+            response.put("resultCode",ConstantUtil.SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -210,12 +217,12 @@ public class QuestionAction {
         User user = (User) session.get("user");
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
-            response.put("resultCode", UN_LOGIN);
+            response.put("resultCode", ConstantUtil.UN_LOGIN);
         } else {
             if (questionService.deleteQuestion(user, questionId)) {
-                response.put("resultCode", SUCCESS);
+                response.put("resultCode", ConstantUtil.SUCCESS);
             } else {
-                response.put("resultCode", USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT);
+                response.put("resultCode", ConstantUtil.USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT);
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));

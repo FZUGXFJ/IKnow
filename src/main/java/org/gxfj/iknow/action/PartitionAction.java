@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.PartitionService;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -29,26 +30,19 @@ public class PartitionAction {
     private Integer start;
 
     private InputStream inputStream;
-    private final Integer UN_LOGIN = 1;
-    private static Integer HASH_MAP_NUM = 20;
-    private final static int MIN_HASH_MAP_NUM = 10;
-    private final static String JSON_RESULT_CODE = "resultCode";
-    private final static String JSON_QUESIONTS = "questions";
-    private final static int SUCCESS = 0;
-    private final static int RESPONSE_NUM = 20;
-    private final static String SESSION_USER="user";
-    private final static int PARTITION_QUESTION_COUNT = 20;
+
+
 
     public String getCategories(){
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
+        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        User user = (User)session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(JSON_RESULT_CODE, UN_LOGIN);
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
         }
         else {
             response=partitionService.getCategories();
-            response.put(JSON_RESULT_CODE,SUCCESS);
+            response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -57,14 +51,14 @@ public class PartitionAction {
 
     public String getSubjects(){
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
+        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        User user = (User)session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(JSON_RESULT_CODE, UN_LOGIN);
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
         }
         else {
             response=partitionService.getSubjects(categoryId);
-            response.put(JSON_RESULT_CODE,SUCCESS);
+            response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -73,14 +67,14 @@ public class PartitionAction {
 
     public String getMajors(){
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
+        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        User user = (User)session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(JSON_RESULT_CODE, UN_LOGIN);
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
         }
         else {
             response=partitionService.getMajors(subjectId);
-            response.put(JSON_RESULT_CODE,SUCCESS);
+            response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -89,9 +83,9 @@ public class PartitionAction {
 
     public String getQuestion() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        response = partitionService.getQuestion(categoryId,subjectId,majorId,start,PARTITION_QUESTION_COUNT);
-        response.put(JSON_RESULT_CODE, SUCCESS);
+        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        response = partitionService.getQuestion(categoryId,subjectId,majorId,start,ConstantUtil.PARTITION_QUESTION_COUNT);
+        response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
 
         return "success";
     }

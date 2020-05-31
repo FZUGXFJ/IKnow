@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.CommentService;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -27,6 +28,7 @@ public class CommentAction {
     @Autowired
     CommentService commentService;
 
+    /*
     private final String SESSION_USER = "user";
     private final String RETURN_STRING = "success";
     private final String RESULT_CODE = "resultCode";
@@ -38,6 +40,10 @@ public class CommentAction {
     private final int RESULT_CODE_NOT_APPROVED = 2;
     private final int DEFAULT_SORT = 0;
     private final int NO_COMMENTER = 2;
+     */
+
+
+
 
     public InputStream getInputStream() { return inputStream; }
 
@@ -48,19 +54,19 @@ public class CommentAction {
         System.out.println(answerId);
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get(SESSION_USER);
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(RESULT_CODE, UN_LOGIN);
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
         }
         else if(content == null){
-            response.put(RESULT_CODE, MISS_COMMENT_INF );
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.MISS_COMMENT_INF );
         }
         else{
             commentService.postComment(user , answerId , content);
-            response.put(RESULT_CODE, SUCCESS);
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return RETURN_STRING;
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String viewComments(){
@@ -68,71 +74,71 @@ public class CommentAction {
         Map<String, Object> response;
         Integer sort1;
         if(sort==null){
-            sort1=DEFAULT_SORT;
+            sort1=ConstantUtil.Comment_DEFAULT_SORT;
             session.put("commentsort",sort1);
         }
         else {
             sort1=sort;
             session.put("commentsort",sort1);
         }
-        response = commentService.getComments(answerId, (User) session.get(SESSION_USER),sort1);
-        response.put(RESULT_CODE, SUCCESS);
+        response = commentService.getComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),sort1);
+        response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return RETURN_STRING;
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String approveComment() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get(SESSION_USER);
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
 
         if (user != null) {
             if (commentService.approveComment(user, commentId)) {
-                response.put(RESULT_CODE, SUCCESS);
+                response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
             } else {
-                response.put(RESULT_CODE, RESULT_CODE_APPROVED);
+                response.put(ConstantUtil.RESULT_CODE, ConstantUtil.RESULT_CODE_APPROVED);
             }
         } else {
-            response.put(RESULT_CODE, UN_LOGIN);
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return RETURN_STRING;
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelApprove() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User ) session.get(SESSION_USER);
+        User user = (User ) session.get(ConstantUtil.SESSION_USER);
 
         if (user != null) {
             if (commentService.cancelApprove(user, commentId)) {
-                response.put(RESULT_CODE, SUCCESS);
+                response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
             } else {
-                response.put(RESULT_CODE, RESULT_CODE_NOT_APPROVED);
+                response.put(ConstantUtil.RESULT_CODE, ConstantUtil.RESULT_CODE_NOT_APPROVED);
             }
         } else {
-            response.put(RESULT_CODE, UN_LOGIN);
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return RETURN_STRING;
+        return ConstantUtil.RETURN_STRING;
     }
     public String moreComment(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
         Integer sort1 =(Integer)session.get("commentsort");
         if(sort1 ==null){
-            sort1 =DEFAULT_SORT;
+            sort1 =ConstantUtil.Comment_DEFAULT_SORT;
         }
-        if (commentService.moreComments(answerId, (User) session.get(SESSION_USER),start,sort1 )==null){
-            response.put(RESULT_CODE,NO_MORE);
+        if (commentService.moreComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),start,sort1 )==null){
+            response.put(ConstantUtil.RESULT_CODE,ConstantUtil.NO_MORE);
         }
         else {
-            response=commentService.moreComments(answerId, (User) session.get(SESSION_USER),start,sort1 );
-            response.put(RESULT_CODE, SUCCESS);
+            response=commentService.moreComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),start,sort1 );
+            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return RETURN_STRING;
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String deleteComment(){
@@ -140,14 +146,14 @@ public class CommentAction {
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
         User user=(User)session.get("user");
         if(user==null){
-            response.put(RESULT_CODE,UN_LOGIN);
+            response.put(ConstantUtil.RESULT_CODE,ConstantUtil.UN_LOGIN);
         }
         else {
             if (commentService.deleteComment(commentId,user)){
-                response.put(RESULT_CODE,SUCCESS);
+                response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
             }
             else {
-                response.put(RESULT_CODE,NO_COMMENTER);
+                response.put(ConstantUtil.RESULT_CODE,ConstantUtil.NO_COMMENTER);
             }
         }
         return "success";
