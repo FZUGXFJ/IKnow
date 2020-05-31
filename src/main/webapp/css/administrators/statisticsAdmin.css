@@ -143,3 +143,7 @@ li{
     margin: 0px 4px;
     font-size: 12px;
 }
+#quesType{
+    width: 70%;
+    height: 50%;
+}

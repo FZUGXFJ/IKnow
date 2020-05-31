@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.0.1">
-    <title>相关统计</title>
+    <title>问题相关统计</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
-
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -141,7 +141,7 @@
                     <h1 class="h2">数据统计</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="questionSum=true;questionType=true">总览</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary">导出</button>
                         </div>
                         <!--                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
@@ -149,15 +149,16 @@
                         <!--                            统计-->
                         <!--                        </button>-->
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),0);user=true;">用户统计</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),1);user=false">问题统计</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),1);questionSum=true;questionType=false">总数统计</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),1);questionSum=false;questionType=true">类别统计</button>
                         </div>
                     </div>
                 </div>
-                <h2 v-if="user">用户总数</h2>
-                <h2 v-if="!user">问题总数</h2>
-                <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-
+                <h2 v-if="questionSum">问题总数</h2>
+                <canvas v-if="questionSum" class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+                <h2 v-if="questionType">类别统计</h2>
+<!--                <canvas v-if="questionType" class="my-4 w-100" id="quesType" width="900" height="380"></canvas>-->
+                <div v-if="questionType" id="quesType"></div>
             </main>
         </div>
     </div>
@@ -168,9 +169,11 @@
     let index=new Vue({
         el:"#index",
         data:{
-            user:true,
+            questionType:true,
+            questionSum:true,
             userSums:[],
             questionSums:[],
+            questionTypeSums:[],
             all: 8, //总页数
             cur: 1//当前页码
         },
@@ -386,6 +389,76 @@
                         console.log(status);
                     }
                 });
+            },
+            getTypeStatistics:function () {
+                $.ajax({
+                    url: "../admin/questionTypeSum.action",
+                    type: "POST",
+                    data: {
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                                index.questionTypeSums=result.questionTypeSums;
+                                let len = index.questionTypeSums.length;
+                                //Graphs
+                                let types = new Array(len);
+                                for(i=0;i<len;i++){
+                                    types[i]=index.questionTypeSums[i].type;
+                                }
+                                let sums = new Array(len);
+                                for(i=0;i<len;i++){
+                                    sums[i]=index.questionTypeSums[i].sum;
+                                }
+                                var ctx = echarts.init(document.getElementById('quesType'));
+                                // eslint-disable-next-line no-unused-vars
+                            option = {
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                                },
+                                legend: {
+                                    // orient: 'vertical',
+                                    // top: 'middle',
+                                    bottom: 10,
+                                    left: 'center',
+                                    data: ['西凉', '益州', '兖州', '荆州', '幽州']
+                                },
+                                series: [
+                                    {
+                                        type: 'pie',
+                                        radius: '65%',
+                                        center: ['50%', '50%'],
+                                        selectedMode: 'single',
+                                        data: [
+                                            {value: 1548, name: '幽州'},
+                                            {value: 535, name: '荆州'},
+                                            {value: 510, name: '兖州'},
+                                            {value: 634, name: '益州'},
+                                            {value: 735, name: '西凉'}
+                                        ],
+                                        // emphasis: {
+                                        //     itemStyle: {
+                                        //         shadowBlur: 10,
+                                        //         shadowOffsetX: 0,
+                                        //         shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        //     }
+                                        // }
+                                    }
+                                ]
+                            };
+                            ctx.setOption(option);
+                                console.log(sums);
+                        }
+                        console.log(result.resultCode);
+                    },
+                    error: function (request, status, error) {
+                        alert("获取数据失败！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             }
         },
         computed: {
@@ -420,7 +493,8 @@
         mounted:function () {
             this.isLogin();
             let date = this.getBeforeDate(0);
-            this.getStatistics(date,0);
+            this.getStatistics(date,1);
+            this.getTypeStatistics();
         }
 
     });

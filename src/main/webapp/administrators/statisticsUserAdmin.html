@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.0.1">
-    <title>相关统计</title>
+    <title>用户相关统计</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
@@ -141,7 +141,7 @@
                     <h1 class="h2">数据统计</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="user=true;active=true">总览</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getUserStatistics(getBeforeDate(0),0);getActiveStatistics(getBeforeDate(0),0);getActiveStatistics(getBeforeDate(0),1);user=true;active=true">总览</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary">导出</button>
                         </div>
 <!--                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
@@ -155,11 +155,11 @@
                     </div>
                 </div>
                 <h2 v-if="user">用户总数</h2>
-                <canvas class="my-4 w-100" id="sumsChart" width="900" height="380"></canvas>
+                <canvas v-if="user" class="my-4 w-100" id="sumsChart" width="900" height="380"></canvas>
                 <h2 v-if="active">用户日活跃量</h2>
-                <canvas class="my-4 w-100" id="dayActiveChart" width="900" height="380"></canvas>
+                <canvas v-if="active" class="my-4 w-100" id="dayActiveChart" width="900" height="380"></canvas>
                 <h2 v-if="active">用户月活跃量</h2>
-                <canvas class="my-4 w-100" id="monActiveChart" width="900" height="380"></canvas>
+                <canvas v-if="active" class="my-4 w-100" id="monActiveChart" width="900" height="380"></canvas>
 
             </main>
         </div>
