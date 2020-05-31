@@ -46,7 +46,7 @@ public class PartitionAction {
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String getSubjects(){
@@ -62,7 +62,7 @@ public class PartitionAction {
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String getMajors(){
@@ -78,7 +78,7 @@ public class PartitionAction {
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String getQuestion() {
@@ -87,7 +87,7 @@ public class PartitionAction {
         response = partitionService.getQuestion(categoryId,subjectId,majorId,start,ConstantUtil.PARTITION_QUESTION_COUNT);
         response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
 
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public InputStream getInputStream() {

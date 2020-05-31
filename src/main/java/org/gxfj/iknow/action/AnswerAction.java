@@ -59,7 +59,7 @@ public class AnswerAction {
             response.put("resultCode" , ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String postAnswer() {
@@ -81,7 +81,7 @@ public class AnswerAction {
             response.put("resultCode" , ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String viewAnswer() {
@@ -90,7 +90,7 @@ public class AnswerAction {
         Map<String,Object> response = answerService.getRecommendAnswer(questionId,answerId,user);
         response.put("resultCode",ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String adoptAnswer() {
@@ -114,7 +114,7 @@ public class AnswerAction {
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelAdopt(){
@@ -132,7 +132,7 @@ public class AnswerAction {
             response.put("resultCode", ConstantUtil.UN_LOGIN);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String recommendAnswer(){
@@ -157,7 +157,7 @@ public class AnswerAction {
         }
         response.put("user",cUser);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String approveAnswer(){
@@ -174,7 +174,7 @@ public class AnswerAction {
             response.put("resultCode" , ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelApprove(){
@@ -191,7 +191,7 @@ public class AnswerAction {
             response.put("resultCode" , ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
     public String oppositionAnswer(){
         Map<String , Object> session = ActionContext.getContext().getSession();
@@ -207,7 +207,7 @@ public class AnswerAction {
             response.put("resultCode" , ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelOppose(){
@@ -224,7 +224,7 @@ public class AnswerAction {
             response.put("resultCode" , ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String moreRecommend(){
@@ -250,7 +250,7 @@ public class AnswerAction {
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String deleteAnswer(){
@@ -268,7 +268,7 @@ public class AnswerAction {
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
     public Integer getQuestionId() {
         return questionId;

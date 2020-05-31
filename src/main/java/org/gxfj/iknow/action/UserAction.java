@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.UserService;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.MailUtil;
 import static org.gxfj.iknow.util.ConstantUtil.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class UserAction {
         Map<String,Object> result = userService.loginByNoPassword(email,(String)session.get(EMAIL), verifyCode
                 , (String) session.get(VERIFY_CODE));
         Map<String,Object> resultMap = new HashMap<>(MIN_HASH_MAP_NUM);
-        User user = (User) result.get("user");
+        User user = (User) result.get(ConstantUtil.SESSION_USER);
         if (user != null) {
             ActionContext.getContext().getSession().put("user",user);
             resultMap.put("response",0);
@@ -117,14 +118,14 @@ public class UserAction {
 
     public String getSimpleUserInf() {
         Map<String,Object> session = ActionContext.getContext().getSession();
-        String result=userService.getSimpleUserInf((User) session.get("user"));
+        String result=userService.getSimpleUserInf((User) session.get(ConstantUtil.SESSION_USER));
         inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 
     public String editInf() {
         Map<String,Object> session = ActionContext.getContext().getSession();
-        String result=userService.editUserInf(head,username,gender,introduction,(User) session.get("user"));
+        String result=userService.editUserInf(head,username,gender,introduction,(User) session.get(ConstantUtil.SESSION_USER));
         inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
@@ -313,12 +314,12 @@ public class UserAction {
 
     public String getAllUserInf(){
         Map<String,Object> session = ActionContext.getContext().getSession();
-        User user = (User)session.get("user");
+        User user = (User)session.get(ConstantUtil.SESSION_USER);
         Map<String, Object> result = userService.getAllUserInf(user);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
-
+    
     public String getUsername() {
         return username;
     }

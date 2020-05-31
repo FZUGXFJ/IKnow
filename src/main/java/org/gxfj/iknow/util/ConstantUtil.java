@@ -42,6 +42,7 @@ public class ConstantUtil {
     public final static int USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT = 2;
 
     //Record
+    public final static int UN_LOGIN_TWO = 2;
 
     //Reply
     public final static int NO_REPLYER = 2;

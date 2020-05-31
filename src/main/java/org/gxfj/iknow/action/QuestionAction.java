@@ -80,7 +80,7 @@ public class QuestionAction {
         /////////////
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         if (user == null) {
             response.put("resultCode",ConstantUtil.UN_LOGIN);
         }
@@ -95,13 +95,13 @@ public class QuestionAction {
             response.put("resultCode", ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String questionType() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         if (user == null) {
             response.put("resultCode",ConstantUtil.UN_LOGIN);
         } else {
@@ -110,13 +110,13 @@ public class QuestionAction {
         }
         System.out.println(JSON.toJSONString(response));
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String viewQuestion() {
         System.out.println(questionId);
         Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         int sort1;
         if (sort==null){
             session.put("answersort",ConstantUtil.QUESTION_DEFAULT_SORT);
@@ -139,12 +139,12 @@ public class QuestionAction {
             response.put("viewerIsOwner",1);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelAdopt() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         User viewUser = questionService.get(questionId);
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
@@ -155,12 +155,12 @@ public class QuestionAction {
             response.put("resultCode",ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String collectQuestion() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
             response.put("resultCode",ConstantUtil.UN_LOGIN);
@@ -172,12 +172,12 @@ public class QuestionAction {
             response.put("resultCode", ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelCollect() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
             response.put("resultCode",ConstantUtil.UN_LOGIN);
@@ -189,12 +189,12 @@ public class QuestionAction {
             response.put("resultCode", ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String moreAnswer() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         Integer sort1 =(Integer)session.get("answersort");
         if(sort1 ==null){
             sort1 = ConstantUtil.QUESTION_DEFAULT_SORT;
@@ -209,12 +209,12 @@ public class QuestionAction {
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String deleteQuestion() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
             response.put("resultCode", ConstantUtil.UN_LOGIN);
@@ -226,7 +226,7 @@ public class QuestionAction {
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String getQuestionTitle() {

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.ReplyService;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -31,7 +32,7 @@ public class ReplyAction {
     public String sendReply(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get("user");
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
         if(user == null){
             response.put("resultCode" , UN_LOGIN);
         } else if(content == null){
@@ -41,7 +42,7 @@ public class ReplyAction {
             response.put("resultCode" , SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String showMoreReply(){
@@ -58,7 +59,7 @@ public class ReplyAction {
         //在session中保存排序的方式
         session.put("sortType", sortType);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String approveReply(){
@@ -75,7 +76,7 @@ public class ReplyAction {
             response.put("resultCode" , SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelApprove(){
@@ -92,13 +93,13 @@ public class ReplyAction {
             response.put("resultCode" , SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String deleteReply(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
-        User user=(User)session.get("user");
+        User user=(User)session.get(ConstantUtil.SESSION_USER);
         if(user==null){
             response.put(RESULT_CODE,UN_LOGIN);
         }
@@ -110,7 +111,7 @@ public class ReplyAction {
                 response.put(RESULT_CODE,NO_REPLYER);
             }
         }
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public void setContent(String content) {

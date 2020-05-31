@@ -6,6 +6,7 @@ import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.AnswerService;
 import org.gxfj.iknow.service.CollectionService;
 import org.gxfj.iknow.service.RecordService;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -52,7 +53,7 @@ public class RecordAction {
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String browsingRecord(){
@@ -73,7 +74,7 @@ public class RecordAction {
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String postQueRecord(){
@@ -81,7 +82,7 @@ public class RecordAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get(SESSION_USER);
         if(user == null){
-            response.put("resultCode" , UN_LOGIN);
+            response.put("resultCode" , UN_LOGIN_TWO);
         }
         else {
             List<Map<String, Object>> records = recordService.listPostQuestionRecord(user,start);
@@ -96,7 +97,7 @@ public class RecordAction {
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String postAnsRecord(){
@@ -119,7 +120,7 @@ public class RecordAction {
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public void setStart(Integer start) {

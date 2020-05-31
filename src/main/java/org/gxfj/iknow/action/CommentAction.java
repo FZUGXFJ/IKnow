@@ -156,7 +156,7 @@ public class CommentAction {
                 response.put(ConstantUtil.RESULT_CODE,ConstantUtil.NO_COMMENTER);
             }
         }
-        return "success";
+        return ConstantUtil.RETURN_STRING;
     }
 
     public Integer getAnswerId() {
