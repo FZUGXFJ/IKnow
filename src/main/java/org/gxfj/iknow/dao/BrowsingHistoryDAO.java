@@ -49,7 +49,7 @@ public interface BrowsingHistoryDAO extends BaseDAO<Browsinghistory>{
      * @param count 统计的天数
      * @return 每天的个数
      */
-    List<Long> getUserDailyActives(String date, Integer count);
+    List<List> getUserDailyActives(String date, Integer count);
 
     /**
      * 获取从 date 开始过去3个月（包含当月）天每天的活跃用户数
@@ -57,5 +57,5 @@ public interface BrowsingHistoryDAO extends BaseDAO<Browsinghistory>{
      * @param count 统计的月数
      * @return 每月的个数
      */
-    List<Long> getUserMonthlyActives(String date, Integer count);
+    List<Object[]> getUserMonthlyActives(String date, Integer count);
 }

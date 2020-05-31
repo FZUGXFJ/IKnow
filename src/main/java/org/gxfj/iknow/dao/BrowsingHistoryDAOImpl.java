@@ -86,25 +86,27 @@ public class BrowsingHistoryDAOImpl implements BrowsingHistoryDAO{
     }
 
     @Override
-    public List<Long> getUserDailyActives(String date, Integer count) {
+    public List<List> getUserDailyActives(String date, Integer count) {
         if(date == null || count == null) {
             return null;
         }
-        String hql = "SELECT count(DISTINCT userID) FROM Browsinghistory where DateDiff(?, date) < ? GROUP" +
-                " BY DATE_FORMAT(date, '%Y-%m-%d')";
+        String hql = "SELECT new list(count(DISTINCT userID),  DateDiff(?, date))  FROM Browsinghistory where " +
+                "DateDiff(?, date) < ? GROUP BY DATE_FORMAT(date, '%Y-%m-%d')";
         Query query = getSession().createQuery(hql);
-        return query.setParameter(0,date).setParameter(1,count).list();
+        return query.setParameter(0, date).setParameter(1, date).setParameter(2, count).list();
     }
 
     @Override
-    public List<Long> getUserMonthlyActives(String date, Integer count) {
+    public List<Object[]> getUserMonthlyActives(String date, Integer count) {
         if(date == null || count == null) {
             return null;
         }
-        String hql = "select count(DISTINCT userID) FROM Browsinghistory where PERIOD_DIFF(?, date) < ? GROUP BY " +
-                "DATE_FORMAT(date, '%Y-%m')";
-
-        Query query = getSession().createQuery(hql);
-        return query.setParameter(0,date).setParameter(1,count).list();
+        String sql = "select count(DISTINCT userID), PERIOD_DIFF(DATE_FORMAT(?, '%Y%m'), DATE_FORMAT(date, '%Y%m')) " +
+                "FROM Browsinghistory where PERIOD_DIFF(DATE_FORMAT(?, '%Y%m'), DATE_FORMAT(date, '%Y%m')) < ? GROUP " +
+                "BY DATE_FORMAT(date, '%Y-%m')";
+//        String hql = "SELECT new list(count(DISTINCT userID),  DateDiff(?, date))  FROM Browsinghistory where " +
+//                "DateDiff(?, date) < ? GROUP BY DATE_FORMAT(date, '%Y-%m-%d')";
+        SQLQuery query = getSession().createSQLQuery(sql);
+        return query.setParameter(0,date).setParameter(1,date).setParameter(2,count).list();
     }
 }

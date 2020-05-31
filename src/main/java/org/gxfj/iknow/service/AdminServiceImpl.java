@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,20 +86,34 @@ public class AdminServiceImpl implements AdminService{
         List<Map<String,Object>> records = new ArrayList<>();
         Map<String,Object> result = new HashMap<>(5);
         if(typeSum == 0){
-            List<Long> date = browsingHistoryDAO.getUserDailyActives(dateNow, 7);
-            for (Long i : date){
-                record=new HashMap<>();
-                record.put("sum",i);
+            List<List> date = browsingHistoryDAO.getUserDailyActives(dateNow, 7);
+
+            //初始化日活跃列表
+            for (int i = 0; i < 7; i++) {
+                record = new HashMap<>(1);
+                record.put("sum", 0);
                 records.add(record);
+            }
+
+            for (List i : date){
+                record = records.get(7 - 1 - (Integer)i.get(1));
+                record.put("sum",i.get(0));
             }
             result.put("userDayActives",records);
         }
         else {
-            List<Long> date = browsingHistoryDAO.getUserMonthlyActives(dateNow,3);
-            for (Long i : date){
-                record = new HashMap<>();
-                record.put("sum",i);
+            List<Object[]> date = browsingHistoryDAO.getUserMonthlyActives(dateNow,3);
+
+            //初始化月活跃列表
+            for (int i = 0; i < 3; i++) {
+                record = new HashMap<>(1);
+                record.put("sum", 0);
                 records.add(record);
+            }
+
+            for (Object[] i : date){
+                record = records.get(3 - 1 - ((BigInteger)i[1]).intValue());
+                record.put("sum",i[0]);
             }
             result.put("userMonActives",records);
         }
