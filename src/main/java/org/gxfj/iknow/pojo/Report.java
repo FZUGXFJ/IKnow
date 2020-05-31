@@ -1,13 +1,12 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
 public class Report {
     private Integer id;
-    private Integer type;
+    private Integer targetId;
     private String description;
     private Date date;
     private User userByUserId;
@@ -25,13 +24,13 @@ public class Report {
     }
 
     @Basic
-    @Column(name = "type", nullable = false)
-    public Integer getType() {
-        return type;
+    @Column(name = "targetID", nullable = false)
+    public Integer getTargetId() {
+        return targetId;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setTargetId(Integer type) {
+        this.targetId = type;
     }
 
     @Basic
@@ -68,7 +67,7 @@ public class Report {
         if (id != null ? !id.equals(report.id) : report.id != null) {
             return false;
         }
-        if (type != null ? !type.equals(report.type) : report.type != null) {
+        if (targetId != null ? !targetId.equals(report.targetId) : report.targetId != null) {
             return false;
         }
         if (description != null ? !description.equals(report.description) : report.description != null) {
@@ -84,7 +83,7 @@ public class Report {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (targetId != null ? targetId.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
