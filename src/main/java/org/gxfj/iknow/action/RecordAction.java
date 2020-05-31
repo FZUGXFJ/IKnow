@@ -32,12 +32,6 @@ public class RecordAction {
     RecordService recordService;
 
     public InputStream getInputStream() { return inputStream; }
-    /*final static private int RESPONSE_NUM = 20;
-
-    private final String SESSION_USER = "user";
-    private final int SUCCESS = 0;
-    private final int UN_LOGIN = 2;
-    private final int NO_MORE = 1;*/
 
     public String collectionRecord(){
         Map<String, Object> session = ActionContext.getContext().getSession();
