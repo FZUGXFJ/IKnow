@@ -18,7 +18,7 @@
     <div id="searchBar">
         <table>
             <td style="width: 10%">
-                <i class="fas fa-arrow-left" style="color: #acacac"></i>
+                <i class="fas fa-arrow-left" style="color: #acacac" @click="back"></i>
             </td>
             <td style="width: 80%">
                 <input type="text" aria-label="搜索" :placeholder="placeholder" class="noBorder" v-model="keyword">
@@ -29,7 +29,7 @@
         </table>
     </div>
     <div style="text-align: center" v-if="hasKeyword">
-        <button class="btn btn-link">查看【{{keyword}}】的搜索结果</button>
+        <button class="btn btn-link" @click="search(keyword)">查看【{{keyword}}】的搜索结果</button>
     </div>
     <br>
     <div id="operateBar">
@@ -50,65 +50,71 @@
     </div>
     <div class="splitBox"></div>
     <div id="comprehensionResult" v-if="selectedIndex===1">
-        问题
-        <div class="splitLine"></div>
-        <div class="resultItem" v-for="item in questionResultCom">
-            <table style="margin-bottom: 0.2em">
-                <td style="width: 10%">
-                    <div v-html="item.ownerHead" class="head"></div>
-                </td>
-                <td>
-                    &nbsp;{{item.ownerName}}
-                </td>
-            </table>
-            <h5><b>{{item.title}}</b></h5>
-            <div class="info">
-                {{item.browsingNum}}浏览-{{item.answerNum}}回答-{{item.collectNum}}收藏
+        <div v-if="questionResultNum">
+            问题
+            <div class="splitLine"></div>
+            <div class="resultItem" v-for="item in questionResultCom">
+                <table style="margin-bottom: 0.2em">
+                    <td style="width: 10%">
+                        <div v-html="item.ownerHead" class="head"></div>
+                    </td>
+                    <td>
+                        &nbsp;{{item.ownerName}}
+                    </td>
+                </table>
+                <h5><b>{{item.title}}</b></h5>
+                <div class="info">
+                    {{item.browsingNum}}浏览-{{item.answerNum}}回答-{{item.collectNum}}收藏
+                </div>
             </div>
-        </div>
-        <div style="text-align: right" v-if="questionResultNum>2">
-            <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=2">查看更多></span>
-        </div>
-        <div class="splitBox"></div>
-        回答
-        <div class="splitLine"></div>
-        <div class="resultItem" v-for="item in answerResultCom">
-            <h6><b>{{item.questionTitle}}</b></h6>
-            <table>
-                <td style="width: 10%">
-                    <div v-html="item.answererHead"></div>
-                </td>
-                <td>
-                    &nbsp;{{item.answererName}}：
-                </td>
-            </table>
-            <div class="answerContent">
-                {{item.content}}
+            <div style="text-align: right" v-if="questionResultNum>2">
+                <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=2">查看更多></span>
             </div>
-            <div class="info">
-                {{item.commentNum}}评论-{{item.approveNum}}赞同
+            <div class="splitBox"></div>
+        </div>
+        <div v-if="answerResultNum > 0">
+            回答
+            <div class="splitLine"></div>
+            <div class="resultItem" v-for="item in answerResultCom">
+                <h6><b>{{item.questionTitle}}</b></h6>
+                <table>
+                    <td style="width: 10%">
+                        <div v-html="item.answererHead"></div>
+                    </td>
+                    <td>
+                        &nbsp;{{item.answererName}}：
+                    </td>
+                </table>
+                <div class="answerContent">
+                    {{item.content}}
+                </div>
+                <div class="info">
+                    {{item.commentNum}}评论-{{item.approveNum}}赞同
+                </div>
             </div>
+            <div style="text-align: right" v-if="answerResultNum>2">
+                <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=3">查看更多></span>
+            </div>
+            <div class="splitBox"></div>
         </div>
-        <div style="text-align: right" v-if="answerResultNum>2">
-            <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=3">查看更多></span>
-        </div>
-        <div class="splitBox"></div>
-        用户
-        <div class="splitLine"></div>
-        <div class="resultItem" v-for="item in userResultCom">
-            <table>
-                <td style="width: 18%">
-                    <div class="head" v-html="item.userHead"></div>
-                </td>
-                <td style="width: 5%"></td>
-                <td>
-                    <div class="username">{{item.userName}}</div>
-                    <div class="userIntroduction">{{item.userIntroduction}}</div>
-                </td>
-            </table>
-        </div>
-        <div style="text-align: right" v-if="userResultNum>2">
-            <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=4">查看更多></span>
+        <div v-if="userResultNum > 0">
+            用户
+            <div class="splitLine"></div>
+            <div class="resultItem" v-for="item in userResultCom">
+                <table>
+                    <td style="width: 18%">
+                        <div class="head" v-html="item.userHead"></div>
+                    </td>
+                    <td style="width: 5%"></td>
+                    <td>
+                        <div class="username">{{item.userName}}</div>
+                        <div class="userIntroduction">{{item.userIntroduction}}</div>
+                    </td>
+                </table>
+            </div>
+            <div style="text-align: right" v-if="userResultNum>2">
+                <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=4">查看更多></span>
+            </div>
         </div>
     </div>
     <div id="questionResult" v-if="selectedIndex===2">
@@ -165,141 +171,90 @@
     let searchResult = new Vue({
         el:"#searchResult",
         data:{
-            placeholder:"java",
             keyword:"",
-            selectedIndex:1,
-            questionResult:[
-                {
-                    id:0,
-                    title:"搜索结果1？",
-                    ownerId:0,
-                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    ownerName:"李平",
-                    collectNum:0,
-                    answerNum:0,
-                    browsingNum:0
-                },{
-                    id:0,
-                    title:"搜索结果2？",
-                    ownerId:0,
-                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    ownerName:"李平",
-                    collectNum:0,
-                    answerNum:0,
-                    browsingNum:0
-                },{
-                    id:0,
-                    title:"搜索结果3？",
-                    ownerId:0,
-                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    ownerName:"李平",
-                    collectNum:0,
-                    answerNum:0,
-                    browsingNum:0
-                }
-            ],
-            questionResultCom:[
-                {
-                    id:0,
-                    title:"搜索结果1？",
-                    ownerId:0,
-                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    ownerName:"李平",
-                    collectNum:0,
-                    answerNum:0,
-                    browsingNum:0
-                },{
-                    id:0,
-                    title:"搜索结果2？",
-                    ownerId:0,
-                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    ownerName:"李平",
-                    collectNum:0,
-                    answerNum:0,
-                    browsingNum:0
-                }
-            ],
-            questionResultNum:3,
-            answerResult:[
-                {
-                    id:0,
-                    content:"这是回答搜索结果1",
-                    answererId:0,
-                    answererHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    answererName:"瓶子",
-                    approveNum:0,
-                    commentNum:0,
-                    questionId:0,
-                    questionTitle:"标题？"
-                },{
-                    id:0,
-                    content:"这是回答搜索结果2",
-                    answererId:0,
-                    answererHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    answererName:"瓶子",
-                    approveNum:0,
-                    commentNum:0,
-                    questionId:0,
-                    questionTitle:"标题？"
-                }
-            ],
-            answerResultCom:[
-                {
-                    id:0,
-                    content:"这是回答搜索结果1这是回答搜索结果1这是回答搜索结果1这是回答搜索结果1这是回答搜索结果1这是回答搜索结果1",
-                    answererId:0,
-                    answererHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    answererName:"瓶子",
-                    approveNum:0,
-                    commentNum:0,
-                    questionId:0,
-                    questionTitle:"标题？"
-                },{
-                    id:0,
-                    content:"这是回答搜索结果2",
-                    answererId:0,
-                    answererHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    answererName:"瓶子",
-                    approveNum:0,
-                    commentNum:0,
-                    questionId:0,
-                    questionTitle:"标题？"
-                }
-            ],
+            placeholder:"",
+            selectedIndex:0,
+            questionResult:[],
+            questionResultCom:[],
+            questionResultNum:0,
+            answerResult:[],
+            answerResultCom:[],
             answerResultNum:2,
-            userResult:[
-                {
-                    userId:0,
-                    userName:"李白",
-                    userHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    userIntroduction:"唐朝第一诗人",
-                    userIdentity:{
-                        identityType:0,
-                        realName:""
-                    },
-                }
-            ],
-            userResultCom:[
-                {
-                    userId:0,
-                    userName:"李白",
-                    userHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
-                    userIntroduction:"唐朝第一诗人",
-                    userIdentity:{
-                        identityType:0,
-                        realName:""
-                    },
-                }
-            ],
-            userResultNum:1,
+            userResult:[],
+            userResultCom:[],
+            userResultNum:0,
         },
         methods:{
             cleanKeyword:function () {
-
-            }
+                this.keyword = "";
+            },
+            back:function () {
+                location.href = "../home.html";
+            },
+            search:function (keyword) {
+                $.ajax({
+                    type:"POST",
+                    url:"../../search/searchResult.action",
+                    data:{
+                        keyword:keyword
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            let questionSize;
+                            let answerSize;
+                            let userSize;
+                            searchResult.questionResult = result.questionResult;
+                            questionSize = result.questionResult.length;
+                            searchResult.questionResultNum = questionSize;
+                            if (questionSize > 2) {
+                                searchResult.questionResultCom.push(searchResult.questionResult[0]);
+                                searchResult.questionResultCom.push(searchResult.questionResult[1]);
+                            } else {
+                                searchResult.questionResultCom = searchResult.questionResult;
+                            }
+                            searchResult.answerResult = result.answerResult;
+                            answerSize = result.answerResult.length;
+                            searchResult.answerResultNum = answerSize;
+                            if (answerSize > 2) {
+                                searchResult.answerResultCom.push(searchResult.answerResult[0]);
+                                searchResult.answerResultCom.push(searchResult.answerResult[1]);
+                            } else {
+                                searchResult.answerResultCom = searchResult.answerResult;
+                            }
+                            searchResult.userResult = result.userResult ;
+                            userSize = result.userResult;
+                            searchResult.userResultNum = userSize;
+                            if (userSize > 2) {
+                                searchResult.userResultCom.push(searchResult.userResult[0]);
+                                searchResult.userResultCom.push(searchResult.userResult[1]);
+                            } else {
+                                searchResult.userResultCom = searchResult.userResult;
+                            }
+                            searchResult.placeholder = keyword;
+                            searchResult.selectedIndex = 1;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
         },
         mounted:function () {
-
+            let keyword = "";
+            let loc = location.href;
+            loc = loc.replace("?","&").split("&")[1];
+            if (loc !== undefined && loc.indexOf("keyword=")!==-1) {
+                keyword = decodeURI(loc.replace("keyword=",""));
+                this.search(keyword);
+            } else {
+                alert("未知错误！");
+                location.href = "../home.html";
+            }
         },
         computed: {
             hasKeyword: function () {
