@@ -45,4 +45,11 @@ public interface UserDAO extends BaseDAO<User>{
      * @return 非封禁用户的uid的列表
      */
     List<Integer> getActiveUserId();
+
+    /**
+     * 根据关键字获得user
+     * @param keyword 关键字
+     * @return user列表
+     */
+    List<User> listByKeyword(String keyword);
 }

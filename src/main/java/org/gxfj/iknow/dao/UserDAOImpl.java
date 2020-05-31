@@ -1,6 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Level;
+import org.gxfj.iknow.pojo.Question;
 import org.gxfj.iknow.pojo.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -98,5 +99,13 @@ public class UserDAOImpl implements UserDAO {
         Query query = getSession().createQuery(hql);
 
         return query.setInteger(0,ACTIVATE_STATE).setInteger(1,FORBIDDEN_WORD_STATE).list();
+    }
+
+    @Override
+    public List<User> listByKeyword(String keyword) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM User WHERE ( name like '%" + keyword + "%' )";
+        Query query = session.createQuery(hql);
+        return query.list();
     }
 }

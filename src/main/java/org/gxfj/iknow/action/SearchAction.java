@@ -30,4 +30,11 @@ public class SearchAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return "success";
     }
+
+    public String searchResult(String keyword) {
+        Map<String,Object> response = searchService.searchResult(keyword);
+        response.put("resultCode",0);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return "success";
+    }
 }

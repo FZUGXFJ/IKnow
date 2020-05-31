@@ -126,4 +126,13 @@ public class QuestionDAOImpl implements QuestionDAO {
         Query query = getSession().createQuery(hql);
         return query.setInteger(0,questionTypeId).setFirstResult(start).setMaxResults(count).list();
     }
+
+    @Override
+    public List<Question> listByKeyword(String keyword) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM Question as q WHERE ( title like '%" + keyword + "%' ) and (q.isDelete = 0)" +
+                "or ( content like '%" + keyword + "%' ) and (q.isDelete = 0)";
+        Query query = session.createQuery(hql);
+        return query.list();
+    }
 }

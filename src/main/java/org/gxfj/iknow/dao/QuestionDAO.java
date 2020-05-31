@@ -64,4 +64,11 @@ public interface QuestionDAO extends BaseDAO<Question>{
      * @return 发布的回答数目
      */
     List<Question> listByQuestionType(Integer questionTypeId, Integer start, Integer count);
+
+    /**
+     * 根据关键字获取问题
+     * @param keyword 关键字
+     * @return 问题列表
+     */
+    List<Question> listByKeyword(String keyword);
 }

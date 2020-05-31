@@ -93,4 +93,12 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      * @return 回答数量
      */
     public Integer getUserAnswersCount(Integer userId);
+
+    /**
+     * 根据关键字获取回答
+     * @param keyword 关键字
+     * @return 回答列表
+     */
+    List<Answer> listByKeyword(String keyword);
+
 }
