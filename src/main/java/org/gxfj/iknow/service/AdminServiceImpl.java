@@ -5,6 +5,7 @@ import org.gxfj.iknow.dao.BrowsingHistoryDAO;
 import org.gxfj.iknow.dao.CategoriesTypeDAO;
 import org.gxfj.iknow.pojo.Admin;
 import org.gxfj.iknow.pojo.Categoriestype;
+import org.gxfj.iknow.pojo.Questiontype;
 import org.gxfj.iknow.pojo.Subjecttype;
 import org.gxfj.iknow.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,10 +116,12 @@ public class AdminServiceImpl implements AdminService{
         for (Categoriestype categoriestype : categoriestypeList){
             record = new HashMap<>(2);
             int sum = 0;
-            for (Subjecttype subjecttype : categoriestype.getSubjecttypesById()) {
-                sum += subjecttype.getMajortypesById().size();
+            for (Questiontype questiontype : categoriestype.getQuestiontypesById()) {
+                sum += questiontype.getQuestionsById().size();
             }
+
             record.put("sum", sum);
+            record.put("type", categoriestype.getName());
             records.add(record);
         }
         result.put("questionTypeSums",records);
