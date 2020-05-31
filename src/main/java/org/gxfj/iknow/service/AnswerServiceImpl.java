@@ -705,13 +705,13 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public boolean deleteAnswer(Integer answerId){
+    public boolean deleteAnswer(User user , Integer answerId){
         Answer answer = answerDAO.get(answerId);
+        if(answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(answerId)){
+            cancelAdopt(user, answerId);
+        }
         answerDAO.delete(answer);
-        Question question = answer.getQuestionByQuestionId();
-        /*
-        TODO 取消采纳操作
-         */
+
         return true;
     }
 }
