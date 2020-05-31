@@ -66,41 +66,42 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
                                 <span data-feather="home"></span>
-                                XX举报 <span class="sr-only">(current)</span>
+                                问题举报 <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file"></span>
-                                XX举报
+                                回答举报
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="shopping-cart"></span>
-                                XX举报
+                                评论举报
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="users"></span>
-                                XX举报
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="bar-chart-2"></span>
-                                XX举报
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span>
-                                XX举报
+                                回复举报
                             </a>
                         </li>
                     </ul>
-
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>学校管理</span>
+                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+                        <!--                        <span data-feather="plus-circle"></span>-->
+                        <!--                    </a>-->
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="statisticsUserAdmin.html">
+                                <span data-feather="file-text"></span>
+                                学校管理
+                            </a>
+                        </li>
+                    </ul>
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                         <span>相关统计</span>
                         <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
@@ -109,7 +110,7 @@
                     </h6>
                     <ul class="nav flex-column mb-2">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="statisticsUserAdmin.html">
                                 <span data-feather="file-text"></span>
                                 用户统计
                             </a>
@@ -117,19 +118,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file-text"></span>
-                                XXX图
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                XXX图
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                XXX图
+                                问题统计
                             </a>
                         </li>
                     </ul>
@@ -141,7 +130,7 @@
                     <h1 class="h2">数据统计</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="questionSum=true;questionType=true">总览</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="questionSum=true;questionType=true;getStatistics(getBeforeDate(0),1);getTypeStatistics()">总览</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary">导出</button>
                         </div>
                         <!--                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
@@ -150,7 +139,7 @@
                         <!--                        </button>-->
                         <div class="btn-group mr-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),1);questionSum=true;questionType=false">总数统计</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),1);questionSum=false;questionType=true">类别统计</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getTypeStatistics();questionSum=false;questionType=true">类别统计</button>
                         </div>
                     </div>
                 </div>
@@ -402,27 +391,30 @@
                                 index.questionTypeSums=result.questionTypeSums;
                                 let len = index.questionTypeSums.length;
                                 //Graphs
-                                let types = new Array(len);
+                                let types=[];
                                 for(i=0;i<len;i++){
-                                    types[i]=index.questionTypeSums[i].type;
+                                    types[i]=index.questionTypeSums[i].name;
                                 }
                                 let sums = new Array(len);
                                 for(i=0;i<len;i++){
-                                    sums[i]=index.questionTypeSums[i].sum;
+                                    let obj = new Object();
+                                    obj.name = index.questionTypeSums[i].name;
+                                    obj.value = index.questionTypeSums[i].value;
+                                    sums[i]=obj;
                                 }
                                 var ctx = echarts.init(document.getElementById('quesType'));
                                 // eslint-disable-next-line no-unused-vars
                             option = {
                                 tooltip: {
                                     trigger: 'item',
-                                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                                    formatter: '问题类别: <br/>{b} : {c} ({d}%)'
                                 },
                                 legend: {
                                     // orient: 'vertical',
                                     // top: 'middle',
                                     bottom: 10,
                                     left: 'center',
-                                    data: ['西凉', '益州', '兖州', '荆州', '幽州']
+                                    data: types
                                 },
                                 series: [
                                     {
@@ -430,20 +422,14 @@
                                         radius: '65%',
                                         center: ['50%', '50%'],
                                         selectedMode: 'single',
-                                        data: [
-                                            {value: 1548, name: '幽州'},
-                                            {value: 535, name: '荆州'},
-                                            {value: 510, name: '兖州'},
-                                            {value: 634, name: '益州'},
-                                            {value: 735, name: '西凉'}
-                                        ],
-                                        // emphasis: {
-                                        //     itemStyle: {
-                                        //         shadowBlur: 10,
-                                        //         shadowOffsetX: 0,
-                                        //         shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                        //     }
-                                        // }
+                                        data: sums,
+                                        emphasis: {
+                                            itemStyle: {
+                                                shadowBlur: 10,
+                                                shadowOffsetX: 0,
+                                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                            }
+                                        }
                                     }
                                 ]
                             };
