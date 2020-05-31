@@ -43,58 +43,58 @@ public class AdminAction {
             session.clear();
         }
         inputStream = new ByteArrayInputStream("{\"response\":0}".getBytes(StandardCharsets.UTF_8));
-        return  ConstantUtil.getRETURN_STRING();
+        return  ConstantUtil.RETURN_STRING;
     }
 
     public String login(){
-        Map resultMap = new HashMap(ConstantUtil.getHashMapNum());
+        Map resultMap = new HashMap(ConstantUtil.HASH_MAP_NUM);
         Admin adminInf = new Admin();
         adminInf.setAccount(accountNum);
         adminInf.setPasswd(password);
         Admin admin = adminService.login(adminInf);
         if(admin == null){
-            resultMap.put(ConstantUtil.getResultCode() , ConstantUtil.getUN_LOGIN());
+            resultMap.put(ConstantUtil.RESULT_CODE , ConstantUtil.UN_LOGIN);
         }
         else{
-            ActionContext.getContext().getSession().put(ConstantUtil.getLoginAdminSessionName(),admin);
-            resultMap.put(ConstantUtil.getResultCode() , ConstantUtil.getSUCCESS());
+            ActionContext.getContext().getSession().put(ConstantUtil.LOGIN_ADMIN_SESSION_NAME,admin);
+            resultMap.put(ConstantUtil.RESULT_CODE , ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
-        return ConstantUtil.getRETURN_STRING();
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String statistics(){
         Map<String,Object> result=adminService.getData(dateNow,typeSum);
-        result.put(ConstantUtil.getResultCode() , ConstantUtil.getSUCCESS());
+        result.put(ConstantUtil.RESULT_CODE , ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
-        return ConstantUtil.getRETURN_STRING();
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String isLogin() {
         Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> result = new HashMap<>(ConstantUtil.getMinHashMapNum());
-        if (session.get(ConstantUtil.getLoginAdminSessionName()) == ConstantUtil.getNoAdmin()) {
-            result.put(ConstantUtil.getResultCode() , ConstantUtil.getUN_LOGIN());
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if (session.get(ConstantUtil.LOGIN_ADMIN_SESSION_NAME) == ConstantUtil.NO_ADMIN) {
+            result.put(ConstantUtil.RESULT_CODE , ConstantUtil.UN_LOGIN);
         } else {
-            result.put(ConstantUtil.getResultCode() , ConstantUtil.getSUCCESS());
+            result.put(ConstantUtil.RESULT_CODE , ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         System.out.println(JSON.toJSONString(result));
-        return ConstantUtil.getRETURN_STRING();
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String active() {
         Map<String,Object> result = adminService.getActiveData(dateNow,typeSum);
-        result.put(ConstantUtil.getResultCode() , ConstantUtil.getSUCCESS());
+        result.put(ConstantUtil.RESULT_CODE , ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
-        return ConstantUtil.getRETURN_STRING();
+        return ConstantUtil.RETURN_STRING;
     }
 
     public String questionTypeSum(){
         Map<String,Object> result = adminService.getQuestionTypeSumData();
-        result.put(ConstantUtil.getResultCode() , ConstantUtil.getSUCCESS());
+        result.put(ConstantUtil.RESULT_CODE , ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
-        return ConstantUtil.getRETURN_STRING();
+        return ConstantUtil.RETURN_STRING;
     }
 
     public Integer getAccountNum() {
