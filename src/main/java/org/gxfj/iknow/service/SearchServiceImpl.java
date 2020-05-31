@@ -46,11 +46,10 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public Map<String, Object> searchResult(String keyword) {
-        Map<String, Object> session = ActionContext.getContext().getSession();
+    public Map<String, Object> searchResult(String keyword,Integer userId) {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get("user");
-        if (user != null) {
+        if (userId!=-1) {
+            User user=userDAO.get(userId);
             postSearchHistory(user,keyword);
         }
         response.put("questionResult",getQuestionsByKeyword(keyword));
@@ -68,7 +67,7 @@ public class SearchServiceImpl implements SearchService{
         Searchhistory searchhistory=new Searchhistory();
         searchhistory.setContent(context);
         searchhistory.setDate(new Date());
-        searchhistory.setId(user.getId());
+        searchhistory.setUserByUserId(user);
         return searchHistoryDAO.add(searchhistory);
     }
 

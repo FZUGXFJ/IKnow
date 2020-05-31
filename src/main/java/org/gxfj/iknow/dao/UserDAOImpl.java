@@ -45,7 +45,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void update(User bean) {
-        getHibernateTemplate().update(bean);
+        getHibernateTemplate().merge(bean);
     }
 
     @Override
@@ -106,6 +106,6 @@ public class UserDAOImpl implements UserDAO {
         Session session = sessionFactory.getCurrentSession();
         String hql = "FROM User WHERE ( name like '%" + keyword + "%' )";
         Query query = session.createQuery(hql);
-        return query.list();
+        return query.setMaxResults(20).list();
     }
 }

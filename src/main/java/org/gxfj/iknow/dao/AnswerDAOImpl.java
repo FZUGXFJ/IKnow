@@ -148,6 +148,6 @@ public class AnswerDAOImpl implements AnswerDAO{
         Session session = sessionFactory.getCurrentSession();
         String hql = "FROM Answer as a WHERE ( content like '%" + keyword + "%' ) and (a.isDelete = 0)";
         Query query = session.createQuery(hql);
-        return query.list();
+        return query.setMaxResults(20).list();
     }
 }
