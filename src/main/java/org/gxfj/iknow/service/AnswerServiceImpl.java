@@ -39,6 +39,7 @@ public class AnswerServiceImpl implements AnswerService{
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
     final static private int QUESTION_STATE_SOLVE = 2;
+    final static private int QUESTION_STATE_UN_SOLVE = 1;
     final static private int ANONYMOUS = 1;
     @Override
     public String getQuestiontitle(Integer questionId) {
@@ -276,6 +277,15 @@ public class AnswerServiceImpl implements AnswerService{
         if (answer.getUserByUserId().getId().equals(user.getId())){
             answer.setIsAnonymous((byte)1);
             answerDAO.update(answer);
+            Question question = answer.getQuestionByQuestionId();
+            //将问题采纳的回答id置0
+            Answer answerNull = null;
+            question.setAnswerByAdoptId(answerNull);
+            //构造未解决的问题状态
+            Questionstate questionstate = new Questionstate();
+            questionstate.setId(QUESTION_STATE_UN_SOLVE);
+            question.setQuestionstateByStateId(questionstate);
+            questionDAO.update(question);
             return true;
         }
         return false;
@@ -698,6 +708,10 @@ public class AnswerServiceImpl implements AnswerService{
     public boolean deleteAnswer(Integer answerId){
         Answer answer = answerDAO.get(answerId);
         answerDAO.delete(answer);
+        Question question = answer.getQuestionByQuestionId();
+        /*
+        TODO 取消采纳操作
+         */
         return true;
     }
 }
