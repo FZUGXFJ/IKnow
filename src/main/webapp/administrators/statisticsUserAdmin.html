@@ -111,7 +111,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file-text"></span>
-                                用户/问题增长趋势图
+                                用户统计
                             </a>
                         </li>
                         <li class="nav-item">
@@ -141,7 +141,7 @@
                     <h1 class="h2">数据统计</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="user=true;active=true">总览</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary">导出</button>
                         </div>
 <!--                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
@@ -149,14 +149,17 @@
 <!--                            统计-->
 <!--                        </button>-->
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),0);user=true;">用户统计</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),1);user=false">问题统计</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getUserStatistics(getBeforeDate(0),0);user=true;active=false">总数统计</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getActiveStatistics(getBeforeDate(0),0);getActiveStatistics(getBeforeDate(0),1);user=false;active=true">活跃量统计</button>
                         </div>
                     </div>
                 </div>
                 <h2 v-if="user">用户总数</h2>
-                <h2 v-if="!user">问题总数</h2>
-                <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+                <canvas class="my-4 w-100" id="sumsChart" width="900" height="380"></canvas>
+                <h2 v-if="active">用户日活跃量</h2>
+                <canvas class="my-4 w-100" id="dayActiveChart" width="900" height="380"></canvas>
+                <h2 v-if="active">用户月活跃量</h2>
+                <canvas class="my-4 w-100" id="monActiveChart" width="900" height="380"></canvas>
 
             </main>
         </div>
@@ -169,8 +172,11 @@
         el:"#index",
         data:{
             user:true,
+            active:true,
             userSums:[],
             questionSums:[],
+            dayActiveSums:[],
+            monActiveSums:[],
             all: 8, //总页数
             cur: 1//当前页码
         },
@@ -226,6 +232,30 @@
                     }
                 });
             },
+            getBeforeMon:function(num, time) {
+                let n = num;
+                let d = '';
+                if(time) {
+                    d = new Date(time);
+                } else {
+                    d = new Date();
+                }
+                let year = d.getFullYear();
+                let mon = d.getMonth() + 1;
+                if(mon <= n) {
+                    if((n-mon)>12) {
+                        year = year - (n-mon)/12;
+                        mon = mon - (n-mon)%12;
+                    }else {
+                        year = year - 1;
+                        mon = mon - (n-mon)%12;
+                    }
+                } else {
+                    mon = mon -n;
+                }
+                let s = year + "-" + (mon < 10 ? ('0' + mon) : mon);
+                return s;
+            },
             getBeforeDate:function(num, time) {
                 let n = num;
                 let d = '';
@@ -252,7 +282,7 @@
                 let s = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
                 return s;
             },
-            getStatistics:function (dateNow,typeSum) {
+            getUserStatistics:function (dateNow,typeSum) {
                 $.ajax({
                     url: "../admin/statistics.action",
                     type: "POST",
@@ -266,7 +296,7 @@
                         if(typeSum === 0)
                         {
                             index.userSums=result.userSums;
-                            // Graphs
+                            //Graphs
                             let day1=index.userSums[0].sum;
                             let day2=index.userSums[1].sum;
                             let day3=index.userSums[2].sum;
@@ -274,9 +304,13 @@
                             let day5=index.userSums[4].sum;
                             let day6=index.userSums[5].sum;
                             let day7=index.userSums[6].sum;
-                            var ctx = document.getElementById('myChart')
+                            let days = new Array(7);
+                            for(i=0;i<7;i++){
+                                days[i]=index.userSums[i].sum;
+                            }
+                            var ctx = document.getElementById('sumsChart')
                             // eslint-disable-next-line no-unused-vars
-                            var myChart = new Chart(ctx, {
+                            var sumsChart = new Chart(ctx, {
                                 type: 'line',
                                 data: {
                                     labels: [
@@ -289,15 +323,7 @@
                                         index.getBeforeDate(1)
                                     ],
                                     datasets: [{
-                                        data: [
-                                            day1,
-                                            day2,
-                                            day3,
-                                            day4,
-                                            day5,
-                                            day6,
-                                            day7
-                                        ],
+                                        data: days,
                                         lineTension: 0,
                                         backgroundColor: 'transparent',
                                         borderColor: '#007bff',
@@ -331,9 +357,9 @@
                             let day5=index.questionSums[4].sum;
                             let day6=index.questionSums[5].sum;
                             let day7=index.questionSums[6].sum;
-                            var ctx = document.getElementById('myChart')
+                            var ctx = document.getElementById('sumsChart')
                             // eslint-disable-next-line no-unused-vars
-                            var myChart = new Chart(ctx, {
+                            var sumsChart = new Chart(ctx, {
                                 type: 'line',
                                 data: {
                                     labels: [
@@ -386,6 +412,114 @@
                     console.log(status);
                 }
             });
+            },
+            getActiveStatistics:function (dateNow,typeSum) {
+                $.ajax({
+                    url: "../admin/active.action",
+                    type: "POST",
+                    data: {
+                        dateNow:dateNow,
+                        typeSum:typeSum,
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            if(typeSum === 0)
+                            {
+                                index.dayActiveSums=result.userDayActives;
+                                //Graphs
+                                let days = new Array(7);
+                                for(i=0;i<7;i++){
+                                    days[i]=index.dayActiveSums[i].sum;
+                                }
+                                var ctx = document.getElementById('dayActiveChart')
+                                // eslint-disable-next-line no-unused-vars
+                                var dayActiveChart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: [
+                                            index.getBeforeDate(7),
+                                            index.getBeforeDate(6),
+                                            index.getBeforeDate(5),
+                                            index.getBeforeDate(4),
+                                            index.getBeforeDate(3),
+                                            index.getBeforeDate(2),
+                                            index.getBeforeDate(1)
+                                        ],
+                                        datasets: [{
+                                            data: days,
+                                            lineTension: 0,
+                                            backgroundColor: 'transparent',
+                                            borderColor: '#007bff',
+                                            borderWidth: 4,
+                                            pointBackgroundColor: '#007bff'
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: false
+                                                }
+                                            }]
+                                        },
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                })
+                            }
+                            if(typeSum === 1)
+                            {
+                                index.monActiveSums=result.userMonActives;
+                                // Graphs
+                                let mons = new Array(3);
+                                for(i=0;i<3;i++){
+                                    mons[i]=index.monActiveSums[i].sum;
+                                }
+                                var ctx = document.getElementById('monActiveChart')
+                                // eslint-disable-next-line no-unused-vars
+                                var monActiveChart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: [
+                                            index.getBeforeMon(2),
+                                            index.getBeforeMon(1),
+                                            index.getBeforeMon(0)
+                                        ],
+                                        datasets: [{
+                                            data: mons,
+                                            lineTension: 0,
+                                            backgroundColor: 'transparent',
+                                            borderColor: '#007bff',
+                                            borderWidth: 4,
+                                            pointBackgroundColor: '#007bff'
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: false
+                                                }
+                                            }]
+                                        },
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        console.log(result.resultCode);
+                    },
+                    error: function (request, status, error) {
+                        alert("获取数据失败！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             }
         },
         computed: {
@@ -420,7 +554,9 @@
         mounted:function () {
             this.isLogin();
             let date = this.getBeforeDate(0);
-            this.getStatistics(date,0);
+            this.getUserStatistics(date,0);
+            this.getActiveStatistics(date,0);
+            this.getActiveStatistics(date,1);
         }
 
     });
@@ -429,9 +565,6 @@
 
         feather.replace()
 
-        // Graphs
-        var ctx = document.getElementById('myChart')
-        // eslint-disable-next-line no-unused-vars
 
     }())
 </script>
