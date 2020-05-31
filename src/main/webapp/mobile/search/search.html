@@ -18,7 +18,7 @@
     <div id="searchBar">
         <table>
             <td style="width: 10%">
-                <i class="fas fa-arrow-left" style="color: #acacac"></i>
+                <i class="fas fa-arrow-left" style="color: #acacac" @click="back"></i>
             </td>
             <td style="width: 80%">
                 <input type="text" aria-label="搜索" placeholder="搜索IKnow内容" class="noBorder" v-model="keyword">
@@ -29,7 +29,7 @@
         </table>
     </div>
     <div style="text-align: center" v-if="hasKeyword">
-        <button class="btn btn-link">查看【{{keyword}}】的搜索结果</button>
+        <button class="btn btn-link" @click="getResult(keyword)">查看【{{keyword}}】的搜索结果</button>
     </div>
     <br>
     <div id="hotSearch">
@@ -37,13 +37,13 @@
         <div v-for="(hot,index) in hotSearch">
             <table>
                 <td style="width: 50%;">
-                    <div class="hotItem">
+                    <div class="hotItem" @click="getResult(hot[0].content)">
                         <i :class="{one:index===0,three:index===1,other:index>=2}">{{2*index+1}}</i>
                         {{hot[0].content}}
                     </div>
                 </td>
                 <td style="width: 50%">
-                    <div class="hotItem">
+                    <div class="hotItem" @click="getResult(hot[1].content)">
                         <i :class="{two:index===0,other:index>=1}">{{2*index+2}}</i>
                         {{hot[1].content}}
                     </div>
@@ -58,7 +58,7 @@
                 <h6><b>搜索历史</b></h6>
             </td>
             <td style="text-align: right;opacity: 0.5">
-                <span>清空</span>
+                <span @click="cleanHistory">清空</span>
             </td>
         </table>
         <div>
@@ -71,7 +71,7 @@
                         {{history.content}}
                     </td>
                     <td style="width: 10%;opacity: 0.3;text-align: right">
-                        <i class="fas fa-times"></i>
+                        <i class="fas fa-times" @click="deleteHistory(index)"></i>
                     </td>
                 </table>
                 <div class="splitLine"></div>
@@ -84,70 +84,75 @@
         el:"#search",
         data:{
             keyword:"",
-            searchHistory:[
-                {
-                    content:"李白"
-                },{
-                    content: "中国"
-                }
-            ],
-            hotSearch1:[
-                {
-                    content:"李白李白李白李白李白李白李白李白李白李白李白李白"
-                },{
-                    content: "中国"
-                },
-            ],
-            hotSearch2:[
-                {
-                    content:"李白"
-                },{
-                    content: "中国"
-                },
-            ],
-            hotSearch3:[
-                {
-                    content:"李白"
-                },{
-                    content: "中国"
-                },
-            ],
-            hotSearch4:[
-                {
-                    content:"李白"
-                },{
-                    content: "中国"
-                },
-            ],
-            hotSearch5:[
-                {
-                    content:"李白"
-                },{
-                    content: "中国"
-                },
-            ],
+            searchHistory:[],
+            hotSearch:[]
         },
         methods:{
             cleanKeyword:function () {
                 this.keyword = "";
+            },
+            getResult:function (kw) {
+                let searchHistory;
+                let searchHistoryStr = localStorage.getItem("searchHistory");
+                if (searchHistoryStr == null) {
+                    searchHistory = [];
+                } else {
+                    searchHistory = JSON.parse(searchHistoryStr);
+                }
+                if (searchHistory.length >= 10) {
+                    searchHistory.shift();
+                }
+                let kwObj = {
+                    content:kw
+                };
+                searchHistory.push(kwObj);
+                localStorage.setItem("searchHistory",JSON.stringify(searchHistory));
+                location.href = "searchResult.html?keyword=" + kw;
+            },
+            deleteHistory:function (index) {
+                this.searchHistory.splice(index,1);
+                localStorage.setItem("searchHistory",JSON.stringify(this.searchHistory));
+            },
+            cleanHistory:function () {
+                this.searchHistory = [];
+                localStorage.removeItem("searchHistory");
+            },
+            back:function () {
+                history.go(-1);
             }
         },
         mounted:function () {
-
+            $.ajax({
+                type:"POST",
+                url:"../../search/searchHistory.action",
+                data:{},
+                dataType:"json",
+                success:function (result) {
+                    let size = result.hotSearch.length;
+                    let hotSearchPart = [];
+                    for (let i = 0;i < size; i++) {
+                        hotSearchPart.push(result.hotSearch[i]);
+                        if (i % 2 !== 0) {
+                            search.hotSearch.push(hotSearchPart);
+                            hotSearchPart = [];
+                        }
+                    }
+                },
+                error:function (request,status,error) {
+                    alert("系统异常！");
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
+                }
+            });
+            if (localStorage.getItem("searchHistory") != null) {
+                this.searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
+            }
         },
         computed:{
             hasKeyword:function () {
                 return this.keyword.length > 0;
             },
-            hotSearch:function () {
-                let result = [];
-                result.push(this.hotSearch1);
-                result.push(this.hotSearch2);
-                result.push(this.hotSearch3);
-                result.push(this.hotSearch4);
-                result.push(this.hotSearch5);
-                return result;
-            }
         }
     });
 </script>
