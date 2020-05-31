@@ -133,6 +133,6 @@ public class QuestionDAOImpl implements QuestionDAO {
         String hql = "FROM Question as q WHERE ( title like '%" + keyword + "%' ) and (q.isDelete = 0)" +
                 "or ( content like '%" + keyword + "%' ) and (q.isDelete = 0)";
         Query query = session.createQuery(hql);
-        return query.list();
+        return query.setMaxResults(20).list();
     }
 }
