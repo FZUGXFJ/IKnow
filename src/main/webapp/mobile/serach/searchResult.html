@@ -1,10 +1,312 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>搜索结果</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/search/searchResult.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 </head>
 <body>
+<div id="searchResult">
+    <div id="searchBar">
+        <table>
+            <td style="width: 10%">
+                <i class="fas fa-arrow-left" style="color: #acacac"></i>
+            </td>
+            <td style="width: 80%">
+                <input type="text" aria-label="搜索" :placeholder="placeholder" class="noBorder" v-model="keyword">
+            </td>
+            <td style="width: 10%;text-align: right" v-if="hasKeyword">
+                <i class="fas fa-times" style="color: #acacac" @click="cleanKeyword"></i>
+            </td>
+        </table>
+    </div>
+    <div style="text-align: center" v-if="hasKeyword">
+        <button class="btn btn-link">查看【{{keyword}}】的搜索结果</button>
+    </div>
+    <br>
+    <div id="operateBar">
+        <table>
+            <td class="opItem">
+                <span :class="{selected:selectedIndex===1}" @click="selectedIndex=1">综合</span>
+            </td>
+            <td class="opItem">
+                <span :class="{selected:selectedIndex===2}" @click="selectedIndex=2">问题</span>
+            </td>
+            <td class="opItem">
+                <span :class="{selected:selectedIndex===3}" @click="selectedIndex=3">回答</span>
+            </td>
+            <td class="opItem">
+                <span :class="{selected:selectedIndex===4}" @click="selectedIndex=4">用户</span>
+            </td>
+        </table>
+    </div>
+    <div class="splitBox"></div>
+    <div id="comprehensionResult" v-if="selectedIndex===1">
+        问题
+        <div class="splitLine"></div>
+        <div class="resultItem" v-for="item in questionResultCom">
+            <table style="margin-bottom: 0.2em">
+                <td style="width: 10%">
+                    <div v-html="item.ownerHead" class="head"></div>
+                </td>
+                <td>
+                    &nbsp;{{item.ownerName}}
+                </td>
+            </table>
+            <h5><b>{{item.title}}</b></h5>
+            <div class="info">
+                {{item.browsingNum}}浏览-{{item.answerNum}}回答-{{item.collectNum}}收藏
+            </div>
+        </div>
+        <div style="text-align: right" v-if="questionResultNum>2">
+            <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=2">查看更多></span>
+        </div>
+        <div class="splitBox"></div>
+        回答
+        <div class="splitLine"></div>
+        <div class="resultItem" v-for="item in answerResultCom">
+            <h6><b>{{item.questionTitle}}</b></h6>
+            <table>
+                <td style="width: 10%">
+                    <div v-html="item.answererHead"></div>
+                </td>
+                <td>
+                    &nbsp;{{item.answererName}}：
+                </td>
+            </table>
+            <div class="answerContent">
+                {{item.content}}
+            </div>
+            <div class="info">
+                {{item.commentNum}}评论-{{item.approveNum}}赞同
+            </div>
+        </div>
+        <div style="text-align: right" v-if="answerResultNum>2">
+            <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=3">查看更多></span>
+        </div>
+        <div class="splitBox"></div>
+        用户
+        <div class="splitLine"></div>
+        <div class="resultItem" v-for="item in userResultCom">
+            <table>
+                <td style="width: 18%">
+                    <div class="head" v-html="item.userHead"></div>
+                </td>
+                <td style="width: 5%"></td>
+                <td>
+                    <div class="username">{{item.userName}}</div>
+                    <div class="userIntroduction">{{item.userIntroduction}}</div>
+                </td>
+            </table>
+        </div>
+        <div style="text-align: right" v-if="userResultNum>2">
+            <span style="opacity: 0.5;font-size: 0.8em" @click="selectedIndex=4">查看更多></span>
+        </div>
+    </div>
+    <div id="questionResult" v-if="selectedIndex===2">
+        <div class="resultItem" v-for="item in questionResult">
+            <table style="margin-bottom: 0.2em">
+                <td style="width: 10%">
+                    <div v-html="item.ownerHead"></div>
+                </td>
+                <td>
+                    &nbsp;{{item.ownerName}}
+                </td>
+            </table>
+            <h5><b>{{item.title}}</b></h5>
+            <div class="info">
+                {{item.browsingNum}}浏览-{{item.answerNum}}回答-{{item.collectNum}}收藏
+            </div>
+        </div>
+    </div>
+    <div id="answerResult" v-if="selectedIndex===3">
+        <div class="resultItem" v-for="item in answerResult">
+            <h6><b>{{item.questionTitle}}</b></h6>
+            <table>
+                <td style="width: 10%">
+                    <div v-html="item.answererHead"></div>
+                </td>
+                <td>
+                    &nbsp;{{item.answererName}}：
+                </td>
+            </table>
+            <div class="answerContent">
+                {{item.content}}
+            </div>
+            <div class="info">
+                {{item.commentNum}}评论-{{item.approveNum}}赞同
+            </div>
+        </div>
+    </div>
+    <div id="userResult" v-if="selectedIndex===4">
+        <div class="resultItem" v-for="item in userResult">
+            <table>
+                <td style="width: 18%">
+                    <div class="head" v-html="item.userHead"></div>
+                </td>
+                <td style="width: 5%"></td>
+                <td>
+                    <div class="username">{{item.userName}}</div>
+                    <div class="userIntroduction">{{item.userIntroduction}}</div>
+                </td>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    let searchResult = new Vue({
+        el:"#searchResult",
+        data:{
+            placeholder:"java",
+            keyword:"",
+            selectedIndex:1,
+            questionResult:[
+                {
+                    id:0,
+                    title:"搜索结果1？",
+                    ownerId:0,
+                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    ownerName:"李平",
+                    collectNum:0,
+                    answerNum:0,
+                    browsingNum:0
+                },{
+                    id:0,
+                    title:"搜索结果2？",
+                    ownerId:0,
+                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    ownerName:"李平",
+                    collectNum:0,
+                    answerNum:0,
+                    browsingNum:0
+                },{
+                    id:0,
+                    title:"搜索结果3？",
+                    ownerId:0,
+                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    ownerName:"李平",
+                    collectNum:0,
+                    answerNum:0,
+                    browsingNum:0
+                }
+            ],
+            questionResultCom:[
+                {
+                    id:0,
+                    title:"搜索结果1？",
+                    ownerId:0,
+                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    ownerName:"李平",
+                    collectNum:0,
+                    answerNum:0,
+                    browsingNum:0
+                },{
+                    id:0,
+                    title:"搜索结果2？",
+                    ownerId:0,
+                    ownerHead:"<img src='../../head/10.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    ownerName:"李平",
+                    collectNum:0,
+                    answerNum:0,
+                    browsingNum:0
+                }
+            ],
+            questionResultNum:3,
+            answerResult:[
+                {
+                    id:0,
+                    content:"这是回答搜索结果1",
+                    answererId:0,
+                    answererHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    answererName:"瓶子",
+                    approveNum:0,
+                    commentNum:0,
+                    questionId:0,
+                    questionTitle:"标题？"
+                },{
+                    id:0,
+                    content:"这是回答搜索结果2",
+                    answererId:0,
+                    answererHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    answererName:"瓶子",
+                    approveNum:0,
+                    commentNum:0,
+                    questionId:0,
+                    questionTitle:"标题？"
+                }
+            ],
+            answerResultCom:[
+                {
+                    id:0,
+                    content:"这是回答搜索结果1这是回答搜索结果1这是回答搜索结果1这是回答搜索结果1这是回答搜索结果1这是回答搜索结果1",
+                    answererId:0,
+                    answererHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    answererName:"瓶子",
+                    approveNum:0,
+                    commentNum:0,
+                    questionId:0,
+                    questionTitle:"标题？"
+                },{
+                    id:0,
+                    content:"这是回答搜索结果2",
+                    answererId:0,
+                    answererHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    answererName:"瓶子",
+                    approveNum:0,
+                    commentNum:0,
+                    questionId:0,
+                    questionTitle:"标题？"
+                }
+            ],
+            answerResultNum:2,
+            userResult:[
+                {
+                    userId:0,
+                    userName:"李白",
+                    userHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    userIntroduction:"唐朝第一诗人",
+                    userIdentity:{
+                        identityType:0,
+                        realName:""
+                    },
+                }
+            ],
+            userResultCom:[
+                {
+                    userId:0,
+                    userName:"李白",
+                    userHead:"<img src='../../head/11.jpg' width='100%' height='100%' style='border-radius: 100%'>",
+                    userIntroduction:"唐朝第一诗人",
+                    userIdentity:{
+                        identityType:0,
+                        realName:""
+                    },
+                }
+            ],
+            userResultNum:1,
+        },
+        methods:{
+            cleanKeyword:function () {
 
+            }
+        },
+        mounted:function () {
+
+        },
+        computed: {
+            hasKeyword: function () {
+                return this.keyword.length > 0;
+            },
+        }
+    });
+</script>
 </body>
 </html>

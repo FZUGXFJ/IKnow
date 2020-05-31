@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.0.1">
-    <title>Signin Template · Bootstrap</title>
+    <title>管理员登录</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/sign-in/">
     <!-- Bootstrap core CSS -->
     <link href="../css/administrators/login_new.css" rel="stylesheet">
@@ -18,6 +18,10 @@
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
     <script type="text/javascript" src="../js/computer.js"></script>
     <style>
+        .input{
+            width: 60%;
+            margin-left: 20%;
+        }
         .errorMessage{
             text-align: left;
             font-size: 0.8em;
@@ -37,13 +41,16 @@
                 font-size: 3.5rem;
             }
         }
+
+        .space{
+            margin-top: 3%;
+        }
     </style>
     <!-- Custom styles for this template -->
     <link href="signin.css" rel="stylesheet">
 </head>
 <body class="text-center">
-    <form class="form-signin">
-        <div id="login">
+<div id="login" style="margin-left: 40%;width:20%;">
     <div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
         <button type="button" class="close"  aria-label="Close" @click="closeAlert">
@@ -53,20 +60,19 @@
     <img class="mb-4" src="../img/Admin.png" alt="" width="72" height="72">
     <h1 class="h3 mb-3 font-weight-normal">管理员登录</h1>
     <label for="accountNum" class="sr-only">Admin Account</label>
-    <input type="number" id="accountNum" class="form-control" placeholder="请输入您的账号" autofocus>
+    <input type="text" id="accountNum" class="form-control input space" placeholder="请输入您的账号">
         <div class="errorMessage" v-if="accountNumError" style="margin-left: 5px">{{accountNumErrorMsg}}</div>
     <label for="password" class="sr-only" >Password</label>
-    <input type="password" id="password" class="form-control"placeholder="请输入您的密码" maxlength="20">
+    <input type="password" id="password" class="form-control input"placeholder="请输入您的密码" maxlength="20" style="margin-top: 1%">
         <div class="errorMessage" v-if="passwordError" style="margin-left: 5px">{{passwordErrorMsg}}</div>
     <div class="checkbox mb-3">
         <label>
             <input type="checkbox" value="remember-me"> 记住我
         </label>
     </div>
-    <button class="btn btn-lg btn-primary btn-block"  @click="validator()"  id="loginBut1">登录</button>
+    <button class="btn btn-lg btn-primary btn-block input"  @click="validator()"  id="loginBut1">登录</button>
     <p class="mt-5 mb-3 text-muted">&copy; 2020-2020</p>
-        </div>
-</form>
+</div>
 <script type="text/javascript">
     let login=new Vue({
         el:"#login",
@@ -80,7 +86,6 @@
         },
         methods:{
             loginByPassword:function (accountNum,password) {
-                alert("666");
                 $.ajax({
                     url:"../admin/login.action",
                     type:"POST",
@@ -91,13 +96,11 @@
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
-                            alert("555");
                             login.alertMsg.head = "登录成功";
                             login.alertMsg.body = "登录成功";
                             $("#alert").slideDown();
                             location.href = "index.html";
                         } else if (result.resultCode === 1) {
-                            alert("444");
                             login.alertMsg.head = "登录失败";
                             login.alertMsg.body = "账号或密码错误";
                             $("#alert").slideDown();
@@ -112,15 +115,12 @@
                 let accountNum = $("#accountNum").val();
                 let password = $("#password").val();
                 if (password.length === 0) {
-                    alert("333");
                     this.passwordError = true;
                     this.passwordErrorMsg = "密码为空";
                 } else {
-                    alert("222");
                     this.passwordError = false;
                 }
                 if (!this.accountNumError && !this.passwordError) {
-                    alert(accountNum.valueOf());
                     this.loginByPassword(accountNum,password);
                 }
             },

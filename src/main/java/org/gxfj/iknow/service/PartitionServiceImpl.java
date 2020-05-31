@@ -1,19 +1,11 @@
 package org.gxfj.iknow.service;
 
-import org.gxfj.iknow.dao.CategoriesTypeDAO;
-import org.gxfj.iknow.dao.MajorTypeDAO;
-import org.gxfj.iknow.dao.SubjectTypeDAO;
-import org.gxfj.iknow.pojo.Categoriestype;
-import org.gxfj.iknow.pojo.Major;
-import org.gxfj.iknow.pojo.Majortype;
-import org.gxfj.iknow.pojo.Subjecttype;
+import org.gxfj.iknow.dao.*;
+import org.gxfj.iknow.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("partitionService")
 public class PartitionServiceImpl implements PartitionService{
@@ -23,6 +15,11 @@ public class PartitionServiceImpl implements PartitionService{
     SubjectTypeDAO subjectTypeDAO;
     @Autowired
     MajorTypeDAO majorTypeDAO;
+    @Autowired
+    QuestionTypeDAO questionTypeDAO;
+    @Autowired
+    QuestionDAO questionDAO;
+
     @Override
     public Map<String, Object> getCategories() {
         Map<String,Object> category;
@@ -77,4 +74,34 @@ public class PartitionServiceImpl implements PartitionService{
         result.put("majors",majors);
         return result;
     }
+
+    @Override
+    public Map<String, Object> getQuestion(Integer categoryId, Integer subjectId, Integer majorId, Integer start,
+                                           Integer count) {
+        if (categoryId == null || subjectId == null || majorId == null || start == null || count == null) {
+            return null;
+        }
+        Map<String, Object> result = new HashMap<>(2);
+        List<Map<String, Object>> questionsMapList = new ArrayList<>();
+        Map<String, Object> questionMap;
+        Questiontype questiontype = questionTypeDAO.get(categoryId, subjectId, majorId);
+
+        List<Question> questionList = questionDAO.listByQuestionType(questiontype.getId(), start, count);
+
+        for (Question question : questionList) {
+            questionMap = new HashMap<>(2);
+
+            questionMap.put("id", question.getId());
+            questionMap.put("title", question.getTitle());
+            questionMap.put("isSolved", question.getAnswerByAdoptId() == null ? 1 : 0);
+            questionMap.put("browsingNum", question.getBrowsinghistoriesById().size());
+            questionMap.put("answerNum", question.getAnswersById().size());
+            questionMap.put("collectionNum", question.getCollectionproblemsById().size());
+            questionsMapList.add(questionMap);
+        }
+        result.put("question", questionsMapList);
+        return result;
+    }
+
+
 }

@@ -23,4 +23,18 @@ public interface AdminService {
      * @return 数据
      */
     public Map<String,Object> getData(String dateNow,Integer typeSum);
+
+    /**
+     * 获取活跃度
+     * @param dateNow 当前日期
+     * @param typeSum 数据类型
+     * @return 数据
+     */
+    public Map<String,Object> getActiveData(String dateNow,Integer typeSum);
+
+    /**
+     * 获取问题种类数量
+     * @return 数据
+     */
+    public Map<String,Object> getQuestionTypeSumData();
 }

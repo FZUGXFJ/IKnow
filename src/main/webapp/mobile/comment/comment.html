@@ -24,7 +24,10 @@
                 <span v-if="load">全部{{commentNum}}条评论</span>
                 <span v-else="">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
             </td>
-            <td style="width: 33%;"></td>
+            <td style="width: 33%;text-align: right;color: #acacac;font-size: 1.5em;">
+                <i class="fas fa-sort-amount-up" v-if="sortType===0" @click="reverse"></i>
+                <i class="fas fa-sort-amount-down" v-else="" @click="reverse"></i>
+            </td>
         </table>
     </div>
     <br><br>
@@ -167,7 +170,8 @@
             noAction:false,
             start:0,
             loadingMore:false,
-            hasMore:false
+            hasMore:false,
+            sortType:0,
         },
         methods:{
             post:function () {
@@ -438,6 +442,44 @@
                 this.commentNum = commentsInfo.commentNum;
                 this.start = commentsInfo.start;
                 this.hasMore = commentsInfo.hasMore;
+            },
+            reverse:function () {
+                if (this.sortType === 0) {
+                    this.sortType = 1;
+                } else {
+                    this.sortType = 0;
+                }
+                this.load = false;
+                this.loadAll();
+            },
+            loadAll:function () {
+                let answerId = this.answerId;
+                let sort = this.sortType;
+                $.ajax({
+                    url:"../../comment/viewComments.action",
+                    type:"POST",
+                    data:{
+                        answerId:answerId,
+                        sort:sort
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            allComment.commentNum = result.commentNum;
+                            allComment.comments = result.comments;
+                            allComment.saveToLocal();
+                            allComment.load = true;
+                            allComment.start += result.comments.length;
+                            allComment.hasMore = result.comments.length >= 20;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             }
         },
         mounted:function () {
@@ -455,30 +497,7 @@
                 this.load = true;
                 return;
             }
-            $.ajax({
-                url:"../../comment/viewComments.action",
-                type:"POST",
-                data:{
-                    answerId:answerId
-                },
-                dataType:"json",
-                success:function (result) {
-                    if (result.resultCode === 0) {
-                        allComment.commentNum = result.commentNum;
-                        allComment.comments = result.comments;
-                        allComment.saveToLocal();
-                        allComment.load = true;
-                        allComment.start += result.comments.length;
-                        allComment.hasMore = result.comments.length >= 20;
-                    }
-                },
-                error:function (request,status,error) {
-                    alert("系统异常！");
-                    console.log(request.status);
-                    console.log(request.readyState);
-                    console.log(status);
-                }
-            });
+            this.loadAll();
         }
     });
 </script>
