@@ -16,6 +16,14 @@ public class SearchAction {
     private SearchService searchService;
     private InputStream inputStream;
 
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
     public String searchHistory() {
         Map<String,Object> response = searchService.searchHistory();
         response.put("resultCode",0);

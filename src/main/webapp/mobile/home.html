@@ -19,7 +19,7 @@
         <div id="homeHeader">
             <table>
                 <td style="width: 85%">
-                    <div id="searchBox">
+                    <div id="searchBox" @click="toSearch">
                         <i class="fas fa-search" style="color: #acacac"></i>
                         <span id="recSearch">@IKnow发布啦</span>
                     </div>
@@ -213,6 +213,9 @@
                 } else {
                     location.href = "my.html";
                 }
+            },
+            toSearch:function () {
+                location.href = "search/search.html";
             }
         },
         mounted:function () {
