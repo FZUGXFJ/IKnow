@@ -5,6 +5,7 @@ import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.UserService;
 import org.gxfj.iknow.util.MailUtil;
+import static org.gxfj.iknow.util.ConstantUtil.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * @author herokilito
@@ -38,28 +40,6 @@ public class UserAction {
     @Autowired
     MailUtil mailUtil;
     private InputStream inputStream;
-    private final String EMAIL = "email";
-    private final String VERIFY_CODE = "verifyCode";
-    private final String SUCCESS = "success";
-    private final static String RESULT_CODE = "resultCode";
-    private final static String LOGIN_USER_SESSION_NAME = "user";
-    private final static String RESET_PASSWORD_VERIFY_CODE_SESSION_NAME = "resetPasswordVerifyCode";
-    private final static String RESET_PASSWORD_VERIFY_STATE_SESSION_NAME = "resetPasswordVerifyState";
-    private final static String REBIND_EMAIL_VERIFY_CODE_SESSION_NAME = "rebindEmailVerifyCode";
-    private final static String REBIND_EMAIL_VERIFY_STATE_SESSION_NAME = "rebindEmailVerifyState";
-    private final static String NEW_EMAIL_SESSION_NAME = "newEmail";
-    private final static String NEW_EMAIL_VERIFY_CODE_SESSION_NAME = "newEmailVerifyCode";
-    private final static String NEW_EMAIL_VERIFY_STATE_SESSION_NAME = "newEmailVerifyState";
-
-    private final static String SESSION_NAME = "";
-    private final static int SUCCESS_CODE = 0;
-    private final static int RESET_PASSWORD_FAIL = 1;
-    private final static int UN_LOGIN = 1;
-    private final static int VERIFY_DEFAULT = 1;
-    private final static int MIN_HASH_MAP_NUM = 10;
-    private final static int SUCCESS_LOGON = 0;
-    private final static String NO_USER = null;
-
 
 
     public String passwordLogin() {
@@ -77,7 +57,7 @@ public class UserAction {
             resultMap.put("resultCode",1);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     public String emailLogin() {
@@ -98,7 +78,7 @@ public class UserAction {
             resultMap.put("response",result.get("value"));
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     public String logon() {
@@ -107,11 +87,11 @@ public class UserAction {
         if (session.get(VERIFY_CODE) == null || !verifyCode.equals(session.get(VERIFY_CODE))) {
             result = "{\"response\":3}";
             inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            return SUCCESS;
+            return RETURN_STRING;
         } else if (session.get(EMAIL) == null || !email.equals(session.get(EMAIL))) {
             result = "{\"response\":4}";
             inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            return SUCCESS;
+            return RETURN_STRING;
         }
         Map<String,Object> resultMap = userService.logon(username,password,email);
         if ((Integer) resultMap.get("value") == SUCCESS_LOGON) {
@@ -119,12 +99,12 @@ public class UserAction {
         }
         result = "{\"response\":" + resultMap.get("value") + "}";
         inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     /**
      * 用于邮箱登录，session中无user
-     * @return
+     * @return 处理是否成功
      */
     public String sendEmail() {
         Map<String,Object> session = ActionContext.getContext().getSession();
@@ -132,21 +112,21 @@ public class UserAction {
         session.put(EMAIL,email);
         session.put(VERIFY_CODE,resultMap.get("verifyCode"));
         inputStream = new ByteArrayInputStream(resultMap.get("result").getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     public String getSimpleUserInf() {
         Map<String,Object> session = ActionContext.getContext().getSession();
         String result=userService.getSimpleUserInf((User) session.get("user"));
         inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     public String editInf() {
         Map<String,Object> session = ActionContext.getContext().getSession();
         String result=userService.editUserInf(head,username,gender,introduction,(User) session.get("user"));
         inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     public String isLogin() {
@@ -155,11 +135,11 @@ public class UserAction {
         if (session.get(LOGIN_USER_SESSION_NAME) == NO_USER) {
             result.put(RESULT_CODE, UN_LOGIN);
         } else {
-            result.put(RESULT_CODE, SUCCESS_CODE);
+            result.put(RESULT_CODE, SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         System.out.println(JSON.toJSONString(result));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     /**
@@ -174,7 +154,7 @@ public class UserAction {
         session.put(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME,resultMap.get(VERIFY_CODE));
         session.put(RESET_PASSWORD_VERIFY_STATE_SESSION_NAME, false);
         inputStream = new ByteArrayInputStream(resultMap.get("result").getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     /**
@@ -189,7 +169,7 @@ public class UserAction {
             result.put(RESULT_CODE, UN_LOGIN);
         } else {
             if (state != null && !state && verifyCode.equals(session.get(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME))) {
-                result.put(RESULT_CODE,SUCCESS_CODE);
+                result.put(RESULT_CODE,SUCCESS);
                 session.put(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME, null);
                 session.put(RESET_PASSWORD_VERIFY_STATE_SESSION_NAME, true);
             } else {
@@ -198,12 +178,12 @@ public class UserAction {
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     /**
      * 修改密码中，如果之前的邮箱验证通过则修改密码
-     * @return
+     * @return 处理是否成功
      */
     public String resetPassword() {
         Map<String, Object> session = ActionContext.getContext().getSession();
@@ -213,7 +193,7 @@ public class UserAction {
         Boolean resetPasswordVerify = (Boolean)session.get(RESET_PASSWORD_VERIFY_STATE_SESSION_NAME);
         if (user != null && resetPasswordVerify != null && resetPasswordVerify) {
             if (userService.resetPassword(user, newPassword)) {
-                result.put(RESULT_CODE, SUCCESS_CODE);
+                result.put(RESULT_CODE, SUCCESS);
             } else {
                 result.put(RESULT_CODE, RESET_PASSWORD_FAIL);
             }
@@ -224,7 +204,7 @@ public class UserAction {
         session.put(RESET_PASSWORD_VERIFY_STATE_SESSION_NAME, null);
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
 
@@ -240,7 +220,7 @@ public class UserAction {
         session.put(REBIND_EMAIL_VERIFY_CODE_SESSION_NAME,resultMap.get(VERIFY_CODE));
         session.put(REBIND_EMAIL_VERIFY_STATE_SESSION_NAME, false);
         inputStream = new ByteArrayInputStream(resultMap.get("result").getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
 
@@ -257,7 +237,7 @@ public class UserAction {
             result.put(RESULT_CODE,UN_LOGIN);
         } else {
             if (state != null && !state  && verifyCode.equals(session.get(REBIND_EMAIL_VERIFY_CODE_SESSION_NAME))) {
-                result.put(RESULT_CODE,SUCCESS_CODE);
+                result.put(RESULT_CODE,SUCCESS);
 
                 session.put(REBIND_EMAIL_VERIFY_CODE_SESSION_NAME,null);
                 session.put(REBIND_EMAIL_VERIFY_STATE_SESSION_NAME, true);
@@ -267,7 +247,7 @@ public class UserAction {
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     /**
@@ -290,7 +270,7 @@ public class UserAction {
             response = "{\"head\":\"发送失败\",\"body\":\"服务器异常\"}";
         }
         inputStream = new ByteArrayInputStream(response.getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     /**
@@ -319,7 +299,7 @@ public class UserAction {
         }
         session.put(NEW_EMAIL_VERIFY_STATE_SESSION_NAME, null);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     public String logout(){
@@ -328,7 +308,7 @@ public class UserAction {
             session.clear();
         }
         inputStream = new ByteArrayInputStream("{\"response\":0}".getBytes(StandardCharsets.UTF_8));
-        return  SUCCESS;
+        return  RETURN_STRING;
     }
 
     public String getAllUserInf(){
@@ -336,7 +316,7 @@ public class UserAction {
         User user = (User)session.get("user");
         Map<String, Object> result = userService.getAllUserInf(user);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
-        return SUCCESS;
+        return RETURN_STRING;
     }
 
     public String getUsername() {
