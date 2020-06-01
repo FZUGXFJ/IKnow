@@ -43,18 +43,7 @@ public class Time {
 
     }
 
-    /**
-     * 时间转换(出bug了用下面那个）
-     * @param date 数据库时间
-     * @return
-     */
-    public static Date getNowDate(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateString = formatter.format(date);
-        ParsePosition pos = new ParsePosition(8);
-        Date currentTime_2 = formatter.parse(dateString, pos);
-        return currentTime_2;
-    }
+
 
     /**
      * 时间转换
