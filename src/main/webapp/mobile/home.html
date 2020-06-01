@@ -138,17 +138,18 @@
                 {
                     name:"举报",
                     method:function () {
-                        if (homePage.user.id === 0) {
+                        if (parseInt(homePage.user.id) === 0) {
                             homePage.$messagebox.confirm("请先登录！").then(action => {
                                 location.href = "user/login.html?boot=0";
                             }).catch(action => {});
+                        } else {
+                            let reportInfo = {
+                                targetId: homePage.selectAid,
+                                type: 2
+                            };
+                            sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
+                            location.href = "report/report.html";
                         }
-                        let reportInfo = {
-                            targetId:homePage.selectAid,
-                            type:2
-                        };
-                        sessionStorage.setItem("reportInfo",JSON.stringify(reportInfo));
-                        location.href = "report/report.html";
                     }
                 }
             ],

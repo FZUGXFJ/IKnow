@@ -9,7 +9,7 @@ table{
     box-shadow: 0 0.3em 0.2em #d6d6d6;
     position: fixed;
     top: 0;
-    z-index: 9998;
+    z-index: 2000;
     background-color: white;
 }
 #questionInf{
@@ -62,7 +62,7 @@ table{
     box-shadow: 0 -0.3em 0.2em #d6d6d6;
     position: fixed;
     bottom: 0;
-    z-index: 9998;
+    z-index: 2000;
     background-color: white;
     text-align: center;
 }

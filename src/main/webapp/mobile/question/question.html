@@ -14,6 +14,8 @@
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/element-ui/2.12.0/theme-chalk/index.css">
     <script type="text/javascript" src="https://lib.baomitu.com/element-ui/2.12.0/index.js"></script>
+    <link rel="stylesheet" href="https://lib.baomitu.com/mint-ui/2.2.13/style.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/mint-ui/2.2.13/index.js"></script>
 </head>
 <body>
 <div id="question" v-loading="loading === 0">
@@ -58,15 +60,7 @@
         <table style="font-size: 0.8em">
             <td style="width: 50%"><span style="opacity: 0.6">回答{{answerCount}}</span></td>
             <td style="width: 50%;text-align: right">
-<!--                <div class="dropdown">-->
-<!--                    <button class="noBorder dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--                        <span style="font-size: 0.8em;opacity: 0.6">{{sortMethod}}</span>-->
-<!--                    </button>-->
-<!--                    <div class="dropdown-menu" aria-labelledby="sortDropdown" style="font-size: 0.8em;width: 5em">-->
-<!--                        <button class="noBorder" style="display: block">默认排序</button>-->
-<!--                        <button class="noBorder" style="display: block">按时间排序</button>-->
-<!--                    </div>-->
-<!--                </div>-->
+
                 <el-dropdown>
                     <span class="el-dropdown-link">
                         排序方式<i class="el-icon-arrow-down el-icon--right"></i>
@@ -108,7 +102,7 @@
                         <td style="width: 90%;opacity: 0.5;font-size: 0.8em">
                             {{answer.answerApprove}}赞同-{{answer.answerComment}}评论-{{answer.answerTime}}
                         </td>
-                        <td style="width: 10%;text-align: right;" data-toggle="modal" data-target="#operateModal1">
+                        <td style="width: 10%;text-align: right;" @click="reportAnswer(answer.answerId)">
                             <i class="fas fa-ellipsis-h" style="opacity: 0.5"></i>
                         </td>
                     </table>
@@ -150,7 +144,7 @@
                                 <span>删除问题</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsOwner==0">
-                                <div><i class="fas fa-minus-circle fa-2x"></i></div>
+                                <div><i class="fas fa-minus-circle fa-2x" @click="reportQuestion"></i></div>
                                 <span>举报问题</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsOwner==1 && isAnonymous==1">
@@ -166,27 +160,7 @@
             </div>
         </div>
     </div>
-    <div style="z-index: 9999;" class="modal fade" id="operateModal1" tabindex="-1"
-         role="dialog" aria-labelledby="topModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">操作</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="operateMenu1">
-                        <button class="btn btn-light" style="width: 100%;margin: 0 auto;text-align: left">
-                            <i class="fas fa-minus-circle" style="color: #acacac"></i>&nbsp;举报
-                        </button>
-                        <br>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <mt-actionsheet :actions="actions" v-model="showSheet"></mt-actionsheet>
 </div>
 <script type="text/javascript">
     let question = new Vue({
@@ -215,7 +189,22 @@
             noAction:false,
             start:0,
             hasMore:false,
-            loadingMore:true
+            loadingMore:true,
+            actions:[
+                {
+                    name:"举报",
+                    method:function () {
+                        let reportInfo = {
+                            targetId: question.selectAid,
+                            type: 2
+                        };
+                        sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
+                        location.href = "../report/report.html";
+                    }
+                }
+            ],
+            selectAid:0,
+            showSheet:false
         },
         methods:{
             postAnswer:function () {
@@ -391,6 +380,18 @@
                 this.start = questionInfo.start;
                 this.hasMore = questionInfo.hasMore;
                 this.loading = 1;
+            },
+            reportQuestion:function () {
+                let reportInfo = {
+                    targetId: question.questionId,
+                    type: 1
+                };
+                sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
+                location.href = "../report/report.html";
+            },
+            reportAnswer:function (id) {
+                this.selectAid = id;
+                this.showSheet = true;
             }
         },
         mounted:function () {

@@ -72,7 +72,27 @@
                             sessionStorage.removeItem("reportInfo");
                             history.go(-1);
                         } else {
-                            homePage.$messagebox.alert("请先登录！").then(action => {
+                            report.$messagebox.alert("请先登录！").then(action => {
+                                location.href = "../user/login.html?boot=0";
+                            });
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            isLogin:function () {
+                $.ajax({
+                    type: "POST",
+                    url: "../../user/isLogin.action",
+                    data: {},
+                    success: function (result) {
+                        if (result.resultCode !== 0) {
+                            report.$messagebox.alert("请先登录！").then(action => {
                                 location.href = "../user/login.html?boot=0";
                             });
                         }
@@ -87,6 +107,7 @@
             }
         },
         mounted:function () {
+            this.isLogin();
             let reportInfo = sessionStorage.getItem("reportInfo");
             if (reportInfo == null) {
                 this.$messagebox.alert("系统异常！").then(action => {
@@ -108,7 +129,7 @@
                                 report.options.push(option);
                             });
                         } else {
-                            homePage.$messagebox.alert("请先登录！").then(action => {
+                            report.$messagebox.alert("请先登录！").then(action => {
                                 location.href = "../user/login.html?boot=0";
                             });
                         }
