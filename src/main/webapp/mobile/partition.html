@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" href="../css/mobile/index.css">
-    <link rel="stylesheet" type="text/css" href="../css/mobile/search/search.css">
+    <link rel="stylesheet" type="text/css" href="../css/mobile/partition.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
@@ -39,29 +39,93 @@
             </td>
         </table>
     </div>
-</div>
-<br><br><br><br><br>
-<div style="text-align: center">
-    <h6>{{text}}</h6>
-</div>
-<div>
-
-</div>
-<div id="footer">
-    <table>
-        <td style="width: 33%;text-align: center">
-            <i class="fas fa-home selected" @click="toRecommend"></i>
-            <div>首页</div>
-        </td>
-        <td style="width: 34%;text-align: center">
-            <i class="fas fa-plus" style="color: #12eee7" @click="add"></i>
-            <div>添加</div>
-        </td>
-        <td style="width: 33%;text-align: center">
-            <i class="fas fa-user" @click="toMyPage"></i>
-            <div>我的</div>
-        </td>
-    </table>
+    <br><br><br><br><br>
+    <div class="splitBox"></div>
+    <div style="text-align: center;margin: 0.5em 0">
+        <table>
+            <td style="width: 10%">
+                <i class="fas fa-chevron-left" style="color: #acacac" @click="lastStep"></i>
+            </td>
+            <td style="width: 80%;text-align: center">
+                {{text}}
+            </td>
+            <td></td>
+        </table>
+    </div>
+    <div id="category" v-if="stepNum === 1">
+        <div class="selectItem" v-for="item in categories">
+            <table>
+                <td style="width: 10%">
+                    <i class="fas fa-synagogue" style="color: #52f252"></i>
+                </td>
+                <td style="width: 80%">
+                    {{item.name}}
+                </td>
+                <td style="width: 10%;text-align: right;opacity: 0.5">
+                    <i class="fas fa-angle-right"></i>
+                </td>
+            </table>
+        </div>
+    </div>
+    <div id="subject" v-if="stepNum === 2">
+        <div class="selectItem" v-for="item in subjects">
+            <table>
+                <td style="width: 10%">
+                    <i class="fas fa-university" style="color: #f29d35"></i>
+                </td>
+                <td style="width: 80%">
+                    {{item.name}}
+                </td>
+                <td style="width: 10%;text-align: right;opacity: 0.5">
+                    <i class="fas fa-angle-right"></i>
+                </td>
+            </table>
+        </div>
+    </div>
+    <div id="major" v-if="stepNum === 3">
+        <div class="selectItem" v-for="item in majors">
+            <table>
+                <td style="width: 10%">
+                    <i class="fas fa-graduation-cap" style="color: #2b2b2b"></i>
+                </td>
+                <td style="width: 80%">
+                    {{item.name}}
+                </td>
+                <td style="width: 10%;text-align: right;opacity: 0.5">
+                    <i class="fas fa-angle-right"></i>
+                </td>
+            </table>
+        </div>
+    </div>
+    <div id="questions" v-if="stepNum === 4">
+        <div class="selectItem" v-for="item in questions">
+            <h5><b>{{item.title}}</b></h5>
+            <table>
+                <td style="width: 70%;opacity: 0.5">
+                    {{item.answerNum}}回答-{{item.browsingNum}}浏览-{{item.collectionNum}}收藏
+                </td>
+                <td style="text-align: right;width: 30%">
+                    <span class="btn-link"><i class="fas fa-edit"></i>写回答</span>
+                </td>
+            </table>
+        </div>
+    </div>
+    <div id="footer">
+        <table>
+            <td style="width: 33%;text-align: center">
+                <i class="fas fa-home selected" @click="toRecommend"></i>
+                <div>首页</div>
+            </td>
+            <td style="width: 34%;text-align: center">
+                <i class="fas fa-plus" style="color: #12eee7" @click="add"></i>
+                <div>添加</div>
+            </td>
+            <td style="width: 33%;text-align: center">
+                <i class="fas fa-user" @click="toMyPage"></i>
+                <div>我的</div>
+            </td>
+        </table>
+    </div>
 </div>
 <script>
     let chosePart = new Vue({
@@ -72,9 +136,50 @@
                 id:14
             },
             text:"请选择门类分类",
-            categories:[],
-            subjects:[],
-            majors:[]
+            categoryId:0,
+            categories:[
+                {
+                    name:"哲学",
+                },{
+                    name:"文学"
+                }
+            ],
+            subjectId:0,
+            subjects:[
+                {
+                    name:"计算机类"
+                },{
+                    name:"美术类"
+                }
+            ],
+            majorId:0,
+            majors:[
+                {
+                    name:"软件工程"
+                }, {
+                   name:"计算机"
+                }
+            ],
+            start:0,
+            stepNum:4,
+            questions:[
+                {
+                    id:0,
+                    title:"问题测试?",
+                    isSolved:0,
+                    browsingNum:0,
+                    answerNum:0,
+                    collectionNum:0
+                },
+                {
+                    id:0,
+                    title:"问题测试1?",
+                    isSolved:0,
+                    browsingNum:0,
+                    answerNum:0,
+                    collectionNum:0
+                }
+            ]
         },
         methods:{
             toSearch:function () {
@@ -157,6 +262,13 @@
                         homePage.loading = 2;
                     }
                 });
+            },
+            lastStep:function () {
+                if (this.stepNum > 1) {
+                    this.stepNum--;
+                } else {
+                    history.go(-1);
+                }
             }
         },
         mounted:function () {
