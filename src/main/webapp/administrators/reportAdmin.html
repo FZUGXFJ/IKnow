@@ -164,7 +164,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="reportInfo in reportInfoList">
+                    <tr v-for="reportInfo in pageInfoList">
                         <td>{{reportInfo.id}}</td>
                         <td>{{reportInfo.userID}}</td>
                         <td>{{reportInfo.targetID}}</td>
@@ -212,7 +212,7 @@
             passwordError:false,
             passwordErrorMsg:"",
             alertMsg:{head:"",body:""},
-            all: 8, //总页数
+            all: 1, //总页数
             cur: 1//当前页码
         },
         watch: {
@@ -271,6 +271,7 @@
                         if (result.response === 0) {
                             index.reportInfoList = result.reportInfoList;
                             index.all = Math.ceil(index.reportInfoList.length/15) || 1;
+                            console.log(index.all);
                             for(let i = 0;i < index.reportInfoList.length;i++)
                             {
                                 this.pageInfoList[i] = this.reportInfoList.slice(15*i,15*(i+1));
@@ -327,7 +328,7 @@
         },
         mounted:function () {
             this.isLogin();
-            this.getReportType(0);
+            this.getReportType(1);
         }
     });
     (function () {
