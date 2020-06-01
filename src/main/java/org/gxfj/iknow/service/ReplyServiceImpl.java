@@ -136,10 +136,10 @@ public class ReplyServiceImpl implements ReplyService {
         //获得用户的身份
         Integer userIdentify = getUserIdentify(comment);
         if (userIdentify != NO_SPECIAL_IDENTIFY && isAnonymous(comment)){
-            commentMap.put("head", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            commentMap.put("head", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
             commentMap.put("name",ConstantUtil.ANONYMOUS_USER_NAME);
         } else {
-            commentMap.put("head",ImgUtil.changeAvatar(comment.getUserByUserId().getHead()));
+            commentMap.put("head",ImgUtil.changeAvatar(comment.getUserByUserId().getHead(), 2));
             commentMap.put("name",comment.getUserByUserId().getName());
         }
         if (userIdentify == IS_QUESTION_OWNER) {
@@ -213,10 +213,10 @@ public class ReplyServiceImpl implements ReplyService {
         boolean userIdentify = (replierId.equals(questionOwnerId) && question.getIsAnonymous() == 1) ||
                 (replierId.equals(answerOwnerId) && answer.getIsAnonymous() == 1);
         if (userIdentify) {
-            replyMap.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            replyMap.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
             replyMap.put("name", ConstantUtil.ANONYMOUS_USER_NAME);
         } else {
-            replyMap.put("head",ImgUtil.changeAvatar(reply.getUserByUserId().getHead()));
+            replyMap.put("head",ImgUtil.changeAvatar(reply.getUserByUserId().getHead(), 2));
             replyMap.put("name",reply.getUserByUserId().getName());
         }
         if(replierId.equals(questionOwnerId)){

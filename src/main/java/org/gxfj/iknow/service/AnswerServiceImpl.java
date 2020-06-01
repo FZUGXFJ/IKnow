@@ -82,13 +82,13 @@ public class AnswerServiceImpl implements AnswerService{
         //获得查看回答的用户的头像
         //未登录
         if(user == null){
-            resultMap.put("userHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            resultMap.put("userHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
             resultMap.put("answer" , getAnswerMap(questionId, answerId,null));
         }
         //已登录
         else{
             resultMap.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
-            resultMap.put("userHead" , ImgUtil.changeAvatar(user.getHead()));
+            resultMap.put("userHead" , ImgUtil.changeAvatar(user.getHead(), 2));
         }
 
         Answer answer=answerDAO.getNotDelete(answerId);
@@ -137,7 +137,7 @@ public class AnswerServiceImpl implements AnswerService{
         //匿名设置
         if(answer.getIsAnonymous() == 1){
             answererMap.put("id" , 0);
-            answererMap.put("head" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            answererMap.put("head" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
             answererMap.put("name" , ConstantUtil.ANONYMOUS_USER_NAME);
             answererMap.put("level" , 0);
             answererMap.put("badgeNum" , 0);
@@ -147,7 +147,7 @@ public class AnswerServiceImpl implements AnswerService{
         }
         else {
             answererMap.put("id" , answerer.getId());
-            answererMap.put("head" , ImgUtil.changeAvatar(answer.getUserByUserId().getHead()));
+            answererMap.put("head" , ImgUtil.changeAvatar(answer.getUserByUserId().getHead(), 2));
             answererMap.put("name" , answerer.getName());
             answererMap.put("level",expUtil.getLevelLabel(answer.getUserByUserId().getExp()));
             answererMap.put("badgeNum" , answerer.getBadgeNum());
@@ -205,7 +205,7 @@ public class AnswerServiceImpl implements AnswerService{
             commentMap.put("id", comment.getId());
             commentMap.put("uid" , comment.getUserByUserId().getId());
             commentMap.put("uName" , comment.getUserByUserId().getName());
-            commentMap.put("uHead" , ImgUtil.changeAvatar(comment.getUserByUserId().getHead()));
+            commentMap.put("uHead" , ImgUtil.changeAvatar(comment.getUserByUserId().getHead(), 2));
             commentMap.put("content" , comment.getContent());
             commentMap.put("approveNum" , comment.getCount());
 
@@ -223,14 +223,14 @@ public class AnswerServiceImpl implements AnswerService{
                 isQuestionOwner = 1;
                 if (comment.getAnswerByAnswerId().getQuestionByQuestionId().getIsAnonymous() == 1) {
                     commentMap.put("uName",ConstantUtil.ANONYMOUS_USER_NAME);
-                    commentMap.put("uHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+                    commentMap.put("uHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
                 }
             }
             if(comment.getUserByUserId().getId().equals(answerDAO.getNotDelete(answerId).getUserByUserId().getId())){
                 isAnswerer = 1;
                 if (comment.getAnswerByAnswerId().getIsAnonymous() == 1) {
                     commentMap.put("uName",ConstantUtil.ANONYMOUS_USER_NAME);
-                    commentMap.put("uHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+                    commentMap.put("uHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
                 }
             }
             commentMap.put("isQuestionOwner" , isQuestionOwner);

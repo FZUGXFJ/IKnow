@@ -16,5 +16,15 @@ public class ImgUtil {
         return "<img src='../head/" + fileName + "' width='100%' height='100%' style='border-radius: 100%' alt=''>";
     }
 
+    public static String changeAvatar(String fileName, int upper) {
+        String up = "";
+        for (int i = 0; i < upper; i++) {
+            up += "../";
+        }
+
+        return "<img src='"+ up +"head/" + fileName + "' width='100%' height='100%' style='border-radius: 100%' " +
+                "alt=''>";
+    }
+
 
 }
