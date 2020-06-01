@@ -6,17 +6,21 @@ import org.gxfj.iknow.dao.CategoriesTypeDAO;
 import org.gxfj.iknow.pojo.Admin;
 import org.gxfj.iknow.pojo.Categoriestype;
 import org.gxfj.iknow.pojo.Questiontype;
-import org.gxfj.iknow.pojo.Subjecttype;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.SecurityUtil;
+import static org.gxfj.iknow.util.ServiceConstantUtil.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
 
 /**
  * @author hhj
@@ -25,7 +29,6 @@ import java.util.Map;
 @Transactional(readOnly = false)
 public class AdminServiceImpl implements AdminService{
 
-    private final static int MD5_PASSWORD_LENGTH = 32;
     @Autowired
     private AdminDAO adminDAO;
 
@@ -56,8 +59,8 @@ public class AdminServiceImpl implements AdminService{
     public Map<String, Object> getData(String dateNow, Integer typeSum) {
         Map<String,Object> record;
         List<Map<String,Object>> records = new ArrayList<>();
-        Map<String,Object> result = new HashMap<>(5);
-        if(typeSum == 1){
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        if(typeSum == ConstantUtil.DAILY_ACTIVE_USER_STATICS_TYPE_CODE){
             List<Integer> date = adminDAO.getQuestionSum(dateNow);
             for (Integer i : date){
                 record = new HashMap<>();
@@ -66,7 +69,7 @@ public class AdminServiceImpl implements AdminService{
             }
             result.put("questionSums",records);
         }
-        else {
+        else if (typeSum == ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_TYPE_CODE) {
             List<Integer> date = adminDAO.getUserSum(dateNow);
             for (Integer i : date){
                 record = new HashMap<>();
@@ -81,38 +84,32 @@ public class AdminServiceImpl implements AdminService{
     BrowsingHistoryDAO browsingHistoryDAO;
 
     @Override
-    public Map<String, Object> getActiveData(String dateNow, Integer typeSum) {
+    public Map<String, Object> getActiveData(String dateNow, Integer typeSum, Integer length) {
         Map<String,Object> record;
         List<Map<String,Object>> records = new ArrayList<>();
-        Map<String,Object> result = new HashMap<>(5);
-        if(typeSum == 0){
-            List<List> date = browsingHistoryDAO.getUserDailyActives(dateNow, 7);
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
 
-            //初始化日活跃列表
-            for (int i = 0; i < 7; i++) {
-                record = new HashMap<>(1);
-                record.put("sum", 0);
-                records.add(record);
-            }
+        //初始化日活跃列表
+        for (int i = 0; i < length; i++) {
+            record = new HashMap<>(MIN_HASH_MAP_NUM);
+            record.put("sum", 0);
+            records.add(record);
+        }
+
+        if(typeSum == 0){
+            List<List> date = browsingHistoryDAO.getUserDailyActives(dateNow, length);
 
             for (List i : date){
-                record = records.get(7 - 1 - (Integer)i.get(1));
+                record = records.get(length - 1 - (Integer)i.get(1));
                 record.put("sum",i.get(0));
             }
             result.put("userDayActives",records);
         }
         else {
-            List<Object[]> date = browsingHistoryDAO.getUserMonthlyActives(dateNow,3);
-
-            //初始化月活跃列表
-            for (int i = 0; i < 3; i++) {
-                record = new HashMap<>(1);
-                record.put("sum", 0);
-                records.add(record);
-            }
+            List<Object[]> date = browsingHistoryDAO.getUserMonthlyActives(dateNow, length);
 
             for (Object[] i : date){
-                record = records.get(3 - 1 - ((BigInteger)i[1]).intValue());
+                record = records.get(length - 1 - ((BigInteger)i[1]).intValue());
                 record.put("sum",i[0]);
             }
             result.put("userMonActives",records);
@@ -126,10 +123,10 @@ public class AdminServiceImpl implements AdminService{
     public Map<String, Object> getQuestionTypeSumData() {
         Map<String,Object> record;
         List<Map<String,Object>> records = new ArrayList<>();
-        Map<String,Object> result = new HashMap<>(5);
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         List<Categoriestype> categoriestypeList = categoriesTypeDAO.list();
         for (Categoriestype categoriestype : categoriestypeList){
-            record = new HashMap<>(2);
+            record = new HashMap<>(MIN_HASH_MAP_NUM);
             int sum = 0;
             for (Questiontype questiontype : categoriestype.getQuestiontypesById()) {
                 sum += questiontype.getQuestionsById().size();

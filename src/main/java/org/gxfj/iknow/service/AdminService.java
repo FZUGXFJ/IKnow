@@ -25,15 +25,16 @@ public interface AdminService {
     public Map<String,Object> getData(String dateNow,Integer typeSum);
 
     /**
-     * 获取活跃度
+     * 获取过去length天，每天的用户活跃数
      * @param dateNow 当前日期
-     * @param typeSum 数据类型
+     * @param typeSum 数据的尺寸，可选为月、日
+     * @param length 获取的天数
      * @return 数据
      */
-    public Map<String,Object> getActiveData(String dateNow,Integer typeSum);
+    public Map<String,Object> getActiveData(String dateNow,Integer typeSum, Integer length);
 
     /**
-     * 获取问题种类数量
+     * 获取各个门类下的问题数量
      * @return 数据
      */
     public Map<String,Object> getQuestionTypeSumData();

@@ -13,6 +13,10 @@ public class ConstantUtil {
     //Admin
     public final static String LOGIN_ADMIN_SESSION_NAME = "admin";
     public final static String NO_ADMIN = null;
+    public final static int DAILY_ACTIVE_USER_STATICS_TYPE_CODE = 0;
+    public final static int DAILY_ACTIVE_USER_STATICS_LENGTH = 7;
+    public final static int MONTHLY_ACTIVATE_USER_STATICS_TYPE_CODE = 1;
+    public final static int MONTHLY_ACTIVATE_USER_STATICS_LENGTH = 3;
 
 
 

@@ -84,7 +84,14 @@ public class AdminAction {
     }
 
     public String active() {
-        Map<String,Object> result = adminService.getActiveData(dateNow,typeSum);
+        int length = 0;
+        if (typeSum == ConstantUtil.DAILY_ACTIVE_USER_STATICS_TYPE_CODE) {
+            length = ConstantUtil.DAILY_ACTIVE_USER_STATICS_LENGTH;
+        } else if (typeSum == ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_TYPE_CODE) {
+            length = ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_LENGTH;
+        }
+
+        Map<String,Object> result = adminService.getActiveData(dateNow,typeSum, length);
         result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
