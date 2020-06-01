@@ -10,7 +10,7 @@ table{
     box-shadow: 0 0.2em 0.3em #d6d6d6;
     position: fixed;
     top: 0;
-    z-index: 9999;
+    z-index: 2000;
 }
 #separator{
     padding: 0 1em;
@@ -50,7 +50,7 @@ table{
     box-shadow: 0 -0.2em 0.3em #d6d6d6;
     position: fixed;
     bottom: 0;
-    z-index: 9999;
+    z-index: 2000;
 }
 .errorBox{
     color: red;

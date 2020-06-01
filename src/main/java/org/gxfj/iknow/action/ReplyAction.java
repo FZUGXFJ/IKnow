@@ -56,13 +56,8 @@ public class ReplyAction {
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response=new HashMap<>(20);
         User user = (User) session.get(SESSION_USER);
-        if(user==null){
-            response.put("resultCode" , UN_LOGIN);
-        }
-        else {
-            response = replyService.showAllReplys(commentId, user, sortType);
-            response.put("resultCode" , SUCCESS);
-        }
+        response = replyService.showAllReplys(commentId, user, sortType);
+        response.put("resultCode" , SUCCESS);
         //在session中保存排序的方式
         session.put("sortType", sortType);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));

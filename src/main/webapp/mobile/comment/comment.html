@@ -12,6 +12,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" href="https://lib.baomitu.com/mint-ui/2.2.13/style.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/mint-ui/2.2.13/index.js"></script>
 </head>
 <body>
 <div id="allComment">
@@ -46,7 +48,7 @@
                     <span v-if="comment.isAnswerer">(回答者)</span>
                 </td>
                 <td style="width: 30%;text-align: right">
-                    <i class="fas fa-ellipsis-h" style="opacity: 0.5" data-toggle="modal" data-target="#operateModal"></i>
+                    <i class="fas fa-ellipsis-h" style="opacity: 0.5" @click="reportComment(comment.id)"></i>
                 </td>
             </table>
             <div class="commentContent">
@@ -81,7 +83,7 @@
                             <span>{{reply.targetName}}</span>
                         </td>
                         <td style="width: 30%;text-align: right">
-                            <i class="fas fa-ellipsis-h" style="opacity: 0.5" data-toggle="modal" data-target="#operateModal"></i>
+                            <i class="fas fa-ellipsis-h" style="opacity: 0.5" @click="reportReply(reply.id)"></i>
                         </td>
                     </table>
                     <div class="replyContent">
@@ -129,27 +131,8 @@
             </td>
         </table>
     </div>
-    <div style="z-index: 9999;" class="modal fade" id="operateModal" tabindex="-1"
-         role="dialog" aria-labelledby="topModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">操作</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="operateMenu">
-                        <button class="btn btn-light" style="width: 100%;margin: 0 auto;text-align: left">
-                            <i class="fas fa-minus-circle" style="color: #acacac"></i>&nbsp;举报
-                        </button>
-                        <br>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <mt-actionsheet :actions="actions1" v-model="showSheet1"></mt-actionsheet>
+    <mt-actionsheet :actions="actions2" v-model="showSheet2"></mt-actionsheet>
 </div>
 <script>
     let allComment = new Vue({
@@ -172,6 +155,36 @@
             loadingMore:false,
             hasMore:false,
             sortType:0,
+            actions1:[
+                {
+                    name:"举报",
+                    method:function () {
+                        let reportInfo = {
+                            targetId: allComment.selectCid,
+                            type: 3
+                        };
+                        sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
+                        location.href = "../report/report.html";
+                    }
+                }
+            ],
+            selectCid:0,
+            showSheet1:false,
+            actions2:[
+                {
+                    name:"举报",
+                    method:function () {
+                        let reportInfo = {
+                            targetId: allComment.selectRid,
+                            type: 4
+                        };
+                        sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
+                        location.href = "../report/report.html";
+                    }
+                }
+            ],
+            selectRid:0,
+            showSheet2:false
         },
         methods:{
             post:function () {
@@ -480,6 +493,14 @@
                         console.log(status);
                     }
                 });
+            },
+            reportComment:function (id) {
+                this.selectCid = id;
+                this.showSheet1 = true;
+            },
+            reportReply:function (id) {
+                this.selectRid = id;
+                this.showSheet2 = true;
             }
         },
         mounted:function () {

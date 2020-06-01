@@ -156,7 +156,7 @@
                                 <span>邀请回答</span>
                             </td>
                             <td class="operateItem">
-                                <div><i class="fas fa-minus-circle fa-2x"></i></div>
+                                <div><i class="fas fa-minus-circle fa-2x" @click="reportAnswer"></i></div>
                                 <span>举报</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsQuestionOwner == 1 && question.isSolved == 0 && answer.isAdopt == 0">
@@ -443,6 +443,14 @@
                         answer.noAction = false;
                     }
                 });
+            },
+            reportAnswer:function () {
+                let reportInfo = {
+                    targetId: answer.answerId,
+                    type: 2
+                };
+                sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
+                location.href = "../report/report.html";
             }
         },
         mounted:function () {
