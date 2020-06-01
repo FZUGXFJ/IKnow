@@ -43,7 +43,7 @@ public class Question {
     }
 
     @Basic
-    @Column(name = "contentHtml", nullable = false, length = -1)
+    @Column(name = "contentHtml", nullable = true, length = -1)
     public String getContentHtml() {
         return contentHtml;
     }
@@ -53,7 +53,7 @@ public class Question {
     }
 
     @Basic
-    @Column(name = "contentText", nullable = false, length = -1)
+    @Column(name = "contentText", nullable = true, length = -1)
     public String getContentText() {
         return contentText;
     }
