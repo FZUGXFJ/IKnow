@@ -146,7 +146,8 @@ public class AnswerDAOImpl implements AnswerDAO{
     @Override
     public List<Answer> listByKeyword(String keyword) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Answer as a WHERE ( content like '%" + keyword + "%' ) and (a.isDelete = 0)";
+        String hql = "FROM Answer as a WHERE ( contentText like '%" + keyword + "%' )" +
+                " and (a.isDelete = 0)";
         Query query = session.createQuery(hql);
         return query.setMaxResults(20).list();
     }
