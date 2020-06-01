@@ -165,16 +165,16 @@ public class AdminServiceImpl implements AdminService{
             reportMap.put("id",report.getId());
             reportMap.put("userID",report.getUserByUserId().getId());
             switch(reportType){
-                case 1 :
+                case 0 :
                     targetUser = questionDAO.get(report.getTargetId()).getUserByUserId();
                     break;
-                case 2 :
+                case 1 :
                     targetUser = answerDAO.get(report.getTargetId()).getUserByUserId();
                     break;
-                case 3 :
+                case 2 :
                     targetUser = commentDAO.get(report.getTargetId()).getUserByUserId();
                     break;
-                case 4 :
+                case 3 :
                     targetUser = replyDAO.get(report.getTargetId()).getUserByUserId();
                     break;
                 default :
@@ -186,6 +186,7 @@ public class AdminServiceImpl implements AdminService{
             reportMap.put("typeID",report.getTargetId());
             reportMap.put("date", Time.getTime1(report.getDate()));
             reportMap.put("reason",report.getReportreasonByReasonId().getContent());
+            reportMap.put("isDeal",0);
             reportListMap.add(reportMap);
         }
         result.put("reportInfoList",reportListMap);
