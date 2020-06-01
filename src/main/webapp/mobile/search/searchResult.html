@@ -29,7 +29,7 @@
         </table>
     </div>
     <div style="text-align: center" v-if="hasKeyword">
-        <button class="btn btn-link" @click="search(keyword)">查看【{{keyword}}】的搜索结果</button>
+        <button class="btn btn-link" @click="searchNew">查看【{{keyword}}】的搜索结果</button>
     </div>
     <br>
     <div id="operateBar">
@@ -53,7 +53,7 @@
         <div v-if="questionResultNum">
             问题
             <div class="splitLine"></div>
-            <div class="resultItem" v-for="item in questionResultCom">
+            <div class="resultItem" v-for="item in questionResultCom" @click="toQuestion(item.id)">
                 <table style="margin-bottom: 0.2em">
                     <td style="width: 10%">
                         <div v-html="item.ownerHead" class="head"></div>
@@ -62,7 +62,7 @@
                         &nbsp;{{item.ownerName}}
                     </td>
                 </table>
-                <h5><b>{{item.title}}</b></h5>
+                <h5  @click="toQuestion(item.id)"><b>{{item.title}}</b></h5>
                 <div class="info">
                     {{item.browsingNum}}浏览-{{item.answerNum}}回答-{{item.collectNum}}收藏
                 </div>
@@ -75,7 +75,7 @@
         <div v-if="answerResultNum > 0">
             回答
             <div class="splitLine"></div>
-            <div class="resultItem" v-for="item in answerResultCom">
+            <div class="resultItem" v-for="item in answerResultCom" @click="toAnswer(item.questionId,item.id)">
                 <h6><b>{{item.questionTitle}}</b></h6>
                 <table>
                     <td style="width: 10%">
@@ -85,7 +85,7 @@
                         &nbsp;{{item.answererName}}：
                     </td>
                 </table>
-                <div class="answerContent">
+                <div class="answerContent" @click="toAnswer(item.questionId,item.id)">
                     {{item.content}}
                 </div>
                 <div class="info">
@@ -118,7 +118,7 @@
         </div>
     </div>
     <div id="questionResult" v-if="selectedIndex===2">
-        <div class="resultItem" v-for="item in questionResult">
+        <div class="resultItem" v-for="item in questionResult" @click="toQuestion(item.id)">
             <table style="margin-bottom: 0.2em">
                 <td style="width: 10%">
                     <div v-html="item.ownerHead"></div>
@@ -127,15 +127,15 @@
                     &nbsp;{{item.ownerName}}
                 </td>
             </table>
-            <h5><b>{{item.title}}</b></h5>
+            <h5 @click="toQuestion(item.id)"><b>{{item.title}}</b></h5>
             <div class="info">
                 {{item.browsingNum}}浏览-{{item.answerNum}}回答-{{item.collectNum}}收藏
             </div>
         </div>
     </div>
     <div id="answerResult" v-if="selectedIndex===3">
-        <div class="resultItem" v-for="item in answerResult">
-            <h6><b>{{item.questionTitle}}</b></h6>
+        <div class="resultItem" v-for="item in answerResult" @click="toAnswer(item.questionId,item.id)">
+            <h6 @click="toQuestion(item.questionId)"><b>{{item.questionTitle}}</b></h6>
             <table>
                 <td style="width: 10%">
                     <div v-html="item.answererHead"></div>
@@ -144,7 +144,7 @@
                     &nbsp;{{item.answererName}}：
                 </td>
             </table>
-            <div class="answerContent">
+            <div class="answerContent" @click="toAnswer(item.questionId,item.id)">
                 {{item.content}}
             </div>
             <div class="info">
@@ -243,6 +243,39 @@
                     }
                 });
             },
+            toQuestion:function (qid) {
+                location.href = "../question/question.html?questionId=" + qid;
+            },
+            toAnswer:function (qid,aid) {
+                location.href = "../answer/answer.html?questionId=" + qid + "&answerId=" + aid;
+            },
+            searchNew:function () {
+                let kw = this.keyword;
+                let searchHistory;
+                let searchHistoryStr = localStorage.getItem("searchHistory");
+                if (searchHistoryStr == null) {
+                    searchHistory = [];
+                } else {
+                    searchHistory = JSON.parse(searchHistoryStr);
+                }
+                let i = 0;
+                for (let his of searchHistory) {
+                    if (his.content === kw) {
+                        searchHistory.splice(i,1);
+                        break;
+                    }
+                    i++;
+                }
+                if (searchHistory.length >= 10) {
+                    searchHistory.shift();
+                }
+                let kwObj = {
+                    content:kw
+                };
+                searchHistory.unshift(kwObj);
+                localStorage.setItem("searchHistory",JSON.stringify(searchHistory));
+                location.href = "../search/searchResult.html?keyword=" + kw;
+            }
         },
         mounted:function () {
             let keyword = "";

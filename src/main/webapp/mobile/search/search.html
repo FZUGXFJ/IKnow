@@ -67,7 +67,7 @@
                     <td style="width: 10%;opacity: 0.3">
                         <i class="fas fa-clock"></i>
                     </td>
-                    <td style="width: 80%">
+                    <td style="width: 80%" @click="getResult(history.content)">
                         {{history.content}}
                     </td>
                     <td style="width: 10%;opacity: 0.3;text-align: right">
@@ -99,13 +99,21 @@
                 } else {
                     searchHistory = JSON.parse(searchHistoryStr);
                 }
+                let i = 0;
+                for (let his of searchHistory) {
+                    if (his.content === kw) {
+                        searchHistory.splice(i,1);
+                        break;
+                    }
+                    i++;
+                }
                 if (searchHistory.length >= 10) {
                     searchHistory.shift();
                 }
                 let kwObj = {
                     content:kw
                 };
-                searchHistory.push(kwObj);
+                searchHistory.unshift(kwObj);
                 localStorage.setItem("searchHistory",JSON.stringify(searchHistory));
                 location.href = "searchResult.html?keyword=" + kw;
             },

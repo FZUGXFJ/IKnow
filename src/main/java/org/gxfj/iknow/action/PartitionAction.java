@@ -44,55 +44,30 @@ public class PartitionAction {
      */
 
     public String getCategories(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User)session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
-        }
-        else {
-            response=partitionService.getCategories();
-            response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
-        }
-
+        Map<String, Object> response;
+        response=partitionService.getCategories();
+        response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String getSubjects(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User)session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
-        }
-        else {
-            response=partitionService.getSubjects(categoryId);
-            response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
-        }
-
+        Map<String, Object> response;
+        response=partitionService.getSubjects(categoryId);
+        response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String getMajors(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User)session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.RESULT_CODE, ConstantUtil.UN_LOGIN);
-        }
-        else {
-            response=partitionService.getMajors(subjectId);
-            response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
-        }
-
+        Map<String, Object> response;
+        response=partitionService.getMajors(subjectId);
+        response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String getQuestion() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
         response = partitionService.getQuestion(categoryId,subjectId,majorId,start,ConstantUtil.PARTITION_QUESTION_COUNT);
         response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
