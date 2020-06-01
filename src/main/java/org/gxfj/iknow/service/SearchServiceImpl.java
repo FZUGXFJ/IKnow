@@ -88,12 +88,12 @@ public class SearchServiceImpl implements SearchService{
             question.put("title",q.getTitle());
             if(q.getIsAnonymous() == 1) {
                 question.put("ownerId",0);
-                question.put("ownerHead",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+                question.put("ownerHead",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
                 question.put("ownerName",ConstantUtil.ANONYMOUS_USER_NAME);
             }
             else{
                 question.put("ownerId",q.getUserByUserId().getId());
-                question.put("ownerHead",ImgUtil.changeAvatar(q.getUserByUserId().getHead()));
+                question.put("ownerHead",ImgUtil.changeAvatar(q.getUserByUserId().getHead(), 2));
                 question.put("ownerName",q.getUserByUserId().getName());
             }
             question.put("collectNum",collectionProblemDAO.getCollectionCount(q.getId()));
@@ -123,12 +123,12 @@ public class SearchServiceImpl implements SearchService{
             answer.put("content", HtmlUtil.delHtmlTag(HtmlUtil.changeImgTag(answer1.getContentHtml())));
             if(answer1.getIsAnonymous() == 1){
                 answer.put("answererId" , 0);
-                answer.put("answererHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+                answer.put("answererHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
                 answer.put("answererName" , ConstantUtil.ANONYMOUS_USER_NAME);
             }
             else {
                 answer.put("answererId" , answer1.getId());
-                answer.put("answererHead" , ImgUtil.changeAvatar(answer1.getUserByUserId().getHead()));
+                answer.put("answererHead" , ImgUtil.changeAvatar(answer1.getUserByUserId().getHead(), 2));
                 answer.put("answererName" , answer1.getUserByUserId().getName());
             }
             answer.put("approveNum" , answer1.getApprovalCount());
@@ -154,7 +154,7 @@ public class SearchServiceImpl implements SearchService{
             user=new HashMap<>(5);
             user.put("userId",user1.getId());
             user.put("userName",user1.getName());
-            user.put("userHead" , ImgUtil.changeAvatar(user1.getHead()));
+            user.put("userHead" , ImgUtil.changeAvatar(user1.getHead(), 2));
             user.put("userIntroduction" ,user1.getIntroduction());
             user.put("userIdentity" ,getUserIdentity(user1.getId()));
             res.add(user);

@@ -142,10 +142,10 @@ public class CommentServiceImpl implements CommentService {
         boolean isAnonymous = (questionOwner.getId().equals(commentUser.getId()) && question.getIsAnonymous() == 1)
                 ||(answerOwner.getId().equals(commentUser.getId()) && answer.getIsAnonymous() == 1);
         if(isAnonymous){
-            commentMap.put("head", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            commentMap.put("head", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
             commentMap.put("name",ConstantUtil.ANONYMOUS_USER_NAME);
         }else{
-            commentMap.put("head",ImgUtil.changeAvatar(commentUser.getHead()));
+            commentMap.put("head",ImgUtil.changeAvatar(commentUser.getHead(), 2));
             commentMap.put("name",commentUser.getName());
         }
         return  commentMap;
@@ -174,11 +174,11 @@ public class CommentServiceImpl implements CommentService {
 
         if(isAnonymous1){
             replyMap.put("name", ConstantUtil.ANONYMOUS_USER_NAME);
-            replyMap.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            replyMap.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
         }
         else{
             replyMap.put("name",replyUser.getName());
-            replyMap.put("head",ImgUtil.changeAvatar(replyUser.getHead()));
+            replyMap.put("head",ImgUtil.changeAvatar(replyUser.getHead(), 2));
         }
         if(isAnonymous2) {
             replyMap.put("targetName", ConstantUtil.ANONYMOUS_USER_NAME);
