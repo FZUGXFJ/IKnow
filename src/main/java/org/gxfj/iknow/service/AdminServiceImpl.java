@@ -158,7 +158,7 @@ public class AdminServiceImpl implements AdminService{
         Map<String,Object> reportMap;
         List<Map<String,Object>> reportListMap = new ArrayList<>();
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
-        List<Report> reports = reportDAO.listReportByType(reportType);
+        List<Report> reports = reportDAO.listReportByType(reportType+1);
         User targetUser;
         for (Report report : reports){
             reportMap = new HashMap<>(MIN_HASH_MAP_NUM);
