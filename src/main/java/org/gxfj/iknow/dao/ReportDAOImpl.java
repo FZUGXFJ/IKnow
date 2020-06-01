@@ -1,11 +1,14 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Report;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("reportDAO")
 public class ReportDAOImpl implements ReportDAO{
@@ -37,5 +40,13 @@ public class ReportDAOImpl implements ReportDAO{
     @Override
     public void update(Report bean) {
         getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public List<Report> listReportByType(Integer reportType){
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "from Report as r WHERE typeID = :reportType";
+        Query query = session.createQuery(hql).setParameter("reportType",reportType);
+        return query.list();
     }
 }
