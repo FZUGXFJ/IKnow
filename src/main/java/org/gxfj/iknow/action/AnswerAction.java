@@ -154,7 +154,7 @@ public class AnswerAction {
             cUser.put("head", ImgUtil.changeAvatar(user.getHead()));
         } else {
             cUser.put("id",0);
-            cUser.put("head",ImgUtil.changeAvatar(user.getHead()));
+            cUser.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
         }
         response.put("user",cUser);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
