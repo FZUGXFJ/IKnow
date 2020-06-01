@@ -347,5 +347,23 @@ public class QuestionServiceImpl implements QuestionService{
         return true;
     }
 
-
+    @Override
+    public Map<String, Object> getQuestioninf(Integer questionId,User user) {
+        Map<String,Object> result = getQuestionType();
+        if(user == null){
+            result.put("resultCode",1);
+            return result;
+        }
+        else {
+            Question question = questionDAO.get(questionId);
+            result.put("questionTitle",question.getTitle());
+            result.put("questionContent",question.getContentHtml());
+            result.put("categoryId",question.getQuestiontypeByTypeId().getCategoriestypeByCategoryId().getId());
+            result.put("subjectId",question.getQuestiontypeByTypeId().getSubjecttypeBySubjectId().getId());
+            result.put("majorId",question.getQuestiontypeByTypeId().getMajortypeByMajorId().getId());
+            User user1 = question.getUserByUserId();
+            result.put("resultCode",user1.getId().equals(user.getId()) ? 0 : 2);
+            return result;
+        }
+    }
 }
