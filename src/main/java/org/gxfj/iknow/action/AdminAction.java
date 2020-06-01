@@ -24,6 +24,8 @@ public class AdminAction {
     private String password;
     private String dateNow;
     private Integer typeSum;
+    private Integer reportType;
+    private Integer userID;
     @Autowired
     private AdminService adminService;
 
@@ -104,6 +106,13 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    public String reportType(){
+        Map<String,Object> result = adminService.getReportByType(reportType);
+        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -142,5 +151,21 @@ public class AdminAction {
 
     public void setDateNow(String dateNow) {
         this.dateNow = dateNow;
+    }
+
+    public void setReportType(Integer reportType) {
+        this.reportType = reportType;
+    }
+
+    public Integer getReportType() {
+        return reportType;
+    }
+
+    public void setUserId(Integer userID) {
+        this.userID = userID;
+    }
+
+    public Integer getUserId() {
+        return userID;
     }
 }
