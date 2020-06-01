@@ -88,7 +88,7 @@ public class AnswerServiceImpl implements AnswerService{
         //已登录
         else{
             resultMap.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
-            resultMap.put("userHead" , ImgUtil.changeAvatar(user.getHead()));
+            resultMap.put("userHead" , ImgUtil.changeAvatar(user.getHead(), 2));
         }
 
         Answer answer=answerDAO.getNotDelete(answerId);
