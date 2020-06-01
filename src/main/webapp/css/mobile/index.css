@@ -9,7 +9,7 @@ table{
     background-color: white;
     top: 0;
     position: fixed;
-    z-index: 9990;
+    z-index: 2000;
 }
 #homeHeader h1{
     padding-left: 5%;

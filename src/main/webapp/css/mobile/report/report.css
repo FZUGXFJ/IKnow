@@ -1,0 +1,22 @@
+/*div{*/
+/*    width: 100%;*/
+/*}*/
+/*table{*/
+/*    width: 100%;*/
+/*}*/
+#header{
+    background-color: white;
+    padding: 0.2em 1em;
+    box-shadow: 0 0.2em 0.3em #d6d6d6;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+    width: 100%;
+}
+#header table{
+    width: 100%;
+}
+#inputArea{
+    width: 90%;
+    margin: 0 auto;
+}
