@@ -256,7 +256,7 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.resultCode === 0) {
-                            if(typeSum === 0)
+                            if(typeSum === 1)
                             {
                                 index.userSums=result.userSums;
                                 // Graphs
@@ -313,7 +313,7 @@
                                 })
                                 console.log(index.userSums[0].sum);
                             }
-                            if(typeSum === 1)
+                            if(typeSum === 0)
                             {
                                 index.questionSums=result.questionSums;
                                 // Graphs
@@ -480,7 +480,7 @@
         mounted:function () {
             this.isLogin();
             let date = this.getBeforeDate(0);
-            this.getStatistics(date,1);
+            this.getStatistics(date,0);
             this.getTypeStatistics();
         }
 
