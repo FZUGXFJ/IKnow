@@ -72,16 +72,15 @@ public class CommentAction {
     public String viewComments(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;
-        Integer sort1;
+        Integer commentsSort;
         if (sort == null) {
-            sort1=ConstantUtil.COMMENT_DEFAULT_SORT;
-            session.put("commentsort",sort1);
+            commentsSort = ConstantUtil.COMMENT_DEFAULT_SORT;
         }
         else {
-            sort1 = sort;
-            session.put("commentsort",sort1);
+            commentsSort = sort;
         }
-        response = commentService.getComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),sort1);
+        session.put("commentsort",commentsSort);
+        response = commentService.getComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),commentsSort);
         response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
