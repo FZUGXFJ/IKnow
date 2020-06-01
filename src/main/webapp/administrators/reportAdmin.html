@@ -164,7 +164,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="reportInfo in pageInfoList">
+                    <tr v-for="reportInfo in reportInfoList">
                         <td>{{reportInfo.id}}</td>
                         <td>{{reportInfo.userID}}</td>
                         <td>{{reportInfo.targetID}}</td>
@@ -270,12 +270,13 @@
                     success:function (result) {
                         if (result.response === 0) {
                             index.reportInfoList = result.reportInfoList;
-                            index.all = Math.ceil(index.reportInfoList.length/15) || 1;
-                            console.log(index.all);
-                            for(let i = 0;i < index.reportInfoList.length;i++)
-                            {
-                                this.pageInfoList[i] = this.reportInfoList.slice(15*i,15*(i+1));
-                            }
+                            // index.all = Math.ceil(index.reportInfoList.length/15) || 1;
+                            // console.log(index.all);
+                            // for(let i = 0;i < index.reportInfoList.length;i++)
+                            // {
+                            //     index.pageInfoList[i] = index.reportInfoList.slice(15*i,15*(i+1));
+                            //     console.log(index.pageInfoList[i]);
+                            // }
                         }
                     },
                     error:function (request,status,error) {
