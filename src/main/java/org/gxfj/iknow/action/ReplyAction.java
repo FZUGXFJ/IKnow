@@ -118,6 +118,8 @@ public class ReplyAction {
                 response.put(JSON_RETURN_CODE,NO_REPLYER);
             }
         }
+        
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
