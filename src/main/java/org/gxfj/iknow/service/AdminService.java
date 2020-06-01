@@ -44,4 +44,10 @@ public interface AdminService {
      * @return 包含举报信息列表的map数据
      */
     public Map<String,Object> getReportByType(Integer reportType);
+
+    /**
+     * 获取举报原因
+     * @return 包含举报原因列表的map数据
+     */
+    public Map<String,Object> getReportReason();
 }

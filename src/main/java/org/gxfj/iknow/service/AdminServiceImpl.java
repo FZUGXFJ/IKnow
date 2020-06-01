@@ -39,6 +39,8 @@ public class AdminServiceImpl implements AdminService{
     private CommentDAO commentDAO;
     @Autowired
     private ReplyDAO replyDAO;
+    @Autowired
+    private ReportReasonDAO reportReasonDAO;
 
     @Override
     public Admin login(Admin adminInf) {
@@ -185,6 +187,22 @@ public class AdminServiceImpl implements AdminService{
             reportListMap.add(reportMap);
         }
         result.put("reportInfoList",reportListMap);
+        return result;
+    }
+
+    @Override
+    public Map<String,Object> getReportReason(){
+        Map<String,Object> reportReasonMap;
+        List<Map<String,Object>> reportReasonListMap = new ArrayList<>();
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        List<Reportreason> reportreasons = reportReasonDAO.list();
+        for(Reportreason reportreason:reportreasons){
+            reportReasonMap = new HashMap<>(MIN_HASH_MAP_NUM);
+            reportReasonMap.put("id",reportreason.getId());
+            reportReasonMap.put("content",reportreason.getContent());
+            reportReasonListMap.add(reportReasonMap);
+        }
+        result.put("reportReason",reportReasonListMap);
         return result;
     }
 }
