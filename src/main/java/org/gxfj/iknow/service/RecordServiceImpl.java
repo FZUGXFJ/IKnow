@@ -72,7 +72,7 @@ public class RecordServiceImpl implements RecordService {
             Answer answer = browsinghistory.getAnswerByAnswerId();
             if (answer !=null) {
                 answerRecord.put("answerId",answer.getId());
-                answerRecord.put("answerContent",HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContent())));
+                answerRecord.put("answerContent",HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContentHtml())));
                 answerRecord.put("answererName",answer.getUserByUserId().getName());
                 answerRecords.add(answerRecord);
             }
@@ -115,7 +115,7 @@ public class RecordServiceImpl implements RecordService {
             record.put("id",answer.getId());
             record.put("questionId",answer.getQuestionByQuestionId().getId());
             record.put("questionTitle",answer.getQuestionByQuestionId().getTitle());
-            record.put("answerContent",HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContent())));
+            record.put("answerContent",HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContentHtml())));
             record.put("commentNum",answer.getCommentsById().size());
             record.put("approveNum",answer.getApprovalanswersById().size());
             int isAdopt = 0;

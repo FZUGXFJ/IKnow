@@ -58,7 +58,7 @@ public class AnswerServiceImpl implements AnswerService{
         answer.setQuestionByQuestionId(q);
         answer.setIsDelete((byte)0);
         answer.setIsRoof((byte)0);
-        answer.setContent(content);
+        answer.setContentHtml(content);
 
         answerDAO.add(answer);
         Map<String, Object> result= new HashMap<>(MAP_NUM);
@@ -169,7 +169,7 @@ public class AnswerServiceImpl implements AnswerService{
         Answer answer = answerDAO.getNotDelete(answerId);
         Question question = questionDAO.getNotDelete(questionId);
         Map<String , Object> answerMap = new HashMap<>(MAP_NUM);
-        answerMap.put("content" , answer.getContent());
+        answerMap.put("content" , answer.getContentHtml());
         answerMap.put("approveNum" , answer.getApprovalCount());
         answerMap.put("commentNum" , commentDAO.getCount(answerId));
         if(question.getAnswerByAdoptId() != null && question.getAnswerByAdoptId().getId().equals(answer.getId())) {
@@ -668,7 +668,7 @@ public class AnswerServiceImpl implements AnswerService{
             }
             recommend.put("answerId",answer.getId());
             //使用HtmlUtil工具类，将图片转换掉
-            recommend.put("content", HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContent())));
+            recommend.put("content", HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContentHtml())));
             recommend.put("approveNum",answer.getApprovalCount());
             recommend.put("commentNum",commentDAO.getCount(answer.getId()));
             Answer au=question.getAnswerByAdoptId();

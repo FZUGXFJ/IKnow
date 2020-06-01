@@ -252,7 +252,7 @@ public class QuestionServiceImpl implements QuestionService{
             //所有设置
             questionAnswerMap.put("answerId",answer.getId());
             //回答
-            questionAnswerMap.put("answerView", HtmlUtil.changeImgTag(answer.getContent()));
+            questionAnswerMap.put("answerView", HtmlUtil.changeImgTag(answer.getContentHtml()));
             questionAnswerMap.put("answerApprove",answer.getApprovalCount());
             //回答评论数
             questionAnswerMap.put("answerComment",commentDAO.getCount(answer.getId()));

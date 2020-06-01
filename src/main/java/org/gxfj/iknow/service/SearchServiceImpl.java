@@ -1,6 +1,5 @@
 package org.gxfj.iknow.service;
 
-import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.HtmlUtil;
@@ -120,7 +119,7 @@ public class SearchServiceImpl implements SearchService{
         for (Answer answer1:answers) {
             answer=new HashMap<>(9);
             answer.put("id",answer1.getId());
-            answer.put("content", HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer1.getContent())));
+            answer.put("content", HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer1.getContentHtml())));
             if(answer1.getIsAnonymous() == 1){
                 answer.put("answererId" , 0);
                 answer.put("answererHead" , "<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>");
