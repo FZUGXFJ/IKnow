@@ -121,10 +121,18 @@ public class AdminAction {
     }
 
     public String userInfo(){
-        Map<String,Object> result = adminService.getReportReason();
+        Map<String,Object> result = adminService.getUserInfo(userID);
         result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 获得问题的举报记录
+     * @return “SUCCESS”
+     */
+    public String questionReported(){
+        return  null;
     }
 
     public Integer getAccountNum() {
