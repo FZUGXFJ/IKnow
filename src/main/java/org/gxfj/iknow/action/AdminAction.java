@@ -26,6 +26,7 @@ public class AdminAction {
     private Integer typeSum;
     private Integer reportType;
     private Integer userID;
+    private Integer typeID;
     @Autowired
     private AdminService adminService;
 
@@ -132,7 +133,10 @@ public class AdminAction {
      * @return “SUCCESS”
      */
     public String questionReported(){
-        return  null;
+        Map<String,Object> result = adminService.getReportedQuestion(typeID);
+        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
     }
 
     public Integer getAccountNum() {

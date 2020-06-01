@@ -56,4 +56,11 @@ public interface AdminService {
      * @return 包含用户信息列表的map数据
      */
     public Map<String,Object> getUserInfo(Integer userId);
+
+    /**
+     * 获得被举报的问题的信息
+     * @param questioinId 问题id
+     * @return 包含举报的问题的信息的map数据
+     */
+    public Map<String, Object> getReportedQuestion(Integer questioinId);
 }

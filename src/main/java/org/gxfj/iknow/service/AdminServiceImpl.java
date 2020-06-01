@@ -226,4 +226,31 @@ public class AdminServiceImpl implements AdminService{
         result.put("userInfos",userListMap);
         return result;
     }
+
+    @Override
+    public Map<String, Object> getReportedQuestion(Integer questioinId) {
+        Map<String, Object> questionMap = new HashMap<>(MIN_HASH_MAP_NUM);
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        Question question = questionDAO.get(questioinId);
+        questionMap.put("id", question.getId());
+        questionMap.put("userID", question.getUserByUserId().getId());
+        questionMap.put("title", question.getTitle());
+        questionMap.put("content", question.getContentText());
+        questionMap.put("date", question.getDate());
+        if(question.getIsDelete().equals(1)){
+            questionMap.put("isDelete", "是");
+        }
+        else {
+            questionMap.put("isDelete", "否");
+        }
+        //获得问题类别，存储在map中
+        Map<String, Object> questionTypeMap = new HashMap<>(MIN_HASH_MAP_NUM);
+        questionTypeMap.put("categoriesType", question.getQuestiontypeByTypeId()
+                .getCategoriestypeByCategoryId().getName());
+        questionTypeMap.put("majorType", question.getQuestiontypeByTypeId().getMajortypeByMajorId().getName());
+        questionTypeMap.put("subjectType", question.getQuestiontypeByTypeId().getSubjecttypeBySubjectId().getName());
+        questionMap.put("type", questionTypeMap);
+        result.put("questionReported", questionMap);
+        return result;
+    }
 }
