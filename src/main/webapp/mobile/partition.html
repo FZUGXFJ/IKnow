@@ -15,7 +15,7 @@
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 </head>
 <body>
-<div id="chosePart">
+<div id="partition">
     <div id="homeHeader">
         <table>
             <td style="width: 85%">
@@ -31,10 +31,10 @@
         </table>
         <br>
         <table>
-            <td class="select" @click="">
+            <td class="select" @click="toRecommend">
                 <h6>推荐</h6>
             </td>
-            <td class="select selected" @click="">
+            <td class="select selected">
                 <h6>分区</h6>
             </td>
         </table>
@@ -47,14 +47,15 @@
                 <i class="fas fa-chevron-left" style="color: #acacac" @click="lastStep"></i>
             </td>
             <td style="width: 80%;text-align: center">
-                {{text}}
+                <span v-if="loading">加载中...&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+                <span v-else="">{{text}}</span>
             </td>
             <td></td>
         </table>
     </div>
     <div id="category" v-if="stepNum === 1">
         <div class="selectItem" v-for="item in categories">
-            <table>
+            <table @click="getSubjects(item.id)">
                 <td style="width: 10%">
                     <i class="fas fa-synagogue" style="color: #52f252"></i>
                 </td>
@@ -69,7 +70,7 @@
     </div>
     <div id="subject" v-if="stepNum === 2">
         <div class="selectItem" v-for="item in subjects">
-            <table>
+            <table @click="getMajors(item.id)">
                 <td style="width: 10%">
                     <i class="fas fa-university" style="color: #f29d35"></i>
                 </td>
@@ -84,7 +85,7 @@
     </div>
     <div id="major" v-if="stepNum === 3">
         <div class="selectItem" v-for="item in majors">
-            <table>
+            <table @click="getQuestions(item.id)">
                 <td style="width: 10%">
                     <i class="fas fa-graduation-cap" style="color: #2b2b2b"></i>
                 </td>
@@ -99,7 +100,7 @@
     </div>
     <div id="questions" v-if="stepNum === 4">
         <div class="selectItem" v-for="item in questions">
-            <h5><b>{{item.title}}</b></h5>
+            <h5 @click="toQuestion(item.id)"><b>{{item.title}}</b></h5>
             <table>
                 <td style="width: 70%;opacity: 0.5">
                     {{item.answerNum}}回答-{{item.browsingNum}}浏览-{{item.collectionNum}}收藏
@@ -109,7 +110,14 @@
                 </td>
             </table>
         </div>
+        <br>
+        <div style="text-align: center;font-size: 0.7em">
+            <span v-if="loadingMore">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            <span style="opacity: 0.5" v-if="!loadingMore && !hasMore">没有更多内容</span>
+            <span @click="getQuestions" class="btn-link" v-if="hasMore && !loadingMore">加载更多</span>
+        </div>
     </div>
+    <br><br><br>
     <div id="footer">
         <table>
             <td style="width: 33%;text-align: center">
@@ -128,58 +136,23 @@
     </div>
 </div>
 <script>
-    let chosePart = new Vue({
-        el:"#chosePart",
+    let partition = new Vue({
+        el:"#partition",
         data:{
-            user:{
-                head:"<img src='../head/14.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>",
-                id:14
-            },
-            text:"请选择门类分类",
+            user:{},
+            text:"",
             categoryId:0,
-            categories:[
-                {
-                    name:"哲学",
-                },{
-                    name:"文学"
-                }
-            ],
+            categories:[],
             subjectId:0,
-            subjects:[
-                {
-                    name:"计算机类"
-                },{
-                    name:"美术类"
-                }
-            ],
+            subjects:[],
             majorId:0,
-            majors:[
-                {
-                    name:"软件工程"
-                }, {
-                   name:"计算机"
-                }
-            ],
+            majors:[],
             start:0,
-            stepNum:4,
-            questions:[
-                {
-                    id:0,
-                    title:"问题测试?",
-                    isSolved:0,
-                    browsingNum:0,
-                    answerNum:0,
-                    collectionNum:0
-                },
-                {
-                    id:0,
-                    title:"问题测试1?",
-                    isSolved:0,
-                    browsingNum:0,
-                    answerNum:0,
-                    collectionNum:0
-                }
-            ]
+            stepNum:0,
+            questions:[],
+            loading:true,
+            hasMore:false,
+            loadingMore:false
         },
         methods:{
             toSearch:function () {
@@ -196,8 +169,7 @@
                 }
             },
             toRecommend:function () {
-                sessionStorage.clear();
-                location.href = "home.html"
+                location.href = "home.html";
             },
             add:function () {
                 if (this.loading === 0) {
@@ -210,56 +182,118 @@
                 }
             },
             getCategories:function () {
+                this.loading = true;
                 $.ajax({
-                    url:"",
+                    url:"../partition/getCategories.action",
                     type:"POST",
                     data:{},
                     dataType:"json",
                     success:function (result) {
-
+                        if (result.resultCode === 0) {
+                            partition.categories = result.categories;
+                            partition.stepNum ++;
+                            partition.text = "请选择问题门类分类";
+                            partition.loading = false;
+                        }
                     },
                     error:function (request,status,error) {
                         alert("系统异常！");
                         console.log(request.status);
                         console.log(request.readyState);
                         console.log(status);
-                        homePage.loading = 2;
                     }
                 });
             },
-            getSubjects:function () {
+            getSubjects:function (categoryId) {
+                this.loading = true;
+                this.categoryId = categoryId;
                 $.ajax({
-                    url:"",
+                    url:"../partition/getSubjects.action",
                     type:"POST",
-                    data:{},
+                    data:{
+                        categoryId:categoryId
+                    },
                     dataType:"json",
                     success:function (result) {
-
+                        if (result.resultCode === 0) {
+                            partition.subjects = result.subjects;
+                            partition.stepNum ++;
+                            partition.text = "请选择问题学科分类";
+                            partition.loading = false;
+                        }
                     },
                     error:function (request,status,error) {
                         alert("系统异常！");
                         console.log(request.status);
                         console.log(request.readyState);
                         console.log(status);
-                        homePage.loading = 2;
                     }
                 });
             },
-            getMajors:function () {
+            getMajors:function (subjectId) {
+                this.loading = true;
+                this.subjectId = subjectId;
                 $.ajax({
-                    url:"",
+                    url:"../partition/getMajors.action",
                     type:"POST",
-                    data:{},
+                    data:{
+                        subjectId:subjectId
+                    },
                     dataType:"json",
                     success:function (result) {
-
+                        if (result.resultCode === 0) {
+                            partition.majors = result.majors;
+                            partition.stepNum ++;
+                            partition.text = "请选择问题专业分类";
+                            partition.loading = false;
+                        }
                     },
                     error:function (request,status,error) {
                         alert("系统异常！");
                         console.log(request.status);
                         console.log(request.readyState);
                         console.log(status);
-                        homePage.loading = 2;
+                    }
+                });
+            },
+            getQuestions:function (majorId) {
+                if (this.stepNum < 4) {
+                    this.questions = [];
+                    this.start = 0;
+                    this.stepNum ++;
+                }
+                this.text = "";
+                this.loadingMore = true;
+                this.majorId = majorId;
+                let categoryId = this.categoryId;
+                let subjectId = this.subjectId;
+                let start = this.start;
+                $.ajax({
+                    url:"../partition/getQuestions.action",
+                    type:"POST",
+                    data:{
+                        subjectId:subjectId,
+                        categoryId:categoryId,
+                        majorId:majorId,
+                        start:start
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            let size = result.question.length;
+                            partition.start += size;
+                            result.question.forEach(function (item) {
+                                partition.questions.push(item);
+                            });
+                            partition.hasMore = size >= 20;
+                            partition.loadingMore = false;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
                     }
                 });
             },
@@ -269,12 +303,19 @@
                 } else {
                     history.go(-1);
                 }
+            },
+            toQuestion:function (qid) {
+                location.href = "question/question.html?quetionId=" + qid;
+            },
+            toPostAnswer:function (qid) {
+
             }
         },
         mounted:function () {
             if(sessionStorage.getItem("user") != null) {
-                this.user = sessionStorage.getItem("user");
+                this.user = JSON.parse(sessionStorage.getItem("user"));
             }
+            this.getCategories();
         }
     });
 </script>

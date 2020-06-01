@@ -1,5 +1,8 @@
-.selectItem{
+.selectItem {
     padding: 0.5em 0;
+}
+.selectItem :hover{
+    background-color: #f6f6f6;
 }
 #category{
     width: 90%;

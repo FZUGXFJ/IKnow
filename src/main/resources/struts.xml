@@ -383,7 +383,7 @@
         </action>
     </package>
 
-    <package name="partition" namespace="/admin" extends="default">
+    <package name="partition" namespace="/partition" extends="default">
         <action name="getCategories" class="org.gxfj.iknow.action.PartitionAction" method="getCategories">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
@@ -402,7 +402,7 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
-        <action name="getQuestions" class="org.gxfj.iknow.action.PartitionAction" method="getQuestions">
+        <action name="getQuestions" class="org.gxfj.iknow.action.PartitionAction" method="getQuestion">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>

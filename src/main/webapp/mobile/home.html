@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
@@ -31,10 +31,10 @@
             </table>
             <br>
             <table>
-                <td class="select" v-bind:class="{selected:recommendPage}" v-on:click="recommendPage=!recommendPage">
+                <td class="select selected">
                     <h6>推荐</h6>
                 </td>
-                <td class="select" v-bind:class="{selected:!recommendPage}" v-on:click="recommendPage=!recommendPage">
+                <td class="select" @click="toPartition">
                     <h6>分区</h6>
                 </td>
             </table>
@@ -216,6 +216,9 @@
             },
             toSearch:function () {
                 location.href = "search/search.html";
+            },
+            toPartition:function () {
+                location.href = "partition.html";
             }
         },
         mounted:function () {
