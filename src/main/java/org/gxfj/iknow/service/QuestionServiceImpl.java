@@ -221,7 +221,7 @@ public class QuestionServiceImpl implements QuestionService{
             questionAnswerMap.put("answererLevel",0);
             questionAnswerMap.put("answererBadge",0);
             questionAnswerMap.put("answererId",0);
-            questionAnswerMap.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
+            questionAnswerMap.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>");
         }
         //非匿名设置
         else{
@@ -230,7 +230,8 @@ public class QuestionServiceImpl implements QuestionService{
             questionAnswerMap.put("answererLevel",expUtil.getLevelLabel(answer.getUserByUserId().getExp()));
             questionAnswerMap.put("answererBadge",answer.getUserByUserId().getBadgeNum());
             questionAnswerMap.put("answererId",answer.getUserByUserId().getId());
-            questionAnswerMap.put("answererHead","<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%' height='100%' alt=''>");
+            questionAnswerMap.put("answererHead","<img src='../../head/" + answer.getUserByUserId().getHead()
+                    + "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
         }
         return questionAnswerMap;
     }

@@ -87,13 +87,13 @@ public class SearchServiceImpl implements SearchService{
             question.put("title",q.getTitle());
             if(q.getIsAnonymous() == 1) {
                 question.put("ownerId",0);
-                question.put("ownerHead","<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
+                question.put("ownerHead","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 question.put("ownerName","匿名用户");
             }
             else{
                 question.put("ownerId",q.getUserByUserId().getId());
                 question.put("ownerHead","<img src='../../head/"+
-                        q.getUserByUserId().getHead()+"' width='100%'");
+                        q.getUserByUserId().getHead()+"' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 question.put("ownerName",q.getUserByUserId().getName());
             }
             question.put("collectNum",collectionProblemDAO.getCollectionCount(q.getId()));
@@ -123,13 +123,13 @@ public class SearchServiceImpl implements SearchService{
             answer.put("content", HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer1.getContent())));
             if(answer1.getIsAnonymous() == 1){
                 answer.put("answererId" , 0);
-                answer.put("answererHead" , "<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
+                answer.put("answererHead" , "<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>");
                 answer.put("answererName" , "匿名用户");
             }
             else {
                 answer.put("answererId" , answer1.getId());
                 answer.put("answererHead" , "<img src='../../head/" + answer1.getUserByUserId().getHead() + "' width='100%'" +
-                        " height='100%' alt=''>");
+                        " height='100%' style='border-radius: 100%' alt=''>");
                 answer.put("answererName" , answer1.getUserByUserId().getName());
             }
             answer.put("approveNum" , answer1.getApprovalCount());
@@ -155,7 +155,7 @@ public class SearchServiceImpl implements SearchService{
             user=new HashMap<>(5);
             user.put("userId",user1.getId());
             user.put("userName",user1.getName());
-            user.put("userHead" , "<img src='../head/" + user1.getHead() +
+            user.put("userHead" , "<img src='../../head/" + user1.getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
             user.put("userIntroduction" ,user1.getIntroduction());
             user.put("userIdentity" ,getUserIdentity(user1.getId()));
@@ -174,7 +174,7 @@ public class SearchServiceImpl implements SearchService{
             Useridentity useridentity = userIdentities.get(0);
             userIdentityMap.put("realName" , useridentity.getName());
             String type=useridentity.getType();
-            if (type.equals("教师")) {
+            if ("教师".equals(type)) {
                 userIdentityMap.put("identityType" , 0);
             }
             else {

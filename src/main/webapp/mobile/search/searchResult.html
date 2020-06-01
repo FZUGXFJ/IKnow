@@ -79,7 +79,7 @@
                 <h6><b>{{item.questionTitle}}</b></h6>
                 <table>
                     <td style="width: 10%">
-                        <div v-html="item.answererHead"></div>
+                        <div v-html="item.answererHead" class="head"></div>
                     </td>
                     <td>
                         &nbsp;{{item.answererName}}：
@@ -223,7 +223,7 @@
                                 searchResult.answerResultCom = searchResult.answerResult;
                             }
                             searchResult.userResult = result.userResult ;
-                            userSize = result.userResult;
+                            userSize = result.userResult.length;
                             searchResult.userResultNum = userSize;
                             if (userSize > 2) {
                                 searchResult.userResultCom.push(searchResult.userResult[0]);
