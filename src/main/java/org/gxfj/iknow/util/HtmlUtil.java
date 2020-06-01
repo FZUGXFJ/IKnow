@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public class HtmlUtil extends HTMLEditorKit.ParserCallback{
 
-    private static final String IMG_REGEX = "<\\\\s*img\\\\s+([^>]*)\\\\s*>";
+    private static final String IMG_REGEX = "<\\s*img\\s+([^>]*)\\s*>";
     private static final String HTML_TAG_REGEX = "<[/]*[a-zA-Z][^>]*>";
     private static final Pattern IMG_PATTERN = Pattern.compile(IMG_REGEX);
     private static final Pattern HTML_TAG_PATTERN = Pattern.compile(HTML_TAG_REGEX);
