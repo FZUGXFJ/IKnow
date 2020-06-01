@@ -1,7 +1,6 @@
 package org.gxfj.iknow.pojo;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 
@@ -9,7 +8,8 @@ import java.util.Date;
 public class Question {
     private Integer id;
     private String title;
-    private String content;
+    private String contentHtml;
+    private String contentText;
     private Date date;
     private Byte isDelete;
     private Collection<Answer> answersById;
@@ -43,13 +43,23 @@ public class Question {
     }
 
     @Basic
-    @Column(name = "content", nullable = false, length = -1)
-    public String getContent() {
-        return content;
+    @Column(name = "contentHtml", nullable = false, length = -1)
+    public String getContentHtml() {
+        return contentHtml;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContentHtml(String contentHtml) {
+        this.contentHtml = contentHtml;
+    }
+
+    @Basic
+    @Column(name = "contentText", nullable = false, length = -1)
+    public String getContentText() {
+        return contentText;
+    }
+
+    public void setContentText(String contentText) {
+        this.contentText = contentText;
     }
 
     @Basic
@@ -89,7 +99,7 @@ public class Question {
         if (title != null ? !title.equals(question.title) : question.title != null) {
             return false;
         }
-        if (content != null ? !content.equals(question.content) : question.content != null) {
+        if (contentHtml != null ? !contentHtml.equals(question.contentHtml) : question.contentHtml != null) {
             return false;
         }
         if (date != null ? !date.equals(question.date) : question.date != null) {
@@ -106,7 +116,7 @@ public class Question {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (contentHtml != null ? contentHtml.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
         return result;

@@ -119,7 +119,7 @@ public class AnswerServiceImpl implements AnswerService{
         //将问题变成json格式
         questionMap.put("id" , question.getId());
         questionMap.put("title" , question.getTitle());
-        questionMap.put("content" , question.getContent());
+        questionMap.put("content" , question.getContentHtml());
         questionMap.put("answerCount",questionDAO.getAnswerCount(questionId));
         questionMap.put("isSolved",question.getQuestionstateByStateId().getId() == 1 ? 0 : 1);
         return questionMap;

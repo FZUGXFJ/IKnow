@@ -69,7 +69,7 @@ public class QuestionServiceImpl implements QuestionService{
 
         question.setUserByUserId(user);
         question.setTitle(title);
-        question.setContent(context);
+        question.setContentHtml(context);
         question.setQuestiontypeByTypeId(questiontype);
         question.setQuestionstateByStateId(questionstate);
         question.setQuestionscenarioByScenarioId(questionscenario);
@@ -151,7 +151,7 @@ public class QuestionServiceImpl implements QuestionService{
         questionMap.put("isAnonymous",question.getIsAnonymous());
         questionMap.put("isSolved",question.getQuestionstateByStateId().getId()  == QUESTION_STATE_SOLVE ? 1 : 0);
         questionMap.put("title",question.getTitle());
-        questionMap.put("content",question.getContent());
+        questionMap.put("content",question.getContentHtml());
         questionMap.put("collectionCount",collectionProblemDAO.getCollectionCount(question.getId()));
         questionMap.put("browsingCount",browsingHistoryDAO.getBrowsingCount(question.getId()));
         if (answers == null) {
