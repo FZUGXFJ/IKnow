@@ -154,158 +154,25 @@
                     <thead>
                     <tr>
                         <th>举报ID</th>
-                        <th>用户ID</th>
+                        <th>举报者ID</th>
+                        <th>被举报者ID</th>
                         <th>举报类别</th>
-                        <th>XXID</th>
                         <th>举报日期</th>
-                        <th>举报日期</th>
-                        <th>操作</th>
+                        <th>原因类别</th>
+                        <th>操作1</th>
+                        <th>操作2</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>Lorem</td>
-                        <td>ipsum</td>
-                        <td>dolor</td>
-                        <td>sit</td>
-                        <td>2020-05-29</td>
+                    <tr v-for="reportInfo in reportInfoList">
+                        <td>{{reportInfo.id}}</td>
+                        <td>{{reportInfo.userID}}</td>
+                        <td>{{reportInfo.targetID}}</td>
+                        <td>{{reportInfo.type}}</td>
+                        <td>{{reportInfo.date}}</td>
+                        <td>{{reportInfo.reason}}</td>
                         <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,002</td>
-                        <td>amet</td>
-                        <td>consectetur</td>
-                        <td>adipiscing</td>
-                        <td>elit</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>Integer</td>
-                        <td>nec</td>
-                        <td>odio</td>
-                        <td>Praesent</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>libero</td>
-                        <td>Sed</td>
-                        <td>cursus</td>
-                        <td>ante</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,004</td>
-                        <td>dapibus</td>
-                        <td>diam</td>
-                        <td>Sed</td>
-                        <td>nisi</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,005</td>
-                        <td>Nulla</td>
-                        <td>quis</td>
-                        <td>sem</td>
-                        <td>at</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,006</td>
-                        <td>nibh</td>
-                        <td>elementum</td>
-                        <td>imperdiet</td>
-                        <td>Duis</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,007</td>
-                        <td>sagittis</td>
-                        <td>ipsum</td>
-                        <td>Praesent</td>
-                        <td>mauris</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,008</td>
-                        <td>Fusce</td>
-                        <td>nec</td>
-                        <td>tellus</td>
-                        <td>sed</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,009</td>
-                        <td>augue</td>
-                        <td>semper</td>
-                        <td>porta</td>
-                        <td>Mauris</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,010</td>
-                        <td>massa</td>
-                        <td>Vestibulum</td>
-                        <td>lacinia</td>
-                        <td>arcu</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,011</td>
-                        <td>eget</td>
-                        <td>nulla</td>
-                        <td>Class</td>
-                        <td>aptent</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,012</td>
-                        <td>taciti</td>
-                        <td>sociosqu</td>
-                        <td>ad</td>
-                        <td>litora</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,013</td>
-                        <td>torquent</td>
-                        <td>per</td>
-                        <td>conubia</td>
-                        <td>nostra</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,014</td>
-                        <td>per</td>
-                        <td>inceptos</td>
-                        <td>himenaeos</td>
-                        <td>Curabitur</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
-                    </tr>
-                    <tr>
-                        <td>1,015</td>
-                        <td>sodales</td>
-                        <td>ligula</td>
-                        <td>in</td>
-                        <td>libero</td>
-                        <td>2020-05-29</td>
-                        <td>处理</td>
+                        <td>删除</td>
                     </tr>
                     </tbody>
                 </table>
@@ -337,6 +204,8 @@
     let index=new Vue({
         el:"#index",
         data:{
+            reportInfoList:[],
+            pageInfoList:[],
             isRmb:false,
             accountNumError:false,
             accountNumErrorMsg:"",
@@ -371,13 +240,60 @@
                     }
                 });
             },
+            isLogin:function(){
+                $.ajax({
+                    url: "../admin/isLogin.action",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 1) {
+                            location.href="login.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            getReportType: function(reportType){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/reportType.action",
+                    data:{
+                        reportType:reportType,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            index.reportInfoList = result.reportInfoList;
+                            index.all = Math.ceil(index.reportInfoList.length/15) || 1;
+                            for(let i = 0;i < index.reportInfoList.length;i++)
+                            {
+                                this.pageInfoList[i] = this.reportInfoList.slice(15*i,15*(i+1));
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
             btnClick: function(data){
                 if(data != this.cur){
                     this.cur = data;
+                    index.reportInfoList = index.pageInfoList[this.cur-1];
                 }
             },
             pageClick: function(){
                 console.log('现在在'+this.cur+'页');
+                index.reportInfoList = index.pageInfoList[this.cur-1];
             }
         },
         computed: {
@@ -408,6 +324,10 @@
                 console.log(ar);
                 return ar
             }
+        },
+        mounted:function () {
+            this.isLogin();
+            this.getReportType(0);
         }
     });
     (function () {

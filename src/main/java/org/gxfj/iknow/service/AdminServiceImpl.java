@@ -165,16 +165,16 @@ public class AdminServiceImpl implements AdminService{
             reportMap.put("id",report.getId());
             reportMap.put("userID",report.getUserByUserId().getId());
             switch(reportType){
-                case 1 :
+                case 0 :
                     targetUser = questionDAO.get(report.getTargetId()).getUserByUserId();
                     break;
-                case 2 :
+                case 1 :
                     targetUser = answerDAO.get(report.getTargetId()).getUserByUserId();
                     break;
-                case 3 :
+                case 2 :
                     targetUser = commentDAO.get(report.getTargetId()).getUserByUserId();
                     break;
-                case 4 :
+                case 3 :
                     targetUser = replyDAO.get(report.getTargetId()).getUserByUserId();
                     break;
                 default :
@@ -186,6 +186,7 @@ public class AdminServiceImpl implements AdminService{
             reportMap.put("typeID",report.getTargetId());
             reportMap.put("date", Time.getTime1(report.getDate()));
             reportMap.put("reason",report.getReportreasonByReasonId().getContent());
+            reportMap.put("isDeal",0);
             reportListMap.add(reportMap);
         }
         result.put("reportInfoList",reportListMap);
@@ -252,5 +253,59 @@ public class AdminServiceImpl implements AdminService{
         questionMap.put("type", questionTypeMap);
         result.put("questionReported", questionMap);
         return result;
+    }
+
+    @Override
+    public Map<String, Object> getAnswerReported(Integer typeId, Integer type) {
+        Map<String,Object> map = new HashMap<>(MIN_HASH_MAP_NUM);
+        List<Map<String,Object>> answerListMap = new ArrayList<>();
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        switch(type){
+            case 0 :
+                map = getAnswerInfoMap(typeId);
+                break;
+            case 1 :
+                map = getCommentInfoMap(typeId);
+                break;
+            case 2 :
+                map = getReplyInfoMap(typeId);
+                break;
+            default :
+                map = null;
+        }
+        answerListMap.add(map);
+        result.put("answerReported",answerListMap);
+        return result;
+    }
+
+    private Map<String,Object> getCommentInfoMap(Integer commentId){
+        Comment comment = commentDAO.get(commentId);
+        Map<String,Object> commentMap = new HashMap<>(MIN_HASH_MAP_NUM);
+        commentMap.put("id",comment.getId());
+        commentMap.put("userID",comment.getUserByUserId().getId());
+        commentMap.put("content",comment.getContent());
+        commentMap.put("date",Time.getTime1(comment.getDate()));
+        commentMap.put("isDelete",comment.getIsDelete()==1?"是":"否");
+        return commentMap;
+    }
+    private Map<String,Object> getAnswerInfoMap(Integer answerId){
+        Answer answer = answerDAO.get(answerId);
+        Map<String,Object> answerMap = new HashMap<>(MIN_HASH_MAP_NUM);
+        answerMap.put("id",answer.getId());
+        answerMap.put("userID",answer.getUserByUserId().getId());
+        answerMap.put("content",answer.getContentText());
+        answerMap.put("date",Time.getTime1(answer.getDate()));
+        answerMap.put("isDelete",answer.getIsDelete()==1?"是":"否");
+        return answerMap;
+    }
+    private Map<String,Object> getReplyInfoMap(Integer replyId){
+        Reply reply = replyDAO.get(replyId);
+        Map<String,Object> replyMap = new HashMap<>(MIN_HASH_MAP_NUM);
+        replyMap.put("id",reply.getId());
+        replyMap.put("userID",reply.getUserByUserId().getId());
+        replyMap.put("content",reply.getContent());
+        replyMap.put("date",Time.getTime1(reply.getDate()));
+        replyMap.put("isDelete",reply.getIsDelete()==1?"是":"否");
+        return replyMap;
     }
 }

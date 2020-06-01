@@ -63,4 +63,12 @@ public interface AdminService {
      * @return 包含举报的问题的信息的map数据
      */
     public Map<String, Object> getReportedQuestion(Integer questioinId);
+
+    /**
+     * 获取对应回答信息列表
+     * @param typeId 回答举报对应的信息id
+     * @param type 类型（0为回答，1为评论，2为回复）
+     * @return 包含用户信息列表的map数据
+     */
+    public Map<String,Object> getAnswerReported(Integer typeId, Integer type);
 }

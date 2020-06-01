@@ -27,6 +27,7 @@ public class AdminAction {
     private Integer reportType;
     private Integer userID;
     private Integer typeID;
+    private Integer type;
     @Autowired
     private AdminService adminService;
 
@@ -139,6 +140,13 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    public String answerReported(){
+        Map<String,Object> result = adminService.getAnswerReported(typeID,type);
+        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -193,5 +201,21 @@ public class AdminAction {
 
     public Integer getUserId() {
         return userID;
+    }
+
+    public Integer getTypeID() {
+        return typeID;
+    }
+
+    public void setTypeID(Integer typeID) {
+        this.typeID = typeID;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }
