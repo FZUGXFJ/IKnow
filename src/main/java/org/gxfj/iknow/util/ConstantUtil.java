@@ -10,6 +10,9 @@ public class ConstantUtil {
     public final static String JSON_RETURN_CODE = "resultCode";
     public final static String SESSION_USER = "user";
     public final static String RETURN_STRING = "success";
+    public final static String ANONYMOUS_USER_AVATAR = "0.jpg";
+    public final static String ANONYMOUS_USER_NAME = "匿名用户";
+
     //Admin
     public final static String LOGIN_ADMIN_SESSION_NAME = "admin";
     public final static String NO_ADMIN = null;

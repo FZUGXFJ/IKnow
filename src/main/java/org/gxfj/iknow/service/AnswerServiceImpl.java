@@ -2,9 +2,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
-import org.gxfj.iknow.util.ExpUtil;
-import org.gxfj.iknow.util.HtmlUtil;
-import org.gxfj.iknow.util.MathUtil;
+import org.gxfj.iknow.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -84,13 +82,13 @@ public class AnswerServiceImpl implements AnswerService{
         //获得查看回答的用户的头像
         //未登录
         if(user == null){
-            resultMap.put("userHead" , "<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
+            resultMap.put("userHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
             resultMap.put("answer" , getAnswerMap(questionId, answerId,null));
         }
         //已登录
         else{
             resultMap.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
-            resultMap.put("userHead" , "<img src='../../head/" + user.getHead() + "' width='100%'  height='100%' alt=''>");
+            resultMap.put("userHead" , ImgUtil.changeAvatar(user.getHead()));
         }
 
         Answer answer=answerDAO.getNotDelete(answerId);
@@ -139,8 +137,8 @@ public class AnswerServiceImpl implements AnswerService{
         //匿名设置
         if(answer.getIsAnonymous() == 1){
             answererMap.put("id" , 0);
-            answererMap.put("head" , "<img src='../../head/0.jpg' width='100%' height='100%' alt=''>");
-            answererMap.put("name" , "匿名用户");
+            answererMap.put("head" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            answererMap.put("name" , ConstantUtil.ANONYMOUS_USER_NAME);
             answererMap.put("level" , 0);
             answererMap.put("badgeNum" , 0);
             /*
@@ -149,8 +147,7 @@ public class AnswerServiceImpl implements AnswerService{
         }
         else {
             answererMap.put("id" , answerer.getId());
-            answererMap.put("head" , "<img src='../../head/" + answer.getUserByUserId().getHead() + "' width='100%'" +
-                    " height='100%' alt=''>");
+            answererMap.put("head" , ImgUtil.changeAvatar(answer.getUserByUserId().getHead()));
             answererMap.put("name" , answerer.getName());
             answererMap.put("level",expUtil.getLevelLabel(answer.getUserByUserId().getExp()));
             answererMap.put("badgeNum" , answerer.getBadgeNum());
@@ -208,8 +205,7 @@ public class AnswerServiceImpl implements AnswerService{
             commentMap.put("id", comment.getId());
             commentMap.put("uid" , comment.getUserByUserId().getId());
             commentMap.put("uName" , comment.getUserByUserId().getName());
-            commentMap.put("uHead" , "<img src='../../head/" + comment.getUserByUserId().getHead() + "' width='100%' " +
-                    "height='100%'  style='border-radius:100%' alt=''>");
+            commentMap.put("uHead" , ImgUtil.changeAvatar(comment.getUserByUserId().getHead()));
             commentMap.put("content" , comment.getContent());
             commentMap.put("approveNum" , comment.getCount());
 
@@ -226,17 +222,15 @@ public class AnswerServiceImpl implements AnswerService{
             if(comment.getUserByUserId().getId().equals(questionDAO.getNotDelete(questionId).getUserByUserId().getId())){
                 isQuestionOwner = 1;
                 if (comment.getAnswerByAnswerId().getQuestionByQuestionId().getIsAnonymous() == 1) {
-                    commentMap.put("uName","匿名用户");
-                    commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%' " +
-                            "style='border-radius:100%' alt=''>");
+                    commentMap.put("uName",ConstantUtil.ANONYMOUS_USER_NAME);
+                    commentMap.put("uHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
                 }
             }
             if(comment.getUserByUserId().getId().equals(answerDAO.getNotDelete(answerId).getUserByUserId().getId())){
                 isAnswerer = 1;
                 if (comment.getAnswerByAnswerId().getIsAnonymous() == 1) {
-                    commentMap.put("uName","匿名用户");
-                    commentMap.put("uHead" , "<img src='../../head/0.jpg' width='100%' height='100%'" +
-                            " style='border-radius:100%' alt=''>");
+                    commentMap.put("uName",ConstantUtil.ANONYMOUS_USER_NAME);
+                    commentMap.put("uHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
                 }
             }
             commentMap.put("isQuestionOwner" , isQuestionOwner);
@@ -655,14 +649,12 @@ public class AnswerServiceImpl implements AnswerService{
 //            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1) ;
             boolean isAnonymous = (answer.getIsAnonymous() == ANONYMOUS);
             if(isAnonymous) {
-                recommend.put("answererHead","<img src='../head/0.jpg' width='100%' height='100%'" +
-                        " style='border-radius: 100%' alt=''>");
-                recommend.put("answererName","匿名用户");
+                recommend.put("answererHead", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+                recommend.put("answererName", ConstantUtil.ANONYMOUS_USER_NAME);
                 recommend.put("answererLevel",0);
                 recommend.put("answererBadge",0);
             } else {
-                recommend.put("answererHead","<img src='../head/" + user.getHead() +
-                        "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+                recommend.put("answererHead",ImgUtil.changeAvatar(user.getHead()));
                 recommend.put("answererName",user.getName());
                 recommend.put("answererLevel",expUtil.getLevelLabel(user.getExp()));
                 recommend.put("answererBadge",user.getBadgeNum());
