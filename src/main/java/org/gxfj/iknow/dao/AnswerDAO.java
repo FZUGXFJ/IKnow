@@ -31,20 +31,20 @@ public interface AnswerDAO extends BaseDAO<Answer>{
      * @param start 开始元素
      * @return 回答列表
      */
-    List<Answer> listNoDelete(Integer start, Integer count);
+    List<Answer> listLastAnswerNoDelete(Integer start, Integer count);
 
     /**
      * 得到最新的未删除的回答
      * @param count 回答个数
      * @return 回答列表
      */
-    List<Answer> listNoDelete(Integer count);
+    List<Answer> listLastAnswerNoDelete(Integer count);
 
     /**
      * 获得所有的回答列表
      * @return 回答列表
      */
-    List<Answer> listNoDelete();
+    List<Answer> listLastAnswerNoDelete();
 
     List<Answer> list();
 

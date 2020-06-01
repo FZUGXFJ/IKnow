@@ -1,6 +1,5 @@
 package org.gxfj.iknow.service;
 
-import freemarker.template.utility.HtmlEscape;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ExpUtil;
@@ -308,7 +307,7 @@ public class AnswerServiceImpl implements AnswerService{
         List<Answer> result = new ArrayList<>();
         if (userId == null) {
             // 对于未登录的浏览者，依旧采用推荐最先的回答
-            return answerDAO.listNoDelete(count);
+            return answerDAO.listLastAnswerNoDelete(count);
         } else {
             List<Answer> answerList = null;
             if (recommentAnswerMap.containsKey(userId)) {
@@ -335,7 +334,7 @@ public class AnswerServiceImpl implements AnswerService{
         List<Answer> result = new ArrayList<>();
         if (userId == null) {
             // 对于未登录的浏览者，依旧采用推荐最先的回答
-            return answerDAO.listNoDelete(start,count);
+            return answerDAO.listLastAnswerNoDelete(start,count);
         } else {
             List<Answer> answerList = null;
             if (recommentAnswerMap.containsKey(userId)) {
@@ -557,7 +556,7 @@ public class AnswerServiceImpl implements AnswerService{
                 }
             }
 
-            List<Answer> lastNewAnswer = answerDAO.listNoDelete(PRE_RECOMMENT_NUM - recommendnum);
+            List<Answer> lastNewAnswer = answerDAO.listLastAnswerNoDelete(PRE_RECOMMENT_NUM - recommendnum);
             for (Answer answer : lastNewAnswer) {
                 recommendList.add(answer);
             }
@@ -565,7 +564,7 @@ public class AnswerServiceImpl implements AnswerService{
         }
 
         //对新注册的用户由于历史浏览为空，所以推荐只能统一用最新的数据，存储在key为0的list中
-        List<Answer> lastNewAnswer = answerDAO.listNoDelete(PRE_RECOMMENT_NUM);
+        List<Answer> lastNewAnswer = answerDAO.listLastAnswerNoDelete(PRE_RECOMMENT_NUM);
         recommentAnswerMap.put(NEW_USER_RECOMMEND_KEY, lastNewAnswer);
 
         //DEBUG：查看生成的推荐表
