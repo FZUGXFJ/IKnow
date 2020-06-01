@@ -157,9 +157,9 @@ public class UserAction {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         if (session.get(LOGIN_USER_SESSION_NAME) == NO_USER) {
-            result.put(RESULT_CODE, UN_LOGIN);
+            result.put(JSON_RETURN_CODE, UN_LOGIN);
         } else {
-            result.put(RESULT_CODE, SUCCESS);
+            result.put(JSON_RETURN_CODE, SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         System.out.println(JSON.toJSONString(result));
@@ -190,14 +190,14 @@ public class UserAction {
         Map<String, Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         Boolean state = (Boolean)session.get(RESET_PASSWORD_VERIFY_STATE_SESSION_NAME);
         if (session.get(LOGIN_USER_SESSION_NAME) == NO_USER) {
-            result.put(RESULT_CODE, UN_LOGIN);
+            result.put(JSON_RETURN_CODE, UN_LOGIN);
         } else {
             if (state != null && !state && verifyCode.equals(session.get(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME))) {
-                result.put(RESULT_CODE,SUCCESS);
+                result.put(JSON_RETURN_CODE,SUCCESS);
                 session.put(RESET_PASSWORD_VERIFY_CODE_SESSION_NAME, null);
                 session.put(RESET_PASSWORD_VERIFY_STATE_SESSION_NAME, true);
             } else {
-                result.put(RESULT_CODE, VERIFY_DEFAULT);
+                result.put(JSON_RETURN_CODE, VERIFY_DEFAULT);
             }
         }
 
@@ -217,13 +217,13 @@ public class UserAction {
         Boolean resetPasswordVerify = (Boolean)session.get(RESET_PASSWORD_VERIFY_STATE_SESSION_NAME);
         if (user != null && resetPasswordVerify != null && resetPasswordVerify) {
             if (userService.resetPassword(user, newPassword)) {
-                result.put(RESULT_CODE, SUCCESS);
+                result.put(JSON_RETURN_CODE, SUCCESS);
             } else {
-                result.put(RESULT_CODE, RESET_PASSWORD_FAIL);
+                result.put(JSON_RETURN_CODE, RESET_PASSWORD_FAIL);
             }
 
         } else {
-            result.put(RESULT_CODE, UN_LOGIN);
+            result.put(JSON_RETURN_CODE, UN_LOGIN);
         }
         session.put(RESET_PASSWORD_VERIFY_STATE_SESSION_NAME, null);
 
@@ -258,15 +258,15 @@ public class UserAction {
         Boolean state = (Boolean) session.get(REBIND_EMAIL_VERIFY_STATE_SESSION_NAME);
 
         if (session.get(LOGIN_USER_SESSION_NAME) == NO_USER ) {
-            result.put(RESULT_CODE,UN_LOGIN);
+            result.put(JSON_RETURN_CODE,UN_LOGIN);
         } else {
             if (state != null && !state  && verifyCode.equals(session.get(REBIND_EMAIL_VERIFY_CODE_SESSION_NAME))) {
-                result.put(RESULT_CODE,SUCCESS);
+                result.put(JSON_RETURN_CODE,SUCCESS);
 
                 session.put(REBIND_EMAIL_VERIFY_CODE_SESSION_NAME,null);
                 session.put(REBIND_EMAIL_VERIFY_STATE_SESSION_NAME, true);
             } else {
-                result.put(RESULT_CODE, VERIFY_DEFAULT);
+                result.put(JSON_RETURN_CODE, VERIFY_DEFAULT);
             }
         }
 
@@ -309,16 +309,16 @@ public class UserAction {
         User user=(User)session.get(LOGIN_USER_SESSION_NAME);
         //验证新邮箱是否存在
         if (userService.existEmail((String) session.get(NEW_EMAIL_SESSION_NAME))) {
-            result.put(RESULT_CODE, 2);
+            result.put(JSON_RETURN_CODE, 2);
         } else {
             if (state != null && !state && code.equals(verifyCode)) {
                 if (userService.reBindEmail(user, (String) session.get(NEW_EMAIL_SESSION_NAME))) {
-                    result.put(RESULT_CODE, 0);
+                    result.put(JSON_RETURN_CODE, 0);
                 } else {
-                    result.put(RESULT_CODE, 1);
+                    result.put(JSON_RETURN_CODE, 1);
                 }
             } else {
-                result.put(RESULT_CODE, 1);
+                result.put(JSON_RETURN_CODE, 1);
             }
         }
         session.put(NEW_EMAIL_VERIFY_STATE_SESSION_NAME, null);

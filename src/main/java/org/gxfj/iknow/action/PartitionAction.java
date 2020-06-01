@@ -1,8 +1,6 @@
 package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
-import com.opensymphony.xwork2.ActionContext;
-import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.PartitionService;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -46,7 +43,7 @@ public class PartitionAction {
     public String getCategories(){
         Map<String, Object> response;
         response=partitionService.getCategories();
-        response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -54,7 +51,7 @@ public class PartitionAction {
     public String getSubjects(){
         Map<String, Object> response;
         response=partitionService.getSubjects(categoryId);
-        response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -62,7 +59,7 @@ public class PartitionAction {
     public String getMajors(){
         Map<String, Object> response;
         response=partitionService.getMajors(subjectId);
-        response.put(ConstantUtil.RESULT_CODE,ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -70,7 +67,7 @@ public class PartitionAction {
     public String getQuestion() {
         Map<String, Object> response;
         response = partitionService.getQuestion(categoryId,subjectId,majorId,start,ConstantUtil.PARTITION_QUESTION_COUNT);
-        response.put(ConstantUtil.RESULT_CODE, ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

@@ -200,11 +200,11 @@ public class QuestionAction {
             sort1 = ConstantUtil.QUESTION_DEFAULT_SORT;
         }
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        if (questionService.moreAnswers(user,questionId,start,20,sort1 )==null){
+        if (questionService.moreAnswers(user,questionId,start, ConstantUtil.SHOW_ANSWERS_NUM,sort1 )==null){
             response.put("resultCode",ConstantUtil.NO_MORE);
         }
         else {
-            response=questionService.moreAnswers(user,questionId,start,20,sort );
+            response=questionService.moreAnswers(user,questionId,start, ConstantUtil.SHOW_ANSWERS_NUM,sort );
             response.put("resultCode",ConstantUtil.SUCCESS);
         }
 

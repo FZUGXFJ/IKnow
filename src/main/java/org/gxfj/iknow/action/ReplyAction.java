@@ -108,14 +108,14 @@ public class ReplyAction {
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
         User user=(User)session.get(ConstantUtil.SESSION_USER);
         if(user==null){
-            response.put(RESULT_CODE,UN_LOGIN);
+            response.put(JSON_RETURN_CODE,UN_LOGIN);
         }
         else {
             if (replyService.deleteReply(replyId,user)){
-                response.put(RESULT_CODE,SUCCESS);
+                response.put(JSON_RETURN_CODE,SUCCESS);
             }
             else {
-                response.put(RESULT_CODE,NO_REPLYER);
+                response.put(JSON_RETURN_CODE,NO_REPLYER);
             }
         }
         return ConstantUtil.RETURN_STRING;

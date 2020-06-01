@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.SearchService;
-import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import static org.gxfj.iknow.util.ConstantUtil.*;
@@ -36,7 +35,7 @@ public class SearchAction {
     }
     public String searchHistory() {
         Map<String,Object> response = searchService.searchHistory();
-        response.put(RESULT_CODE,SUCCESS);
+        response.put(JSON_RETURN_CODE,SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
@@ -49,7 +48,7 @@ public class SearchAction {
             userId = user.getId();
         }
         Map<String,Object> response = searchService.searchResult(keyword,userId);
-        response.put(RESULT_CODE,SUCCESS);
+        response.put(JSON_RETURN_CODE,SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }

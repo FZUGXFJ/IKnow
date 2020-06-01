@@ -7,7 +7,7 @@ public class ConstantUtil {
     public final static int MIN_HASH_MAP_NUM = 10;
     public final static int SUCCESS = 0;
     public final static int NO_MORE = 1;
-    public final static String RESULT_CODE = "resultCode";
+    public final static String JSON_RETURN_CODE = "resultCode";
     public final static String SESSION_USER = "user";
     public final static String RETURN_STRING = "success";
     //Admin
@@ -22,12 +22,13 @@ public class ConstantUtil {
     public final static int USER_IS_NOT_QUESTIONER = 2;
     public final static int USER_IS_NOT_ANSWERER = 1;
     public final static int USER_IS_NOT_ANSWERER_TWO = 2;
+    public final static int RECOMMEND_ANSWERS_NUM_PER_TIME = 20;
 
     //Comment
     public final static int MISS_COMMENT_INF = 2;
     public final static int RESULT_CODE_APPROVED = 2;
     public final static int RESULT_CODE_NOT_APPROVED = 2;
-    public final static int Comment_DEFAULT_SORT = 0;
+    public final static int COMMENT_DEFAULT_SORT = 0;
     public final static int NO_COMMENTER = 2;
 
     //Partition
@@ -40,6 +41,7 @@ public class ConstantUtil {
     public final static int MISS_QUESTION_INF = 2;
     public final static int QUESTION_DEFAULT_SORT = 1;
     public final static int USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT = 2;
+    public final static int SHOW_ANSWERS_NUM = 20;
 
     //Record
     public final static int UN_LOGIN_TWO = 2;
