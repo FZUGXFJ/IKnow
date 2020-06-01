@@ -257,7 +257,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Map<String, Object> getAnswerReported(Integer typeId, Integer type) {
-        Map<String,Object> map = new HashMap<>(MIN_HASH_MAP_NUM);
+        Map<String,Object> map;
         List<Map<String,Object>> answerListMap = new ArrayList<>();
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         switch(type){
