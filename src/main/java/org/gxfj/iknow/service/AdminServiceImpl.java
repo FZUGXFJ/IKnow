@@ -41,6 +41,8 @@ public class AdminServiceImpl implements AdminService{
     private ReplyDAO replyDAO;
     @Autowired
     private ReportReasonDAO reportReasonDAO;
+    @Autowired
+    private UserDAO userDAO;
 
     @Override
     public Admin login(Admin adminInf) {
@@ -203,6 +205,25 @@ public class AdminServiceImpl implements AdminService{
             reportReasonListMap.add(reportReasonMap);
         }
         result.put("reportReason",reportReasonListMap);
+        return result;
+    }
+
+    @Override
+    public Map<String,Object> getUserInfo(Integer userId){
+        Map<String,Object> userMap = new HashMap<>(MIN_HASH_MAP_NUM);
+        List<Map<String,Object>> userListMap = new ArrayList<>();
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        User user = userDAO.get(userId);
+        userMap.put("id",user.getId());
+        userMap.put("email",user.getEmail());
+        userMap.put("name",user.getName());
+        userMap.put("isAttest",user.getIsAttest()==1?"已认证":"未认证");
+        userMap.put("date",Time.getTime1(user.getDate()));
+        userMap.put("badgeNum",user.getBadgeNum());
+        userMap.put("state",user.getUserstateByStateId().getState());
+        userMap.put("identity",user.getUseridentityByIdentityId().getType());
+        userListMap.add(userMap);
+        result.put("userInfos",userListMap);
         return result;
     }
 }

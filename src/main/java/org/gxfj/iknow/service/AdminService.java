@@ -50,4 +50,10 @@ public interface AdminService {
      * @return 包含举报原因列表的map数据
      */
     public Map<String,Object> getReportReason();
+
+    /**
+     * 获取用户信息
+     * @return 包含用户信息列表的map数据
+     */
+    public Map<String,Object> getUserInfo(Integer userId);
 }
