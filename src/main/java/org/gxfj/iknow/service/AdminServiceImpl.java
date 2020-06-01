@@ -1,14 +1,12 @@
 package org.gxfj.iknow.service;
 
-import org.gxfj.iknow.dao.AdminDAO;
-import org.gxfj.iknow.dao.BrowsingHistoryDAO;
-import org.gxfj.iknow.dao.CategoriesTypeDAO;
-import org.gxfj.iknow.pojo.Admin;
-import org.gxfj.iknow.pojo.Categoriestype;
-import org.gxfj.iknow.pojo.Questiontype;
+import org.gxfj.iknow.dao.*;
+import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.SecurityUtil;
 import static org.gxfj.iknow.util.ServiceConstantUtil.*;
+
+import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +29,16 @@ public class AdminServiceImpl implements AdminService{
 
     @Autowired
     private AdminDAO adminDAO;
+    @Autowired
+    private ReportDAO reportDAO;
+    @Autowired
+    private QuestionDAO questionDAO;
+    @Autowired
+    private AnswerDAO answerDAO;
+    @Autowired
+    private CommentDAO commentDAO;
+    @Autowired
+    private ReplyDAO replyDAO;
 
     @Override
     public Admin login(Admin adminInf) {
@@ -138,6 +146,45 @@ public class AdminServiceImpl implements AdminService{
             }
         }
         result.put("questionTypeSums",records);
+        return result;
+    }
+
+    @Override
+    public Map<String,Object> getReportByType(Integer reportType){
+        Map<String,Object> reportMap;
+        List<Map<String,Object>> reportListMap = new ArrayList<>();
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+        List<Report> reports = reportDAO.listReportByType(reportType);
+        User targetUser;
+        for (Report report : reports){
+            reportMap = new HashMap<>(MIN_HASH_MAP_NUM);
+            reportMap.put("id",report.getId());
+            reportMap.put("userID",report.getUserByUserId().getId());
+            switch(reportType){
+                case 1 :
+                    targetUser = questionDAO.get(report.getTargetId()).getUserByUserId();
+                    break;
+                case 2 :
+                    targetUser = answerDAO.get(report.getTargetId()).getUserByUserId();
+                    break;
+                case 3 :
+                    targetUser = commentDAO.get(report.getTargetId()).getUserByUserId();
+                    break;
+                case 4 :
+                    targetUser = replyDAO.get(report.getTargetId()).getUserByUserId();
+                    break;
+                default :
+                    targetUser = null;
+            }
+            reportMap.put("targetID",targetUser.getId());
+            reportMap.put("type",report.getReporttypeByTypeId().getType());
+            reportMap.put("description",report.getDescription());
+            reportMap.put("typeID",report.getTargetId());
+            reportMap.put("date", Time.getTime1(report.getDate()));
+            reportMap.put("reason",report.getReportreasonByReasonId().getContent());
+            reportListMap.add(reportMap);
+        }
+        result.put("reportInfoList",reportListMap);
         return result;
     }
 }

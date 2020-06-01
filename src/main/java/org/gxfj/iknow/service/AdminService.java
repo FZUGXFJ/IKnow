@@ -38,4 +38,10 @@ public interface AdminService {
      * @return 数据
      */
     public Map<String,Object> getQuestionTypeSumData();
+
+    /**
+     * 获取指定举报类别的举报信息
+     * @return 包含举报信息列表的map数据
+     */
+    public Map<String,Object> getReportByType(Integer reportType);
 }
