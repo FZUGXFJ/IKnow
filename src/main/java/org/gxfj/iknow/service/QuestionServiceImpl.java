@@ -70,6 +70,7 @@ public class QuestionServiceImpl implements QuestionService{
         question.setUserByUserId(user);
         question.setTitle(title);
         question.setContentHtml(context);
+        question.setContentText(HtmlUtil.html2Text(context));
         question.setQuestiontypeByTypeId(questiontype);
         question.setQuestionstateByStateId(questionstate);
         question.setQuestionscenarioByScenarioId(questionscenario);

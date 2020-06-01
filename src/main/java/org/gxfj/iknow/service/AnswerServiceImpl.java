@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import freemarker.template.utility.HtmlEscape;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ExpUtil;
@@ -59,6 +60,7 @@ public class AnswerServiceImpl implements AnswerService{
         answer.setIsDelete((byte)0);
         answer.setIsRoof((byte)0);
         answer.setContentHtml(content);
+        answer.setContentText(HtmlUtil.html2Text(content));
 
         answerDAO.add(answer);
         Map<String, Object> result= new HashMap<>(MAP_NUM);
@@ -668,7 +670,7 @@ public class AnswerServiceImpl implements AnswerService{
             }
             recommend.put("answerId",answer.getId());
             //使用HtmlUtil工具类，将图片转换掉
-            recommend.put("content", HtmlUtil.Html2Text(HtmlUtil.changeImgTag(answer.getContentHtml())));
+            recommend.put("content", HtmlUtil.delHtmlTag(HtmlUtil.changeImgTag(answer.getContentHtml())));
             recommend.put("approveNum",answer.getApprovalCount());
             recommend.put("commentNum",commentDAO.getCount(answer.getId()));
             Answer au=question.getAnswerByAdoptId();
