@@ -5,6 +5,7 @@ import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.AnswerService;
 import org.gxfj.iknow.util.ConstantUtil;
+import org.gxfj.iknow.util.ImgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -150,12 +151,10 @@ public class AnswerAction {
         response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
         if (user != null) {
             cUser.put("id",user.getId());
-            cUser.put("head","<img src='../head/" + user.getHead() +
-                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            cUser.put("head", ImgUtil.changeAvatar(user.getHead()));
         } else {
             cUser.put("id",0);
-            cUser.put("head","<img src='../head/0.jpg' width='100%' height='100%'" +
-                    " style='border-radius: 100%' alt=''>");
+            cUser.put("head",ImgUtil.changeAvatar(user.getHead()));
         }
         response.put("user",cUser);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));

@@ -2,6 +2,8 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.ConstantUtil;
+import org.gxfj.iknow.util.ImgUtil;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,7 +101,7 @@ public class ReplyServiceImpl implements ReplyService {
             replyMap.put("id", reply.getId());
             replyMap.put("userId" , reply.getUserByUserId().getId());
             if(isAnonymousOwner){
-                replyMap.put("targetName" ,"匿名用户");
+                replyMap.put("targetName" ,ConstantUtil.ANONYMOUS_USER_NAME);
                 replyMap.put("targetId" , "0");
             }
             else {
@@ -134,12 +136,10 @@ public class ReplyServiceImpl implements ReplyService {
         //获得用户的身份
         Integer userIdentify = getUserIdentify(comment);
         if (userIdentify != NO_SPECIAL_IDENTIFY && isAnonymous(comment)){
-            commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
-                    "style='border-radius: 100%' alt=''>");
-            commentMap.put("name","匿名用户");
+            commentMap.put("head", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            commentMap.put("name",ConstantUtil.ANONYMOUS_USER_NAME);
         } else {
-            commentMap.put("head","<img src='../../head/"+comment.getUserByUserId().getHead() +
-                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            commentMap.put("head",ImgUtil.changeAvatar(comment.getUserByUserId().getHead()));
             commentMap.put("name",comment.getUserByUserId().getName());
         }
         if (userIdentify == IS_QUESTION_OWNER) {
@@ -213,12 +213,10 @@ public class ReplyServiceImpl implements ReplyService {
         boolean userIdentify = (replierId.equals(questionOwnerId) && question.getIsAnonymous() == 1) ||
                 (replierId.equals(answerOwnerId) && answer.getIsAnonymous() == 1);
         if (userIdentify) {
-            replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
-                    "style='border-radius: 100%' alt=''>");
-            replyMap.put("name","匿名用户");
+            replyMap.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            replyMap.put("name", ConstantUtil.ANONYMOUS_USER_NAME);
         } else {
-            replyMap.put("head","<img src='../../head/"+reply.getUserByUserId().getHead() +
-                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            replyMap.put("head",ImgUtil.changeAvatar(reply.getUserByUserId().getHead()));
             replyMap.put("name",reply.getUserByUserId().getName());
         }
         if(replierId.equals(questionOwnerId)){

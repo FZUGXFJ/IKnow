@@ -98,7 +98,6 @@ public class UserAction {
             resultMap.put("email",user.getEmail());
             resultMap.put("password",user.getPasswd());
         } else {
-            String response = "{\"response\":" + result.get("value") + "}";
             resultMap.put("response",result.get("value"));
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));

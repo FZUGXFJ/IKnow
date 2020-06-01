@@ -2,6 +2,8 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.ConstantUtil;
+import org.gxfj.iknow.util.ImgUtil;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -140,12 +142,10 @@ public class CommentServiceImpl implements CommentService {
         boolean isAnonymous = (questionOwner.getId().equals(commentUser.getId()) && question.getIsAnonymous() == 1)
                 ||(answerOwner.getId().equals(commentUser.getId()) && answer.getIsAnonymous() == 1);
         if(isAnonymous){
-            commentMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%'" +
-                    " style='border-radius: 100%' alt=''>");
-            commentMap.put("name","匿名用户");
+            commentMap.put("head", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            commentMap.put("name",ConstantUtil.ANONYMOUS_USER_NAME);
         }else{
-            commentMap.put("head","<img src='../../head/"+commentUser.getHead() +
-                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            commentMap.put("head",ImgUtil.changeAvatar(commentUser.getHead()));
             commentMap.put("name",commentUser.getName());
         }
         return  commentMap;
@@ -173,17 +173,15 @@ public class CommentServiceImpl implements CommentService {
                 ||(answerOwner.getId().equals(targetUser.getId()) && answer.getIsAnonymous() == 1);
 
         if(isAnonymous1){
-            replyMap.put("name", "匿名用户");
-            replyMap.put("head","<img src='../../head/0.jpg' width='100%' height='100%' " +
-                    "style='border-radius: 100%' alt=''>");
+            replyMap.put("name", ConstantUtil.ANONYMOUS_USER_NAME);
+            replyMap.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
         }
         else{
             replyMap.put("name",replyUser.getName());
-            replyMap.put("head","<img src='../../head/"+replyUser.getHead() +
-                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            replyMap.put("head",ImgUtil.changeAvatar(replyUser.getHead()));
         }
         if(isAnonymous2) {
-            replyMap.put("targetName", "匿名用户");
+            replyMap.put("targetName", ConstantUtil.ANONYMOUS_USER_NAME);
         }
         else{
             replyMap.put("targetName",targetUser.getName());

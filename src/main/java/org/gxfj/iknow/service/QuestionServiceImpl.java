@@ -3,9 +3,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
-import org.gxfj.iknow.util.ExpUtil;
-import org.gxfj.iknow.util.HtmlUtil;
-import org.gxfj.iknow.util.Time;
+import org.gxfj.iknow.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -198,7 +196,7 @@ public class QuestionServiceImpl implements QuestionService{
         Map<String, Object> owner = new HashMap<>(MAP_NUM);
         if(question.getIsAnonymous() == 1) {
             owner.put("id",0);
-            owner.put("username","匿名用户");
+            owner.put("username", ConstantUtil.ANONYMOUS_USER_NAME);
             owner.put("head","0.jpg");
         }
         else{
@@ -218,11 +216,11 @@ public class QuestionServiceImpl implements QuestionService{
         Map<String, Object> questionAnswerMap = new HashMap<>(MAP_NUM);
         //匿名设置
         if(answer.getIsAnonymous() == 1) {
-            questionAnswerMap.put("answererName","匿名用户");
+            questionAnswerMap.put("answererName",ConstantUtil.ANONYMOUS_USER_NAME);
             questionAnswerMap.put("answererLevel",0);
             questionAnswerMap.put("answererBadge",0);
             questionAnswerMap.put("answererId",0);
-            questionAnswerMap.put("answererHead","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            questionAnswerMap.put("answererHead", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
         }
         //非匿名设置
         else{
@@ -231,8 +229,7 @@ public class QuestionServiceImpl implements QuestionService{
             questionAnswerMap.put("answererLevel",expUtil.getLevelLabel(answer.getUserByUserId().getExp()));
             questionAnswerMap.put("answererBadge",answer.getUserByUserId().getBadgeNum());
             questionAnswerMap.put("answererId",answer.getUserByUserId().getId());
-            questionAnswerMap.put("answererHead","<img src='../../head/" + answer.getUserByUserId().getHead()
-                    + "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            questionAnswerMap.put("answererHead",ImgUtil.changeAvatar(answer.getUserByUserId().getHead()));
         }
         return questionAnswerMap;
     }

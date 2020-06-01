@@ -2,7 +2,9 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.HtmlUtil;
+import org.gxfj.iknow.util.ImgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,13 +88,12 @@ public class SearchServiceImpl implements SearchService{
             question.put("title",q.getTitle());
             if(q.getIsAnonymous() == 1) {
                 question.put("ownerId",0);
-                question.put("ownerHead","<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>");
-                question.put("ownerName","匿名用户");
+                question.put("ownerHead",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+                question.put("ownerName",ConstantUtil.ANONYMOUS_USER_NAME);
             }
             else{
                 question.put("ownerId",q.getUserByUserId().getId());
-                question.put("ownerHead","<img src='../../head/"+
-                        q.getUserByUserId().getHead()+"' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+                question.put("ownerHead",ImgUtil.changeAvatar(q.getUserByUserId().getHead()));
                 question.put("ownerName",q.getUserByUserId().getName());
             }
             question.put("collectNum",collectionProblemDAO.getCollectionCount(q.getId()));
@@ -122,13 +123,12 @@ public class SearchServiceImpl implements SearchService{
             answer.put("content", HtmlUtil.delHtmlTag(HtmlUtil.changeImgTag(answer1.getContentHtml())));
             if(answer1.getIsAnonymous() == 1){
                 answer.put("answererId" , 0);
-                answer.put("answererHead" , "<img src='../../head/0.jpg' width='100%' height='100%' style='border-radius: 100%' alt=''>");
-                answer.put("answererName" , "匿名用户");
+                answer.put("answererHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+                answer.put("answererName" , ConstantUtil.ANONYMOUS_USER_NAME);
             }
             else {
                 answer.put("answererId" , answer1.getId());
-                answer.put("answererHead" , "<img src='../../head/" + answer1.getUserByUserId().getHead() + "' width='100%'" +
-                        " height='100%' style='border-radius: 100%' alt=''>");
+                answer.put("answererHead" , ImgUtil.changeAvatar(answer1.getUserByUserId().getHead()));
                 answer.put("answererName" , answer1.getUserByUserId().getName());
             }
             answer.put("approveNum" , answer1.getApprovalCount());
@@ -154,8 +154,7 @@ public class SearchServiceImpl implements SearchService{
             user=new HashMap<>(5);
             user.put("userId",user1.getId());
             user.put("userName",user1.getName());
-            user.put("userHead" , "<img src='../../head/" + user1.getHead() +
-                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            user.put("userHead" , ImgUtil.changeAvatar(user1.getHead()));
             user.put("userIntroduction" ,user1.getIntroduction());
             user.put("userIdentity" ,getUserIdentity(user1.getId()));
             res.add(user);
