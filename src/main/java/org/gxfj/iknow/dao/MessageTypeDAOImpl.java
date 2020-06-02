@@ -1,17 +1,18 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Message;
-import org.hibernate.Query;
+import org.gxfj.iknow.pojo.Messagetype;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-@Repository("messageDAO")
-public class MessageDAOImpl implements MessageDAO{
+/**
+ * @author erniumo
+ */
+@Repository("messageTypeDAO")
+public class MessageTypeDAOImpl implements MessageTypeDAO {
     private HibernateTemplate ht = null;
 
     @Autowired
@@ -28,25 +29,17 @@ public class MessageDAOImpl implements MessageDAO{
         return ht;
     }
     @Override
-    public Integer add(Message bean) {
+    public Integer add(Messagetype bean) {
         return (Integer)getHibernateTemplate().save(bean);
     }
 
     @Override
-    public Message get(Integer id) {
-        return getHibernateTemplate().get(Message.class,id);
+    public Messagetype get(Integer id) {
+        return getHibernateTemplate().get(Messagetype.class,id);
     }
 
     @Override
-    public void update(Message bean) {
+    public void update(Messagetype bean) {
         getHibernateTemplate().update(bean);
-    }
-
-    @Override
-    public List<Message> listByUserId(Integer userId) {
-        Query query = getSession().createQuery("from Message as m WHERE ( userID= " + userId + " ) " +
-                "order by date desc");
-        List<Message> messages = query.list();
-        return messages;
     }
 }
