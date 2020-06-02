@@ -1,5 +1,6 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.Reply;
 import org.gxfj.iknow.pojo.Report;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -48,5 +49,10 @@ public class ReportDAOImpl implements ReportDAO{
         String hql = "from Report as r WHERE typeID = :reportType";
         Query query = session.createQuery(hql).setParameter("reportType",reportType);
         return query.list();
+    }
+
+    @Override
+    public void delete(Report bean) {
+        getHibernateTemplate().delete(bean);
     }
 }
