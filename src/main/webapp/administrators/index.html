@@ -123,107 +123,154 @@
                 </td>
             </tr>
         </table>
-<!--        <nav aria-label="Page navigation example" style="position: fixed;right: 1%">-->
-<!--            <ul class="pagination">-->
-<!--                <li class="page-item">-->
-<!--                    <a class="page-link" href="#" aria-label="Previous">-->
-<!--                        <span aria-hidden="true">&laquo;</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li class="page-item"><a class="page-link" href="#">1</a></li>-->
-<!--                <li class="page-item"><a class="page-link" href="#">2</a></li>-->
-<!--                <li class="page-item"><a class="page-link" href="#">3</a></li>-->
-<!--                <li class="page-item">-->
-<!--                    <a class="page-link" href="#" aria-label="Next">-->
-<!--                        <span aria-hidden="true">&raquo;</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </nav>-->
+        <!--        <nav aria-label="Page navigation example" style="position: fixed;right: 1%">-->
+        <!--            <ul class="pagination">-->
+        <!--                <li class="page-item">-->
+        <!--                    <a class="page-link" href="#" aria-label="Previous">-->
+        <!--                        <span aria-hidden="true">&laquo;</span>-->
+        <!--                    </a>-->
+        <!--                </li>-->
+        <!--                <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+        <!--                <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+        <!--                <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+        <!--                <li class="page-item">-->
+        <!--                    <a class="page-link" href="#" aria-label="Next">-->
+        <!--                        <span aria-hidden="true">&raquo;</span>-->
+        <!--                    </a>-->
+        <!--                </li>-->
+        <!--            </ul>-->
+        <!--        </nav>-->
 
 
 
     </div>
     <!--悬浮窗口-->
     <div id="window" class="window_css" style="background-color: white">
-        <div>
-            <span style="font-size: 1.2em;font-weight: bold">用户信息</span>
+        <div class="head">
+            <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white">问题举报信息</span>
             <a href="javascript:void(0)" onclick="hideWindow()">
-                <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 0"></i>
+                <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 5%"></i>
             </a>
         </div>
-        <div class="userInfo">
-            <h5>基本信息：</h5>
+        <div class="userInfo margintop">
             <div class="form-row">
-                <div class="form-group col-1">
-                    <input type="text" readonly class="form-control-plaintext" value="ID:" style="text-align: center;font-weight: bold">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="举报者ID:" style="text-align: center;font-weight: bold">
                 </div>
                 <div class="form-group col-4">
                     <input type="number" readonly class="form-control-plaintext" value="1">
                 </div>
-                <div class="form-group col-1">
-                    <input type="text" readonly class="form-control-plaintext" value="用户名:" style="text-align: center;font-weight: bold">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="被举报者ID:" style="text-align: center;font-weight: bold">
                 </div>
                 <div class="form-group col-4">
-                    <input type="password" class="form-control">
+                    <input type="number" readonly class="form-control-plaintext" value="1">
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-1">
-                    <input type="text" readonly class="form-control-plaintext" value="个人介绍:" style="text-align: center;font-weight: bold">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="举报者身份:" style="text-align: center;font-weight: bold">
                 </div>
                 <div class="form-group col-4">
-                    <input type="text" class="form-control" value="春翔的父亲">
+                    <input type="number" readonly class="form-control-plaintext" value="1">
                 </div>
-                <div class="form-group col-1">
-                    <input type="text" readonly class="form-control-plaintext" value="性别:" style="text-align: center;font-weight: bold">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="被举报者身份:" style="text-align: center;font-weight: bold">
                 </div>
                 <div class="form-group col-4">
-                    <select id="inputState" class="form-control">
-                        <option selected>保密</option>
-                        <option>男/option>
-                        <option>女/option>
-                    </select>
+                    <input type="number" readonly class="form-control-plaintext" value="1">
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-1">
-                    <input type="text" readonly class="form-control-plaintext" value="用户身份:" style="text-align: center;font-weight: bold">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="举报者徽章:" style="text-align: center;font-weight: bold">
                 </div>
                 <div class="form-group col-4">
-                    <select class="form-control">
-                        <option selected>学生</option>
-                        <option>老师</option>
-                    </select>
+                    <input type="number" readonly class="form-control-plaintext" value="1">
                 </div>
-                <div class="form-group col-1">
-                    <input type="text" readonly class="form-control-plaintext" value="用户状态:" style="text-align: center;font-weight: bold">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="被举报者徽章:" style="text-align: center;font-weight: bold">
                 </div>
                 <div class="form-group col-4">
-                    <select class="form-control">
-                        <option selected>正常</option>
-                        <option>停封</option>
-                        <option>禁言</option>
-                    </select>
+                    <input type="number" readonly class="form-control-plaintext" value="1">
                 </div>
             </div>
-            <h5>设置账户密码：</h5>
+
             <div class="form-row">
-                <div class="form-group col-1">
-                    <input type="text" readonly class="form-control-plaintext" value="邮箱:" style="text-align: center;font-weight: bold">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="举报者状态:" style="text-align: center;font-weight: bold">
                 </div>
                 <div class="form-group col-4">
-                    <input type="email" class="form-control" value="1185229277@qq.com">
+                    <input type="number" readonly class="form-control-plaintext" value="1">
                 </div>
-                <div class="form-group col-1">
-                    <input type="text" readonly class="form-control-plaintext" value="密码:" style="text-align: center;font-weight: bold">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="被举报者状态:" style="text-align: center;font-weight: bold">
                 </div>
                 <div class="form-group col-4">
-                    <input type="text" class="form-control" value="123456">
+                    <input type="number" readonly class="form-control-plaintext" value="1">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">保存</button>
-            <button type="submit" class="btn btn-danger">删除</button>
+            <div class="form-row">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="举报原因:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select class="form-control-plaintext">
+                        <option>辱骂攻击</option>
+                        <option>政治敏感</option>
+                        <option>色情低俗</option>
+                        <option>侵权抄袭</option>
+                        <option>造谣行为</option>
+                        <option>仇视言论</option>
+                    </select>
+                </div>
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="提出时间:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="time" readonly class="form-control-plaintext">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="问题标题:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-10">
+                    <input type="text" class="form-control-plaintext" value="" readonly>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="问题内容:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-7">
+                    <textarea class="questionContent" readonly></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="是否删除:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select class="form-control-plaintext">
+                        <option>是</option>
+                        <option>否</option>
+                    </select>
+                </div>
+                <div class="form-group col-2">
+                    <input type="text" readonly class="form-control-plaintext" value="惩罚措施:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select class="form-control-plaintext">
+                        <option>禁言7天</option>
+                        <option>禁言30天</option>
+                        <option>禁言90天</option>
+                        <option>禁言365天</option>
+                        <option>永久封禁</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-left: 15px">确定</button>
         </div>
     </div>
     <!--出现悬浮窗口后,背景变暗-->
