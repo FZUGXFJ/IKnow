@@ -66,21 +66,14 @@ public class UserAction {
     private final static String NO_USER = null;
      */
 
+    /**
+     * 用密码登录
+     * @return SUCCESS
+     */
     public String passwordLogin() {
-        User loginInf = new User();
-        loginInf.setEmail(email);
-        loginInf.setPasswd(password);
-        User user = userService.loginByPassword(loginInf);
-        Map<String,Object> resultMap = new HashMap<>(MIN_HASH_MAP_NUM);
-        if (user != null) {
-            ActionContext.getContext().getSession().put("user",user);
-            resultMap.put("resultCode",0);
-            resultMap.put("email",user.getEmail());
-            resultMap.put("password",user.getPasswd());
-        } else {
-            resultMap.put("resultCode",1);
-        }
-        inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
+        Map<String, Object> result = userService.loginByPassword(email, password);
+        ActionContext.getContext().getSession().put("user",result.get("user"));
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 
