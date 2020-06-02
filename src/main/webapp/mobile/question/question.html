@@ -140,6 +140,10 @@
                         <br>
                         <table>
                             <td class="operateItem" v-if="viewerIsOwner==1">
+                                <div><i class="fas fa-edit fa-2x" @click="ediQuestion"></i></div>
+                                <span>编辑问题</span>
+                            </td>
+                            <td class="operateItem" v-if="viewerIsOwner==1">
                                 <div><i class="fas fa-trash-alt fa-2x"></i></div>
                                 <span>删除问题</span>
                             </td>
@@ -392,6 +396,9 @@
             reportAnswer:function (id) {
                 this.selectAid = id;
                 this.showSheet = true;
+            },
+            ediQuestion:function () {
+                location.href = "editQuestion.html?questionId=" + this.questionId;
             }
         },
         mounted:function () {

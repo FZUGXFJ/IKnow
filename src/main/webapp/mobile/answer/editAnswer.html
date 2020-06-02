@@ -131,6 +131,10 @@
                     if (result.resultCode === 0) {
                         editor.container.firstChild.innerHTML = result.content;
                         editAnswer.loading = false;
+                    } else if (result.resultCode === 1) {
+                        location.href = "../user/login.html?boot=1";
+                    } else if (result.resultCode === 2) {
+                        location.href = "../home.html";
                     }
                 },
                 error:function (request,status,error) {

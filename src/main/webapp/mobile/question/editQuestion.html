@@ -21,15 +21,28 @@
 <div id="editQuestion">
     <div id="header">
         <table>
-            <td style="width: 50%;"><i class="fas fa-times" @click="back"></i></td>
-            <td style="width: 50%;text-align: right;"><button class="btn btn-link" @click="">修改问题</button></td>
+            <td style="width: 33%;"><i class="fas fa-times" @click="back"></i></td>
+            <td style="width: 34%">
+                <span v-if="loading">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+                <span v-else="">编辑问题</span>
+            </td>
+            <td style="width: 33%;text-align: right;"><button class="btn btn-link" @click="check">修改</button></td>
         </table>
     </div>
     <br><br><br>
+    <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <input type="text" id="questionTitle" class="form-control"
+           aria-label="标题" v-model="questionTitle" placeholder="标题加载中。。。"
+           style="width: 90%;margin: 0 auto">
 </div>
 <div id="contentArea">
-    <input type="text" id="questionTitle" class="form-control" aria-label="标题" v-model="questionTitle" placeholder="">
     <div class="separator"></div>
+    <br>
     <div id="toolbar" style="border: 0">
         <table>
             <td style="width: 60%">
@@ -42,7 +55,7 @@
         </table>
     </div>
     <div id="inputArea">
-        <div id="editor" style="border: 0;font-size: 1.2em">
+        <div id="editor" style="border: 0;font-size: 1.1em">
             <p></p>
         </div>
     </div>
@@ -54,7 +67,7 @@
         <td class="classificationSelect">
             <select class="form-control" id="categoriesType" v-model="selectedCatId" @change="categoriesTypeChange">
                 <option disabled value="0" selected>请选择门类类别</option>
-                <option v-for="obj in categoriesTypes" :value="obj.id">{{obj.name}}</option>
+                <option v-for="obj in categoriesTypes" :value="obj.id" :selected="obj.id===selectedCatId">{{obj.name}}</option>
             </select>
         </td>
     </table>
@@ -85,20 +98,89 @@
             toolbar: '#toolbar'
         },
         theme: 'snow',
-        placeholder:"此处输入问题详情"
+        placeholder:"问题加载中。。。"
     });
     let editQuestion = new Vue({
        el:"#editQuestion",
        data:{
-           questionTitle:"需要修改的标题",
+           questionTitle:"",
+           questionId:0,
+           alertMsg:{head:"",body:""},
+           loading:true
        },
        methods:{
            back:function () {
-
+                history.go(-1);
+           },
+           check:function () {
+               let questionTitle = this.questionTitle.trim();
+               let questionContent = editor.container.firstChild.innerHTML;
+               let categoriesType = choseClassification.selectedCatId;
+               let subjectType = choseClassification.selectedSubId;
+               let majorType = choseClassification.selectedMajId;
+               if (questionTitle.length <= 0) {
+                   this.alertMsg.head = "问题标题不能为空";
+                   this.alertMsg.body = "";
+                   $("#alert").slideDown();
+               } else if (!questionTitle.endsWith("?") && !questionTitle.endsWith("？")) {
+                   this.alertMsg.head = "问题必须以问号结尾";
+                   this.alertMsg.body = "";
+                   $("#alert").slideDown();
+               }else if (questionTitle.length >50) {
+                   this.alertMsg.head = "问题标题不能多于50字";
+                   this.alertMsg.body = "";
+                   $("#alert").slideDown();
+               } else if (questionContent.length > 25000) {
+                   this.alertMsg.head = "问题内容不能多于25000字";
+                   this.alertMsg.body = "";
+                   $("#alert").slideDown();
+               } else if (categoriesType === "") {
+                   this.alertMsg.head = "门类分类不能为空";
+                   this.alertMsg.body = "";
+                   $("#alert").slideDown();
+               } else if (subjectType === "") {
+                   this.alertMsg.head = "科目分类不能为空";
+                   this.alertMsg.body = "";
+                   $("#alert").slideDown();
+               } else if (majorType === "") {
+                   this.alertMsg.head = "专业分类不能为空";
+                   this.alertMsg.body = "";
+                   $("#alert").slideDown();
+               } else {
+                   this.update(questionTitle,questionContent,categoriesType,subjectType,majorType);
+               }
+           },
+           closeAlert:function () {
+               $("#alert").slideUp();
+           },
+           update:function (questionTitle,questionContent,categoriesType,subjectType,majorType) {
+               $.ajax({
+                   url:"../../question/updateQuestion.action",
+                   type:"POST",
+                   data:{
+                       questionId:editQuestion.questionId,
+                       questionTitle:questionTitle,
+                       questionContent:questionContent,
+                       categoriesType:categoriesType,
+                       subjectType:subjectType,
+                       majorType:majorType,
+                   },
+                   dataType:"json",
+                   success:function (result) {
+                       if (result.resultCode === 0) {
+                            history.go(-1);
+                       } else if (result.resultCode === 1) {
+                           location.href = "../user/login.html?boot=1";
+                       }
+                   },
+                   error:function (request,status,error) {
+                       alert("系统异常！");
+                       console.log(request.status);
+                       console.log(request.readyState);
+                       console.log(status);
+                   }
+               });
            }
-       },
-       mounted:function () {
-
        }
     });
     let choseClassification = new Vue({
@@ -128,26 +210,44 @@
             }
         },
         mounted:function () {
+            let loc = location.href;
+            loc = loc.replace("?","&").split("&")[1];
+            let questionId;
+            if (loc.indexOf("questionId=")!==-1) {
+                questionId = loc.replace("questionId=","");
+                editQuestion.questionId = questionId;
+            } else {
+                location.href = "../../error/mobile/404error.html"
+            }
             $.ajax({
-                url:"../../question/questionType.action",
+                url:"../../question/getQuestionInfo.action",
                 type:"POST",
                 data:{
-
+                    questionId:questionId
                 },
                 dataType:"json",
                 success:function (result) {
                     if (result.resultCode === 0) {
+                        editQuestion.questionTitle = result.questionTitle;
+                        editor.container.firstChild.innerHTML = result.questionContent;
                         choseClassification.categoriesTypes = result.categoriesTypes;
+                        choseClassification.selectedCatId = result.categoryId;
+                        choseClassification.categoriesTypeChange();
+                        choseClassification.selectedSubId = result.subjectId;
+                        choseClassification.subjectTypeChange();
+                        choseClassification.selectedMajId = result.majorId;
+                        editQuestion.loading = false;
                     } else if (result.resultCode === 1) {
-                        alert("请先登录后再发布提问！");
-                        location.href = "../user/login.html?boot=0";
+                        location.href = "../user/login.html?boot=1";
+                    } else if (result.resultCode === 2) {
+                        location.href = "../home.html";
                     }
                 },
-                error:function (a,b,c) {
-                    alert("系统错误");
-                    console.log(a);
-                    console.log(b);
-                    console.log(c);
+                error:function (request,status,error) {
+                    alert("系统异常！");
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
                 }
             });
         }

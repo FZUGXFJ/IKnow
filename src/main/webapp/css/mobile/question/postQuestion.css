@@ -16,6 +16,7 @@ table{
     width: 100%;
     font-size: 1.3em;
     border: 0;
+    font-weight: bold;
 }
 #container{
     width: 90%;

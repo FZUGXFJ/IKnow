@@ -67,7 +67,7 @@
             </td>
         </table>
     </div>
-    <div id="editor" style="border: 0;font-size: 1.2em">
+    <div id="editor" style="border: 0;font-size: 1.1em">
         <p></p>
     </div>
 </div>
@@ -159,12 +159,12 @@
                     postQuestion.alertMsg.head = "问题必须以问号结尾";
                     postQuestion.alertMsg.body = "";
                     $("#alert").slideDown();
-                }else if (questionTitle.length >50) {
-                    postQuestion.alertMsg.head = "问题标题不能多于50字";
+                }else if (questionTitle.length > 100) {
+                    postQuestion.alertMsg.head = "问题标题不能多于100字";
                     postQuestion.alertMsg.body = "";
                     $("#alert").slideDown();
-                } else if (questionContent.length > 15000) {
-                    postQuestion.alertMsg.head = "问题内容不能多于15000字";
+                } else if (questionContent.length > 25000) {
+                    postQuestion.alertMsg.head = "问题内容不能多于25000字";
                     postQuestion.alertMsg.body = "";
                     $("#alert").slideDown();
                 } else if (categoriesType === "") {
@@ -232,9 +232,7 @@
             $.ajax({
                 url:"../../question/questionType.action",
                 type:"POST",
-                data:{
-
-                 },
+                data:{},
                 dataType:"json",
                 success:function (result) {
                     if (result.resultCode === 0) {
