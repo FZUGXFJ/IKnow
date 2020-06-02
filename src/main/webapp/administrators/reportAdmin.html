@@ -171,8 +171,8 @@
                         <td>{{reportInfo.date}}</td>
                         <td>{{reportInfo.reason}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#layer">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button @click="now=i+cur*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#edit">删除</button>
+                            <button @click="now=i+(cur-1)*15" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                         </td>
                     </tr>
                     </tbody>
@@ -197,11 +197,122 @@
             </div>
         </main>
     </div>
+    <div role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ '确认删除么？'}} </h4>
+                </div>
+                <div class="modal-body text-right">
+                    <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                    <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="del()">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--悬浮窗口-->
+    <div id="window" class="window_css" style="background-color: white">
+        <div>
+            <span style="font-size: 1.2em;font-weight: bold">用户信息</span>
+            <a href="javascript:void(0)" onclick="hideWindow()">
+                <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 0"></i>
+            </a>
+        </div>
+        <div class="userInfo">
+            <h5>基本信息：</h5>
+            <div class="form-row">
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="ID:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="number" readonly class="form-control-plaintext" value="1">
+                </div>
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="用户名:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="password" class="form-control">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="个人介绍:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="text" class="form-control" value="春翔的父亲">
+                </div>
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="性别:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select id="inputState" class="form-control">
+                        <option selected>保密</option>
+                        <option>男/option>
+                        <option>女/option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="用户身份:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select class="form-control">
+                        <option selected>学生</option>
+                        <option>老师</option>
+                    </select>
+                </div>
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="用户状态:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <select class="form-control">
+                        <option selected>正常</option>
+                        <option>停封</option>
+                        <option>禁言</option>
+                    </select>
+                </div>
+            </div>
+            <h5>设置账户密码：</h5>
+            <div class="form-row">
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="邮箱:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="email" class="form-control" value="1185229277@qq.com">
+                </div>
+                <div class="form-group col-1">
+                    <input type="text" readonly class="form-control-plaintext" value="密码:" style="text-align: center;font-weight: bold">
+                </div>
+                <div class="form-group col-4">
+                    <input type="text" class="form-control" value="123456">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">保存</button>
+            <button type="submit" class="btn btn-danger">删除</button>
+        </div>
+    </div>
+    <!--出现悬浮窗口后,背景变暗-->
+    <div id="shadow" class="shadow_css"></div>
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <script>
+    /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
+    function displayWindow() {
+        /*悬浮窗口的显示,需要将display变成block*/
+        document.getElementById("window").style.display = "block";
+        /*将背景变暗*/
+        document.getElementById("shadow").style.display = "block";
+    }
+
+    /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+    function hideWindow() {
+        document.getElementById("window").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+
     let reportAdmin=new Vue({
         el:"#reportAdmin",
         data:{
@@ -215,7 +326,7 @@
             alertMsg:{head:"",body:""},
             all: 1, //总页数
             cur: 1,//当前页码
-            now:-1
+            now:-1//当前索引
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -288,6 +399,36 @@
                         console.log(status);
                     }
                 });
+            },
+            del: function(){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/reportDel.action",
+                    data:{
+                        reportID:reportAdmin.reportInfoList[reportAdmin.now].id,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            reportAdmin.reportInfoList.splice(reportAdmin.now,1);
+                            if((reportAdmin.reportInfoList.length+1)%15==1){
+                                reportAdmin.cur--;
+                            }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                            reportAdmin.page();
+                            console.log(reportAdmin.now);
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            page: function(){
+                reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
+                console.log(reportAdmin.all);
             },
             btnClick: function(data){
                 if(data != this.cur){
