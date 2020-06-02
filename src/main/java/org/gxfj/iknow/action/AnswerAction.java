@@ -293,6 +293,7 @@ public class AnswerAction {
 
     public String updateAnswer(){
         Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        answerService.updateAnswerContent(answerId, content);
         response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
