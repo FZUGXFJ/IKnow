@@ -272,6 +272,31 @@ public class AnswerAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
+
+    public String getAnswerInfo(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
+        if (user == null) {
+            response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.UN_LOGIN);
+        } else {
+            if(answerService.isAnswerer(answerId,user)) {
+                response.put("content",answerService.getAnswerContent(answerId));
+                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+            } else{
+                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
+            }
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    public String updateAnswer(){
+        Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
     public Integer getQuestionId() {
         return questionId;
     }
