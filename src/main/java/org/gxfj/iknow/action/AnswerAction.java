@@ -126,7 +126,7 @@ public class AnswerAction {
         User user = (User) session.get(ConstantUtil.SESSION_USER);
 
         if (user != null) {
-            if (answerService.cancelAdopt(user, answerId)) {
+            if (answerService.cancelAnonymous(user, answerId)) {
                 response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
             } else {
                 response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.USER_IS_NOT_ANSWERER);
