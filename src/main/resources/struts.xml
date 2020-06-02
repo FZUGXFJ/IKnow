@@ -340,7 +340,14 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="deleteReply" class="org.gxfj.iknow.action.ReplyAction" method="deleteReply">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
+
     <package name="record" namespace="/record" extends="default">
         <action name="collectionRecord" class="org.gxfj.iknow.action.RecordAction" method="collectionRecord">
             <result name="success" type="stream">
@@ -361,12 +368,6 @@
             </result>
         </action>
         <action name="postAnsRecord" class="org.gxfj.iknow.action.RecordAction" method="postAnsRecord">
-            <result name="success" type="stream">
-                <param name="contentType">application/json;charset=utf-8</param>
-                <param name="inputName">inputStream</param>
-            </result>
-        </action>
-        <action name="deleteReply" class="org.gxfj.iknow.action.ReplyAction" method="deleteReply">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>
