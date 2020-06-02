@@ -44,12 +44,12 @@ public interface AnswerService {
     public Boolean adoptAnswer(User user, Integer answerId);
 
     /**
-     * 执行用户采纳问题操作。如果用户是题主，采纳成功，否则采纳失败
+     * 执行回答取消匿名
      * @param user 执行操作的用户
      * @param answerId 要采纳的回答的id
      * @return 成功为true,失败为false
      */
-    public Boolean cancelAdopt(User user,Integer answerId);
+    public Boolean cancelAnonymous(User user,Integer answerId);
 
     /**
      * 获得count条问题信息
