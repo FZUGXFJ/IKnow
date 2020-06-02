@@ -4,6 +4,7 @@ import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.ImgUtil;
+import org.gxfj.iknow.util.TextVerifyUtil;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,11 @@ public class ReplyServiceImpl implements ReplyService {
     private final int IS_ANSWERER = 2;
 
     @Override
-    public void postReply(Integer commentId, String content, Integer replyTarget, User user) {
+    public Integer postReply(Integer commentId, String content, Integer replyTarget, User user) {
+        if (!TextVerifyUtil.verifyCompliance(content)) {
+            return null;
+        }
+
         User targetUser= userDAO.get(replyTarget);
         Comment comment = commentDAO.getNotDelete(commentId);
 
@@ -47,6 +52,7 @@ public class ReplyServiceImpl implements ReplyService {
         reply.setUserByUserId(user);
 
         replyDAO.add(reply);
+        return reply.getId();
     }
 
     @Override

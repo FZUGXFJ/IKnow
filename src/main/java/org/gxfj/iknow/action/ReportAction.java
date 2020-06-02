@@ -36,11 +36,11 @@ public class ReportAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get(SESSION_USER);
         if(user == null){
-            response.put(JSON_RETURN_CODE, UN_LOGIN);
+            response.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
         }
         else {
             response = reportService.reportReasonmap();
-            response.put(JSON_RETURN_CODE,SUCCESS);
+            response.put(JSON_RETURN_CODE_NAME,SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -52,10 +52,10 @@ public class ReportAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User)session.get(SESSION_USER);
         if(user == null){
-            response.put(JSON_RETURN_CODE, UN_LOGIN);
+            response.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
         }
         else if (reportService.doReport(type,reason,description,targetId,user)){
-            response.put(JSON_RETURN_CODE,SUCCESS);
+            response.put(JSON_RETURN_CODE_NAME,SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));

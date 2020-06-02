@@ -58,11 +58,11 @@ public class AdminAction {
         adminInf.setPasswd(password);
         Admin admin = adminService.login(adminInf);
         if(admin == null){
-            resultMap.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         else{
             ActionContext.getContext().getSession().put(ConstantUtil.LOGIN_ADMIN_SESSION_NAME,admin);
-            resultMap.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+            resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -70,7 +70,7 @@ public class AdminAction {
 
     public String statistics(){
         Map<String,Object> result=adminService.getData(dateNow,typeSum);
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -79,9 +79,9 @@ public class AdminAction {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         if (session.get(ConstantUtil.LOGIN_ADMIN_SESSION_NAME) == ConstantUtil.NO_ADMIN) {
-            result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         } else {
-            result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         System.out.println(JSON.toJSONString(result));
@@ -97,35 +97,35 @@ public class AdminAction {
         }
 
         Map<String,Object> result = adminService.getActiveData(dateNow,typeSum, length);
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String questionTypeSum(){
         Map<String,Object> result = adminService.getQuestionTypeSumData();
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String reportType(){
         Map<String,Object> result = adminService.getReportByType(reportType);
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String reportReason(){
         Map<String,Object> result = adminService.getReportReason();
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String userInfo(){
         Map<String,Object> result = adminService.getUserInfo(userID);
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -136,14 +136,14 @@ public class AdminAction {
      */
     public String questionReported(){
         Map<String,Object> result = adminService.getReportedQuestion(typeID);
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String answerReported(){
         Map<String,Object> result = adminService.getAnswerReported(typeID,type);
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -155,7 +155,7 @@ public class AdminAction {
     public String reportDel(){
         Map<String,Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         adminService.deleteReport(reportID);
-        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

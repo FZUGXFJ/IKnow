@@ -13,8 +13,9 @@ public interface CommentService {
      * @param user 用户
      * @param answerId 回答ID
      * @param content 用户输入的回答内容
+     * @return 评论id
      */
-    public void postComment(User user, Integer answerId, String content);
+    public Integer postComment(User user, Integer answerId, String content);
 
     /**
      * 获取回答的评论(评论数方法中指定）

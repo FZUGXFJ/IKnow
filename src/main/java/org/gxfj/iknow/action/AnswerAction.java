@@ -51,7 +51,7 @@ public class AnswerAction {
         Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         User user = (User)session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         else if(questionId == null){
             response.put("resultCode" , ConstantUtil.MISS_QUESTIONID);
@@ -59,7 +59,7 @@ public class AnswerAction {
         else{
             questionTitle = answerService.getQuestiontitle(questionId);
             response.put("title" , questionTitle);
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -70,18 +70,17 @@ public class AnswerAction {
         Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         User user = (User)session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         else if(questionId == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.MISS_QUESTIONID);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_QUESTIONID);
         }
         else if(content == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.MISS_ANSWER_IF);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_ANSWER_IF);
         }
         else{
             //得到新发布的回答的id
             response = answerService.postAnswer(questionId,content,isAnonymous,user);
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -91,7 +90,7 @@ public class AnswerAction {
         Map<String,Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         Map<String,Object> response = answerService.getRecommendAnswer(questionId,answerId,user);
-        response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -106,14 +105,14 @@ public class AnswerAction {
         if (user != null) {
             if (answerService.adoptAnswer(user, answerId)) {
                 //用户已登录，且用户为题主，返回采纳成功
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
                 //用户已登录，但用户不是题主，返回用户不是提问者
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.USER_IS_NOT_QUESTIONER);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_QUESTIONER);
             }
         } else {
             //用户未登录，返回未登录
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -127,12 +126,12 @@ public class AnswerAction {
 
         if (user != null) {
             if (answerService.cancelAnonymous(user, answerId)) {
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.USER_IS_NOT_ANSWERER);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_ANSWERER);
             }
         } else {
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -148,7 +147,7 @@ public class AnswerAction {
         } else {
             response=answerService.getRecommendAnswer(null,20);
         }
-        response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         if (user != null) {
             cUser.put("id",user.getId());
             cUser.put("head", ImgUtil.changeAvatar(user.getHead()));
@@ -166,13 +165,13 @@ public class AnswerAction {
         Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE , ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         else if(!answerService.approveAnswer(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE , 2 );
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
         }
         else{
-            response.put(ConstantUtil.JSON_RETURN_CODE , ConstantUtil.SUCCESS);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -183,13 +182,13 @@ public class AnswerAction {
         Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE , ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         else if(!answerService.cancelApprove(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE , 2 );
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
         }
         else{
-            response.put(ConstantUtil.JSON_RETURN_CODE , ConstantUtil.SUCCESS);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -199,13 +198,13 @@ public class AnswerAction {
         Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE , ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         else if(!answerService.oppositionAnswer(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE , 2 );
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
         }
         else{
-            response.put(ConstantUtil.JSON_RETURN_CODE , ConstantUtil.SUCCESS);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -216,13 +215,13 @@ public class AnswerAction {
         Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE , ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         else if(!answerService.cancelOppose(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE , 2 );
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
         }
         else{
-            response.put(ConstantUtil.JSON_RETURN_CODE , ConstantUtil.SUCCESS);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -234,21 +233,21 @@ public class AnswerAction {
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if (user != null) {
             if(answerService.moreRecommendAnswer(user.getId(), ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start)==null) {
-                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.NO_MORE);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
             }
             else{
                 response = answerService.moreRecommendAnswer(user.getId(), ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,
                         start);
-                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
             }
 
         } else {
             if(answerService.moreRecommendAnswer(null,ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start)==null){
-                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.NO_MORE);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
             }
             else{
                 response = answerService.moreRecommendAnswer(null, ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start);
-                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -260,13 +259,13 @@ public class AnswerAction {
         Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if (user == null) {
-            response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
         } else {
             if(answerService.isAnswerer(answerId,user)) {
                 answerService.deleteAnswer(user, answerId);
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else{
-                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -278,13 +277,13 @@ public class AnswerAction {
         Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if (user == null) {
-            response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
         } else {
             if(answerService.isAnswerer(answerId,user)) {
                 response.put("content",answerService.getAnswerContent(answerId));
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else{
-                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -294,7 +293,7 @@ public class AnswerAction {
     public String updateAnswer(){
         Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
         answerService.updateAnswerContent(answerId, content);
-        response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

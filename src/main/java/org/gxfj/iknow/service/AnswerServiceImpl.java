@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.util.*;
 
+import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
+
 /**
  * @author erniumo ,hhj
  */
@@ -47,6 +49,14 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String,Object> postAnswer(Integer questionId, String content, Byte isAnonymous, User user) {
+
+        Map<String, Object> result= new HashMap<>(MAP_NUM);
+        if (!TextVerifyUtil.verifyCompliance(content)) {
+            result.put("resultCode", JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            return result;
+        }
+
+
         Answer answer=new Answer();
         answer.setIsAnonymous(isAnonymous);
         answer.setDate(new Date());
@@ -60,8 +70,8 @@ public class AnswerServiceImpl implements AnswerService{
         answer.setContentText(HtmlUtil.html2Text(content));
 
         answerDAO.add(answer);
-        Map<String, Object> result= new HashMap<>(MAP_NUM);
         result.put("answerID",answer.getId());
+        result.put("resultCode", 0);
         return result;
     }
 
@@ -298,7 +308,7 @@ public class AnswerServiceImpl implements AnswerService{
         return getRecommendJsonItems(answers);
     }
 
-    
+
     /**
      * 从数据库中获取推荐的问题
      * @param count 推荐问题的条数

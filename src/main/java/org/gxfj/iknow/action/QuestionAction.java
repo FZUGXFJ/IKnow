@@ -25,6 +25,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
+
 /**
  * @author qmbx
  * @version 0.0.1
@@ -89,10 +91,14 @@ public class QuestionAction {
             response.put("resultCode",ConstantUtil.MISS_QUESTION_INF);
         }
         else {
-            Integer x=questionService.postQuestion(user, questionTitle, questionContent, categoriesType, subjectType
+            Integer x = questionService.postQuestion(user, questionTitle, questionContent, categoriesType, subjectType
                     , majorType, isAnonymous);
-            response.put("questionId",x);
-            response.put("resultCode", ConstantUtil.SUCCESS);
+            if (x != null) {
+                response.put("questionId",x);
+                response.put("resultCode", ConstantUtil.SUCCESS);
+            } else {
+                response.put("resultCode", JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;

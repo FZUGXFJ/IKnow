@@ -25,9 +25,9 @@ public class TextVerifyUtil {
             ".282335-20185621";
     private final static String ACCESS_TOKEN_NAME = "access_token";
 
-    private final static String VERIFY_RESULT_KEY = "conclusion";
+    private final static String VERIFY_RESULT_KEY = "conclusionType";
 
-    private final static String VERIFY_RESULT_SUCCESS = "合规";
+    private final static Integer VERIFY_RESULT_SUCCESS = 1;
 
     /**
      * 向百度api发送请求审核文本
@@ -46,7 +46,7 @@ public class TextVerifyUtil {
             // 字符数据最好encoding以下;这样一来，某些特殊字符才能传过去(如:某人的名字就是“&”,不encoding的话,传不过去)
             params.append(ACCESS_TOKEN_NAME + "=" + URLEncoder.encode(ACCESS_TOKEN, "utf-8"));
             params.append("&");
-            params.append("text" + "=" + text);
+            params.append("text" + "=" + URLEncoder.encode(text,"utf-8"));
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
@@ -70,9 +70,9 @@ public class TextVerifyUtil {
             //获得响应状态: response.getStatusLine()
             //获得响应内容长度: responseEntity.getContentLength()
             //获得响应内容: EntityUtils.toString(responseEntity)
-
             if (responseEntity != null) {
                 jsonObject = JSON.parseObject(EntityUtils.toString(responseEntity));
+                System.out.println(jsonObject.toJSONString());
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
@@ -103,8 +103,7 @@ public class TextVerifyUtil {
      */
     public static boolean verifyCompliance(String text) {
         JSONObject jsonObject = verifyText(text);
-
-        if (jsonObject.get(VERIFY_RESULT_KEY) == VERIFY_RESULT_SUCCESS) {
+        if (VERIFY_RESULT_SUCCESS.equals(jsonObject.get(VERIFY_RESULT_KEY))) {
             return true;
         } else {
             return false;
