@@ -144,7 +144,7 @@
                                 <span>编辑问题</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsOwner==1">
-                                <div><i class="fas fa-trash-alt fa-2x"></i></div>
+                                <div><i class="fas fa-trash-alt fa-2x" @click="deleteQuestion"></i></div>
                                 <span>删除问题</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsOwner==0">
@@ -399,9 +399,43 @@
             },
             ediQuestion:function () {
                 location.href = "editQuestion.html?questionId=" + this.questionId;
+            },
+            deleteQuestion:function () {
+                this.$messagebox.confirm("问题删除后将无法恢复，确定删除吗？").then(action => {
+                    $.ajax({
+                        url:"../../question/deleteQuestion.action",
+                        type:"POST",
+                        data:{
+                            questionId:question.questionId
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                sessionStorage.setItem("notice","问题删除成功！");
+                                location.href = "../record/postQueRecord.html";
+                            } else if (result.resultCode === 1) {
+                                location.href = "../user/login.html?boot=1";
+                            } else if (result.resultCode === 2) {
+                                location.href = "../home.html";
+                            }
+                        },
+                        error:function (request,status,error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }).catch(action => {
+
+                });
             }
         },
         mounted:function () {
+            if (sessionStorage.getItem("notice") != null) {
+                this.$toast(sessionStorage.getItem("notice"));
+                sessionStorage.removeItem("notice");
+            }
             let loc = location.href;
             let qid = loc.replace("?","&").split("&")[1];
             let questionId;

@@ -163,9 +163,9 @@
                                 <div><i class="fas fa-check-square fa-2x" @click="adopt"></i></div>
                                 <span>采纳回答</span>
                             </td>
-                            <td class="operateItem" v-if="viewerIsQuestionOwner == 1 && question.isSolved == 1 && answer.isAdopt == 1">
-                                <div><i class="fas fa-user-times fa-2x" @click="cancelAdopt"></i></div>
-                                <span>取消采纳</span>
+                            <td class="operateItem" v-if="viewerIsAnswerer == 1">
+                                <div><i class="fas fa-user-times fa-2x" @click="deleteAnswer"></i></div>
+                                <span>删除回答</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsAnswerer == 1 && answer.isAnonymous == 1">
                                 <div><i class="fas fa-user-check fa-2x" @click="cancelAnonymous"></i></div>
@@ -196,99 +196,101 @@
             load:false,
             noAction:false
         },
-        methods:{
-            show:function () {
+        methods: {
+            show: function () {
                 $("#questionContent").removeClass("hidePart");
                 this.hidePart = false;
             },
-            hide:function () {
+            hide: function () {
                 $("#questionContent").addClass("hidePart");
                 this.hidePart = true;
             },
-            clearImg:function (htmlText) {
+            clearImg: function (htmlText) {
 
             },
-            showOperateMenu:function () {
+            showOperateMenu: function () {
                 $("#operateMenu").slideToggle();
             },
-            adopt:function () {
+            adopt: function () {
                 $.ajax({
-                    type:"POST",
-                    url:"../../answer/adoptAnswer.action",
-                    data:{
-                        answerId:answer.answerId
+                    type: "POST",
+                    url: "../../answer/adoptAnswer.action",
+                    data: {
+                        answerId: answer.answerId
                     },
-                    dataType:"json",
-                    success:function (result) {
+                    dataType: "json",
+                    success: function (result) {
                         if (result.resultCode === 0) {
                             alert("采纳成功");
                         }
                     },
-                    error:function () {
+                    error: function () {
                         alert("系统异常");
                     }
                 });
             },
-            cancelAdopt:function () {
+            cancelAdopt: function () {
 
             },
-            allComment:function () {
+            allComment: function () {
                 location.href = "../comment/comment.html?answerId=" + this.answerId;
             },
-            cancelAnonymous:function () {
+            cancelAnonymous: function () {
                 answer.$messagebox.confirm("确定取消匿名吗？").then(action => {
                     $.ajax({
-                        url:"../../answer/cancelAdopt.action",
-                        type:"POST",
-                        data:{
-                            answerId:answer.answerId
+                        url: "../../answer/cancelAdopt.action",
+                        type: "POST",
+                        data: {
+                            answerId: answer.answerId
                         },
-                        dataType:"json",
-                        success:function (result) {
+                        dataType: "json",
+                        success: function (result) {
                             if (result.resultCode === 0) {
                                 history.go(0);
                             }
                         },
-                        error:function (request,status,error) {
+                        error: function (request, status, error) {
                             alert("系统异常！");
                             console.log(request.status);
                             console.log(request.readyState);
                             console.log(status);
                         }
                     });
-                }).catch(action => {});
+                }).catch(action => {
+                });
             },
-            back:function () {
+            back: function () {
                 history.go(-1);
             },
-            approveComment:function (comment) {
+            approveComment: function (comment) {
                 if (answer.noAction) {
                     return;
                 }
                 answer.noAction = true;
                 let type = "POST";
                 let data = {
-                    commentId:comment.id
+                    commentId: comment.id
                 };
                 let dataType = "json";
                 if (comment.isApproved === 0) {
                     $.ajax({
-                        url:"../../comment/approveComment.action",
-                        type:type,
-                        data:data,
-                        dataType:dataType,
-                        success:function (result) {
+                        url: "../../comment/approveComment.action",
+                        type: type,
+                        data: data,
+                        dataType: dataType,
+                        success: function (result) {
                             if (result.resultCode === 0) {
                                 comment.isApproved = 1;
                                 comment.approveNum += 1;
                             } else if (result.resultCode === 1) {
                                 answer.$messagebox.confirm("请先登录").then(action => {
                                     location.href = "../user/login.html?boot=0"
-                                }).catch(action => {});
+                                }).catch(action => {
+                                });
                             }
                             answer.noAction = false;
                         },
-                        error:function (request,status,error) {
+                        error: function (request, status, error) {
                             alert("系统异常！");
                             console.log(request.status);
                             console.log(request.readyState);
@@ -298,22 +300,23 @@
                     });
                 } else {
                     $.ajax({
-                        url:"../../comment/cancelApprove.action",
-                        type:type,
-                        data:data,
-                        dataType:dataType,
-                        success:function (result) {
+                        url: "../../comment/cancelApprove.action",
+                        type: type,
+                        data: data,
+                        dataType: dataType,
+                        success: function (result) {
                             if (result.resultCode === 0) {
                                 comment.isApproved = 0;
                                 comment.approveNum -= 1;
                             } else if (result.resultCode === 1) {
                                 answer.$messagebox.confirm("请先登录").then(() => {
                                     location.href = "../user/login.html?boot=0"
-                                }).catch(action => {});
+                                }).catch(action => {
+                                });
                             }
                             answer.noAction = false;
                         },
-                        error:function (request,status,error) {
+                        error: function (request, status, error) {
                             alert("系统异常！");
                             console.log(request.status);
                             console.log(request.readyState);
@@ -323,30 +326,31 @@
                     });
                 }
             },
-            backToQuestion:function () {
+            backToQuestion: function () {
                 location.href = "../question/question.html?questionId=" + answer.questionId;
             },
-            oppose:function () {
+            oppose: function () {
                 if (answer.noAction) {
                     return;
                 }
                 answer.noAction = true;
                 $.ajax({
-                    type:"POST",
-                    url:"../../answer/oppositionAnswer.action",
-                    data:{answerId:answer.answerId},
-                    dataType:"json",
-                    success:function (result) {
+                    type: "POST",
+                    url: "../../answer/oppositionAnswer.action",
+                    data: {answerId: answer.answerId},
+                    dataType: "json",
+                    success: function (result) {
                         if (result.resultCode === 0) {
                             answer.answer.approveState = 2;
                             answer.noAction = false;
                         } else if (result.resultCode === 1) {
                             answer.$messagebox.confirm("请先登录").then(() => {
                                 location.href = "../user/login.html?boot=0"
-                            }).catch(action => {});
+                            }).catch(action => {
+                            });
                         }
                     },
-                    error:function (request,status,error) {
+                    error: function (request, status, error) {
                         alert("系统异常！");
                         console.log(request.status);
                         console.log(request.readyState);
@@ -355,17 +359,17 @@
                     }
                 });
             },
-            approve:function () {
+            approve: function () {
                 if (answer.noAction) {
                     return;
                 }
                 answer.noAction = true;
                 $.ajax({
-                    type:"POST",
-                    url:"../../answer/approveAnswer.action",
-                    data:{answerId:answer.answerId},
-                    dataType:"json",
-                    success:function (result) {
+                    type: "POST",
+                    url: "../../answer/approveAnswer.action",
+                    data: {answerId: answer.answerId},
+                    dataType: "json",
+                    success: function (result) {
                         if (result.resultCode === 0) {
                             answer.answer.approveState = 1;
                             answer.answer.approveNum++;
@@ -373,10 +377,11 @@
                         } else if (result.resultCode === 1) {
                             answer.$messagebox.confirm("请先登录").then(() => {
                                 location.href = "../user/login.html?boot=0"
-                            }).catch(action => {});
+                            }).catch(action => {
+                            });
                         }
                     },
-                    error:function (request,status,error) {
+                    error: function (request, status, error) {
                         alert("系统异常！");
                         console.log(request.status);
                         console.log(request.readyState);
@@ -385,28 +390,29 @@
                     }
                 });
             },
-            cancelApprove:function () {
+            cancelApprove: function () {
                 if (answer.noAction) {
                     return;
                 }
                 answer.noAction = true;
                 $.ajax({
-                    type:"POST",
-                    url:"../../answer/cancelApprove.action",
-                    data:{answerId:answer.answerId},
-                    dataType:"json",
-                    success:function (result) {
+                    type: "POST",
+                    url: "../../answer/cancelApprove.action",
+                    data: {answerId: answer.answerId},
+                    dataType: "json",
+                    success: function (result) {
                         if (result.resultCode === 0) {
                             answer.answer.approveState = 0;
-                            answer.answer.approveNum --;
+                            answer.answer.approveNum--;
                             answer.noAction = false;
                         } else if (result.resultCode === 1) {
                             answer.$messagebox.confirm("请先登录").then(() => {
                                 location.href = "../user/login.html?boot=0"
-                            }).catch(action => {});
+                            }).catch(action => {
+                            });
                         }
                     },
-                    error:function (request,status,error) {
+                    error: function (request, status, error) {
                         alert("系统异常！");
                         console.log(request.status);
                         console.log(request.readyState);
@@ -415,27 +421,28 @@
                     }
                 });
             },
-            cancelOppose:function () {
+            cancelOppose: function () {
                 if (answer.noAction) {
                     return;
                 }
                 answer.noAction = true;
                 $.ajax({
-                    type:"POST",
-                    url:"../../answer/cancelOppose.action",
-                    data:{answerId:answer.answerId},
-                    dataType:"json",
-                    success:function (result) {
+                    type: "POST",
+                    url: "../../answer/cancelOppose.action",
+                    data: {answerId: answer.answerId},
+                    dataType: "json",
+                    success: function (result) {
                         if (result.resultCode === 0) {
                             answer.answer.approveState = 0;
                             answer.noAction = false;
                         } else if (result.resultCode === 1) {
                             answer.$messagebox.confirm("请先登录").then(() => {
                                 location.href = "../user/login.html?boot=0"
-                            }).catch(action => {});
+                            }).catch(action => {
+                            });
                         }
                     },
-                    error:function (request,status,error) {
+                    error: function (request, status, error) {
                         alert("系统异常！");
                         console.log(request.status);
                         console.log(request.readyState);
@@ -444,7 +451,7 @@
                     }
                 });
             },
-            reportAnswer:function () {
+            reportAnswer: function () {
                 let reportInfo = {
                     targetId: answer.answerId,
                     type: 2
@@ -452,11 +459,47 @@
                 sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
                 location.href = "../report/report.html";
             },
-            editAnswer:function () {
+            editAnswer: function () {
                 location.href = "editAnswer.html?answerId=" + this.answerId;
-            }
+            },
+            deleteAnswer: function () {
+                this.$messagebox.confirm("回答删除后将无法恢复，确定删除吗？").then(action => {
+                    $.ajax({
+                        url: "../../answer/deleteAnswer.action",
+                        type: "POST",
+                        data: {
+                            answerId: answer.answerId
+                        },
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.resultCode === 0) {
+                                sessionStorage.setItem("notice", "回答删除成功！");
+                                sessionStorage.removeItem("questionData");
+                                sessionStorage.removeItem("questionInfo");
+                                history.go(-1);
+                            } else if (result.resultCode === 1) {
+                                location.href = "../user/login.html?boot=1";
+                            } else if (result.resultCode === 2) {
+                                location.href = "../home.html";
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }).catch(action => {
+
+                });
+            },
         },
         mounted:function () {
+            if (sessionStorage.getItem("notice") != null) {
+                this.$toast(sessionStorage.getItem("notice"));
+                sessionStorage.removeItem("notice");
+            }
             let loc = location.href;
             loc = loc.replace("?","&").split("&");
             let questionId = loc[1];

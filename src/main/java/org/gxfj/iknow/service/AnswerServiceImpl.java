@@ -692,7 +692,8 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public boolean deleteAnswer(User user , Integer answerId){
         Answer answer = answerDAO.get(answerId);
-        if(answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(answerId)){
+        if( answer.getQuestionByQuestionId().getAnswerByAdoptId() !=null
+                && answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(answerId)){
             setQuestionNotAdopt(answer.getQuestionByQuestionId());
         }
         answerDAO.delete(answer);
