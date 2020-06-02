@@ -371,16 +371,17 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String,Object> updateQuesiton(Integer QuestionId, String newQuestionTitle, String newQuestionContent,
-                                  Integer newCategoriesType, Integer newSubjectType, Integer newMajorType) {
+    public Map<String,Object> updateQuesiton(Integer questionId, String newQuestionTitle, String newQuestionContent,
+                                             Integer newCategoriesType, Integer newSubjectType, Integer newMajorType) {
         Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         Questiontype questiontype = questionTypeDAO.get(newCategoriesType, newSubjectType, newMajorType);
-        Question question = new Question();
+        Question question = questionDAO.get(questionId);
         question.setTitle(newQuestionTitle);
         question.setContentHtml(newQuestionContent);
         question.setContentText(HtmlUtil.delHtmlTag(newQuestionContent));
         question.setQuestiontypeByTypeId(questiontype);
-        question.setId(QuestionId);
+        question.setId(questionId);
+        question.setDate(new Date());
         questionDAO.update(question);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;

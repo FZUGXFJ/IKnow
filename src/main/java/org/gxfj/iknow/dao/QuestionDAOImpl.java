@@ -42,7 +42,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public void update(Question bean) {
-        getHibernateTemplate().update(bean);
+        getHibernateTemplate().merge(bean);
     }
 
     @Override
