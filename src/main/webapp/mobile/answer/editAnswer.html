@@ -20,9 +20,12 @@
 <div id="editAnswer">
     <div id="header">
         <table>
-            <td style="width: 33%;"><i class="fas fa-times" @click="back"></i></td>
-            <td style="width: 34%;text-align: center">编辑回答</td>
-            <td style="width: 33%;text-align: right;"><button class="btn btn-link" @click="">修改</button></td>
+            <td style="width: 33%;"><i class="fas fa-times" @click="back" style="color: #acacac"></i></td>
+            <td style="width: 34%;text-align: center">
+                <span v-if="loading">加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+                <span v-else="">编辑回答</span>
+            </td>
+            <td style="width: 33%;text-align: right;"><button class="btn btn-link" @click="check">修改</button></td>
         </table>
     </div>
     <br><br><br><br>
@@ -34,7 +37,7 @@
     </div>
 </div>
 <div id="inputArea">
-    <div id="editor" style="border: 0">
+    <div id="editor" style="border: 0;font-size: 1.1em">
         <p></p>
     </div>
 </div>
@@ -55,14 +58,14 @@
             toolbar: '#toolbar'
         },
         theme: 'snow',
-        placeholder:"此处输入回答"
+        placeholder:"内容加载中。。。"
     });
     let editAnswer = new Vue({
         el:"#editAnswer",
         data:{
             answerId:0,
             content:"",
-            load:false,
+            loading:true,
             alertMsg:{head:"",body:""}
         },
         methods:{
@@ -80,7 +83,7 @@
                     url:"../../answer/updateAnswer.action",
                     type:"POST",
                     data:{
-                        answerId:editAnswer.questionId,
+                        answerId:editAnswer.answerId,
                         content:content,
                     },
                     dataType:"json",
@@ -115,7 +118,7 @@
                 answerId = loc.replace("answerId=","");
                 this.answerId = answerId;
             } else {
-                //location.href = "../../error/mobile/404error.html"
+                location.href = "../../error/mobile/404error.html"
             }
             $.ajax({
                 url:"../../answer/getAnswerInfo.action",
@@ -125,7 +128,10 @@
                 },
                 dataType:"json",
                 success:function (result) {
-
+                    if (result.resultCode === 0) {
+                        editor.container.firstChild.innerHTML = result.content;
+                        editAnswer.loading = false;
+                    }
                 },
                 error:function (request,status,error) {
                     alert("系统异常！");
