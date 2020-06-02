@@ -411,7 +411,7 @@
                     success:function (result) {
                         if (result.resultCode === 0) {
                             reportAdmin.reportInfoList.splice(reportAdmin.now,1);
-                            if((reportAdmin.reportInfoList.length+1)%15==1){
+                            if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
                                 reportAdmin.cur--;
                             }   //当最后一页的最后一条数据被删除时，也要改变当前页面
                             reportAdmin.page();
