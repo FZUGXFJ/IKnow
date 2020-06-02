@@ -294,35 +294,11 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String, Object> getRecommendAnswer(Integer userId, Integer count) {
-        List<Answer> answers = selectRecommendAnswer(userId, count);
+        List<Answer> answers = selectRecommendAnswer(userId, count, 0);
         return getRecommendJsonItems(answers);
     }
 
-    /**
-     * 从数据库中获取推荐的问题
-     * @param count 推荐问题的条数
-     * @return 推荐的问题，没有则内容为空
-     */
-    private List<Answer> selectRecommendAnswer(Integer userId, Integer count) {
-        List<Answer> result = new ArrayList<>();
-        if (userId == null) {
-            // 对于未登录的浏览者，依旧采用推荐最先的回答
-            return answerDAO.listLastAnswerNoDelete(count);
-        } else {
-            List<Answer> answerList = null;
-            if (recommentAnswerMap.containsKey(userId)) {
-                answerList = (List<Answer>) recommentAnswerMap.get(userId);
-            } else {
-                answerList = (List<Answer>) recommentAnswerMap.get(NEW_USER_RECOMMEND_KEY);
-            }
-            for (int i = 0; i < count && answerList.size() != 0; i++) {
-                result.add(answerList.get(0));
-                answerList.remove(0);
-            }
-        }
-        return result;
-    }
-
+    
     /**
      * 从数据库中获取推荐的问题
      * @param count 推荐问题的条数
@@ -330,7 +306,7 @@ public class AnswerServiceImpl implements AnswerService{
      * @param start 起始地址
      * @return 推荐的问题，没有则内容为空
      */
-    private List<Answer> selectRecommendAnswer1(Integer userId, Integer count,Integer start) {
+    private List<Answer> selectRecommendAnswer(Integer userId, Integer count, Integer start) {
         List<Answer> result = new ArrayList<>();
         if (userId == null) {
             // 对于未登录的浏览者，依旧采用推荐最先的回答
@@ -636,7 +612,7 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String, Object> moreRecommendAnswer(Integer userId, Integer count, Integer start) {
-        List<Answer> answers = selectRecommendAnswer1(userId, count, start);
+        List<Answer> answers = selectRecommendAnswer(userId, count, start);
         return getRecommendJsonItems(answers);
     }
 
