@@ -11,10 +11,11 @@ public interface AdminService {
 
     /**
      * 管理员登录
-     * @param adminInf 输入的管理员信息
+     * @param accountNum 管理员的账号
+     * @param password
      * @return 管理员
      */
-    Map<String, Object> login(Admin adminInf);
+    Map<String, Object> login(Integer accountNum, String password);
 
     /**
      * 判断管理员是否登录

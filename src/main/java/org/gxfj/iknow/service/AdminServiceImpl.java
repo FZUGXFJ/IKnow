@@ -48,16 +48,16 @@ public class AdminServiceImpl implements AdminService{
     CategoriesTypeDAO categoriesTypeDAO;
 
     @Override
-    public Map<String, Object> login(Admin adminInf) {
+    public Map<String, Object> login(Integer accountNum, String password) {
         Map<String, Object> resultMap = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
 
-        Admin admin = adminDAO.getAdminByCount(adminInf.getAccount());
+        Admin admin = adminDAO.getAdminByCount(accountNum);
         if(admin == null){
             return null;
         }
         else{
-            if (adminInf.getPasswd().length() == MD5_PASSWORD_LENGTH) {
-                if (adminInf.getPasswd().equals(admin.getPasswd())) {
+            if (password.length() == MD5_PASSWORD_LENGTH) {
+                if (password.equals(admin.getPasswd())) {
                     ActionContext.getContext().getSession().put(ConstantUtil.LOGIN_ADMIN_SESSION_NAME,admin);
                     resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
@@ -65,7 +65,7 @@ public class AdminServiceImpl implements AdminService{
                     resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
                 }
             } else {
-                if (SecurityUtil.md5Compare(adminInf.getPasswd(),admin.getPasswd())) {
+                if (SecurityUtil.md5Compare(password,admin.getPasswd())) {
                     ActionContext.getContext().getSession().put(ConstantUtil.LOGIN_ADMIN_SESSION_NAME,admin);
                     resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
                 } else {

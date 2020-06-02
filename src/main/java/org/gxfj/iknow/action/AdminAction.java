@@ -59,11 +59,7 @@ public class AdminAction {
      */
     public String login(){
 
-        Admin adminInf = new Admin();
-        adminInf.setAccount(accountNum);
-        adminInf.setPasswd(password);
-
-        Map<String, Object> resultMap = adminService.login(adminInf);
+        Map<String, Object> resultMap = adminService.login(accountNum, password);
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
