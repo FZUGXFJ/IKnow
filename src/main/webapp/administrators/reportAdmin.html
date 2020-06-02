@@ -159,39 +159,24 @@
                         <th>举报类别</th>
                         <th>举报日期</th>
                         <th>原因类别</th>
-                        <th>操作1</th>
-                        <th>操作2</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody align="center">
-                    <tr v-for="reportInfo in reportInfoList">
+                    <tr v-for="(reportInfo,i) in subArr">
                         <td>{{reportInfo.id}}</td>
                         <td>{{reportInfo.userID}}</td>
                         <td>{{reportInfo.targetID}}</td>
                         <td>{{reportInfo.type}}</td>
                         <td>{{reportInfo.date}}</td>
                         <td>{{reportInfo.reason}}</td>
-                        <td>处理</td>
-                        <td>删除</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#layer">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="now=i+cur*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#edit">删除</button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
-<!--                <div v-for="reportInfo in reportInfoList">-->
-<!--                    <table class="table table-striped table-sm">-->
-<!--                        <tbody>-->
-<!--                        <tr >-->
-<!--                            <td>{{reportInfo.id}}</td>-->
-<!--                            <td>{{reportInfo.userID}}</td>-->
-<!--                            <td>{{reportInfo.targetID}}</td>-->
-<!--                            <td>{{reportInfo.type}}</td>-->
-<!--                            <td>{{reportInfo.date}}</td>-->
-<!--                            <td>{{reportInfo.reason}}</td>-->
-<!--                            <td>处理</td>-->
-<!--                            <td>删除</td>-->
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
                 <div class="page-bar">
                     <ul>
                         <li v-if="cur>1"><a v-on:click="cur=1,pageClick()">首页</a></li>
@@ -229,7 +214,8 @@
             passwordErrorMsg:"",
             alertMsg:{head:"",body:""},
             all: 1, //总页数
-            cur: 1//当前页码
+            cur: 1,//当前页码
+            now:-1
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -293,7 +279,6 @@
                                 reportAdmin.pageInfoList[i] = reportAdmin.reportInfoList.slice(15*i,15*(i+1));
                                 console.log(reportAdmin.pageInfoList[i]);
                             }
-                            reportAdmin.reportInfoList=reportAdmin.pageInfoList[0];
                         }
                     },
                     error:function (request,status,error) {
@@ -307,12 +292,12 @@
             btnClick: function(data){
                 if(data != this.cur){
                     this.cur = data;
-                    reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+                    // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
                 }
             },
             pageClick: function(){
                 console.log('现在在'+this.cur+'页');
-                reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+                // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
             }
         },
         computed: {
@@ -342,6 +327,10 @@
                 }
                 console.log(ar);
                 return ar
+            },
+            subArr() {
+                console.log(this.reportInfoList.slice((this.cur-1)*15,this.cur*15));
+                return this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
             }
         },
         mounted:function () {

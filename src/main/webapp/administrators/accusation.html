@@ -16,284 +16,188 @@
     <script type="text/javascript" src="../js/computer.js"></script>
 </head>
 <body style="background-color: aliceblue">
-<nav class="navbar navbar-expand-lg navbar-light fix">
-    <a class="navbar-brand" href="#" style="margin-left: 250PX"><img src="../img/LOGO透明%20(1).png"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active" style="margin-left: 10px">
-                <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">问答</a>
-            </li>
-            <li class="nav-item">
-                <div class="dropdown">
-                    <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img id="head" src="../img/头像.jpg">    <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dLabel">
-                        <li><a class="set" href="#">个人中心</a></li>
-                        <li><a class="set" href="#">切换账户</a></li>
-                        <li><a class="set" href="#">退出登录</a></li>
-                    </ul>
+<div class="container" id="box">
+    <div class="panel panel-primary">
+        <div class="panel-heading">请添加</div>
+        <div class="panel-body">
+            <form>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">姓名：</label>
+                    <input v-model="username" type="text" name="username " class="form-control" id="exampleInputEmail1" >
                 </div>
-            </li>
-        </ul>
-        <script>
-            $('.dropdown-toggle').dropdown()
-        </script>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="高数" aria-label="Search">
-            <button class="btn" type="submit" style="background-color: aqua;color: white">搜索</button>
-        </form>
-        <ul class="navbar-nav mr-auto ">
-            <li class="nav-item dropdown" style="margin-left: 10PX">
-                <select class="form-control form-control-lg">
-                    <option>按题目查找</option>
-                    <option>按回答查找</option>
-                </select>
-            </li>
-        </ul>
-    </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">学号：</label>
+                    <input v-model="id" type="text" name="id" class="form-control" id="exampleInputPassword1">
+                </div>
+                <div class="col-lg-offset-5 col-md-7">
+                    <button type="button" @click="add" class="btn btn-primary">添加</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-primary">重置</button>
+                </div>
 
-</nav>
-
-<hr/>
-<div id="contain">
-    <div class="con1">
-        <div class="accuseInfo row">
-            <div class="col-md-2">举报id</div>
-            <div class="col-md-2">用户id</div>
-            <div class="col-md-2">举报类别</div>
-            <div class="col-md-2">被举报id</div>
-            <div class="col-md-2">举报时间</div>
-            <div class="col-md-2"><button class="deal">处理</button></div>
+            </form>
         </div>
-        <div class="accuseInfo row">
-            <div class="col-md-2">举报id</div>
-            <div class="col-md-2">用户id</div>
-            <div class="col-md-2">举报类别</div>
-            <div class="col-md-2">被举报id</div>
-            <div class="col-md-2">举报时间</div>
-            <div class="col-md-2"><button class="deal">处理</button></div>
-        </div>
-        <div class="accuseInfo row">
-            <div class="col-md-2">举报id</div>
-            <div class="col-md-2">用户id</div>
-            <div class="col-md-2">举报类别</div>
-            <div class="col-md-2">被举报id</div>
-            <div class="col-md-2">举报时间</div>
-            <div class="col-md-2"><button class="deal">处理</button></div>
-        </div>
-    </div>
-    <!--<div class="con2">
-        <div class="pageDiv page">
-            &lt;!&ndash;=======&ndash;&gt;
-            &lt;!&ndash;&gt;>>>>>> origin/dev&ndash;&gt;
-            <nav aria-label="Page navigation example" id="page" style="float: left;margin-top: 1%">
+        <br/>
+        <table class="table table-bordered table-hover">
+            <caption class="h3 text-info">学生信息表</caption>
+            <tr class="text-danger">
+                <th class="text-center">序号</th>
+                <th class="text-center">名字</th>
+                <th class="text-center">学号</th>
+                <th class="text-center">操作</th>
+            </tr>
+            <tr class="text-center" v-for="item in subArr">
+                <td>{{ $index+pageNo*record+1 }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.id }}</td>
+                <td>
+                    <button @click="now=$index+pageNo*record" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#layer">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button @click="edit($index+pageNo*record)" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit">编辑</button>
+                </td>
+            </tr>
+            <tr v-show="arr.length!=0">
+                <td colspan="4" class="text-center">
+                    <button @click="delAll=true" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除全部</button>
+                </td>
+            </tr>
+            <tr v-show="arr.length==0">
+                <td colspan="4" class="text-center text-muted">
+                    <p>暂无数据....</p>
+                </td>
+            </tr>
+        </table>
+        <div class="text-center">
+            <nav aria-label="Page navigation">
                 <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
+                    <li v-for="i in pagearr" track-by="$index" :class="pageNo==(i-1)?'active':''">
+                        <a href="#" @click="pageNo=i-1">{{ i }}</a>
                     </li>
                 </ul>
             </nav>
         </div>
-    </div>-->
-</div>
+    </div>
 
-<script type="text/javascript">
-    let login=new Vue({
-        el:"#login",
-        data:{
-            useEmail:true,
-            isRmb:false,
-            timeout:60,
-            verify:false,
-            emailError:false,
-            emailErrorMsg:"",
-            emailError1:false,
-            emailErrorMsg1:"",
-            passwordError:false,
-            passwordErrorMsg:"",
-            verifyCodeError:false,
-            verifyCodeErrorMsg:"",
-            alertMsg:{head:"",body:""},
-        },
-        methods:{
-            validateVerify:function () {
-                let verifyCode = $("#verifyCode");
-                let val = verifyCode.val();
-                val.length > 6 ? verifyCode.val(val.slice(0,6)) : "";
+    <div role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ delAll?'确认全部删除么？':'确认删除么？'}} </h4>
+                </div>
+                <div class="modal-body text-right">
+                    <button data-dismiss="modal" class="btn btn-primary btn-sm" @click="delAll=false">取消</button>
+                    <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="del()">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div role="dialog" class="modal fade bs-example-modal-sm" id="edit">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                    <h4 class="modal-title">请编辑</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            姓名：<input v-model="selectedlist.name" type="text" name="username " class="form-control" id="username" >
+                            学号：<input v-model="selectedlist.id" type="text" name="id" class="form-control" id="id">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-right">
+                    <button data-dismiss="modal" class="btn btn-primary btn-sm" @click="selectedlist=[]">取消</button>
+                    <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="edit_true()">编辑</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload=function () {
+        new Vue({
+            el:"#box",
+            data:{
+                username:"",
+                id:"",
+                arr:[],
+                now:-1,
+                delAll:false,
+                selectedlist:[],//暂存被选中进行编辑的数据
+                selectedindex:-1,//记录被选中的index
+                pageNo:0,
+                record:3,
+                pagearr:[],
+
             },
-            loginByEmail:function (email,verifyCode) {
-                let al = $("#alert");
-                $.ajax({
-                    url:"../user/emailLogin.action",
-                    type:"POST",
-                    data:{
-                        email:email,
-                        verifyCode:verifyCode
-                    },
-                    dataType:"json",
-                    success:function (result) {
-                        if (result.response === 0) {
-                            accusation.alertMsg.head = "登录成功";
-                            accusation.alertMsg.body = "";
-                            al.removeClass("alert-success");
-                            al.removeClass("alert-danger");
-                            al.addClass("alert-success");
-                            al.slideDown();
-                        } else if (result.response === 1) {
-                            accusation.alertMsg.head = "登录失败";
-                            accusation.alertMsg.body = "邮箱已修改，请重新发送验证码";
-                            al.removeClass("alert-success");
-                            al.removeClass("alert-danger");
-                            al.addClass("alert-danger");
-                            al.slideDown();
-                        } else if (result.response === 2) {
-                            accusation.alertMsg.head = "登录失败";
-                            accusation.alertMsg.body = "验证码错误";
-                            al.removeClass("alert-success");
-                            al.removeClass("alert-danger");
-                            al.addClass("alert-danger");
-                            al.slideDown();
-                        } else if (result.response === 3) {
-                            accusation.alertMsg.head = "登录失败";
-                            accusation.alertMsg.body = "该邮箱未注册";
-                            al.removeClass("alert-success");
-                            al.removeClass("alert-danger");
-                            al.addClass("alert-danger");
-                            al.slideDown();
-                        }
-                    },
-                    error:function (e) {
-                        alert("服务器异常");
+            methods:{
+                add(){
+                    if(this.username=="" || this.id==""){
+                        alert("请输入姓名或学号")
+                    }else{
+                        this.arr.unshift({name:this.username,id:this.id});
+                        this.username="";
+                        this.id="";
+                        this.page();
                     }
-                });
+                },
+                del(){
+                    if(this.delAll){
+                        this.arr=[];
+                        this.delAll=false;
+                        this.page();
+                    }else{
+                        this.arr.splice(this.now,1);
+                        if((this.arr.length+1)%this.record==1){
+                            this.pageNo--;
+                        }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                        this.page();
+                    }
+                },
+                edit(index){
+                    this.selectedlist=[];
+                    this.selectedindex=index;
+                    this.selectedlist=JSON.parse( JSON.stringify(this.arr[index]) );// 深度拷贝,先转换为字符串，然后再转换
+                },
+                edit_true(){
+                    this.arr[this.selectedindex].id=this.selectedlist.id;
+                    this.arr[this.selectedindex].name=this.selectedlist.name;
+                },
+                page(){
+                    let pageMax=Math.ceil(this.arr.length/this.record);
+                    this.pagearr=[];
+                    for(let i=1;i<=pageMax;i++){
+                        this.pagearr.push(i);
+                    }
+                },
             },
-            loginByPassword:function (email,password) {
-                $.ajax({
-                    url:"../user/passwordLogin.action",
-                    type:"POST",
-                    data:{
-                        email:email,
-                        password:password
-                    },
-                    dataType:"json",
-                    success:function (result) {
-                        if (result.response === 0) {
-                            accusation.alertMsg.head = "登录成功";
-                            accusation.alertMsg.body = "登录成功";
-                            $("#alert").slideDown();
-                        } else if (result.response === 1) {
-                            accusation.alertMsg.head = "登录失败";
-                            accusation.alertMsg.body = "邮箱或密码错误";
-                            $("#alert").slideDown();
-                        }
-                    },
-                    error:function (e) {
-                        alert("服务器异常");
-                    }
-                });
-            },
-            getVerifyCode:function () {
-                let email = $("#email");
-                let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                if (!emailRegex.test(email.val())) {
-                    this.emailError = true;
-                    this.emailErrorMsg = "邮箱格式错误，请重新输入";
-                    return;
-                } else {
-                    this.emailError = false;
-                }
-                email.attr("disabled",true);
-                this.verify = true;
-                let timer = setInterval(function () {
-                    accusation.timeout--;
-                    if (accusation.timeout === 0) {
-                        clearInterval(timer);
-                        accusation.verify = false;
-                        accusation.timeout = 60;
-                        email.attr("disabled",false);
-                    }
-                }, 1000);
-                $.ajax({
-                    url:"../user/sendEmail.action",
-                    type:"POST",
-                    data:{
-                        email:email.val(),
-                    },
-                    dataType:"json",
-                    success:function (result) {
-                        accusation.alertMsg = result;
-                        $("#alert").slideDown();
-                    },
-                    error:function (e) {
-                        alert("邮件发送失败");
-                    }
-                });
-            },
-            closeAlert:function () {
-                $("#alert").slideUp();
-            },
-            validator:function () {
-                let email = $("#email").val();
-                let email1 = $("#email1").val();
-                let password = $("#password").val();
-                let verifyCode = $("#verifyCode").val();
-                let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                if (this.useEmail) {
-                    if (!emailRegex.test(email)) {
-                        this.emailError = true;
-                        this.emailErrorMsg = "邮箱格式错误，请重新输入";
-                    } else {
-                        this.emailError = false;
-                    }
-                    if (verifyCode.length === 0) {
-                        this.verifyCodeError = true;
-                        this.verifyCodeErrorMsg = "验证码为空";
-                    } else {
-                        this.verifyCodeError = false;
-                    }
-                    if (!this.emailError && !this.verifyCodeError) {
-                        this.loginByEmail(email,verifyCode);
-                    }
-                } else {
-                    if (!emailRegex.test(email1) && !this.useEmail) {
-                        this.emailError1 = true;
-                        this.emailErrorMsg1 = "邮箱格式错误，请重新输入";
-                    }else {
-                        this.emailError1 = false;
-                    }
-                    if (password.length === 0) {
-                        this.passwordError = true;
-                        this.passwordErrorMsg = "密码为空"
-                    } else {
-                        this.passwordError = false;
-                    }
-                    if (!this.emailError && !this.passwordError) {
-                        this.loginByPassword(email1,password);
-                    }
+            computed:{
+                subArr(){
+                    return this.arr.slice(this.pageNo*this.record,(this.pageNo+1)*this.record);
                 }
             },
-            back:function () {
-                window.history.back();
+            ready(){
+                this.arr.unshift({name:'aaa',id:111});
+                this.arr.unshift({name:'bbb',id:222});
+                this.arr.unshift({name:'ccc',id:333});
+                this.arr.unshift({name:'ddd',id:444});
+                this.arr.unshift({name:'eee',id:555});
+                this.arr.unshift({name:'fff',id:666});
+                this.arr.unshift({name:'ggg',id:777});
+                this.arr.unshift({name:'hhh',id:888});
+                this.arr.unshift({name:'iii',id:999});
+                this.page();
+            },
+            mounted:function () {
+                this.ready();
             }
-        },
-    });
+        });
+    };
+
 </script>
 
 </body>
