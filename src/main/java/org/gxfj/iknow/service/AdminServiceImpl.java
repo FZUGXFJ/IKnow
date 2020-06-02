@@ -308,4 +308,11 @@ public class AdminServiceImpl implements AdminService{
         replyMap.put("isDelete",reply.getIsDelete()==1?"是":"否");
         return replyMap;
     }
+
+    @Override
+    public void deleteReport(Integer reportId){
+        Report report = reportDAO.get(reportId);
+        reportDAO.delete(report);
+    }
+
 }
