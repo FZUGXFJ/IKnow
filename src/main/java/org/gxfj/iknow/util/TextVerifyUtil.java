@@ -72,7 +72,6 @@ public class TextVerifyUtil {
             //获得响应内容: EntityUtils.toString(responseEntity)
             if (responseEntity != null) {
                 jsonObject = JSON.parseObject(EntityUtils.toString(responseEntity));
-                System.out.println(jsonObject.toJSONString());
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();

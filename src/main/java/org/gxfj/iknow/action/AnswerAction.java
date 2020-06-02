@@ -15,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
+
 /**
  * @author hhj
  */
@@ -292,8 +294,11 @@ public class AnswerAction {
 
     public String updateAnswer(){
         Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        answerService.updateAnswerContent(answerId, content);
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        if (answerService.updateAnswerContent(answerId, content)) {
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        } else {
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+        }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

@@ -708,6 +708,9 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public boolean updateAnswerContent(Integer answerId, String content){
+        if (!TextVerifyUtil.verifyCompliance(content)) {
+            return false;
+        }
         Answer answer = answerDAO.get(answerId);
         answer.setContentHtml(content);
         answer.setContentText(HtmlUtil.html2Text(HtmlUtil.changeImgTag(content)));
