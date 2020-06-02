@@ -88,4 +88,17 @@ public interface QuestionService {
      * @return 问题信息
      */
     Map<String,Object> getQuestioninf(Integer questionId,User user);
+
+    /**
+     * 修改问题信息
+     * @param newQuestionId 新的问题id
+     * @param newQuestionTitle 新的问题标题
+     * @param newQuestionContent 新的问题内容
+     * @param newCategoriesType 新的门类类别id
+     * @param newSubjectType 新的学科类别id
+     * @param newMajorType 新的专业类别id
+     * @return 是否成功
+     */
+    Map<String,Object> updateQuesiton(Integer newQuestionId, String newQuestionTitle, String newQuestionContent,
+                                       Integer newCategoriesType, Integer newSubjectType, Integer newMajorType);
 }

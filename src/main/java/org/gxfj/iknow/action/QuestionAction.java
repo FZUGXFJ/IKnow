@@ -249,6 +249,13 @@ public class QuestionAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    public String updateQuesiton(){
+        Map<String, Object> response = questionService.updateQuesiton(questionId, questionTitle, questionContent,
+                categoriesType, subjectType, majorType);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public String getQuestionTitle() {
         return questionTitle;
     }

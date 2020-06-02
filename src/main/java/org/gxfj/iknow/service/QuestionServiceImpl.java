@@ -7,7 +7,6 @@ import org.gxfj.iknow.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.*;
 
 
@@ -369,5 +368,21 @@ public class QuestionServiceImpl implements QuestionService{
             result.put("resultCode",user1.getId().equals(user.getId()) ? 0 : 2);
             return result;
         }
+    }
+
+    @Override
+    public Map<String,Object> updateQuesiton(Integer QuestionId, String newQuestionTitle, String newQuestionContent,
+                                  Integer newCategoriesType, Integer newSubjectType, Integer newMajorType) {
+        Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Questiontype questiontype = questionTypeDAO.get(newCategoriesType, newSubjectType, newMajorType);
+        Question question = new Question();
+        question.setTitle(newQuestionTitle);
+        question.setContentHtml(newQuestionContent);
+        question.setContentText(HtmlUtil.delHtmlTag(newQuestionContent));
+        question.setQuestiontypeByTypeId(questiontype);
+        question.setId(QuestionId);
+        questionDAO.update(question);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
     }
 }
