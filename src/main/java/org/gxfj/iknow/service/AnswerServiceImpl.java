@@ -707,4 +707,19 @@ public class AnswerServiceImpl implements AnswerService{
 
         return true;
     }
+
+    @Override
+    public String getAnswerContent(Integer answerId){
+        Answer answer = answerDAO.get(answerId);
+        return answer.getContentHtml();
+    }
+
+    @Override
+    public boolean updateAnswerContent(Integer answerId, String content){
+        Answer answer = answerDAO.get(answerId);
+        answer.setContentHtml(content);
+        answer.setContentText(HtmlUtil.html2Text(HtmlUtil.changeImgTag(content)));
+        answerDAO.update(answer);
+        return true;
+    }
 }
