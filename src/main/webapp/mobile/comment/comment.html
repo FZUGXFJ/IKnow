@@ -504,6 +504,10 @@
             }
         },
         mounted:function () {
+            if (sessionStorage.getItem("notice") != null) {
+                this.$toast(sessionStorage.getItem("notice"));
+                sessionStorage.removeItem("notice");
+            }
             let loc = location.href;
             loc = loc.replace("?","&").split("&");
             let answerId = loc[1];

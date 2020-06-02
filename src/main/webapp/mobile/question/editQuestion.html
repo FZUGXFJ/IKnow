@@ -168,6 +168,9 @@
                    dataType:"json",
                    success:function (result) {
                        if (result.resultCode === 0) {
+                           sessionStorage.setItem("notice", "问题已更新");
+                           sessionStorage.removeItem("questionData");
+                           sessionStorage.removeItem("questionInfo");
                             history.go(-1);
                        } else if (result.resultCode === 1) {
                            location.href = "../user/login.html?boot=1";

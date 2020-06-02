@@ -91,6 +91,7 @@
                         if (result.resultCode === 0) {
                             sessionStorage.removeItem("questionData");
                             sessionStorage.removeItem("questionInfo");
+                            sessionStorage.setItem("notice", "问题已更新");
                             history.go(-1);
                         } else {
                             postAnswer.alertMsg.head = "未知错误！";

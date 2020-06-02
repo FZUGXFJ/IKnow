@@ -155,6 +155,10 @@
             }
         },
         mounted:function () {
+            if (sessionStorage.getItem("notice") != null) {
+                this.$toast(sessionStorage.getItem("notice"));
+                sessionStorage.removeItem("notice");
+            }
             this.loading = true;
             this.load();
             this.loading = false;

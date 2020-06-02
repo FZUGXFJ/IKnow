@@ -242,6 +242,10 @@
             }
         },
         mounted:function () {
+            if (sessionStorage.getItem("notice") != null) {
+                this.$toast(sessionStorage.getItem("notice"));
+                sessionStorage.removeItem("notice");
+            }
             if (sessionStorage.getItem("recommends") != null) {
                 this.recommends = JSON.parse(sessionStorage.getItem("recommends"));
                 this.user = JSON.parse(sessionStorage.getItem("user"));
