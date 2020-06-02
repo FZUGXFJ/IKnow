@@ -229,6 +229,20 @@ public class QuestionAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    public String getQuestionInfo(){
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
+        Map<String, Object> response;
+        if(user == null){
+            response = questionService.getQuestioninf(questionId,null);
+        }
+        else {
+            response = questionService.getQuestioninf(questionId,user);
+        }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public String getQuestionTitle() {
         return questionTitle;
     }

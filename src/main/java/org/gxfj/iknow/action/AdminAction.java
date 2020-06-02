@@ -28,6 +28,7 @@ public class AdminAction {
     private Integer userID;
     private Integer typeID;
     private Integer type;
+    private Integer reportID;
     @Autowired
     private AdminService adminService;
 
@@ -147,6 +148,18 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 删除对应的举报记录
+     * @return “SUCCESS”
+     */
+    public String reportDel(){
+        Map<String,Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        adminService.deleteReport(reportID);
+        result.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -217,5 +230,13 @@ public class AdminAction {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getReportID() {
+        return reportID;
+    }
+
+    public void setReportID(Integer reportID) {
+        this.reportID = reportID;
     }
 }

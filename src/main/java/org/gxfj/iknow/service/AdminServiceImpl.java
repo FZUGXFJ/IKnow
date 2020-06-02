@@ -236,7 +236,7 @@ public class AdminServiceImpl implements AdminService{
         questionMap.put("id", question.getId());
         questionMap.put("userID", question.getUserByUserId().getId());
         questionMap.put("title", question.getTitle());
-        questionMap.put("content", question.getContentText());
+        questionMap.put("content", question.getContentHtml());
         questionMap.put("date", question.getDate());
         if(question.getIsDelete().equals(1)){
             questionMap.put("isDelete", "是");
@@ -293,7 +293,7 @@ public class AdminServiceImpl implements AdminService{
         Map<String,Object> answerMap = new HashMap<>(MIN_HASH_MAP_NUM);
         answerMap.put("id",answer.getId());
         answerMap.put("userID",answer.getUserByUserId().getId());
-        answerMap.put("content",answer.getContentText());
+        answerMap.put("content",answer.getContentHtml());
         answerMap.put("date",Time.getTime1(answer.getDate()));
         answerMap.put("isDelete",answer.getIsDelete()==1?"是":"否");
         return answerMap;
@@ -308,4 +308,11 @@ public class AdminServiceImpl implements AdminService{
         replyMap.put("isDelete",reply.getIsDelete()==1?"是":"否");
         return replyMap;
     }
+
+    @Override
+    public void deleteReport(Integer reportId){
+        Report report = reportDAO.get(reportId);
+        reportDAO.delete(report);
+    }
+
 }

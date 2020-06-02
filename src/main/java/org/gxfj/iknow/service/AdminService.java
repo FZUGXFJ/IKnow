@@ -71,4 +71,10 @@ public interface AdminService {
      * @return 包含用户信息列表的map数据
      */
     public Map<String,Object> getAnswerReported(Integer typeId, Integer type);
+
+    /**
+     * 删除对应举报信息
+     * @param reportId 举报信息id
+     */
+    public void deleteReport(Integer reportId);
 }

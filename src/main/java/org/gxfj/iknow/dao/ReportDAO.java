@@ -13,4 +13,9 @@ public interface ReportDAO extends BaseDAO<Report>{
      */
     List<Report> listReportByType(Integer reportType);
 
+    /**
+     * 删除举报
+     * @param bean 要删除的举报
+     */
+    void delete(Report bean);
 }

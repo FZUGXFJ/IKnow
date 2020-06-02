@@ -125,4 +125,19 @@ public interface AnswerService {
      * @return 是否成功
      */
     public boolean deleteAnswer(User user , Integer answerId);
+
+    /**
+     * 获取原回答的内容
+     * @param answerId 回答id
+     * @return 包含原回答内容的map
+     */
+    public String getAnswerContent(Integer answerId);
+
+    /**
+     * 更新回答内容
+     * @param answerId 回答id
+     * @param content 新的回答内容
+     * @return 是否成功
+     */
+    public boolean updateAnswerContent(Integer answerId, String content);
 }

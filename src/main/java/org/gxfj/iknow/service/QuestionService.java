@@ -80,4 +80,12 @@ public interface QuestionService {
      * @return 删除的结果
      */
     boolean deleteQuestion(User user, Integer questionId);
+
+    /**
+     * 获取问题信息
+     * @param questionId 问题id
+     * @param user 用户信息
+     * @return 问题信息
+     */
+    Map<String,Object> getQuestioninf(Integer questionId,User user);
 }
