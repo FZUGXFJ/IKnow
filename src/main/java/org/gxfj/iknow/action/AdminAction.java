@@ -42,6 +42,9 @@ public class AdminAction {
     private final static String RESULT_CODE = "resultCode";
     private final static int SUCCESSLOGIN = 0;*/
 
+    /**
+     * 管理员登出
+     */
     public String logout(){
         Map<String,Object> session = ActionContext.getContext().getSession();
         if(!session.isEmpty()){
@@ -51,81 +54,79 @@ public class AdminAction {
         return  ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 管理员登录
+     */
     public String login(){
-        Map<String, Object> resultMap = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+
         Admin adminInf = new Admin();
         adminInf.setAccount(accountNum);
         adminInf.setPasswd(password);
-        Admin admin = adminService.login(adminInf);
-        if(admin == null){
-            resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else{
-            ActionContext.getContext().getSession().put(ConstantUtil.LOGIN_ADMIN_SESSION_NAME,admin);
-            resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+
+        Map<String, Object> resultMap = adminService.login(adminInf);
+
         inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 统计过去7天每天用户/回答的总数
+     */
     public String statistics(){
-        Map<String,Object> result=adminService.getData(dateNow,typeSum);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        Map<String,Object> result = adminService.getSumData(dateNow,typeSum);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 判断管理员是否登录
+     */
     public String isLogin() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-        if (session.get(ConstantUtil.LOGIN_ADMIN_SESSION_NAME) == ConstantUtil.NO_ADMIN) {
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        } else {
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> result = adminService.isLogin();
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         System.out.println(JSON.toJSONString(result));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获取活跃的用户，有两者结果
+     */
     public String active() {
-        int length = 0;
+        Map<String,Object> result = null;
         if (typeSum == ConstantUtil.DAILY_ACTIVE_USER_STATICS_TYPE_CODE) {
-            length = ConstantUtil.DAILY_ACTIVE_USER_STATICS_LENGTH;
+            result = adminService.getDailyActiveUserData(dateNow, ConstantUtil.DAILY_ACTIVE_USER_STATICS_LENGTH);
         } else if (typeSum == ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_TYPE_CODE) {
-            length = ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_LENGTH;
+            result = adminService.getMonthlyActiveUserData(dateNow, ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_LENGTH);
         }
 
-        Map<String,Object> result = adminService.getActiveData(dateNow,typeSum, length);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得各个门类的问题总数
+     */
     public String questionTypeSum(){
         Map<String,Object> result = adminService.getQuestionTypeSumData();
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String reportType(){
         Map<String,Object> result = adminService.getReportByType(reportType);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String reportReason(){
         Map<String,Object> result = adminService.getReportReason();
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String userInfo(){
         Map<String,Object> result = adminService.getUserInfo(userID);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -136,14 +137,12 @@ public class AdminAction {
      */
     public String questionReported(){
         Map<String,Object> result = adminService.getReportedQuestion(typeID);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String answerReported(){
         Map<String,Object> result = adminService.getAnswerReported(typeID,type);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -154,8 +153,8 @@ public class AdminAction {
      */
     public String reportDel(){
         Map<String,Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
-        adminService.deleteReport(reportID);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        result = adminService.deleteReport(reportID);
+
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
