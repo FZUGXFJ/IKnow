@@ -57,6 +57,10 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Integer postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
             , Integer majorType, Byte isAnonymous) {
+        if (!TextVerifyUtil.verifyCompliance(context)) {
+            return null;
+        }
+
         Question question = new Question();
         Questiontype questiontype = questionTypeDAO.get(categoryType,subjectType,majorType);
         Questionstate questionstate = new Questionstate();

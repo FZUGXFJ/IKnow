@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.gxfj.iknow.util.ConstantUtil.*;
+import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
 
 @Controller
 public class ReplyAction {
@@ -45,8 +46,11 @@ public class ReplyAction {
         } else if(content == null){
             response.put("resultCode" , MISS_COMMENT_INF );
         } else{
-            replyService.postReply(commentId,content, replyTarget,user);
-            response.put("resultCode" , SUCCESS);
+            if (replyService.postReply(commentId,content, replyTarget,user) != null) {
+                response.put("resultCode", SUCCESS);
+            } else {
+                response.put("resultCode", JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -103,14 +107,14 @@ public class ReplyAction {
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
         User user=(User)session.get(ConstantUtil.SESSION_USER);
         if(user==null){
-            response.put(JSON_RETURN_CODE,UN_LOGIN);
+            response.put(JSON_RETURN_CODE_NAME,UN_LOGIN);
         }
         else {
             if (replyService.deleteReply(replyId,user)){
-                response.put(JSON_RETURN_CODE,SUCCESS);
+                response.put(JSON_RETURN_CODE_NAME,SUCCESS);
             }
             else {
-                response.put(JSON_RETURN_CODE,NO_REPLYER);
+                response.put(JSON_RETURN_CODE_NAME,NO_REPLYER);
             }
         }
         

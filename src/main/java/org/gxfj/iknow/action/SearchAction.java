@@ -35,7 +35,7 @@ public class SearchAction {
     }
     public String searchHistory() {
         Map<String,Object> response = searchService.searchHistory();
-        response.put(JSON_RETURN_CODE,SUCCESS);
+        response.put(JSON_RETURN_CODE_NAME,SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
@@ -48,7 +48,7 @@ public class SearchAction {
             userId = user.getId();
         }
         Map<String,Object> response = searchService.searchResult(keyword,userId);
-        response.put(JSON_RETURN_CODE,SUCCESS);
+        response.put(JSON_RETURN_CODE_NAME,SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }

@@ -4,6 +4,7 @@ import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.ImgUtil;
+import org.gxfj.iknow.util.TextVerifyUtil;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,10 @@ public class CommentServiceImpl implements CommentService {
     final static private int REPLY_NUM = 2;
 
     @Override
-    public void postComment(User user, Integer answerId, String content){
+    public Integer postComment(User user, Integer answerId, String content){
+        if (!TextVerifyUtil.verifyCompliance(content)) {
+            return null;
+        }
         Comment comment = new Comment();
 
         comment.setUserByUserId(user);
@@ -42,6 +46,8 @@ public class CommentServiceImpl implements CommentService {
         comment.setCount(0);
 
         commentDAO.add(comment);
+
+        return comment.getId();
     }
 
     @Override

@@ -43,7 +43,7 @@ public class PartitionAction {
     public String getCategories(){
         Map<String, Object> response;
         response=partitionService.getCategories();
-        response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -51,7 +51,7 @@ public class PartitionAction {
     public String getSubjects(){
         Map<String, Object> response;
         response=partitionService.getSubjects(categoryId);
-        response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -59,7 +59,7 @@ public class PartitionAction {
     public String getMajors(){
         Map<String, Object> response;
         response=partitionService.getMajors(subjectId);
-        response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -67,7 +67,7 @@ public class PartitionAction {
     public String getQuestion() {
         Map<String, Object> response;
         response = partitionService.getQuestion(categoryId,subjectId,majorId,start,ConstantUtil.PARTITION_QUESTION_COUNT);
-        response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

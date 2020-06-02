@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.util.*;
 
+import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
+
 /**
  * @author erniumo ,hhj
  */
@@ -47,6 +49,14 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String,Object> postAnswer(Integer questionId, String content, Byte isAnonymous, User user) {
+
+        Map<String, Object> result= new HashMap<>(MAP_NUM);
+        if (!TextVerifyUtil.verifyCompliance(content)) {
+            result.put("resultCode", JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            return result;
+        }
+
+
         Answer answer=new Answer();
         answer.setIsAnonymous(isAnonymous);
         answer.setDate(new Date());
@@ -60,8 +70,8 @@ public class AnswerServiceImpl implements AnswerService{
         answer.setContentText(HtmlUtil.html2Text(content));
 
         answerDAO.add(answer);
-        Map<String, Object> result= new HashMap<>(MAP_NUM);
         result.put("answerID",answer.getId());
+        result.put("resultCode", 0);
         return result;
     }
 
@@ -267,55 +277,37 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Boolean cancelAdopt(User user, Integer answerId) {
+    public Boolean cancelAnonymous(User user, Integer answerId) {
         Answer answer = answerDAO.getNotDelete(answerId);
         if (answer.getUserByUserId().getId().equals(user.getId())){
-            answer.setIsAnonymous((byte)1);
+            answer.setIsAnonymous((byte)0);
             answerDAO.update(answer);
-            Question question = answer.getQuestionByQuestionId();
-            //将问题采纳的回答id置0
-            Answer answerNull = null;
-            question.setAnswerByAdoptId(answerNull);
-            //构造未解决的问题状态
-            Questionstate questionstate = new Questionstate();
-            questionstate.setId(QUESTION_STATE_UN_SOLVE);
-            question.setQuestionstateByStateId(questionstate);
-            questionDAO.update(question);
             return true;
         }
         return false;
     }
 
+    /**
+     * 将回答对应的问题置于为解决状态
+     * @param question 推荐问题的条数
+     */
+    private void setQuestionNotAdopt(Question question){
+        //将问题采纳的回答id置0
+        Answer answerNull = null;
+        question.setAnswerByAdoptId(answerNull);
+        //构造未解决的问题状态
+        Questionstate questionstate = new Questionstate();
+        questionstate.setId(QUESTION_STATE_UN_SOLVE);
+        question.setQuestionstateByStateId(questionstate);
+        questionDAO.update(question);
+    }
+
     @Override
     public Map<String, Object> getRecommendAnswer(Integer userId, Integer count) {
-        List<Answer> answers = selectRecommendAnswer(userId, count);
+        List<Answer> answers = selectRecommendAnswer(userId, count, 0);
         return getRecommendJsonItems(answers);
     }
 
-    /**
-     * 从数据库中获取推荐的问题
-     * @param count 推荐问题的条数
-     * @return 推荐的问题，没有则内容为空
-     */
-    private List<Answer> selectRecommendAnswer(Integer userId, Integer count) {
-        List<Answer> result = new ArrayList<>();
-        if (userId == null) {
-            // 对于未登录的浏览者，依旧采用推荐最先的回答
-            return answerDAO.listLastAnswerNoDelete(count);
-        } else {
-            List<Answer> answerList = null;
-            if (recommentAnswerMap.containsKey(userId)) {
-                answerList = (List<Answer>) recommentAnswerMap.get(userId);
-            } else {
-                answerList = (List<Answer>) recommentAnswerMap.get(NEW_USER_RECOMMEND_KEY);
-            }
-            for (int i = 0; i < count && answerList.size() != 0; i++) {
-                result.add(answerList.get(0));
-                answerList.remove(0);
-            }
-        }
-        return result;
-    }
 
     /**
      * 从数据库中获取推荐的问题
@@ -324,7 +316,7 @@ public class AnswerServiceImpl implements AnswerService{
      * @param start 起始地址
      * @return 推荐的问题，没有则内容为空
      */
-    private List<Answer> selectRecommendAnswer1(Integer userId, Integer count,Integer start) {
+    private List<Answer> selectRecommendAnswer(Integer userId, Integer count, Integer start) {
         List<Answer> result = new ArrayList<>();
         if (userId == null) {
             // 对于未登录的浏览者，依旧采用推荐最先的回答
@@ -630,7 +622,7 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public Map<String, Object> moreRecommendAnswer(Integer userId, Integer count, Integer start) {
-        List<Answer> answers = selectRecommendAnswer1(userId, count, start);
+        List<Answer> answers = selectRecommendAnswer(userId, count, start);
         return getRecommendJsonItems(answers);
     }
 
@@ -701,7 +693,7 @@ public class AnswerServiceImpl implements AnswerService{
     public boolean deleteAnswer(User user , Integer answerId){
         Answer answer = answerDAO.get(answerId);
         if(answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(answerId)){
-            cancelAdopt(user, answerId);
+            setQuestionNotAdopt(answer.getQuestionByQuestionId());
         }
         answerDAO.delete(answer);
 
@@ -716,6 +708,9 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Override
     public boolean updateAnswerContent(Integer answerId, String content){
+        if (!TextVerifyUtil.verifyCompliance(content)) {
+            return false;
+        }
         Answer answer = answerDAO.get(answerId);
         answer.setContentHtml(content);
         answer.setContentText(HtmlUtil.html2Text(HtmlUtil.changeImgTag(content)));

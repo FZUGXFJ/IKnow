@@ -67,7 +67,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="book"></span>
-                                问题举报 <span class="sr-only">(current)</span>
+                                问题举报
+                                <span class="badge badge-pill badge-dark" v-if="questionReport>0">{{questionReport}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -167,6 +168,7 @@
             questionSums:[],
             dayActiveSums:[],
             monActiveSums:[],
+            questionReport:0,
             all: 8, //总页数
             cur: 1//当前页码
         },
@@ -510,7 +512,28 @@
                         console.log(status);
                     }
                 });
-            }
+            },
+            getReportType: function(reportType){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/reportType.action",
+                    data:{
+                        reportType:reportType,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            index.questionReport=result.reportInfoList.length;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
         },
         computed: {
             indexs: function(){
@@ -547,6 +570,7 @@
             this.getUserStatistics(date,1);
             this.getActiveStatistics(date,0);
             this.getActiveStatistics(date,1);
+            this.getReportType(0);
         }
 
     });

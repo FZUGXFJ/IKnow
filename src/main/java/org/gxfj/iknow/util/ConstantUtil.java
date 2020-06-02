@@ -7,7 +7,7 @@ public class ConstantUtil {
     public final static int MIN_HASH_MAP_NUM = 10;
     public final static int SUCCESS = 0;
     public final static int NO_MORE = 1;
-    public final static String JSON_RETURN_CODE = "resultCode";
+    public final static String JSON_RETURN_CODE_NAME = "resultCode";
     public final static String SESSION_USER = "user";
     public final static String RETURN_STRING = "success";
     public final static String ANONYMOUS_USER_AVATAR = "0.jpg";

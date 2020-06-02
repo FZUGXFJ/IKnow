@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
+
 /**
  * @author hhj
  */
@@ -56,14 +58,17 @@ public class CommentAction {
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         else if(content == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.MISS_COMMENT_INF );
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_COMMENT_INF );
         }
         else{
-            commentService.postComment(user , answerId , content);
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+            if (commentService.postComment(user , answerId , content) != null) {
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -81,7 +86,7 @@ public class CommentAction {
         }
         session.put("commentsort",commentsSort);
         response = commentService.getComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),commentsSort);
-        response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+        response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -93,12 +98,12 @@ public class CommentAction {
 
         if (user != null) {
             if (commentService.approveComment(user, commentId)) {
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.RESULT_CODE_APPROVED);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_APPROVED);
             }
         } else {
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -112,12 +117,12 @@ public class CommentAction {
 
         if (user != null) {
             if (commentService.cancelApprove(user, commentId)) {
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
-                response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.RESULT_CODE_NOT_APPROVED);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_NOT_APPROVED);
             }
         } else {
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -130,11 +135,11 @@ public class CommentAction {
             sort1 =ConstantUtil.COMMENT_DEFAULT_SORT;
         }
         if (commentService.moreComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),start,sort1 )==null){
-            response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.NO_MORE);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
         }
         else {
             response=commentService.moreComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),start,sort1 );
-            response.put(ConstantUtil.JSON_RETURN_CODE, ConstantUtil.SUCCESS);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -145,14 +150,14 @@ public class CommentAction {
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
         User user=(User)session.get("user");
         if(user==null){
-            response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
         }
         else {
             if (commentService.deleteComment(commentId,user)){
-                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
             }
             else {
-                response.put(ConstantUtil.JSON_RETURN_CODE,ConstantUtil.NO_COMMENTER);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_COMMENTER);
             }
         }
         return ConstantUtil.RETURN_STRING;
