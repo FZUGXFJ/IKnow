@@ -113,18 +113,29 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得reportType对应的类型的举报数据
+     * reportType：举报类别（0为问题举报，1为回答举报，2为评论举报，3为回复举报）
+     */
     public String reportType(){
         Map<String,Object> result = adminService.getReportByType(reportType);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得数据库中所有的举报原因
+     */
     public String reportReason(){
         Map<String,Object> result = adminService.getReportReason();
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 根据用户id获得用户的相关信息
+     * userID：用户id
+     */
     public String userInfo(){
         Map<String,Object> result = adminService.getUserInfo(userID);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
@@ -133,6 +144,7 @@ public class AdminAction {
 
     /**
      * 获得问题的举报记录
+     * typeID：问题举报对应的信息id
      * @return “SUCCESS”
      */
     public String questionReported(){
@@ -141,6 +153,12 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+
+    /**
+     * 获得
+     * typeID：回答举报对应的信息id
+     * type：类型（0为回答，1为评论，2为回复）
+     */
     public String answerReported(){
         Map<String,Object> result = adminService.getAnswerReported(typeID,type);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
