@@ -289,6 +289,24 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="deleteAnswer" class="org.gxfj.iknow.action.AnswerAction" method="deleteAnswer">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="getAnswerInfo" class="org.gxfj.iknow.action.AnswerAction" method="getAnswerInfo">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="updateAnswer" class="org.gxfj.iknow.action.AnswerAction" method="updateAnswer">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
 
     <package name="reply" namespace="/reply" extends="default">
@@ -412,6 +430,12 @@
             </result>
         </action>
         <action name="answerReported" class="org.gxfj.iknow.action.AdminAction" method="answerReported">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="reportDel" class="org.gxfj.iknow.action.AdminAction" method="reportDel">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>
