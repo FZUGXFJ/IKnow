@@ -1,14 +1,13 @@
 package org.gxfj.iknow.pojo;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class Messagetype {
     private Integer id;
     private String name;
+    private Collection<Message> messagesById;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -48,5 +47,14 @@ public class Messagetype {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "messagetypeByTypeId")
+    public Collection<Message> getQuestiontypesById() {
+        return messagesById;
+    }
+
+    public void setQuestiontypesById(Collection<Message> messagesById) {
+        this.messagesById = messagesById;
     }
 }
