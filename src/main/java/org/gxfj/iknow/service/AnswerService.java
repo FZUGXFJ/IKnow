@@ -88,11 +88,10 @@ public interface AnswerService {
     /**
      * 获得count条问题信息
      * @param count 推荐数
-     * @param userId 用户id
      * @param start 起始下标
      * @return 问题表
      */
-    public Map<String,Object> moreRecommendAnswer(Integer userId, Integer count,Integer start);
+    public Map<String,Object> moreRecommendAnswer( Integer count,Integer start);
 
     /**
      * 插入浏览记录

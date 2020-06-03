@@ -149,29 +149,12 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得更多推荐的回答
+     * @return
+     */
     public String moreRecommend(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if (user != null) {
-            if(answerService.moreRecommendAnswer(user.getId(), ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start)==null) {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
-            }
-            else{
-                response = answerService.moreRecommendAnswer(user.getId(), ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,
-                        start);
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-            }
-
-        } else {
-            if(answerService.moreRecommendAnswer(null,ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start)==null){
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
-            }
-            else{
-                response = answerService.moreRecommendAnswer(null, ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start);
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-            }
-        }
+        Map<String, Object> response=answerService.moreRecommendAnswer(ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

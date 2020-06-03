@@ -725,9 +725,30 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> moreRecommendAnswer(Integer userId, Integer count, Integer start) {
-        List<Answer> answers = selectRecommendAnswer(userId, count, start);
-        return getRecommendJsonItems(answers);
+    public Map<String, Object> moreRecommendAnswer( Integer count, Integer start) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if (user != null) {
+            if(getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, start))==null) {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
+            }
+            else{
+                result = getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, start));
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+            }
+
+        } else {
+            if(getRecommendJsonItems(selectRecommendAnswer
+                    (null,ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start))==null){
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
+            }
+            else{
+                result = getRecommendJsonItems(selectRecommendAnswer
+                        (null,ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start));
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+            }
+        }
+        return result;
     }
 
     private Map<String, Object> getRecommendJsonItems(List<Answer> answers) {
