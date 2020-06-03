@@ -3,6 +3,7 @@ package org.gxfj.iknow.service;
 import org.gxfj.iknow.dao.MessageDAO;
 import org.gxfj.iknow.pojo.Message;
 import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.util.HtmlUtil;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class MessageServiceImpl implements MessageService{
                 message = new HashMap<>(5);
                 message.put("id",message1.getId());
                 message.put("type",message1.getMessagetypeByTypeId().getId());
-                message.put("content",message1.getContent());
+                message.put("content", HtmlUtil.html2Text(message1.getContent()));
                 message.put("isRead",message1.getIsRead());
                 message.put("time", Time.getTime(message1.getDate()));
 
@@ -61,6 +62,7 @@ public class MessageServiceImpl implements MessageService{
             message.setIsRead((byte)1);
             messageDAO.update(message);
             response.put("resultCode",0);
+            response.put("content",message.getContent());
             return response;
         }
     }

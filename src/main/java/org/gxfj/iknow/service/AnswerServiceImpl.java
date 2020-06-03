@@ -84,7 +84,9 @@ public class AnswerServiceImpl implements AnswerService{
         result.put("answerID",answer.getId());
         result.put("resultCode", 0);
 
-        MessageUtil.newMessage(2,q.getUserByUserId(),content);
+        MessageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
+                user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='#mobile/answer/answer.html?questionId="
+                + questionId +"&answerId=" + answer.getId() + "'>[回答链接]</a>");
         return result;
     }
 
@@ -591,7 +593,9 @@ public class AnswerServiceImpl implements AnswerService{
             answer.setApprovalCount(answer.getApprovalCount()+1);
             answerDAO.update(answer);
 
-            MessageUtil.newMessage(4,answer.getUserByUserId(),"赞同");
+            MessageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
+                    "</a>赞同了你的回答</P><a href='#mobile/answer/answer.html?questionId=" +
+                    answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
             return true;
         }
         return false;
