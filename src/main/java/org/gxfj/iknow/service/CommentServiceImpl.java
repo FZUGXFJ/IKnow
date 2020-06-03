@@ -70,15 +70,21 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<String, Object> getComments(Integer answerId, User visitor,Integer sort){
-        Map<String, Object> response = new HashMap<>(MAP_NUM);
-        boolean userIdentify;
+    public Map<String, Object> getComments(Integer answerId, Integer sort){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        Integer commentsSort;
+        if (sort == null) {
+            commentsSort = ConstantUtil.COMMENT_DEFAULT_SORT;
+        }
+        else {
+            commentsSort = sort;
+        }
+        ActionContext.getContext().getSession().put("commentsort",commentsSort);
         //获取问题下的20条评论
-        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,0,20,sort);
-
+        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,0,20,commentsSort);
         //json数组
         List<Map<String, Object>> commentListMap;
-
         //获取回答
         Answer answer = answerDAO.getNotDelete(answerId);
         //获取问题
@@ -87,18 +93,17 @@ public class CommentServiceImpl implements CommentService {
         User answerOwner = answer.getUserByUserId();
         //获取题主
         User questionOwner = question.getUserByUserId();
-
         //获取问题评论数
         Integer count = commentDAO.getCount(answerId);
-        response.put("commentNum",count);
+        result.put("commentNum",count);
         if (count != 0) {
-            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, visitor);
+            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, user);
         } else {
             commentListMap = new ArrayList<>();
         }
-
-        response.put("comments",commentListMap);
-        return response;
+        result.put("comments",commentListMap);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
     }
 
     @Override

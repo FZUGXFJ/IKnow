@@ -66,18 +66,7 @@ public class CommentAction {
      * @return SUCCESS
      */
     public String viewComments(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response;
-        Integer commentsSort;
-        if (sort == null) {
-            commentsSort = ConstantUtil.COMMENT_DEFAULT_SORT;
-        }
-        else {
-            commentsSort = sort;
-        }
-        session.put("commentsort",commentsSort);
-        response = commentService.getComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),commentsSort);
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        Map<String, Object> response = commentService.getComments(answerId, sort);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
