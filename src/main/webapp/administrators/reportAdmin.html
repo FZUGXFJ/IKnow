@@ -155,6 +155,25 @@
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead align="center">
+                        <tr v-if="isBatch">
+                            <th>
+                                全选
+                                <svg class="bi bi-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" @click="curAll=true;chooseAll(0)" v-if="!curAll">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                </svg>
+                                <svg class="bi bi-check-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" @click="curAll=false;chooseAll(1)" v-if="curAll">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                                </svg>
+                            </th>
+                            <th>
+                                <button class="btn btn-danger btn-sm" data-toggle="modal">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">全部删除</button>
+                            </th>
+                            <th>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal">退出</button>
+                            </th>
+                        </tr>
                         <tr>
                             <th v-if="isBatch">选择</th>
                             <th>举报ID</th>
@@ -169,10 +188,10 @@
                         <tbody align="center">
                         <tr v-for="(reportInfo,i) in subArr">
                             <td v-if="isBatch">
-                                <svg class="bi bi-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-if="!reportInfo.isDeal" @click="now=i+(cur-1)*15;subArr[i].isDeal=1">
+                                <svg class="bi bi-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-if="!reportInfo.isDeal" @click="now=i+(cur-1)*15;reportInfo[i].isDeal=1;isAll()">
                                     <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                                 </svg>
-                                <svg class="bi bi-check-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-if="reportInfo.isDeal" @click="now=i+(cur-1)*15;subArr[i].isDeal=0">
+                                <svg class="bi bi-check-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-if="reportInfo.isDeal" @click="now=i+(cur-1)*15;reportInfo[i].isDeal=0;curAll=false;isAll()">
                                     <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                                     <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
                                 </svg>
@@ -218,7 +237,7 @@
                     </div>
                     <div class="modal-body text-right">
                         <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
-                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="del()">确认</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="del(reportInfoList[now].id)">确认</button>
                     </div>
                 </div>
             </div>
@@ -384,7 +403,8 @@
             userInfo:[],
             targetInfo:[],
             reportedInfo:[],
-            ban:false
+            ban:false,
+            curAll:false
 
         },
         watch: {
@@ -430,6 +450,42 @@
                         console.log(status);
                     }
                 });
+            },
+            chooseAll:function(type){
+                let now=[];
+                now=this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
+                if(type===0)
+                {
+                    for(let i=0;i<now.length;i++)
+                    {
+                        now[i].isDeal=1;
+                    }
+                }
+                if(type===1)
+                {
+                    for(let i=0;i<now.length;i++)
+                    {
+                        now[i].isDeal=0;
+                    }
+                }
+
+            },
+            isAll:function(){
+                let now=[];
+                now=this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
+                let i=0;
+                let flag=false;
+                    for(i=0;i<now.length;i++)
+                    {
+                        if(now[i].isDeal===0) {
+                            this.curAll = false;
+                            flag=true;
+                            console.log("false");
+                        }
+                    }
+                    if(i===now.length && !flag)
+                        this.curAll=true;
+
             },
             getUserInfo: function(userID,type){
                 $.ajax({
@@ -554,22 +610,40 @@
                     }
                 });
             },
-            del: function(){
+            del: function(i){
                 $.ajax({
                     type:"POST",
                     url:"../admin/reportDel.action",
                     data:{
-                        reportID:reportAdmin.reportInfoList[reportAdmin.now].id,
+                        reportID:i,
                     },
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
-                            reportAdmin.reportInfoList.splice(reportAdmin.now,1);
-                            if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
-                                reportAdmin.cur--;
-                            }   //当最后一页的最后一条数据被删除时，也要改变当前页面
-                            reportAdmin.page();
-                            console.log(reportAdmin.now);
+                            if (result.resultCode === 0) {
+                                reportAdmin.reportInfoList.splice(reportAdmin.now,1);
+                                if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
+                                    reportAdmin.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                reportAdmin.page();
+                                if(reportAdmin.questionPage === true)
+                                {
+                                    reportAdmin.questionLen = reportAdmin.questionLen - 1;
+                                }
+                                if(reportAdmin.anPage === true)
+                                {
+                                    reportAdmin.answerLen = reportAdmin.answerLen - 1;
+                                }
+                                if(reportAdmin.commentPage === true)
+                                {
+                                    reportAdmin.commentLen = reportAdmin.commentLen - 1;
+                                }
+                                if(reportAdmin.replyPage === true)
+                                {
+                                    reportAdmin.replyLen = reportAdmin.replyLen - 1;
+                                }
+                                console.log(reportAdmin.now);
+                            }
                         }
                     },
                     error:function (request,status,error) {
@@ -579,6 +653,17 @@
                         console.log(status);
                     }
                 });
+            },
+            dels: function(){
+                let array=[];
+                array=this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
+                for(let i=(reportAdmin.cur-1)*15;i<array.length;i++)
+                {
+                    if(array[i].isDeal===1)
+                    {
+                        del(i);
+                    }
+                }
             },
             addActive: function(){
                 if(this.questionPage === true)
@@ -659,7 +744,7 @@
                 return ar
             },
             subArr() {
-                console.log(this.reportInfoList.slice((this.cur-1)*15,this.cur*15));
+                console.log("subArr");
                 return this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
             }
         },
