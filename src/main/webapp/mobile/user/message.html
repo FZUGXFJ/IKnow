@@ -266,7 +266,7 @@
             coAndReMessages:[],
             hasNewestCoAndReMsg:false,
             newestCoAndReMsg:{
-                content:"没有新的消息",
+                content:"没有新消息【查看历史消息】",
                 time:""
             },
             showPanel:0,
@@ -284,9 +284,6 @@
             },
             showDetail:function (msg) {
                 this.popupVisible = true;
-                if (msg.isRead === 0) {
-                    msg.isRead = 1;
-                }
                 $.ajax({
                     type:"POST",
                     url:"../../message/readMessage.action",
@@ -297,7 +294,10 @@
                     success:function (result) {
                         if (result.resultCode === 0) {
                             message.currentMsg = result.content;
-                            message.saveToLocal(msg);
+                            if (msg.isRead === 0) {
+                                msg.isRead = 1;
+                                message.saveToLocal(msg);
+                            }
                         } else if (result.resultCode === 1) {
                             location.href = "login.html?boot=1";
                         } else if (result.resultCode === 2) {
@@ -313,6 +313,15 @@
                 });
             },
             toPanel:function (showPanel) {
+                if (showPanel === 1) {
+                    this.text = "系统";
+                } else if (showPanel === 2) {
+                    this.text = "赞同/点赞";
+                } else if (showPanel === 3) {
+                    this.text = "回答";
+                } else if (showPanel === 4) {
+                    this.text = "评论/回复";
+                }
                 this.showPanel = showPanel;
             },
             loadLocalMsg:function () {
@@ -384,7 +393,7 @@
                 } else {
                     answerMessages.unshift(msg);
                 }
-                localStorage.setItem("answerMessages",answerMessages);
+                localStorage.setItem("answerMessages",JSON.stringify(answerMessages));
             },
             saveApp:function (msg) {
                 let approveMessages = localStorage.getItem("approveMessages");
@@ -398,7 +407,7 @@
                 } else {
                     approveMessages.unshift(msg);
                 }
-                localStorage.setItem("approveMessages",approveMessages);
+                localStorage.setItem("approveMessages",JSON.stringify(approveMessages));
             },
             saveCR:function (msg) {
                 let coAndReMessages = localStorage.getItem("coAndReMessages");
@@ -412,7 +421,7 @@
                 } else {
                     coAndReMessages.unshift(msg);
                 }
-                localStorage.setItem("coAndReMessages",coAndReMessages);
+                localStorage.setItem("coAndReMessages",JSON.stringify(coAndReMessages));
             },
             clearTag:function (content) {
                 return content.replace(/<\/?.+?>/g, "");
@@ -454,12 +463,12 @@
                             message.newestSysMsg.content = message.systemMessages[0].content;
                         }
                         if (message.hasNewestAnsMsg) {
-                            message.newestAnsMsg.time = message.newestAnsMsg[0].time;
-                            message.newestAnsMsg.content = message.newestAnsMsg[0].content;
+                            message.newestAnsMsg.time = message.answerMessages[0].time;
+                            message.newestAnsMsg.content = message.answerMessages[0].content;
                         }
                         if (message.hasNewestAppMsg) {
-                            message.newestAppMsg.time = message.newestAppMsg[0].time;
-                            message.newestAppMsg.content = message.newestAppMsg[0].content;
+                            message.newestAppMsg.time = message.approveMessages[0].time;
+                            message.newestAppMsg.content = message.approveMessages[0].content;
                         }
                         if (message.hasNewestCoAndReMsg) {
                             message.newestCoAndReMsg.time = message.coAndReMessages[0].time;
