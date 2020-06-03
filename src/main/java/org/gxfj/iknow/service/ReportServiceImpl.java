@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.Report;
 import org.gxfj.iknow.pojo.Reportreason;
@@ -65,19 +66,25 @@ public class ReportServiceImpl implements ReportService{
         reportDAO.add(report);
         if(type == 1){
             MessageUtil.newMessage(1,questionDAO.get(targetId).getUserByUserId(),
-                    "<p>你发布的问题被举报了，快去看看吧</P><a href='#'>[问题链接]</a>");
+                    "<p>你发布的问题被举报了，快去看看吧</P><a href='../../mobile/question/question.html?" +
+                            "questionId=" + targetId + "'>[问题链接]</a>");
         }
         else if (type == 2){
             MessageUtil.newMessage(1,answerDAO.get(targetId).getUserByUserId(),
-                    "<p>你发布的回答被举报了，快去看看吧</P><a href='#'>[回答链接]</a>");
+                    "<p>你发布的回答被举报了，快去看看吧</P><a href='../../mobile/answer/answer.html?questionId="
+                            + answerDAO.get(targetId).getQuestionByQuestionId().getId() + "&answerId=" + targetId +
+                            "'>[回答链接]</a>");
         }
         else if (type == 3){
             MessageUtil.newMessage(1,commentDAO.get(targetId).getUserByUserId(),
-                    "<p>你发表的评论被举报了，快去看看吧</P><a href='#'>[评论链接]</a>");
+                    "<p>你发表的评论被举报了，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
+                    + commentDAO.get(targetId).getAnswerByAnswerId().getId() + "'>[评论链接]</a>");
         }
         else {
             MessageUtil.newMessage(1,replyDAO.get(targetId).getUserByUserId(),
-                    "<p>你发表的回复被举报了，快去看看吧</P><a href='#'>[回复链接]</a>");
+                    "<p>你发表的回复被举报了，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
+                            + replyDAO.get(targetId).getCommentByCommentId().getAnswerByAnswerId().getId() +
+                            "'>[评论链接]</a>");
         }
         return true;
     }
