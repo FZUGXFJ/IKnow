@@ -520,7 +520,19 @@
         </action>
     </package>
     <package name="identity" namespace="/identity" extends="default">
-        <action name="getSchool" class="org.gxfj.iknow.action.IdentityAction" method="getSchool">
+        <action name="getSchools" class="org.gxfj.iknow.action.IdentityAction" method="getSchools">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="stuAuthentication" class="org.gxfj.iknow.action.IdentityAction" method="stuAuthentication">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="teaAuthentication" class="org.gxfj.iknow.action.IdentityAction" method="teaAuthentication">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>
