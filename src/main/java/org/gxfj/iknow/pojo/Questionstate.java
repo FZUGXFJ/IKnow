@@ -8,6 +8,9 @@ import java.util.Collection;
 @Entity
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Questionstate {
+    public static final int QUESTION_STATE_UN_SOLVE_ID = 1;
+    public static final int QUESTION_STATE_SOLVED_ID = 2;
+
     private Integer id;
     private String state;
     private Collection<Question> questionsById;

@@ -11,8 +11,7 @@ import java.util.List;
 
 @Component
 public class UserStateUtil {
-    public static final String BAN = "停封";
-    public static final String ESTOPPEL = "禁言";
+
 
     private Userstate banState;
     private Userstate estoppelState;
@@ -41,7 +40,7 @@ public class UserStateUtil {
     public Userstate getBanState() {
         if (banState == null) {
             for (Userstate userstate : getUserstateList()) {
-                if (userstate.getState().equals(BAN)) {
+                if (userstate.getState().equals(Userstate.BAN)) {
                     banState = userstate;
                     break;
                 }
@@ -53,7 +52,7 @@ public class UserStateUtil {
     public Userstate getEstoppelState() {
         if (estoppelState == null) {
             for (Userstate userstate : getUserstateList()) {
-                if (userstate.getState().equals(ESTOPPEL)) {
+                if (userstate.getState().equals(Userstate.ESTOPPEL)) {
                     estoppelState = userstate;
                     break;
                 }

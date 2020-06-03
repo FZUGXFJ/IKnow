@@ -8,6 +8,9 @@ import java.util.Collection;
 @Entity
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Userstate {
+    public static final String BAN = "停封";
+    public static final String ESTOPPEL = "禁言";
+
     private Integer id;
     private String state;
     private Collection<User> usersById;
