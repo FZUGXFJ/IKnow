@@ -29,10 +29,9 @@ public interface AnswerService {
      * 查看回答
      * @param questionId 问题id
      * @param answerId 回答的id
-     * @param user 当前用户
      * @return json数据（答案的信息，关联的用户，评论，问题的信息）
      */
-    public Map<String,Object> getRecommendAnswer(Integer questionId , Integer answerId , User user);
+    public Map<String,Object> getRecommendAnswerForQuestion(Integer questionId , Integer answerId );
 
     /**
      * 执行用户采纳问题操作。如果用户是题主，采纳成功，否则采纳失败
@@ -55,7 +54,7 @@ public interface AnswerService {
      * @param count 推荐数
      * @return 问题表
      */
-    public Map<String,Object> getRecommendAnswer(Integer userId, Integer count);
+    public Map<String,Object> getRecommendAnswerForUser(Integer userId, Integer count);
 
 
     void createRecommendAnswer();

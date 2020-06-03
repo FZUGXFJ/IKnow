@@ -105,28 +105,29 @@ public class AnswerServiceImpl implements AnswerService{
 
 
     @Override
-    public Map<String, Object> getRecommendAnswer(Integer questionId, Integer answerId, User user) {
-        Map<String , Object> resultMap = new HashMap<>(MAP_NUM);
+    public Map<String, Object> getRecommendAnswerForQuestion(Integer questionId, Integer answerId) {
+        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String , Object> result = new HashMap<>(MAP_NUM);
         if(user!=null) {
             insertBrowsing(user,questionDAO.get(questionId),answerDAO.get(answerId));
         }
         //获得回答关联的问题
-        resultMap.put("question" , getQuestionMap(questionId));
+        result.put("question" , getQuestionMap(questionId));
         //获得回答答主
-        resultMap.put("answerer" , getAnswererMap(answerId));
+        result.put("answerer" , getAnswererMap(answerId));
         //回答的信息转化为json格式
         //获得一个存储评论列表
-        resultMap.put("comments" , getCommentsMap(questionId, answerId,user));
+        result.put("comments" , getCommentsMap(questionId, answerId,user));
         //获得查看回答的用户的头像
         //未登录
         if(user == null){
-            resultMap.put("userHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
-            resultMap.put("answer" , getAnswerMap(questionId, answerId,null));
+            result.put("userHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
+            result.put("answer" , getAnswerMap(questionId, answerId,null));
         }
         //已登录
         else{
-            resultMap.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
-            resultMap.put("userHead" , ImgUtil.changeAvatar(user.getHead(), 2));
+            result.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
+            result.put("userHead" , ImgUtil.changeAvatar(user.getHead(), 2));
         }
 
         Answer answer=answerDAO.getNotDelete(answerId);
@@ -140,9 +141,10 @@ public class AnswerServiceImpl implements AnswerService{
                 viewerIsAnswerer = 1;
             }
         }
-        resultMap.put("viewerIsAnswerer", viewerIsAnswerer);
-        resultMap.put("viewerIsQuestionOwner", viewerIsQuestionOwner);
-        return resultMap;
+        result.put("viewerIsAnswerer", viewerIsAnswerer);
+        result.put("viewerIsQuestionOwner", viewerIsQuestionOwner);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
     }
 
     /**
@@ -331,7 +333,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> getRecommendAnswer(Integer userId, Integer count) {
+    public Map<String, Object> getRecommendAnswerForUser(Integer userId, Integer count) {
         List<Answer> answers = selectRecommendAnswer(userId, count, 0);
         return getRecommendJsonItems(answers);
     }

@@ -69,11 +69,12 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 查看回答
+     * @return SUCCESS
+     */
     public String viewAnswer() {
-        Map<String,Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        Map<String,Object> response = answerService.getRecommendAnswer(questionId,answerId,user);
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        Map<String,Object> response = answerService.getRecommendAnswerForQuestion(questionId,answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -126,9 +127,9 @@ public class AnswerAction {
         Map<String,Object> cUser=new HashMap<>(2);
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         if (user != null) {
-            response=answerService.getRecommendAnswer(user.getId(),20);
+            response=answerService.getRecommendAnswerForUser(user.getId(),20);
         } else {
-            response=answerService.getRecommendAnswer(null,20);
+            response=answerService.getRecommendAnswerForUser(null,20);
         }
         response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         if (user != null) {
