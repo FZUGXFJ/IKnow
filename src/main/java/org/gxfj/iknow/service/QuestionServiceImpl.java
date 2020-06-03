@@ -56,7 +56,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Integer postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
             , Integer majorType, Byte isAnonymous) {
-        if (!TextVerifyUtil.verifyCompliance(context)) {
+        if (!TextVerifyUtil.verifyCompliance(title) && !TextVerifyUtil.verifyCompliance(context)) {
             return null;
         }
 
@@ -374,6 +374,12 @@ public class QuestionServiceImpl implements QuestionService{
     public Map<String,Object> updateQuesiton(Integer questionId, String newQuestionTitle, String newQuestionContent,
                                              Integer newCategoriesType, Integer newSubjectType, Integer newMajorType) {
         Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+
+        if (!TextVerifyUtil.verifyCompliance(newQuestionTitle) && !TextVerifyUtil.verifyCompliance(newQuestionContent)) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 10);
+            return result;
+        }
+
         Questiontype questiontype = questionTypeDAO.get(newCategoriesType, newSubjectType, newMajorType);
         Question question = questionDAO.get(questionId);
         question.setTitle(newQuestionTitle);
