@@ -18,4 +18,24 @@ public interface ReportDAO extends BaseDAO<Report>{
      * @param bean 要删除的举报
      */
     void delete(Report bean);
+
+    /**
+     * 删掉所有问题举报记录
+     */
+    void deleteAllQueReport();
+
+    /**
+     * 删掉所有回答举报记录
+     */
+    void deleteAllAnsReport();
+
+    /**
+     * 删掉所有评论举报记录
+     */
+    void deleteAllComReport();
+
+    /**
+     * 删掉所有回复举报记录
+     */
+    void deleteAllRepReport();
 }
