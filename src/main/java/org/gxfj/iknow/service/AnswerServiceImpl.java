@@ -663,16 +663,25 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public boolean cancelApprove(Integer answerId, User user) {
-        Integer x = approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId);
-        if (x == -1) {
-            return false;
+    public Map<String, Object> cancelApprove(Integer answerId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-        approvalAnswerDAO.delete(approvalAnswerDAO.get(x));
-        Answer answer=answerDAO.get(answerId);
-        answer.setApprovalCount(answer.getApprovalCount()-1);
-        answerDAO.update(answer);
-        return true;
+        else if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.ANSWER_IN_NOT_APPROVED );
+        }
+        else{
+            approvalAnswerDAO.delete(approvalAnswerDAO.get(approvalAnswerDAO.
+                    searchByUserIdandAnswerId(user.getId(),answerId)));
+            Answer answer=answerDAO.get(answerId);
+            answer.setApprovalCount(answer.getApprovalCount()-1);
+            answerDAO.update(answer);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
     }
 
     @Override

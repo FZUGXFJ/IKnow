@@ -67,10 +67,9 @@ public interface AnswerService {
     /**
      * 取消点赞
      * @param answerId 回答id
-     * @param user 用户
      * @return 是否取消成功
      */
-    public boolean cancelApprove(Integer answerId,User user);
+    public Map<String, Object> cancelApprove(Integer answerId);
 
     /**
      * 反对回答

@@ -39,6 +39,7 @@ public class ConstantUtil {
     public final static int USER_IS_NOT_ANSWERER = 1;
     public final static int USER_IS_NOT_ANSWERER_TWO = 2;
     public final static int RECOMMEND_ANSWERS_NUM_PER_TIME = 20;
+    public final static int ANSWER_IN_NOT_APPROVED = 2;
 
     //Comment
     public final static int MISS_COMMENT_INF = 2;

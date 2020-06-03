@@ -119,22 +119,16 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 取消赞同
+     * @return SUCCESS
+     */
     public String cancelApprove(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(!answerService.cancelApprove(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
-        }
-        else{
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = answerService.cancelApprove(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
+
     public String oppositionAnswer(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
