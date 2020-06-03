@@ -28,6 +28,16 @@ public class UserStateUtil {
         return userstateList;
     }
 
+    public Userstate getStateByName(String stateName) {
+        for (Userstate userstate : getUserstateList()) {
+            if (userstate.getState().equals(stateName)) {
+                banState = userstate;
+                break;
+            }
+        }
+        return null;
+    }
+
     public Userstate getBanState() {
         if (banState == null) {
             for (Userstate userstate : getUserstateList()) {
