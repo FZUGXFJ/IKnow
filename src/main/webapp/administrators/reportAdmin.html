@@ -70,26 +70,26 @@
                 </h6>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a id="questionPage" class="nav-link" href="#" @click="questionPage=true;anPage=false;commentPage=false;replyPage=false;addActive()">
                             <span data-feather="book"></span>
                             问题举报
                             <span class="badge badge-pill badge-dark" v-if="reportInfoList.length>0">{{reportInfoList.length}}</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
+                    <li class="nav-item" >
+                        <a id="anPage" class="nav-link" href="#" @click="questionPage=false;anPage=true;commentPage=false;replyPage=false;addActive()">
                             <span data-feather="feather"></span>
                             回答举报
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a id="commentPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=true;replyPage=false;addActive()">
                             <span data-feather="message-circle"></span>
                             评论举报
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a id="replyPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=false;replyPage=true;addActive()">
                             <span data-feather="refresh-cw"></span>
                             回复举报
                         </a>
@@ -338,7 +338,11 @@
             cur: 1,//当前页码
             now:-1,//当前索引
             isBatch:false,
-            isChoose:false
+            isChoose:false,
+            questionPage:true,
+            anPage:false,
+            commentPage:false,
+            replyPage:false
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -438,6 +442,41 @@
                     }
                 });
             },
+            addActive: function(){
+                if(this.questionPage === true)
+                {
+                    $("#questionPage").addClass("active");
+                    $("#anPage").removeClass("active");
+                    $("#commentPage").removeClass("active");
+                    $("#replyPage").removeClass("active");
+                    console.log("questionPage");
+                }
+                if(this.anPage === true)
+                {
+                    $("#anPage").addClass("active");
+                    $("#questionPage").removeClass("active");
+                    $("#commentPage").removeClass("active");
+                    $("#replyPage").removeClass("active");
+                    console.log("anPage");
+                }
+                if(this.commentPage === true)
+                {
+                    $("#commentPage").addClass("active");
+                    $("#anPage").removeClass("active");
+                    $("#questionPage").removeClass("active");
+                    $("#replyPage").removeClass("active");
+                    console.log("commentPage");
+                }
+                if(this.replyPage === true)
+                {
+                    $("#replyPage").addClass("active");
+                    $("#anPage").removeClass("active");
+                    $("#commentPage").removeClass("active");
+                    $("#questionPage").removeClass("active");
+                    console.log("replyPage");
+                }
+
+            },
             page: function(){
                 reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
                 console.log(reportAdmin.all);
@@ -489,6 +528,7 @@
         mounted:function () {
             this.isLogin();
             this.getReportType(0);
+            this.addActive();
         }
     });
     (function () {
