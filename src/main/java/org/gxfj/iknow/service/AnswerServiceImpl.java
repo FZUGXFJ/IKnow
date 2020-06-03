@@ -358,9 +358,22 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> getRecommendAnswerForUser(Integer userId, Integer count) {
-        List<Answer> answers = selectRecommendAnswer(userId, count, 0);
-        return getRecommendJsonItems(answers);
+    public Map<String, Object> getRecommendAnswerForUser(Integer count) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String,Object> cUser=new HashMap<>(2);
+        if (user != null) {
+            result=getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, 0));
+            cUser.put("id",user.getId());
+            cUser.put("head", ImgUtil.changeAvatar(user.getHead()));
+        } else {
+            result=getRecommendJsonItems(selectRecommendAnswer(null, count, 0));
+            cUser.put("id",0);
+            cUser.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+        }
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+        result.put("user",cUser);
+        return result;
     }
 
 

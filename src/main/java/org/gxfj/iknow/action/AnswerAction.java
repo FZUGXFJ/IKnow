@@ -99,25 +99,12 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 主页的推荐回答
+     * @return SUCCESS
+     */
     public String recommendAnswer(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response;
-        Map<String,Object> cUser=new HashMap<>(2);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if (user != null) {
-            response=answerService.getRecommendAnswerForUser(user.getId(),20);
-        } else {
-            response=answerService.getRecommendAnswerForUser(null,20);
-        }
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-        if (user != null) {
-            cUser.put("id",user.getId());
-            cUser.put("head", ImgUtil.changeAvatar(user.getHead()));
-        } else {
-            cUser.put("id",0);
-            cUser.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
-        }
-        response.put("user",cUser);
+        Map<String, Object> response = answerService.getRecommendAnswerForUser(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

@@ -52,7 +52,7 @@ public interface AnswerService {
      * @param count 推荐数
      * @return 问题表
      */
-    public Map<String,Object> getRecommendAnswerForUser(Integer userId, Integer count);
+    public Map<String,Object> getRecommendAnswerForUser(Integer count);
 
 
     void createRecommendAnswer();
