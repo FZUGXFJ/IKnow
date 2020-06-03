@@ -79,7 +79,7 @@ public class AnswerServiceImpl implements AnswerService{
         else{
             //得到新发布的回答的id
             if (!TextVerifyUtil.verifyCompliance(content)) {
-                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
                 return result;
             }
             Answer answer=new Answer();
@@ -878,7 +878,7 @@ public class AnswerServiceImpl implements AnswerService{
             answerDAO.update(answer);
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         } else {
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
         }
         return result;
     }

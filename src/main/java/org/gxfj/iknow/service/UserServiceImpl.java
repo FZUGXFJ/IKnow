@@ -206,7 +206,7 @@ public class UserServiceImpl<result> implements UserService{
             return result;
         }
         if (!TextVerifyUtil.verifyCompliance(username) || !TextVerifyUtil.verifyCompliance(introduction)) {
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
             return result;
         }
 

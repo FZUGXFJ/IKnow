@@ -376,7 +376,7 @@ public class QuestionServiceImpl implements QuestionService{
         Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
 
         if (!TextVerifyUtil.verifyCompliance(newQuestionTitle) && !TextVerifyUtil.verifyCompliance(newQuestionContent)) {
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 10);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
             return result;
         }
 

@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
                         + answerId + "'>[评论链接]</a>");
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
-                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
             }
         }
         return result;

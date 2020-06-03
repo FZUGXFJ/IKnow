@@ -11,6 +11,8 @@ public class ConstantUtil {
      */
     public final static Integer UN_LOGIN = 1;
 
+    public final static int JSON_RESULT_CODE_VERIFY_TEXT_FAIL = 10;
+
     public final static int NO_MORE = 1;
     public final static String JSON_RETURN_CODE_NAME = "resultCode";
     public final static String SESSION_USER = "user";
