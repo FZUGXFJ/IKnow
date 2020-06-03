@@ -364,4 +364,11 @@ public class AdminServiceImpl implements AdminService{
         return result;
     }
 
+    @Override
+    public Map<String, Object> ban(Integer userID, Integer days) {
+
+
+        return null;
+    }
+
 }

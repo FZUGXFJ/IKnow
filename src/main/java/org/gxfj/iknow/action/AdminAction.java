@@ -29,6 +29,7 @@ public class AdminAction {
     private Integer typeID;
     private Integer type;
     private Integer reportID;
+    private Integer days;
     @Autowired
     private AdminService adminService;
 
@@ -149,7 +150,7 @@ public class AdminAction {
 
 
     /**
-     * 获得
+     * 获得回答举报记录
      * typeID：回答举报对应的信息id
      * type：类型（0为回答，1为评论，2为回复）
      */
@@ -169,6 +170,16 @@ public class AdminAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
+
+    /**
+     * 封禁用户,根据userID封禁对应的用户days天
+     */
+    public String ban() {
+        Map<String, Object> result = adminService.ban(userID, days);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
 
     public Integer getAccountNum() {
         return accountNum;
@@ -248,5 +259,13 @@ public class AdminAction {
 
     public void setReportID(Integer reportID) {
         this.reportID = reportID;
+    }
+
+    public Integer getDays() {
+        return days;
+    }
+
+    public void setDays(Integer days) {
+        this.days = days;
     }
 }

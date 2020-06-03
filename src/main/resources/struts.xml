@@ -448,6 +448,18 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="ban" class="org.gxfj.iknow.action.AdminAction" method="ban">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="estoppel" class="org.gxfj.iknow.action.AdminAction" method="estoppel">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
     </package>
 
     <package name="partition" namespace="/partition" extends="default">

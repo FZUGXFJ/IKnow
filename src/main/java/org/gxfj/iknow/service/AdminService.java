@@ -93,4 +93,12 @@ public interface AdminService {
      * @return 数据
      */
     Map<String, Object> deleteReport(Integer reportId);
+
+    /**
+     * 封禁用户
+     * @param userID 要封禁的用户id
+     * @param days 封禁的时间
+     */
+    Map<String, Object> ban(Integer userID, Integer days);
+
 }

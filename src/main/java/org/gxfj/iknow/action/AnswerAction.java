@@ -45,6 +45,7 @@ public class AnswerAction {
     final static private int RESPONSE_NUM = 20;
     private static int MAP_NUM = 20;
     */
+
     @Autowired
     AnswerService answerService;
 
