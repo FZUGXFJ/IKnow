@@ -107,35 +107,35 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    //@Transactional
-    public boolean approveComment(User user, Integer commentId) {
-        if (user == null) {
-            return false;
+    public Map<String, Object> approveComment(Integer commentId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if (user != null) {
+            Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
+            if (approvalcomment == null) {
+                //更新评论记录中评论点赞数
+                Comment comment = commentDAO.getNotDelete(commentId);
+                comment.setCount(comment.getCount() + 1);
+                commentDAO.update(comment);
+
+                //向评论点赞表中插入记录
+                approvalcomment = new Approvalcomment();
+                approvalcomment.setCommentByCommentId(comment);
+                approvalcomment.setUserByUserId(user);
+                approvalcomment.setDate(new Date());
+                approvalCommentDAO.add(approvalcomment);
+
+                messageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='#'>"+
+                        user.getName() + "</a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
+                        + comment.getAnswerByAnswerId().getId() + "'>[评论链接]</a>");
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_APPROVED);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-
-        //如果查询到记录，说明已经点过赞了
-        Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
-        if (approvalcomment != null) {
-            return false;
-        }
-
-        //更新评论记录中评论点赞数
-        Comment comment = commentDAO.getNotDelete(commentId);
-        comment.setCount(comment.getCount() + 1);
-        commentDAO.update(comment);
-
-        //向评论点赞表中插入记录
-        approvalcomment = new Approvalcomment();
-        approvalcomment.setCommentByCommentId(comment);
-        approvalcomment.setUserByUserId(user);
-        approvalcomment.setDate(new Date());
-        approvalCommentDAO.add(approvalcomment);
-
-        messageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='#'>"+
-                user.getName() + "</a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
-                + comment.getAnswerByAnswerId().getId() + "'>[评论链接]</a>");
-
-        return true;
+        return result;
     }
 
     @Override

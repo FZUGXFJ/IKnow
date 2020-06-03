@@ -26,11 +26,10 @@ public interface CommentService {
 
     /**
      * 验证用户是否点过赞，如果点过，则更新数据库中点赞相关记录
-     * @param user 点赞用户
      * @param commentId 被点赞的评论的id
      * @return 点赞成功true,点赞失败false
      */
-    public boolean approveComment(User user, Integer commentId);
+    public Map<String, Object> approveComment(Integer commentId);
 
     /**
      * 验证用户是否点过赞，如果点过，则修改数据库中的点赞信息
