@@ -25,6 +25,8 @@ public class CommentServiceImpl implements CommentService {
     ReplyDAO replyDAO;
     @Autowired
     ApprovalReplyDAO approvalReplyDAO;
+    @Autowired
+    MessageUtil messageUtil;
 
     final static private int MAP_NUM = 30;
     final static private int REPLY_NUM = 2;
@@ -45,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
 
         commentDAO.add(comment);
 
-        MessageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='#'>"+
+        messageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='#'>"+
                 user.getName() + "</a>评论了你的回答，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
                 + answerId + "'>[评论链接]</a>");
         return comment.getId();
@@ -108,7 +110,7 @@ public class CommentServiceImpl implements CommentService {
         approvalcomment.setDate(new Date());
         approvalCommentDAO.add(approvalcomment);
 
-        MessageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='#'>"+
+        messageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='#'>"+
                 user.getName() + "</a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
                 + comment.getAnswerByAnswerId().getId() + "'>[评论链接]</a>");
         return true;

@@ -40,6 +40,8 @@ public class AnswerServiceImpl implements AnswerService{
     ExpUtil expUtil;
     @Autowired
     ReplyDAO replyDAO;
+    @Autowired
+    MessageUtil messageUtil;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -96,7 +98,7 @@ public class AnswerServiceImpl implements AnswerService{
             result.put("answerID",answer.getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
-            MessageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
+            messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
                     user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
                     "questionId=" + questionId + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
         }
@@ -651,7 +653,7 @@ public class AnswerServiceImpl implements AnswerService{
             answer.setApprovalCount(answer.getApprovalCount()+1);
             answerDAO.update(answer);
 
-            MessageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
+            messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
                     "</a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
                     answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS );

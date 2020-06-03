@@ -24,6 +24,8 @@ public class ReplyServiceImpl implements ReplyService {
     private ApprovalCommentDAO approvalCommentDAO;
     @Autowired
     private ApprovalReplyDAO approvalReplyDAO;
+    @Autowired
+    private MessageUtil messageUtil;
 
     private final int MAP_NUM = 20;
     private final int NO_SPECIAL_IDENTIFY = 0;
@@ -50,7 +52,7 @@ public class ReplyServiceImpl implements ReplyService {
 
         replyDAO.add(reply);
 
-        MessageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='#'>"+
+        messageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='#'>"+
                 user.getName() + "</a>回复了你的评论，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
                 + reply.getCommentByCommentId().getAnswerByAnswerId().getId() + "'>[回复链接]</a>");
         return reply.getId();
@@ -255,7 +257,7 @@ public class ReplyServiceImpl implements ReplyService {
             reply.setCount(reply.getCount()+1);
             replyDAO.update(reply);
 
-            MessageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='#'>"+
+            messageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='#'>"+
                     user.getName() + "</a>赞同了你的回复</P><a href='../../mobile/comment/comment.html?answerId=" +
                     reply.getCommentByCommentId().getAnswerByAnswerId().getId() + "'>[回复链接]</a>");
             return true;
