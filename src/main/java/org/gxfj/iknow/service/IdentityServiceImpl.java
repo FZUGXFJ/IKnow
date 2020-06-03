@@ -51,10 +51,25 @@ public class IdentityServiceImpl implements IdentityService{
 
     @Override
     public boolean stuAuthentication(User user,Integer schoolId,String realName,String studentNum){
-        if(userIdentityDAO.listStuIdentities(user.getId(),schoolId,realName,studentNum) == null){
+        Useridentity useridentity = userIdentityDAO.getStuIdentitie(user.getId(),schoolId,realName,studentNum);
+        if(useridentity == null){
             return false;
         }else {
             user.setIsAttest((byte)1);
+            user.setUseridentityByIdentityId(useridentity);
+            userDAO.update(user);
+            return true;
+        }
+    }
+
+    @Override
+    public boolean teaAuthentication(User user,Integer schoolId,String realName,String jobNum){
+        Useridentity useridentity = userIdentityDAO.getTeaIdentitie(user.getId(),schoolId,realName,jobNum);
+        if(useridentity == null){
+            return false;
+        }else {
+            user.setIsAttest((byte)1);
+            user.setUseridentityByIdentityId(useridentity);
             userDAO.update(user);
             return true;
         }

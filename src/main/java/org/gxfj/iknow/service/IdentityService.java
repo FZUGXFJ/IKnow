@@ -20,4 +20,10 @@ public interface IdentityService {
      * @return 是否认证成功
      */
     boolean stuAuthentication(User user,Integer schoolId, String realName, String studentNum);
+
+    /**
+     * 教师认证
+     * @return 是否认证成功
+     */
+    boolean teaAuthentication(User user,Integer schoolId, String realName, String jobNum);
 }
