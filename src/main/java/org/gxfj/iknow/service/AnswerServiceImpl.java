@@ -399,7 +399,7 @@ public class AnswerServiceImpl implements AnswerService{
         List<Answer> answerList = answerDAO.list();
         int answersLength = answerList.size();
         //获得所有的非封禁用户uid
-        List<Integer> userIdList = userDAO.getActiveUserId();
+        List<Integer> userIdList = userDAO.getAllUserId();
         int usersLength = userIdList.size();
         //获得所有用户的近RECOMMENT_BY_DAYS天的浏览记录
         List<Browsinghistory> browsinghistoryList = browsingHistoryDAO.listInLastDay(RECOMMENT_BY_DAYS);

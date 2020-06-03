@@ -41,10 +41,16 @@ public interface UserDAO extends BaseDAO<User>{
     boolean hasUserEmail(String email);
 
     /**
-     * 获得所有非封禁用户的uid
-     * @return 非封禁用户的uid的列表
+     * 获得所有非封禁用户的id
+     * @return 非封禁用户的id的列表
      */
     List<Integer> getActiveUserId();
+
+    /**
+     * 获得所有用户的id
+     * @return 用户的id的列表
+     */
+    List<Integer> getAllUserId();
 
     /**
      * 根据关键字获得user
@@ -52,4 +58,6 @@ public interface UserDAO extends BaseDAO<User>{
      * @return user列表
      */
     List<User> listByKeyword(String keyword);
+
+
 }

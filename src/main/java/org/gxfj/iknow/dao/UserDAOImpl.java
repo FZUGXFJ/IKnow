@@ -102,6 +102,14 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public List<Integer> getAllUserId() {
+        String hql = "SELECT u.id FROM User AS u";
+        Query query = getSession().createQuery(hql);
+
+        return query.list();
+    }
+
+    @Override
     public List<User> listByKeyword(String keyword) {
         Session session = sessionFactory.getCurrentSession();
         String hql = "FROM User WHERE ( name like '%" + keyword + "%' )";
