@@ -50,8 +50,9 @@ public class IdentityServiceImpl implements IdentityService{
     }
 
     @Override
-    public boolean stuAuthentication(User user,Integer schoolId,String realName,String studentNum){
-        Useridentity useridentity = userIdentityDAO.getStuIdentitie(user.getId(),schoolId,realName,studentNum);
+    public boolean stuAuthentication(User user,String schoolName,String realName,String studentNum){
+        School school = schoolDAO.getSchoolByName(schoolName);
+        Useridentity useridentity = userIdentityDAO.getStuIdentitie(user.getId(),school.getId(),realName,studentNum);
         if(useridentity == null){
             return false;
         }else {
@@ -63,8 +64,9 @@ public class IdentityServiceImpl implements IdentityService{
     }
 
     @Override
-    public boolean teaAuthentication(User user,Integer schoolId,String realName,String jobNum){
-        Useridentity useridentity = userIdentityDAO.getTeaIdentitie(user.getId(),schoolId,realName,jobNum);
+    public boolean teaAuthentication(User user,String schoolName,String realName,String jobNum){
+        School school = schoolDAO.getSchoolByName(schoolName);
+        Useridentity useridentity = userIdentityDAO.getTeaIdentitie(user.getId(),school.getId(),realName,jobNum);
         if(useridentity == null){
             return false;
         }else {
