@@ -114,9 +114,9 @@
                     </ul>
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                         <span>相关统计</span>
-    <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
-    <!--                        <span data-feather="plus-circle"></span>-->
-    <!--                    </a>-->
+                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+                        <!--                        <span data-feather="plus-circle"></span>-->
+                        <!--                    </a>-->
                     </h6>
                     <ul class="nav flex-column mb-2">
                         <li class="nav-item">
@@ -150,7 +150,7 @@
                     </div>
                 </div>
 
-    <!--            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
+                <!--            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
                 <h2 v-if="questionPage">问题举报管理</h2>
                 <h2 v-if="anPage">回答举报管理</h2>
                 <h2 v-if="commentPage">评论举报管理</h2>
@@ -693,16 +693,16 @@
                 now=this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
                 let i=0;
                 let flag=false;
-                    for(i=0;i<now.length;i++)
-                    {
-                        if(now[i].isDeal===0) {
-                            this.curAll = false;
-                            flag=true;
-                            console.log("false");
-                        }
+                for(i=0;i<now.length;i++)
+                {
+                    if(now[i].isDeal===0) {
+                        this.curAll = false;
+                        flag=true;
+                        console.log("false");
                     }
-                    if(i===now.length && !flag)
-                        this.curAll=true;
+                }
+                if(i===now.length && !flag)
+                    this.curAll=true;
 
             },
             getUserInfo: function(userID,type){
@@ -740,7 +740,7 @@
                     success:function (result) {
                         if (result.resultCode === 0) {
                             reportAdmin.reportedInfo=result.questionReported;
-                            console.log(reportAdmin.reportedInfo[0].id);
+                            console.log(reportAdmin.reportedInfo.id);
                         }
                     },
                     error:function (request,status,error) {
@@ -763,7 +763,6 @@
                     success:function (result) {
                         if (result.resultCode === 0) {
                             reportAdmin.reportedInfo=result.answerReported;
-                            console.log(reportAdmin.reportedInfo[0].content);
                         }
                     },
                     error:function (request,status,error) {
@@ -806,21 +805,21 @@
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
-                                reportAdmin.reportInfoList = result.reportInfoList;
-                                reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
-                                if(reportType === 0)
-                                    reportAdmin.questionLen=reportAdmin.reportInfoList.length;
-                                if(reportType === 1)
-                                    reportAdmin.answerLen=reportAdmin.reportInfoList.length;
-                                if(reportType === 2)
-                                    reportAdmin.commentLen=reportAdmin.reportInfoList.length;
-                                if(reportType === 3)
-                                    reportAdmin.replyLen=reportAdmin.reportInfoList.length;
-                                for(let i = 0;i < reportAdmin.reportInfoList.length;i++)
-                                {
-                                    reportAdmin.pageInfoList[i] = reportAdmin.reportInfoList.slice(15*i,15*(i+1));
-                                }
-                                console.log("切换now:"+reportAdmin.now);
+                            reportAdmin.reportInfoList = result.reportInfoList;
+                            reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
+                            if(reportType === 0)
+                                reportAdmin.questionLen=reportAdmin.reportInfoList.length;
+                            if(reportType === 1)
+                                reportAdmin.answerLen=reportAdmin.reportInfoList.length;
+                            if(reportType === 2)
+                                reportAdmin.commentLen=reportAdmin.reportInfoList.length;
+                            if(reportType === 3)
+                                reportAdmin.replyLen=reportAdmin.reportInfoList.length;
+                            for(let i = 0;i < reportAdmin.reportInfoList.length;i++)
+                            {
+                                reportAdmin.pageInfoList[i] = reportAdmin.reportInfoList.slice(15*i,15*(i+1));
+                            }
+                            console.log("切换now:"+reportAdmin.now);
                         }
                     },
                     error:function (request,status,error) {
