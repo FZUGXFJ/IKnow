@@ -6,6 +6,9 @@ import java.util.Date;
 
 @Entity
 public class Comment {
+    public static final int COMMENT_UN_DELETED = 0;
+    public static final int COMMENT_DELETED = 1;
+
     private Integer id;
     private String content;
     private Date date;
