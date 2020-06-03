@@ -29,33 +29,30 @@ public interface AnswerService {
      * 查看回答
      * @param questionId 问题id
      * @param answerId 回答的id
-     * @param user 当前用户
      * @return json数据（答案的信息，关联的用户，评论，问题的信息）
      */
-    public Map<String,Object> getRecommendAnswer(Integer questionId , Integer answerId , User user);
+    public Map<String,Object> getRecommendAnswerForQuestion(Integer questionId , Integer answerId );
 
     /**
      * 执行用户采纳问题操作。如果用户是题主，采纳成功，否则采纳失败
-     * @param user 执行操作的用户
      * @param answerId 要采纳的回答的id
      * @return 成功为true,失败为false
      */
-    public Boolean adoptAnswer(User user, Integer answerId);
+    public Map<String, Object> adoptAnswer( Integer answerId);
 
     /**
      * 执行回答取消匿名
-     * @param user 执行操作的用户
      * @param answerId 要采纳的回答的id
      * @return 成功为true,失败为false
      */
-    public Boolean cancelAnonymous(User user,Integer answerId);
+    public Map<String, Object> cancelAnonymous(Integer answerId);
 
     /**
      * 获得count条问题信息
      * @param count 推荐数
      * @return 问题表
      */
-    public Map<String,Object> getRecommendAnswer(Integer userId, Integer count);
+    public Map<String,Object> getRecommendAnswerForUser(Integer userId, Integer count);
 
 
     void createRecommendAnswer();
