@@ -33,7 +33,6 @@ public interface CommentService {
 
     /**
      * 验证用户是否点过赞，如果点过，则修改数据库中的点赞信息
-     * @param user 取消点赞的用户
      * @param commentId 被点赞的评论的id
      * @return 取消成功返回true，失败返回false
      */
@@ -42,12 +41,10 @@ public interface CommentService {
     /**
      * 获取更多回答的评论(评论数方法中指定）
      * @param answerId 回答Id
-     * @param user 发起查看请求的用户
      * @param start 起始地址
-     * @param sort 排序方式
      * @return 构造好的MAP
      */
-    public Map<String, Object> moreComments(Integer answerId, User user,Integer start,Integer sort);
+    public Map<String, Object> moreComments(Integer answerId, Integer start);
 
     /**
      * 删除评论

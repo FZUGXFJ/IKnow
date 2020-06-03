@@ -327,36 +327,40 @@ public class CommentServiceImpl implements CommentService {
         return replyListMap;
     }
     @Override
-    public Map<String, Object> moreComments(Integer answerId, User visitor,Integer start,Integer sort){
-        Map<String, Object> response = new HashMap<>(MAP_NUM);
-        boolean userIdentify;
-        //获取问题下的20条评论
-        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,start,20,sort);
-        if(comments.size()<=20){
-            return null;
+    public Map<String, Object> moreComments(Integer answerId, Integer start){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        Integer sort =(Integer)ActionContext.getContext().getSession().get("commentsort");
+        if(sort ==null){
+            sort =ConstantUtil.COMMENT_DEFAULT_SORT;
         }
-        //json数组
-        List<Map<String, Object>> commentListMap;
-        //获取回答
-        Answer answer = answerDAO.getNotDelete(answerId);
-        //获取问题
-        Question question = answer.getQuestionByQuestionId();
-        //获取回答者
-        User answerOwner = answer.getUserByUserId();
-        //获取题主
-        User questionOwner = question.getUserByUserId();
-
         //获取问题评论数
         Integer count = commentDAO.getCount(answerId);
-        response.put("commentNum",count);
-        if (count != 0) {
-            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, visitor);
-        } else {
-            commentListMap = new ArrayList<>();
+        if (count == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
         }
-
-        response.put("comments",commentListMap);
-        return response;
+        else {
+            //获取问题下的20条评论
+            List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,start,20,sort);
+            if(comments.size()<=20){
+                return null;
+            }
+            //json数组
+            List<Map<String, Object>> commentListMap;
+            //获取回答
+            Answer answer = answerDAO.getNotDelete(answerId);
+            //获取问题
+            Question question = answer.getQuestionByQuestionId();
+            //获取回答者
+            User answerOwner = answer.getUserByUserId();
+            //获取题主
+            User questionOwner = question.getUserByUserId();
+            result.put("commentNum",count);
+            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, user);
+            result.put("comments",commentListMap);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
     }
 
     @Override

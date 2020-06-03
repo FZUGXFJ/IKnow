@@ -90,21 +90,13 @@ public class CommentAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
-    
+
+    /**
+     * 查看更多评论
+     * @return SUCCESS
+     */
     public String moreComment(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
-        Integer sort1 =(Integer)session.get("commentsort");
-        if(sort1 ==null){
-            sort1 =ConstantUtil.COMMENT_DEFAULT_SORT;
-        }
-        if (commentService.moreComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),start,sort1 )==null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
-        }
-        else {
-            response=commentService.moreComments(answerId, (User) session.get(ConstantUtil.SESSION_USER),start,sort1 );
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response= commentService.moreComments(answerId, start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
