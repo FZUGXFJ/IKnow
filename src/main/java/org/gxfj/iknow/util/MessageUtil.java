@@ -17,9 +17,9 @@ import java.util.Date;
 @Component
 public class MessageUtil {
     @Autowired
-    MessageDAO messageDAO;
+    static MessageDAO messageDAO;
     @Autowired
-    MessageTypeDAO messageTypeDAO;
+    static MessageTypeDAO messageTypeDAO;
 
     /**
      * 新建消息
@@ -27,7 +27,7 @@ public class MessageUtil {
      * @param user  用户信息
      * @param content 消息内容
      */
-    public void newMessage(Integer type,User user,String content){
+    public static void newMessage(Integer type,User user,String content){
         Message message = new Message();
         Messagetype messagetype=messageTypeDAO.get(type);
         message.setIsRead((byte)0);

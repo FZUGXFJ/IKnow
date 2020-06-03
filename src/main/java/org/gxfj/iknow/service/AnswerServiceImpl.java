@@ -72,6 +72,8 @@ public class AnswerServiceImpl implements AnswerService{
         answerDAO.add(answer);
         result.put("answerID",answer.getId());
         result.put("resultCode", 0);
+
+        MessageUtil.newMessage(2,q.getUserByUserId(),content);
         return result;
     }
 
@@ -577,6 +579,8 @@ public class AnswerServiceImpl implements AnswerService{
             approvalAnswerDAO.add(approvalanswer);
             answer.setApprovalCount(answer.getApprovalCount()+1);
             answerDAO.update(answer);
+
+            MessageUtil.newMessage(4,answer.getUserByUserId(),"赞同");
             return true;
         }
         return false;

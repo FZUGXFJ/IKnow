@@ -2,10 +2,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
-import org.gxfj.iknow.util.ConstantUtil;
-import org.gxfj.iknow.util.ImgUtil;
-import org.gxfj.iknow.util.TextVerifyUtil;
-import org.gxfj.iknow.util.Time;
+import org.gxfj.iknow.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +49,8 @@ public class ReplyServiceImpl implements ReplyService {
         reply.setUserByUserId(user);
 
         replyDAO.add(reply);
+
+        MessageUtil.newMessage(3,comment.getUserByUserId(),content);
         return reply.getId();
     }
 
@@ -253,6 +252,8 @@ public class ReplyServiceImpl implements ReplyService {
             approvalReplyDAO.add(approvalreply);
             reply.setCount(reply.getCount()+1);
             replyDAO.update(reply);
+
+            MessageUtil.newMessage(4,reply.getUserByUserId(),"赞同");
             return true;
         }
         return false;
