@@ -60,7 +60,28 @@ public class IdentityAction {
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.AUTHENTICATION_FAILED);
             }
         }
-        result.put(ConstantUtil.RETURN_STRING,ConstantUtil.SUCCESS);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 教师认证
+     */
+    public String teaAuthentication(){
+        Map<String , Object> session = ActionContext.getContext().getSession();
+        Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        User user=(User)session.get(ConstantUtil.SESSION_USER);
+        if(user==null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN_TWO);
+        }
+        else {
+            if (identityService.teaAuthentication(user,school,realName,jobNum)){
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+            }
+            else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.AUTHENTICATION_FAILED);
+            }
+        }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
