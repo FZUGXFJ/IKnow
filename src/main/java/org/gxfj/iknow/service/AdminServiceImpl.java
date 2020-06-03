@@ -258,6 +258,7 @@ public class AdminServiceImpl implements AdminService{
         Map<String,Object> userMap = new HashMap<>(MIN_HASH_MAP_NUM);
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         User user = userDAO.get(userId);
+        Useridentity useridentity = user.getUseridentityByIdentityId();
         userMap.put("id",user.getId());
         userMap.put("email",user.getEmail());
         userMap.put("name",user.getName());
@@ -265,7 +266,7 @@ public class AdminServiceImpl implements AdminService{
         userMap.put("date",Time.getTime1(user.getDate()));
         userMap.put("badgeNum",user.getBadgeNum());
         userMap.put("state",user.getUserstateByStateId().getState());
-        userMap.put("identity",user.getUseridentityByIdentityId().getType());
+        userMap.put("identity",useridentity==null?"普通用户":useridentity.getType());
         userMap.put("reportedTimes",user.getReportedTimes());
         result.put("userInfos",userMap);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
