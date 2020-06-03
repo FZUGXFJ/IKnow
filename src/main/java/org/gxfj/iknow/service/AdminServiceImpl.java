@@ -267,6 +267,7 @@ public class AdminServiceImpl implements AdminService{
         userMap.put("badgeNum",user.getBadgeNum());
         userMap.put("state",user.getUserstateByStateId().getState());
         userMap.put("identity",user.getUseridentityByIdentityId().getType());
+        userMap.put("reportedTimes",user.getReportedTimes());
         userListMap.add(userMap);
         result.put("userInfos",userListMap);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
