@@ -79,44 +79,22 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 采纳回答
+     * @return SUCCESS
+     */
     public String adoptAnswer() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
-        //从Session中获得当前用户对象
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-
-
-        if (user != null) {
-            if (answerService.adoptAnswer(user, answerId)) {
-                //用户已登录，且用户为题主，返回采纳成功
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            } else {
-                //用户已登录，但用户不是题主，返回用户不是提问者
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_QUESTIONER);
-            }
-        } else {
-            //用户未登录，返回未登录
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-
+        Map<String, Object> response = answerService.adoptAnswer(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
-    public String cancelAdopt(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-
-        if (user != null) {
-            if (answerService.cancelAnonymous(user, answerId)) {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            } else {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_ANSWERER);
-            }
-        } else {
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
+    /**
+     * 取消匿名
+     * @return SUCCESS
+     */
+    public String cancelAnonymous(){
+        Map<String, Object> response = answerService.cancelAnonymous(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

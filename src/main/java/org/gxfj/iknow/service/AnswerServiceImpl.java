@@ -281,25 +281,40 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Boolean adoptAnswer(User user, Integer answerId) {
+    public Map<String, Object> adoptAnswer(Integer answerId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if (user != null) {
+            if (adoptAnswer(user, answerId)) {
+                //用户已登录，且用户为题主，返回采纳成功
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                //用户已登录，但用户不是题主，返回用户不是提问者
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_QUESTIONER);
+            }
+        } else {
+            //用户未登录，返回未登录
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+        }
+        return result;
+    }
+
+    private Boolean adoptAnswer(User user, Integer answerId) {
         Answer answer = answerDAO.getNotDelete(answerId);
         Question question = answer.getQuestionByQuestionId();
 
         //构造已解决的问题状态对象
         Questionstate questionstate = new Questionstate();
         questionstate.setId(Questionstate.QUESTION_STATE_SOLVED_ID);
-
         if (user.getId().equals(question.getUserByUserId().getId())) {
             //更新问题的采纳回答id
             question.setAnswerByAdoptId(answer);
             //更新问题状态为已解决
             question.setQuestionstateByStateId(questionstate);
             questionDAO.update(question);
-            
             //增加用户的徽章数
             user.setBadgeNum(user.getBadgeNum() + 1);
             userDAO.update(user);
-            
             return true;
         } else {
             return false;
@@ -307,19 +322,29 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Boolean cancelAnonymous(User user, Integer answerId) {
+    public Map<String, Object> cancelAnonymous(Integer answerId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         Answer answer = answerDAO.getNotDelete(answerId);
-        if (answer.getUserByUserId().getId().equals(user.getId())){
-            answer.setIsAnonymous((byte)0);
-            answerDAO.update(answer);
-            return true;
+        if (user != null) {
+            //用户是答主
+            if (answer.getUserByUserId().getId().equals(user.getId())) {
+                answer.setIsAnonymous((byte)0);
+                answerDAO.update(answer);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_ANSWERER);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-        return false;
+        return result;
     }
 
+
     /**
-     * 将回答对应的问题置于为解决状态
-     * @param question 推荐问题的条数
+     * 将回答对应的问题置于为未解决状态
+     * @param question 问题
      */
     private void setQuestionNotAdopt(Question question){
         //将问题采纳的回答id置0
