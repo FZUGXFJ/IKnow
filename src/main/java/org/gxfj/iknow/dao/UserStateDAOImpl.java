@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("userStateDAO")
 public class UserStateDAOImpl implements  UserStateDAO{
     private HibernateTemplate ht = null;
@@ -37,5 +39,10 @@ public class UserStateDAOImpl implements  UserStateDAO{
     @Override
     public void update(Userstate bean) {
         getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public List<Userstate> list() {
+        return getHibernateTemplate().findByExample(new Userstate());
     }
 }
