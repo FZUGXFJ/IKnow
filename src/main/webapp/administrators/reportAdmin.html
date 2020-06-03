@@ -70,28 +70,28 @@
                     </h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a id="questionPage" class="nav-link" href="#" @click="questionPage=true;anPage=false;commentPage=false;replyPage=false;addActive();getReportType(0);">
+                            <a id="questionPage" class="nav-link" href="#" onclick="hideWindow()" @click="questionPage=true;anPage=false;commentPage=false;replyPage=false;addActive();getReportType(0);">
                                 <span data-feather="book"></span>
                                 问题举报
                                 <span class="badge badge-pill badge-dark" v-if="questionLen>0">{{questionLen}}</span>
                             </a>
                         </li>
                         <li class="nav-item" >
-                            <a id="anPage" class="nav-link" href="#" @click="questionPage=false;anPage=true;commentPage=false;replyPage=false;addActive();getReportType(1);">
+                            <a id="anPage" class="nav-link" href="#" onclick="hideWindow()" @click="questionPage=false;anPage=true;commentPage=false;replyPage=false;addActive();getReportType(1);">
                                 <span data-feather="feather"></span>
                                 回答举报
                                 <span class="badge badge-pill badge-dark" v-if="answerLen>0">{{answerLen}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a id="commentPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=true;replyPage=false;addActive();getReportType(2);">
+                            <a id="commentPage" class="nav-link" href="#" onclick="hideWindow()" @click="questionPage=false;anPage=false;commentPage=true;replyPage=false;addActive();getReportType(2);">
                                 <span data-feather="message-circle"></span>
                                 评论举报
                                 <span class="badge badge-pill badge-dark" v-if="commentLen>0">{{commentLen}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a id="replyPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=false;replyPage=true;addActive();getReportType(3);">
+                            <a id="replyPage" class="nav-link" href="#" onclick="hideWindow()" @click="questionPage=false;anPage=false;commentPage=false;replyPage=true;addActive();getReportType(3);">
                                 <span data-feather="refresh-cw"></span>
                                 回复举报
                                 <span class="badge badge-pill badge-dark" v-if="replyLen>0">{{replyLen}}</span>
