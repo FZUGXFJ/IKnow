@@ -101,21 +101,12 @@ public class CommentAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 删除评论
+     * @return SUCCESS
+     */
     public String deleteComment(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
-        User user=(User)session.get("user");
-        if(user==null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
-        }
-        else {
-            if (commentService.deleteComment(commentId,user)){
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-            }
-            else {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_COMMENTER);
-            }
-        }
+        Map<String, Object> response= commentService.deleteComment(commentId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

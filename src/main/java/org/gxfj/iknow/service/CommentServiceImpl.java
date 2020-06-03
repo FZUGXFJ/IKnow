@@ -364,20 +364,28 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public boolean deleteComment(Integer commentId, User user) {
-        Comment comment=commentDAO.get(commentId);
-        User commentUserByUserId = comment.getUserByUserId();
-        if(commentUserByUserId.getId().equals(user.getId())){
-            comment.setIsDelete(Comment.COMMENT_DELETED);
-
-            for (Reply reply : comment.getRepliesById()) {
-                replyDAO.delete(reply);
-            }
-            commentDAO.delete(comment);
-
-            commentDAO.update(comment);
-            return true;
+    public Map<String, Object> deleteComment(Integer commentId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if(user==null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
         }
-        return false;
+        else {
+            Comment comment=commentDAO.get(commentId);
+            User commentUserByUserId = comment.getUserByUserId();
+            if (commentUserByUserId.getId().equals(user.getId())){
+                comment.setIsDelete(Comment.COMMENT_DELETED);
+                for (Reply reply : comment.getRepliesById()) {
+                    replyDAO.delete(reply);
+                }
+                commentDAO.delete(comment);
+                commentDAO.update(comment);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+            }
+            else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_COMMENTER);
+            }
+        }
+        return result;
     }
 }

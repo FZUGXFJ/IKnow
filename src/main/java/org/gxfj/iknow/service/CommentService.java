@@ -49,8 +49,7 @@ public interface CommentService {
     /**
      * 删除评论
      * @param commentId 评论id
-     * @param user 当前用户
      * @return 是否删除
      */
-    public boolean deleteComment(Integer commentId,User user);
+    public Map<String, Object> deleteComment(Integer commentId);
 }
