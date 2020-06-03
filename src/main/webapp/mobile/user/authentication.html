@@ -66,7 +66,7 @@
             </div>
             <el-popover style="width: 100%;" trigger="manual" v-model="visible" placement="bottom">
                 <div style="height: 15em;overflow-y: scroll">
-                    <div class="schoolItem" v-for="s in schools" @click="schoolChange=false">
+                    <div class="schoolItem" v-for="s in schools" @click="clickSchool(s.name)">
                         <span>{{s.name}}</span>
                         <div class="splitLine"></div>
                     </div>
@@ -146,6 +146,81 @@
                         console.log(status);
                     }
                 });
+            },
+            clickSchool:function (name) {
+                this.schoolChange = false;
+                this.schoolName = name;
+            },
+            doAuthentication:function () {
+                let school = this.schoolName;
+                let studentNum = this.studentNum;
+                let jobNum = this.jobNum;
+                let realName = this.realName;
+                if (this.tab === 0) {
+                    $.ajax({
+                        type:"POST",
+                        url:"../../identity/stuAuthentication.action",
+                        data:{
+                            school:school,
+                            studentNum:studentNum,
+                            realName:realName
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                sessionStorage.setItem("notice","认证成功");
+                            } else if (result.resultCode === 1) {
+                                location.href = "login.html?boot=1";
+                                location.href = "../my.html";
+                            } else if (result.resultCode === 2) {
+                                this.$toast({
+                                    message: '认证失败，信息无法匹配',
+                                    position: 'bottom',
+                                    duration: 3000
+                                });
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type:"POST",
+                        url:"../../identity/teaAuthentication.action",
+                        data:{
+                            school:school,
+                            jobNum:jobNum,
+                            realName:realName
+                        },
+                        dataType:"json",
+                        success:function (result) {
+                            if (result.resultCode === 0) {
+                                if (result.resultCode === 0) {
+                                    sessionStorage.setItem("notice","认证成功");
+                                    location.href = "../my.html";
+                                } else if (result.resultCode === 1) {
+                                    location.href = "login.html?boot=1";
+                                } else if (result.resultCode === 2) {
+                                    this.$toast({
+                                        message: '认证失败，信息无法匹配',
+                                        position: 'bottom',
+                                        duration: 3000
+                                    });
+                                }
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert("系统异常！");
+                            console.log(request.status);
+                            console.log(request.readyState);
+                            console.log(status);
+                        }
+                    });
+                }
             }
         },
         mounted:function () {
