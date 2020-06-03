@@ -368,14 +368,14 @@ public class AdminServiceImpl implements AdminService{
     public Map<String, Object> ban(Integer userID, Integer days) {
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);;
 
-        if (userID != null) {
+        if (userID != null || days != null) {
             User user = userDAO.get(userID);
             if (user != null) {
                 Date lastDate = user.getLastClosureTime();
 
                 Date date = new Date();
                 //如果在惩罚期间了，那在原有的惩罚基础上延长时间
-                if (lastDate.after(date)) {
+                if (lastDate != null && lastDate.after(date)) {
                     date = lastDate;
                 }
                 Calendar calendar = Calendar.getInstance();
@@ -398,7 +398,42 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Map<String, Object> estoppel(Integer userID, Integer days) {
-        return null;
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);;
+
+        if (userID != null || days != null) {
+            User user = userDAO.get(userID);
+            if (user != null) {
+                Date lastDate = user.getLastClosureTime();
+
+                Date date = new Date();
+                //如果在惩罚期间了，那在原有的惩罚基础上延长时间
+                if (lastDate != null && lastDate.after(date)) {
+                    date = lastDate;
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.add(Calendar.DAY_OF_YEAR, days);
+
+                Userstate userstate = user.getUserstateByStateId();
+                if (userstate != null ) {
+                    Integer userStateId = userstate.getId();
+                    if (!userStateId.equals(userStateUtill.getEstoppelState().getId()) &&
+                            !userStateId.equals(userStateUtill.getBanState().getId())) {
+                        user.setUserstateByStateId(userStateUtill.getEstoppelState());
+                    }
+                }
+
+                date = calendar.getTime();
+                user.setLastClosureTime(date);
+                user.setReportedTimes(user.getReportedTimes() + 1);
+                userDAO.update(user);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
+        }
+
+        return result;
     }
 
     @Override
