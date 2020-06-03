@@ -139,25 +139,24 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public boolean cancelApprove(User user, Integer commentId) {
-        if (user == null) {
-            return false;
+    public Map<String, Object> cancelApprove(Integer commentId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if (user != null) {
+            Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
+            if (approvalcomment != null) {
+                Comment comment = commentDAO.getNotDelete(commentId);
+                comment.setCount(comment.getCount() - 1);
+                commentDAO.update(comment);
+                approvalCommentDAO.delete(approvalcomment);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_NOT_APPROVED);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-
-        //如果查询到记录，说明点过赞
-        Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
-        if (approvalcomment == null) {
-            return false;
-        }
-
-        //更新评论记录中评论点赞数
-        Comment comment = commentDAO.getNotDelete(commentId);
-        comment.setCount(comment.getCount() - 1);
-        commentDAO.update(comment);
-
-        approvalCommentDAO.delete(approvalcomment);
-
-        return true;
+        return result;
     }
 
     /**

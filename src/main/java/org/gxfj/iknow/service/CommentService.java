@@ -37,7 +37,7 @@ public interface CommentService {
      * @param commentId 被点赞的评论的id
      * @return 取消成功返回true，失败返回false
      */
-    public boolean cancelApprove(User user, Integer commentId);
+    public Map<String, Object> cancelApprove(Integer commentId);
 
     /**
      * 获取更多回答的评论(评论数方法中指定）

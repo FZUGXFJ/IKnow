@@ -81,23 +81,16 @@ public class CommentAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 取消赞同
+     * @return SUCCESS
+     */
     public String cancelApprove() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User ) session.get(ConstantUtil.SESSION_USER);
-
-        if (user != null) {
-            if (commentService.cancelApprove(user, commentId)) {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            } else {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_NOT_APPROVED);
-            }
-        } else {
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
+        Map<String, Object> response = commentService.cancelApprove(commentId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
+    
     public String moreComment(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
