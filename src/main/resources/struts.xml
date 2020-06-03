@@ -505,5 +505,40 @@
             </result>
         </action>
     </package>
+    <package name="message" namespace="/message" extends="default">
+        <action name="getMessage" class="org.gxfj.iknow.action.MessageAction" method="getMessage">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="readMessage" class="org.gxfj.iknow.action.MessageAction" method="readMessage">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+    </package>
+    <package name="identity" namespace="/identity" extends="default">
+        <action name="getSchools" class="org.gxfj.iknow.action.IdentityAction" method="getSchools">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="stuAuthentication" class="org.gxfj.iknow.action.IdentityAction" method="stuAuthentication">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="teaAuthentication" class="org.gxfj.iknow.action.IdentityAction" method="teaAuthentication">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+
+    </package>
 
 </struts>

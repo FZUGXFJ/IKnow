@@ -2,10 +2,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
-import org.gxfj.iknow.util.ConstantUtil;
-import org.gxfj.iknow.util.ImgUtil;
-import org.gxfj.iknow.util.TextVerifyUtil;
-import org.gxfj.iknow.util.Time;
+import org.gxfj.iknow.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,16 +34,17 @@ public class CommentServiceImpl implements CommentService {
             return null;
         }
         Comment comment = new Comment();
-
+        Answer answer = answerDAO.getNotDelete(answerId);
         comment.setUserByUserId(user);
         comment.setContent(content);
-        comment.setAnswerByAnswerId(answerDAO.getNotDelete(answerId));
+        comment.setAnswerByAnswerId(answer);
         comment.setDate(new Date());
         comment.setIsDelete((byte)0);
         comment.setCount(0);
 
         commentDAO.add(comment);
 
+        MessageUtil.newMessage(3,answer.getUserByUserId(),content);
         return comment.getId();
     }
 
@@ -107,6 +105,7 @@ public class CommentServiceImpl implements CommentService {
         approvalcomment.setDate(new Date());
         approvalCommentDAO.add(approvalcomment);
 
+        MessageUtil.newMessage(4,comment.getUserByUserId(),"赞同");
         return true;
     }
 
