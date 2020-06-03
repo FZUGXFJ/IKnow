@@ -24,8 +24,8 @@ public class IdentityAction {
     IdentityService identityService;
 
     private String keyword;
-    //学校id
-    private Integer school;
+    //学校名
+    private String school;
     private String realName;
     private String studentNum;
     private String jobNum;
@@ -119,11 +119,11 @@ public class IdentityAction {
         this.jobNum = jobNum;
     }
 
-    public Integer getSchool() {
+    public String getSchool() {
         return school;
     }
 
-    public void setSchool(Integer school) {
+    public void setSchool(String school) {
         this.school = school;
     }
 

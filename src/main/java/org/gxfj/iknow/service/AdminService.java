@@ -74,10 +74,10 @@ public interface AdminService {
 
     /**
      * 获得被举报的问题的信息
-     * @param questioinId 问题id
+     * @param questionId 问题id
      * @return 包含举报的问题的信息的map数据
      */
-    Map<String, Object> getReportedQuestion(Integer questioinId);
+    Map<String, Object> getReportedQuestion(Integer questionId);
 
     /**
      * 获取对应回答信息列表
