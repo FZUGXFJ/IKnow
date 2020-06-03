@@ -51,29 +51,20 @@ public class CommentAction {
 
     final static private int RESPONSE_NUM = 20;
 
+    /**
+     * 提交评论
+     * @return SUCCUESS
+     */
     public String postComment(){
-        System.out.println(content);
-        System.out.println(answerId);
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(content == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_COMMENT_INF );
-        }
-        else{
-            if (commentService.postComment(user , answerId , content) != null) {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            } else {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
-            }
-        }
+        Map<String, Object> response = commentService.postComment(answerId, content);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 查看评论
+     * @return SUCCESS
+     */
     public String viewComments(){
         Map<String , Object> session = ActionContext.getContext().getSession();
         Map<String, Object> response;

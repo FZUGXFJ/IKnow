@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.opensymphony.xwork2.ActionContext;
 import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
@@ -10,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.*;
+
+import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
+
 /**
  * @author 爱学习的水先生
  */
@@ -32,25 +36,37 @@ public class CommentServiceImpl implements CommentService {
     final static private int REPLY_NUM = 2;
 
     @Override
-    public Integer postComment(User user, Integer answerId, String content){
-        if (!TextVerifyUtil.verifyCompliance(content)) {
-            return null;
+    public Map<String, Object> postComment(Integer answerId, String content){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-        Comment comment = new Comment();
-        Answer answer = answerDAO.getNotDelete(answerId);
-        comment.setUserByUserId(user);
-        comment.setContent(content);
-        comment.setAnswerByAnswerId(answer);
-        comment.setDate(new Date());
-        comment.setIsDelete((byte)0);
-        comment.setCount(0);
+        else if(content == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_COMMENT_INF );
+        }
+        else{
+            if (TextVerifyUtil.verifyCompliance(content)) {
+                Comment comment = new Comment();
+                Answer answer = answerDAO.getNotDelete(answerId);
+                comment.setUserByUserId(user);
+                comment.setContent(content);
+                comment.setAnswerByAnswerId(answer);
+                comment.setDate(new Date());
+                comment.setIsDelete((byte)0);
+                comment.setCount(0);
 
-        commentDAO.add(comment);
+                commentDAO.add(comment);
 
-        messageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='#'>"+
-                user.getName() + "</a>评论了你的回答，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
-                + answerId + "'>[评论链接]</a>");
-        return comment.getId();
+                messageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='#'>"+
+                        user.getName() + "</a>评论了你的回答，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
+                        + answerId + "'>[评论链接]</a>");
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -113,6 +129,7 @@ public class CommentServiceImpl implements CommentService {
         messageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='#'>"+
                 user.getName() + "</a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
                 + comment.getAnswerByAnswerId().getId() + "'>[评论链接]</a>");
+
         return true;
     }
 
