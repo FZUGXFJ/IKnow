@@ -12,10 +12,11 @@ import java.util.Map;
 public interface AnswerService {
     /**
      * 获得问题标题
+     * @param user 用户
      * @param questionId 问题Id
      * @return Map
      */
-    public String getQuestiontitle(Integer questionId);
+    public Map<String, Object> getQuestiontitle(User user , Integer questionId);
     /**
      * 获取回答id
      * @param questionId 问题Id

@@ -48,21 +48,13 @@ public class AnswerAction {
     @Autowired
     AnswerService answerService;
 
+    /**
+     * 获得问题标题
+     * @return
+     */
     public String questionTitle(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User)session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(questionId == null){
-            response.put("resultCode" , ConstantUtil.MISS_QUESTIONID);
-        }
-        else{
-            questionTitle = answerService.getQuestiontitle(questionId);
-            response.put("title" , questionTitle);
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String, Object> response = answerService.getQuestiontitle(user, questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
