@@ -3,6 +3,8 @@ package org.gxfj.iknow.service;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import static org.gxfj.iknow.util.ConstantUtil.*;
+
 import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.SecurityUtil;
 import static org.gxfj.iknow.util.ServiceConstantUtil.*;
@@ -24,4 +26,37 @@ import java.util.Map;
  */
 @Service("identityService")
 public class IdentityServiceImpl implements IdentityService{
+    @Autowired
+    SchoolDAO schoolDAO;
+    @Autowired
+    UserIdentityDAO userIdentityDAO;
+    @Autowired
+    UserDAO userDAO;
+
+    @Override
+    public Map<String,Object> getSchool(String keyword){
+        List<School> schools = schoolDAO.listKewordSchool(keyword);
+        Map<String, Object> resultMap = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        List<Map<String, Object>> schoolsListMap = new ArrayList<>();
+        Map<String, Object> schoolMap;
+        for(School school:schools){
+            schoolMap = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+            schoolMap.put("id",school.getId());
+            schoolMap.put("name",school.getName());
+            schoolsListMap.add(schoolMap);
+        }
+        resultMap.put("schools",schoolsListMap);
+        return resultMap;
+    }
+
+    @Override
+    public boolean stuAuthentication(User user,Integer schoolId,String realName,String studentNum){
+        if(userIdentityDAO.listStuIdentities(user.getId(),schoolId,realName,studentNum) == null){
+            return false;
+        }else {
+            user.setIsAttest((byte)1);
+            userDAO.update(user);
+            return true;
+        }
+    }
 }
