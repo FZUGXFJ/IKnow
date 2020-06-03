@@ -12,3 +12,26 @@ table{
     top: 0;
     z-index: 2000;
 }
+#container{
+    width: 90%;
+    margin: 0 auto;
+}
+.splitLine{
+    background-color: #acacac;
+    opacity: 0.5;
+    height: 1px;
+    margin: 0.5em 0;
+}
+.schoolItem{
+    padding: 0.5em 1em;
+}
+.selectorItem{
+    width: 50%;
+    background-color: #efefef;
+    border-radius: 0.5em;
+    text-align: center;
+    padding: 0.3em 0;
+}
+.selected{
+    background-color: #2eeeb8;
+}

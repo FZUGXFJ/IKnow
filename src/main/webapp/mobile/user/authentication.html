@@ -12,8 +12,26 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/element-ui/2.12.0/theme-chalk/index.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/element-ui/2.12.0/index.js"></script>
     <link rel="stylesheet" href="https://lib.baomitu.com/mint-ui/2.2.13/style.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/mint-ui/2.2.13/index.js"></script>
+    <style type="text/css">
+        .el-popover{
+            position: relative;
+            background: #FFF;
+            min-width: 150px;
+            border: 1px solid #EBEEF5;
+            padding: 12px;
+            z-index: 2000;
+            color: #606266;
+            line-height: 1.4;
+            text-align: justify;
+            font-size: 14px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+            word-break: break-all;
+        }
+    </style>
 </head>
 <body>
 <div id="authentication">
@@ -30,14 +48,63 @@
         </table>
     </div>
     <br><br><br>
-    <div id="selector">
-
-    </div>
-    <div id="student">
-
-    </div>
-    <div id="teacher">
-
+    <div id="container">
+        <div id="selector">
+            <table>
+                <td class="selectorItem" :class="{selected:tab===0}" @click="tab=0">学生认证</td>
+                <td class="selectorItem" :class="{selected:tab===1}" @click="tab=1">教师认证</td>
+            </table>
+        </div>
+        <br><br>
+        <div id="school">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">
+                    <i class="fas fa-university"></i>
+                </span>
+                <input type="text" class="form-control" placeholder="请输入学校名"
+                       aria-label="school" aria-describedby="basic-addon1" v-model="schoolName" @input="searchSchool">
+            </div>
+            <el-popover style="width: 100%;" trigger="manual" v-model="visible" placement="bottom">
+                <div style="height: 15em;overflow-y: scroll">
+                    <div class="schoolItem" v-for="s in schools" @click="schoolChange=false">
+                        <span>{{s.name}}</span>
+                        <div class="splitLine"></div>
+                    </div>
+                </div>
+            </el-popover>
+        </div>
+        <div id="student" v-if="tab===0">
+            <br>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="fas fa-stamp"></i>
+                </span>
+                <input type="number" class="form-control" placeholder="请输入学号"
+                       aria-label="studentNum" aria-describedby="basic-addon2" v-model="studentNum">
+            </div>
+        </div>
+        <div id="teacher" v-if="tab===1">
+            <br>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon4">
+                    <i class="fas fa-stamp"></i>
+                </span>
+                <input type="number" class="form-control" placeholder="请输入工号"
+                       aria-label="jobNum" aria-describedby="basic-addon4" v-model="studentNum">
+            </div>
+        </div>
+        <br>
+        <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon3">
+                    <i class="fas fa-address-card"></i>
+                </span>
+            <input type="text" class="form-control" placeholder="请输入姓名"
+                   aria-label="name" aria-describedby="basic-addon3" v-model="realName">
+        </div>
+        <br>
+        <div style="text-align: center">
+            <el-button type="primary" plain>认证</el-button>
+        </div>
     </div>
 </div>
 <script>
@@ -45,14 +112,49 @@
         el:"#authentication",
         data:{
             loading:false,
+            schoolName:"",
+            studentNum:"",
+            jobNum:"",
+            realName:"",
+            schoolChange:false,
+            schools:[],
+            visible1:false,
+            tab:0
         },
         methods:{
             back:function () {
-
+                location.href = "../my.html";
+            },
+            searchSchool:function () {
+                this.schoolChange = true;
+                $.ajax({
+                    type:"POST",
+                    url:"../../identity/getSchools.action",
+                    data:{
+                        keyword:authentication.schoolName
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            authentication.schools = result.schools;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             }
         },
         mounted:function () {
 
+        },
+        computed:{
+            visible:function () {
+                return this.schoolName.length > 0 && this.schoolChange;
+            }
         }
     });
 </script>
