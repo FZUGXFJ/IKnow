@@ -74,10 +74,9 @@ public interface AnswerService {
     /**
      * 反对回答
      * @param answerId 回答id
-     * @param user 用户
      * @return 是否成功
      */
-    public boolean oppositionAnswer(Integer answerId,User user);
+    public Map<String, Object> oppositionAnswer(Integer answerId);
 
     /**
      * 取消反对

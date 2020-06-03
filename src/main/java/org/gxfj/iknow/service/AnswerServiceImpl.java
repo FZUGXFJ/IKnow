@@ -666,7 +666,6 @@ public class AnswerServiceImpl implements AnswerService{
     public Map<String, Object> cancelApprove(Integer answerId) {
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
@@ -685,8 +684,16 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public boolean oppositionAnswer(Integer answerId, User user) {
-        if(oppositionAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
+    public Map<String, Object> oppositionAnswer(Integer answerId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+        }
+        else if(oppositionAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) != -1){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
+        }
+        else{
             Answer answer=answerDAO.get(answerId);
             Oppositionanswer oppositionanswer=new Oppositionanswer();
             oppositionanswer.setDate(new Date());
@@ -694,9 +701,9 @@ public class AnswerServiceImpl implements AnswerService{
             oppositionanswer.setAnswerByAnswerId(answer);
 
             oppositionAnswerDAO.add(oppositionanswer);
-            return true;
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
-        return false;
+        return result;
     }
 
     @Override
