@@ -97,7 +97,7 @@ public class QuestionAction {
                 response.put("questionId",x);
                 response.put("resultCode", ConstantUtil.SUCCESS);
             } else {
-                response.put("resultCode", JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+                response.put("resultCode", ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
