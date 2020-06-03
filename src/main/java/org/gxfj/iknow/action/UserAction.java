@@ -72,7 +72,6 @@ public class UserAction {
      */
     public String passwordLogin() {
         Map<String, Object> result = userService.loginByPassword(email, password);
-        ActionContext.getContext().getSession().put("user",result.get("user"));
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }

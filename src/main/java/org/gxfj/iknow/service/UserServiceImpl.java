@@ -1,6 +1,7 @@
 package org.gxfj.iknow.service;
 
 import com.alibaba.fastjson.JSON;
+import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ConstantUtil;
@@ -120,7 +121,7 @@ public class UserServiceImpl<result> implements UserService{
             result.put("resultCode",ConstantUtil.SUCCESS);
             result.put("email",user.getEmail());
             result.put("password",user.getPasswd());
-            result.put("user", user);
+            ActionContext.getContext().getSession().put("user",user);
         }
         else {
             result.put("resultCode",ConstantUtil.WRONG_PASSWORD);
