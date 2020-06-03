@@ -70,28 +70,28 @@
                     </h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a id="questionPage" class="nav-link" href="#" @click="questionPage=true;anPage=false;commentPage=false;replyPage=false;addActive();getReportType(0)">
+                            <a id="questionPage" class="nav-link" href="#" @click="questionPage=true;anPage=false;commentPage=false;replyPage=false;addActive();getReportType(0);">
                                 <span data-feather="book"></span>
                                 问题举报
                                 <span class="badge badge-pill badge-dark" v-if="questionLen>0">{{questionLen}}</span>
                             </a>
                         </li>
                         <li class="nav-item" >
-                            <a id="anPage" class="nav-link" href="#" @click="questionPage=false;anPage=true;commentPage=false;replyPage=false;addActive();getReportType(1)">
+                            <a id="anPage" class="nav-link" href="#" @click="questionPage=false;anPage=true;commentPage=false;replyPage=false;addActive();getReportType(1);">
                                 <span data-feather="feather"></span>
                                 回答举报
                                 <span class="badge badge-pill badge-dark" v-if="answerLen>0">{{answerLen}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a id="commentPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=true;replyPage=false;addActive();getReportType(2)">
+                            <a id="commentPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=true;replyPage=false;addActive();getReportType(2);">
                                 <span data-feather="message-circle"></span>
                                 评论举报
                                 <span class="badge badge-pill badge-dark" v-if="commentLen>0">{{commentLen}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a id="replyPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=false;replyPage=true;addActive();getReportType(3)">
+                            <a id="replyPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=false;replyPage=true;addActive();getReportType(3);">
                                 <span data-feather="refresh-cw"></span>
                                 回复举报
                                 <span class="badge badge-pill badge-dark" v-if="replyLen>0">{{replyLen}}</span>
@@ -174,7 +174,7 @@
                                 <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer3">全部删除</button>
                             </th>
                             <th>
-                                <button class="btn btn-primary btn-sm" data-toggle="modal">退出</button>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" @click="isBatch=!isBatch">退出</button>
                             </th>
                         </tr>
                         <tr>
@@ -206,7 +206,7 @@
                             <td>{{reportInfo.date}}</td>
                             <td>{{reportInfo.reason}}</td>
                             <td>
-                                <button @click="now=i+(cur-1)*15;getUserInfo(reportInfo.userID,0);getUserInfo(reportInfo.targetID,1);getReportedInfo()" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15;getUserInfo(reportInfo.userID,0);getUserInfo(reportInfo.targetID,1);getAReportedInfo()" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                             </td>
                         </tr>
@@ -285,7 +285,10 @@
         </div>
         <div id="window" class="window_css" style="background-color: white">
             <div class="head">
-                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white">问题举报信息</span>
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white" v-if="questionPage">问题举报信息</span>
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white" v-if="anPage">回答举报信息</span>
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white" v-if="commentPage">评论举报信息</span>
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white" v-if="commentPage">回复举报信息</span>
                 <a href="javascript:void(0)" onclick="hideWindow()">
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
@@ -334,7 +337,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" v-if="questionPage">
                 <h5 style="font-weight: bold">问题信息:</h5>
                 <table class="table table-striped table-sm">
                     <tbody>
@@ -350,7 +353,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" v-if="questionPage">
                 <table class="table table-striped table-sm">
                     <tbody>
                     <tr>
@@ -360,6 +363,180 @@
                     </tr>
                     <tr>
                         <td v-html="reportedInfo.content">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <select class="custom-select d-block w-100" required>
+                                        <option select>惩罚方式..</option>
+                                        <option @click="ban=true">封禁</option>
+                                        <option @click="ban=false">禁言</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <select class="custom-select d-block w-100" required>
+                                        <option select>天数..</option>
+                                        <option>7天</option>
+                                        <option>30天</option>
+                                        <option>90天</option>
+                                        <option>365天</option>
+                                        <option v-if="ban==true">永久</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive" v-if="anPage">
+                <h5 style="font-weight: bold">回答信息:</h5>
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td>回答ID:{{reportedInfo[0].id}}</td>
+                        <td>创建时间:{{reportedInfo[0].date}}</td>
+                        <td>是否删除:{{reportedInfo[0].isDelete}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive" v-if="anPage">
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td><h6 style="font-weight: bold">回答内容:</h6></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td v-html="reportedInfo[0].content">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <select class="custom-select d-block w-100" required>
+                                        <option select>惩罚方式..</option>
+                                        <option @click="ban=true">封禁</option>
+                                        <option @click="ban=false">禁言</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <select class="custom-select d-block w-100" required>
+                                        <option select>天数..</option>
+                                        <option>7天</option>
+                                        <option>30天</option>
+                                        <option>90天</option>
+                                        <option>365天</option>
+                                        <option v-if="ban==true">永久</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive" v-if="commentPage">
+                <h5 style="font-weight: bold">评论信息:</h5>
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td>评论ID:{{reportedInfo[0].id}}</td>
+                        <td>创建时间:{{reportedInfo[0].date}}</td>
+                        <td>是否删除:{{reportedInfo[0].isDelete}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive" v-if="commentPage">
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td><h6 style="font-weight: bold">评论内容:</h6></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td v-html="reportedInfo[0].content">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <select class="custom-select d-block w-100" required>
+                                        <option select>惩罚方式..</option>
+                                        <option @click="ban=true">封禁</option>
+                                        <option @click="ban=false">禁言</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <select class="custom-select d-block w-100" required>
+                                        <option select>天数..</option>
+                                        <option>7天</option>
+                                        <option>30天</option>
+                                        <option>90天</option>
+                                        <option>365天</option>
+                                        <option v-if="ban==true">永久</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive" v-if="replyPage">
+                <h5 style="font-weight: bold">问题信息:</h5>
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td>回复ID:{{reportedInfo[0].id}}</td>
+                        <td>创建时间:{{reportedInfo[0].date}}</td>
+                        <td>是否删除:{{reportedInfo[0].isDelete}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive" v-if="replyPage">
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td><h6 style="font-weight: bold">回复内容:</h6></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td v-html="reportedInfo[0].content">
                         </td>
                     </tr>
                     <tr>
@@ -388,8 +565,8 @@
 
                         </td>
                         <td>
-                            <button @click="now=i+(cur-1)*15;getUserInfo(reportInfo.userID,0);getUserInfo(reportInfo.targetID,1);getReportedInfo()" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button @click="now=i+(cur-1)*15" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
                         </td>
                     </tr>
                     </tbody>
@@ -557,12 +734,13 @@
                     type:"POST",
                     url:"../admin/questionReported.action",
                     data:{
-                        typeID:reportAdmin.reportInfoList[reportAdmin.now].id,
+                        typeID:reportAdmin.reportInfoList[reportAdmin.now].typeID,
                     },
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
                             reportAdmin.reportedInfo=result.questionReported;
+                            console.log(reportAdmin.reportedInfo[0].id);
                         }
                     },
                     error:function (request,status,error) {
@@ -578,13 +756,14 @@
                     type:"POST",
                     url:"../admin/answerReported.action",
                     data:{
-                        typeID:reportAdmin.reportInfoList[reportAdmin.now].id,
+                        typeID:reportAdmin.reportInfoList[reportAdmin.now].typeID,
                         type:type
                     },
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
                             reportAdmin.reportedInfo=result.answerReported;
+                            console.log(reportAdmin.reportedInfo[0].content);
                         }
                     },
                     error:function (request,status,error) {
@@ -595,26 +774,26 @@
                     }
                 });
             },
-            getReportedInfo:function(){
+            getAReportedInfo:function(){
                 if(this.questionPage === true)
                 {
                     this.getQuestionInfo();
-                    console.log("问题");
+                    console.log("问题切换now:"+reportAdmin.now);
                 }
                 if(this.anPage === true)
                 {
                     this.getReportedInfo(0);
-                    console.log("回答");
+                    console.log("回答切换now:"+reportAdmin.now);
                 }
                 if(this.commentPage === true)
                 {
                     this.getReportedInfo(1);
-                    console.log("评论");
+                    console.log("评论切换now:"+reportAdmin.now);
                 }
                 if(this.replyPage === true)
                 {
                     this.getReportedInfo(2);
-                    console.log("回复");
+                    console.log("回复切换now:"+reportAdmin.now);
                 }
             },
             getReportType: function(reportType){
@@ -641,6 +820,7 @@
                                 {
                                     reportAdmin.pageInfoList[i] = reportAdmin.reportInfoList.slice(15*i,15*(i+1));
                                 }
+                                console.log("切换now:"+reportAdmin.now);
                         }
                     },
                     error:function (request,status,error) {
@@ -683,7 +863,6 @@
                                 {
                                     reportAdmin.replyLen = reportAdmin.replyLen - 1;
                                 }
-                                console.log(reportAdmin.now);
                             }
                         }
                     },
@@ -880,7 +1059,6 @@
                     $("#anPage").removeClass("active");
                     $("#commentPage").removeClass("active");
                     $("#replyPage").removeClass("active");
-                    console.log("questionPage");
                 }
                 if(this.anPage === true)
                 {
@@ -888,7 +1066,6 @@
                     $("#questionPage").removeClass("active");
                     $("#commentPage").removeClass("active");
                     $("#replyPage").removeClass("active");
-                    console.log("anPage");
                 }
                 if(this.commentPage === true)
                 {
@@ -896,7 +1073,6 @@
                     $("#anPage").removeClass("active");
                     $("#questionPage").removeClass("active");
                     $("#replyPage").removeClass("active");
-                    console.log("commentPage");
                 }
                 if(this.replyPage === true)
                 {
@@ -904,13 +1080,11 @@
                     $("#anPage").removeClass("active");
                     $("#commentPage").removeClass("active");
                     $("#questionPage").removeClass("active");
-                    console.log("replyPage");
                 }
 
             },
             page: function(){
                 reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
-                console.log(reportAdmin.all);
             },
             btnClick: function(data){
                 if(data != this.cur){
