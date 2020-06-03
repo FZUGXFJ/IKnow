@@ -116,7 +116,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     @Override
     public Integer getUserQuestionCount(Integer userId) {
         Query query = getSession().createQuery("select count(q) from Question as q WHERE" +
-                "(userID = "+ userId +") ");
+                "(userID = "+ userId +") and (q.isDelete = 0) ");
         return ((Long)query.uniqueResult()).intValue();
     }
 
