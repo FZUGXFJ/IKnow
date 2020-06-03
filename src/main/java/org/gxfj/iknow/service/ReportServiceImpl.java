@@ -1,12 +1,11 @@
 package org.gxfj.iknow.service;
 
-import org.gxfj.iknow.dao.ReportDAO;
-import org.gxfj.iknow.dao.ReportReasonDAO;
-import org.gxfj.iknow.dao.ReportTypeDAO;
+import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.Report;
 import org.gxfj.iknow.pojo.Reportreason;
 import org.gxfj.iknow.pojo.Reporttype;
 import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.util.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,16 @@ import java.util.*;
 @Service("reportService")
 public class ReportServiceImpl implements ReportService{
 
+    @Autowired
+    UserDAO userDAO;
+    @Autowired
+    QuestionDAO questionDAO;
+    @Autowired
+    AnswerDAO answerDAO;
+    @Autowired
+    CommentDAO commentDAO;
+    @Autowired
+    ReplyDAO replyDAO;
     @Autowired
     ReportReasonDAO reportReasonDAO;
     @Autowired
@@ -54,6 +63,18 @@ public class ReportServiceImpl implements ReportService{
         report.setTargetId(targetId);
 
         reportDAO.add(report);
+        if(type == 1){
+            MessageUtil.newMessage(1,questionDAO.get(targetId).getUserByUserId(),"问题被举报");
+        }
+        else if (type == 2){
+            MessageUtil.newMessage(1,answerDAO.get(targetId).getUserByUserId(),"回答被举报");
+        }
+        else if (type == 3){
+            MessageUtil.newMessage(1,commentDAO.get(targetId).getUserByUserId(),"评论被举报");
+        }
+        else {
+            MessageUtil.newMessage(1,replyDAO.get(targetId).getUserByUserId(),"回复被举报");
+        }
         return true;
     }
 }
