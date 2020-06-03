@@ -5,10 +5,13 @@ import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.SecurityUtil;
+
+import static org.gxfj.iknow.pojo.Questionstate.QUESTION_STATE_UN_SOLVE_ID;
 import static org.gxfj.iknow.util.ServiceConstantUtil.*;
 
 import org.gxfj.iknow.util.Time;
 import org.gxfj.iknow.util.UserStateUtil;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -438,16 +441,82 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Map<String, Object> questionDel(Integer questionID) {
-        return null;
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);;
+
+        Question question = questionDAO.get(questionID);
+        if (question != null && question.getIsDelete() == 1) {
+            Collection<Answer> answerCollection = question.getAnswersById();
+
+            for (Answer answer : answerCollection) {
+                ((AdminService)AopContext.currentProxy()).answerDel(answer.getId());
+            }
+            questionDAO.delete(question);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
+        }
+        return result;
     }
 
     @Override
     public Map<String, Object> answerDel(Integer answerID) {
-        return null;
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);;
+        if (answerID != null) {
+            Answer answer = answerDAO.get(answerID);
+            if (answer != null) {
+                //如果被删除的回答所属的问题没有被删除，那么就需要判断回答是否被采纳，如果被采纳就需要删除采纳
+                if (answer.getQuestionByQuestionId().getIsDelete() == Question.QUESTION_UN_DELETED
+                        && answer.getQuestionByQuestionId().getAnswerByAdoptId() != null
+                        && answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(answerID)) {
+                    Question question = answer.getQuestionByQuestionId();
+                    Answer answerNull = null;
+                    question.setAnswerByAdoptId(answerNull);
+                    //构造未解决的问题状态
+                    Questionstate questionstate = new Questionstate();
+                    questionstate.setId(Questionstate.QUESTION_STATE_UN_SOLVE_ID);
+                    question.setQuestionstateByStateId(questionstate);
+                    questionDAO.update(question);
+                }
+                //删除回答下的所有评论及回复
+                for (Comment comment : answer.getCommentsById()) {
+                    ((AdminService)AopContext.currentProxy()).commentDel(comment.getId());
+                    Collection<Reply> replyCollection = comment.getRepliesById();
+
+                    for (Reply reply : replyCollection) {
+                        replyDAO.delete(reply);
+                    }
+                    commentDAO.delete(comment);
+                }
+                //删除回答
+                answerDAO.delete(answer);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
+        }
+        return result;
     }
+
 
     @Override
     public Map<String, Object> commentDel(Integer commentID) {
+        Map<String, Object> result = null;
+
+        if (commentID != null) {
+            Comment comment = commentDAO.get(commentID);
+            User commentUserByUserId = comment.getUserByUserId();
+            comment.setIsDelete(Comment.COMMENT_DELETED);
+
+            for (Reply reply : comment.getRepliesById()) {
+                replyDAO.delete(reply);
+            }
+            commentDAO.delete(comment);
+
+            commentDAO.update(comment);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
+        }
         return null;
     }
 
