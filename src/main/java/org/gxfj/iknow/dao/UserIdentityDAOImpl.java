@@ -48,4 +48,12 @@ public class UserIdentityDAOImpl implements UserIdentityDAO{
         List<Useridentity> useridentities = query.list();
         return useridentities;
     }
+
+    @Override
+    public List<Useridentity> listStuIdentities (Integer userId, Integer schoolId, String realName, String studentNum) {
+        String hql = "from Useridentity as ui where (userID = "+userId+") and (schoolID ="+schoolId+") and (name ="+realName+")" +
+                "and (studentNum ="+studentNum+")";
+        Query query = getSession().createQuery(hql);
+        return query.list();
+    }
 }
