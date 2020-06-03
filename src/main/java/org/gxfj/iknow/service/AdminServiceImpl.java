@@ -289,12 +289,11 @@ public class AdminServiceImpl implements AdminService{
             questionMap.put("isDelete", "否");
         }
         //获得问题类别，存储在map中
-        Map<String, Object> questionTypeMap = new HashMap<>(MIN_HASH_MAP_NUM);
-        questionTypeMap.put("categoriesType", question.getQuestiontypeByTypeId()
-                .getCategoriestypeByCategoryId().getName());
-        questionTypeMap.put("majorType", question.getQuestiontypeByTypeId().getMajortypeByMajorId().getName());
-        questionTypeMap.put("subjectType", question.getQuestiontypeByTypeId().getSubjecttypeBySubjectId().getName());
-        questionMap.put("type", questionTypeMap);
+        String categoriesType = question.getQuestiontypeByTypeId()
+                .getCategoriestypeByCategoryId().getName();
+        String majorType = question.getQuestiontypeByTypeId().getMajortypeByMajorId().getName();
+        String subjectType = question.getQuestiontypeByTypeId().getSubjecttypeBySubjectId().getName();
+        questionMap.put("type", categoriesType+"-"+majorType+"-"+subjectType);
         result.put("questionReported", questionMap);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
