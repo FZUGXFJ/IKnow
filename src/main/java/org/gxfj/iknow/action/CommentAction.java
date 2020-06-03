@@ -160,6 +160,7 @@ public class CommentAction {
                 response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_COMMENTER);
             }
         }
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 

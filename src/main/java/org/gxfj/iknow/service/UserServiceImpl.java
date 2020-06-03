@@ -3,6 +3,7 @@ package org.gxfj.iknow.service;
 import com.alibaba.fastjson.JSON;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.ExpUtil;
 import org.gxfj.iknow.util.MailUtil;
 import org.gxfj.iknow.util.SecurityUtil;
@@ -111,25 +112,20 @@ public class UserServiceImpl<result> implements UserService{
     }
 
     @Override
-    public User loginByPassword(User loginInf) {
-        User user = userDAO.getUserByEmail(loginInf.getEmail());
-        if (user != null) {
-            if (loginInf.getPasswd().length() == 32) {
-                if (loginInf.getPasswd().equals(user.getPasswd())) {
-                    return user;
-                } else {
-                    return null;
-                }
-            } else {
-                  if (SecurityUtil.md5Compare(loginInf.getPasswd(),user.getPasswd())) {
-                      return user;
-                  } else {
-                      return null;
-                  }
-            }
-        } else {
-            return null;
+    public Map<String, Object> loginByPassword(String email, String password) {
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        User user = userDAO.getUserByEmail(email);
+        if (user != null && (password.length() == 32 && password.equals(user.getPasswd()) ||
+                SecurityUtil.md5Compare(password, user.getPasswd()))) {
+            result.put("resultCode",ConstantUtil.SUCCESS);
+            result.put("email",user.getEmail());
+            result.put("password",user.getPasswd());
+
         }
+        else {
+            result.put("resultCode",ConstantUtil.WRONG_PASSWORD);
+        }
+        return result;
     }
 
     @Override

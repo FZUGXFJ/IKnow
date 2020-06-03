@@ -123,8 +123,10 @@ public class ReplyServiceImpl implements ReplyService {
                 isApproved = approvalReplyDAO.searchByUserIdandReplyId(visitor.getId(), reply.getId());
             }
             replyMap.put("isApproved", isApproved);
-            if(visitor!=null){
-                replyMap.put("viewerIsOwner",visitor.getId().equals(reply.getId()) ? 1 : 0);
+            if(visitor == null) {
+                replyMap.put("viewerIsOwner", 0);
+            } else {
+                replyMap.put("viewerIsOwner",visitor.getId().equals(reply.getUserByUserId().getId()) ? 1 : 0);
             }
             repliesMap.add(replyMap);
         }

@@ -2,10 +2,15 @@ package org.gxfj.iknow.util;
 
 public class ConstantUtil {
     //公共
-    public final static Integer UN_LOGIN = 1;
-    public final static Integer HASH_MAP_NUM = 20;
-    public final static int MIN_HASH_MAP_NUM = 10;
+    /**
+     * 返回的JSON中resultCode的值，代表请求对应的操作执行成功
+     */
     public final static int SUCCESS = 0;
+    /**
+     * 返回的JSON中resultCode的值，代表用户未登录
+     */
+    public final static Integer UN_LOGIN = 1;
+
     public final static int NO_MORE = 1;
     public final static String JSON_RETURN_CODE_NAME = "resultCode";
     public final static String SESSION_USER = "user";
@@ -13,14 +18,18 @@ public class ConstantUtil {
     public final static String ANONYMOUS_USER_AVATAR = "0.jpg";
     public final static String ANONYMOUS_USER_NAME = "匿名用户";
 
+    public final static Integer HASH_MAP_NUM = 20;
+    public final static int MIN_HASH_MAP_NUM = 10;
+
     //Admin
     public final static String LOGIN_ADMIN_SESSION_NAME = "admin";
     public final static String NO_ADMIN = null;
+    public final static int DAILY_QUESTION_SUM_STATICS_TYPE_CODE = 0;
+    public final static int DAILY_USER_SUM_STATICS_TYPE_CODE = 1;
     public final static int DAILY_ACTIVE_USER_STATICS_TYPE_CODE = 0;
     public final static int DAILY_ACTIVE_USER_STATICS_LENGTH = 7;
     public final static int MONTHLY_ACTIVATE_USER_STATICS_TYPE_CODE = 1;
     public final static int MONTHLY_ACTIVATE_USER_STATICS_LENGTH = 3;
-
 
 
     //Answer
@@ -72,7 +81,11 @@ public class ConstantUtil {
     public final static int VERIFY_DEFAULT = 1;
     public final static int SUCCESS_LOGON = 0;
     public final static String NO_USER = null;
+    public final static int WRONG_PASSWORD = 1;
 
+    //IdentityAction
+    //认证失败
+    public final static Integer AUTHENTICATION_FAILED = 1;
 
 
 }

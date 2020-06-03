@@ -11,6 +11,7 @@ public class Message {
     private Byte isRead;
     private String content;
     private User userByUserId;
+    private Messagetype messagetypeByTypeId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -96,5 +97,15 @@ public class Message {
 
     public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "typeID", referencedColumnName = "id", nullable = false)
+    public Messagetype getMessagetypeByTypeId() {
+        return messagetypeByTypeId;
+    }
+
+    public void setMessagetypeByTypeId(Messagetype messagetypeByTypeId) {
+        this.messagetypeByTypeId = messagetypeByTypeId;
     }
 }

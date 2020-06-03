@@ -381,7 +381,6 @@ public class QuestionServiceImpl implements QuestionService{
         question.setContentText(HtmlUtil.delHtmlTag(newQuestionContent));
         question.setQuestiontypeByTypeId(questiontype);
         question.setId(questionId);
-        question.setDate(new Date());
         questionDAO.update(question);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;

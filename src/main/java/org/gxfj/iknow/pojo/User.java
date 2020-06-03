@@ -38,6 +38,8 @@ public class User {
     private Useridentity useridentityByIdentityId;
     private Collection<Useridentity> useridentitiesById;
     private Collection<Reply> repliesById1;
+    private Date lastClosureTime;
+    private Integer reportedTimes;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -371,5 +373,25 @@ public class User {
 
     public void setRepliesById1(Collection<Reply> repliesById1) {
         this.repliesById1 = repliesById1;
+    }
+
+    @Basic
+    @Column(name = "lastClosureTime", nullable = true)
+    public Date getLastClosureTime() {
+        return lastClosureTime;
+    }
+
+    public void setLastClosureTime(Date lastClosureTime) {
+        this.lastClosureTime = lastClosureTime;
+    }
+
+    @Basic
+    @Column(name = "reportedTimes", nullable = false)
+    public Integer getReportedTimes() {
+        return reportedTimes;
+    }
+
+    public void setReportedTimes(Integer reportedTimes) {
+        this.reportedTimes = reportedTimes;
     }
 }

@@ -28,10 +28,11 @@ public interface UserService {
 
     /**
      * 用密码登录
-     * @param loginInf 登录信息
-     * @return 返回user，如果登录失败user为空
+     * @param email 用户输入的邮箱
+     * @param password 用户输入的密码
+     * @return 返回验证结果的Map
      */
-    public User loginByPassword(User loginInf);
+    public Map<String, Object> loginByPassword(String email, String password);
 
     /**
      *免密码登录

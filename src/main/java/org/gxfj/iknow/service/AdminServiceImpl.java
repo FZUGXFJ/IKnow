@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ConstantUtil;
@@ -43,36 +44,56 @@ public class AdminServiceImpl implements AdminService{
     private ReportReasonDAO reportReasonDAO;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    CategoriesTypeDAO categoriesTypeDAO;
 
     @Override
-    public Admin login(Admin adminInf) {
-        Admin admin = adminDAO.getAdminByCount(adminInf.getAccount());
+    public Map<String, Object> login(Integer accountNum, String password) {
+        Map<String, Object> resultMap = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+
+        Admin admin = adminDAO.getAdminByCount(accountNum);
         if(admin == null){
             return null;
         }
         else{
-            if (adminInf.getPasswd().length() == MD5_PASSWORD_LENGTH) {
-                if (adminInf.getPasswd().equals(admin.getPasswd())) {
-                    return admin;
+            if (password.length() == MD5_PASSWORD_LENGTH) {
+                if (password.equals(admin.getPasswd())) {
+                    ActionContext.getContext().getSession().put(ConstantUtil.LOGIN_ADMIN_SESSION_NAME,admin);
+                    resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+
                 } else {
-                    return null;
+                    resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
                 }
             } else {
-                if (SecurityUtil.md5Compare(adminInf.getPasswd(),admin.getPasswd())) {
-                    return admin;
+                if (SecurityUtil.md5Compare(password,admin.getPasswd())) {
+                    ActionContext.getContext().getSession().put(ConstantUtil.LOGIN_ADMIN_SESSION_NAME,admin);
+                    resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
                 } else {
-                    return null;
+                    resultMap.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
                 }
             }
         }
+        return resultMap;
     }
 
     @Override
-    public Map<String, Object> getData(String dateNow, Integer typeSum) {
+    public Map<String, Object> isLogin() {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if (session.get(ConstantUtil.LOGIN_ADMIN_SESSION_NAME) == ConstantUtil.NO_ADMIN) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getSumData(String dateNow, Integer typeSum) {
         Map<String,Object> record;
         List<Map<String,Object>> records = new ArrayList<>();
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
-        if(typeSum == ConstantUtil.DAILY_ACTIVE_USER_STATICS_TYPE_CODE){
+        if(typeSum == ConstantUtil.DAILY_QUESTION_SUM_STATICS_TYPE_CODE){
             List<Integer> date = adminDAO.getQuestionSum(dateNow);
             for (Integer i : date){
                 record = new HashMap<>();
@@ -81,7 +102,7 @@ public class AdminServiceImpl implements AdminService{
             }
             result.put("questionSums",records);
         }
-        else if (typeSum == ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_TYPE_CODE) {
+        else if (typeSum == ConstantUtil.DAILY_USER_SUM_STATICS_TYPE_CODE) {
             List<Integer> date = adminDAO.getUserSum(dateNow);
             for (Integer i : date){
                 record = new HashMap<>();
@@ -90,13 +111,16 @@ public class AdminServiceImpl implements AdminService{
             }
             result.put("userSums",records);
         }
+
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+
         return result;
     }
     @Autowired
     BrowsingHistoryDAO browsingHistoryDAO;
 
     @Override
-    public Map<String, Object> getActiveData(String dateNow, Integer typeSum, Integer length) {
+    public Map<String, Object> getDailyActiveUserData(String dateNow, Integer length) {
         Map<String,Object> record;
         List<Map<String,Object>> records = new ArrayList<>();
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
@@ -108,28 +132,45 @@ public class AdminServiceImpl implements AdminService{
             records.add(record);
         }
 
-        if(typeSum == 0){
-            List<List> date = browsingHistoryDAO.getUserDailyActives(dateNow, length);
+        List<List> date = browsingHistoryDAO.getUserDailyActives(dateNow, length);
 
-            for (List i : date){
-                record = records.get(length - 1 - (Integer)i.get(1));
-                record.put("sum",i.get(0));
-            }
-            result.put("userDayActives",records);
+        for (List i : date){
+            record = records.get(length - 1 - (Integer)i.get(1));
+            record.put("sum",i.get(0));
         }
-        else {
-            List<Object[]> date = browsingHistoryDAO.getUserMonthlyActives(dateNow, length);
+        result.put("userDayActives",records);
 
-            for (Object[] i : date){
-                record = records.get(length - 1 - ((BigInteger)i[1]).intValue());
-                record.put("sum",i[0]);
-            }
-            result.put("userMonActives",records);
-        }
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
-    @Autowired
-    CategoriesTypeDAO categoriesTypeDAO;
+
+    @Override
+    public Map<String, Object> getMonthlyActiveUserData(String dateNow, Integer length) {
+        Map<String,Object> record;
+        List<Map<String,Object>> records = new ArrayList<>();
+        Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
+
+        //初始化日活跃列表
+        for (int i = 0; i < length; i++) {
+            record = new HashMap<>(MIN_HASH_MAP_NUM);
+            record.put("sum", 0);
+            records.add(record);
+        }
+
+        List<Object[]> date = browsingHistoryDAO.getUserMonthlyActives(dateNow, length);
+
+        for (Object[] i : date){
+            record = records.get(length - 1 - ((BigInteger)i[1]).intValue());
+            record.put("sum",i[0]);
+        }
+        result.put("userMonActives",records);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+
+        return result;
+    }
+
+
+
 
     @Override
     public Map<String, Object> getQuestionTypeSumData() {
@@ -150,6 +191,7 @@ public class AdminServiceImpl implements AdminService{
             }
         }
         result.put("questionTypeSums",records);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -190,6 +232,7 @@ public class AdminServiceImpl implements AdminService{
             reportListMap.add(reportMap);
         }
         result.put("reportInfoList",reportListMap);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -206,6 +249,7 @@ public class AdminServiceImpl implements AdminService{
             reportReasonListMap.add(reportReasonMap);
         }
         result.put("reportReason",reportReasonListMap);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -225,6 +269,7 @@ public class AdminServiceImpl implements AdminService{
         userMap.put("identity",user.getUseridentityByIdentityId().getType());
         userListMap.add(userMap);
         result.put("userInfos",userListMap);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -252,6 +297,7 @@ public class AdminServiceImpl implements AdminService{
         questionTypeMap.put("subjectType", question.getQuestiontypeByTypeId().getSubjecttypeBySubjectId().getName());
         questionMap.put("type", questionTypeMap);
         result.put("questionReported", questionMap);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -275,6 +321,7 @@ public class AdminServiceImpl implements AdminService{
         }
         answerListMap.add(map);
         result.put("answerReported",answerListMap);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -310,9 +357,12 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public void deleteReport(Integer reportId){
+    public Map<String, Object> deleteReport(Integer reportId){
         Report report = reportDAO.get(reportId);
         reportDAO.delete(report);
+        Map<String, Object> result = new HashMap<>();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
     }
 
 }
