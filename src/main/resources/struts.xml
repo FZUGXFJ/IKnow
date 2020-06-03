@@ -519,5 +519,14 @@
             </result>
         </action>
     </package>
+    <package name="identity" namespace="/identity" extends="default">
+        <action name="getSchool" class="org.gxfj.iknow.action.IdentityAction" method="getSchool">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+
+    </package>
 
 </struts>
