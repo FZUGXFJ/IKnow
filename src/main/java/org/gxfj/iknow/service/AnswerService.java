@@ -81,10 +81,9 @@ public interface AnswerService {
     /**
      * 取消反对
      * @param answerId 回答id
-     * @param user 用户
      * @return 是否取消成功
      */
-    public boolean cancelOppose(Integer answerId,User user);
+    public Map<String, Object> cancelOppose(Integer answerId);
 
     /**
      * 获得count条问题信息

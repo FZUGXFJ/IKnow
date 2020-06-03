@@ -104,7 +104,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String recommendAnswer(){
-        Map<String, Object> response = answerService.getRecommendAnswerForUser(answerId);
+        Map<String, Object> response = answerService.getRecommendAnswerForUser(20);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -139,19 +139,12 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 取消反对
+     * @return SUCCESS
+     */
     public String cancelOppose(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(!answerService.cancelOppose(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
-        }
-        else{
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = answerService.cancelOppose(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

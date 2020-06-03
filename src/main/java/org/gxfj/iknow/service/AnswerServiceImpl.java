@@ -707,13 +707,21 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public boolean cancelOppose(Integer answerId, User user) {
-        Integer x = oppositionAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId);
-        if (x == -1) {
-            return false;
+    public Map<String, Object> cancelOppose(Integer answerId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-        oppositionAnswerDAO.delete(oppositionAnswerDAO.get(x));
-        return true;
+        else if(oppositionAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
+        }
+        else{
+            oppositionAnswerDAO.delete(oppositionAnswerDAO.get
+                    (oppositionAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId)));
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
     }
 
     @Override
