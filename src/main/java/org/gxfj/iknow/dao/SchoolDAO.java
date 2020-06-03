@@ -12,4 +12,11 @@ public interface SchoolDAO extends BaseDAO<School>{
      * @return  学校列表
      */
     List<School> listKewordSchool(String keyword);
+
+    /**
+     * 获得指定学校名的实例
+     * @param schoolName 关键字
+     * @return  School对象
+     */
+    School getSchoolByName(String schoolName);
 }

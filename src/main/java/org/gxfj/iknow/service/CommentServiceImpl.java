@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.opensymphony.xwork2.ActionContext;
 import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
@@ -10,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.*;
+
+import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
+
 /**
  * @author 爱学习的水先生
  */
@@ -25,42 +29,62 @@ public class CommentServiceImpl implements CommentService {
     ReplyDAO replyDAO;
     @Autowired
     ApprovalReplyDAO approvalReplyDAO;
+    @Autowired
+    MessageUtil messageUtil;
 
     final static private int MAP_NUM = 30;
     final static private int REPLY_NUM = 2;
 
     @Override
-    public Integer postComment(User user, Integer answerId, String content){
-        if (!TextVerifyUtil.verifyCompliance(content)) {
-            return null;
+    public Map<String, Object> postComment(Integer answerId, String content){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-        Comment comment = new Comment();
-        Answer answer = answerDAO.getNotDelete(answerId);
-        comment.setUserByUserId(user);
-        comment.setContent(content);
-        comment.setAnswerByAnswerId(answer);
-        comment.setDate(new Date());
-        comment.setIsDelete((byte)0);
-        comment.setCount(0);
+        else if(content == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_COMMENT_INF );
+        }
+        else{
+            if (TextVerifyUtil.verifyCompliance(content)) {
+                Comment comment = new Comment();
+                Answer answer = answerDAO.getNotDelete(answerId);
+                comment.setUserByUserId(user);
+                comment.setContent(content);
+                comment.setAnswerByAnswerId(answer);
+                comment.setDate(new Date());
+                comment.setIsDelete((byte)0);
+                comment.setCount(0);
 
-        commentDAO.add(comment);
+                commentDAO.add(comment);
 
-        MessageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='#'>"+
-                user.getName() + "</a>评论了你的回答，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
-                + answerId + "'>[评论链接]</a>");
-        return comment.getId();
+                messageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='#'>"+
+                        user.getName() + "</a>评论了你的回答，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
+                        + answerId + "'>[评论链接]</a>");
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            }
+        }
+        return result;
     }
 
     @Override
-    public Map<String, Object> getComments(Integer answerId, User visitor,Integer sort){
-        Map<String, Object> response = new HashMap<>(MAP_NUM);
-        boolean userIdentify;
+    public Map<String, Object> getComments(Integer answerId, Integer sort){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        Integer commentsSort;
+        if (sort == null) {
+            commentsSort = ConstantUtil.COMMENT_DEFAULT_SORT;
+        }
+        else {
+            commentsSort = sort;
+        }
+        ActionContext.getContext().getSession().put("commentsort",commentsSort);
         //获取问题下的20条评论
-        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,0,20,sort);
-
+        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,0,20,commentsSort);
         //json数组
         List<Map<String, Object>> commentListMap;
-
         //获取回答
         Answer answer = answerDAO.getNotDelete(answerId);
         //获取问题
@@ -69,71 +93,70 @@ public class CommentServiceImpl implements CommentService {
         User answerOwner = answer.getUserByUserId();
         //获取题主
         User questionOwner = question.getUserByUserId();
-
         //获取问题评论数
         Integer count = commentDAO.getCount(answerId);
-        response.put("commentNum",count);
+        result.put("commentNum",count);
         if (count != 0) {
-            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, visitor);
+            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, user);
         } else {
             commentListMap = new ArrayList<>();
         }
-
-        response.put("comments",commentListMap);
-        return response;
+        result.put("comments",commentListMap);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
     }
 
     @Override
-    //@Transactional
-    public boolean approveComment(User user, Integer commentId) {
-        if (user == null) {
-            return false;
+    public Map<String, Object> approveComment(Integer commentId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if (user != null) {
+            Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
+            if (approvalcomment == null) {
+                //更新评论记录中评论点赞数
+                Comment comment = commentDAO.getNotDelete(commentId);
+                comment.setCount(comment.getCount() + 1);
+                commentDAO.update(comment);
+
+                //向评论点赞表中插入记录
+                approvalcomment = new Approvalcomment();
+                approvalcomment.setCommentByCommentId(comment);
+                approvalcomment.setUserByUserId(user);
+                approvalcomment.setDate(new Date());
+                approvalCommentDAO.add(approvalcomment);
+
+                messageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='#'>"+
+                        user.getName() + "</a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
+                        + comment.getAnswerByAnswerId().getId() + "'>[评论链接]</a>");
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_APPROVED);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-
-        //如果查询到记录，说明已经点过赞了
-        Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
-        if (approvalcomment != null) {
-            return false;
-        }
-
-        //更新评论记录中评论点赞数
-        Comment comment = commentDAO.getNotDelete(commentId);
-        comment.setCount(comment.getCount() + 1);
-        commentDAO.update(comment);
-
-        //向评论点赞表中插入记录
-        approvalcomment = new Approvalcomment();
-        approvalcomment.setCommentByCommentId(comment);
-        approvalcomment.setUserByUserId(user);
-        approvalcomment.setDate(new Date());
-        approvalCommentDAO.add(approvalcomment);
-
-        MessageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='#'>"+
-                user.getName() + "</a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
-                + comment.getAnswerByAnswerId().getId() + "'>[评论链接]</a>");
-        return true;
+        return result;
     }
 
     @Override
-    public boolean cancelApprove(User user, Integer commentId) {
-        if (user == null) {
-            return false;
+    public Map<String, Object> cancelApprove(Integer commentId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if (user != null) {
+            Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
+            if (approvalcomment != null) {
+                Comment comment = commentDAO.getNotDelete(commentId);
+                comment.setCount(comment.getCount() - 1);
+                commentDAO.update(comment);
+                approvalCommentDAO.delete(approvalcomment);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_NOT_APPROVED);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-
-        //如果查询到记录，说明点过赞
-        Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
-        if (approvalcomment == null) {
-            return false;
-        }
-
-        //更新评论记录中评论点赞数
-        Comment comment = commentDAO.getNotDelete(commentId);
-        comment.setCount(comment.getCount() - 1);
-        commentDAO.update(comment);
-
-        approvalCommentDAO.delete(approvalcomment);
-
-        return true;
+        return result;
     }
 
     /**
@@ -304,36 +327,40 @@ public class CommentServiceImpl implements CommentService {
         return replyListMap;
     }
     @Override
-    public Map<String, Object> moreComments(Integer answerId, User visitor,Integer start,Integer sort){
-        Map<String, Object> response = new HashMap<>(MAP_NUM);
-        boolean userIdentify;
-        //获取问题下的20条评论
-        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,start,20,sort);
-        if(comments.size()<=20){
-            return null;
+    public Map<String, Object> moreComments(Integer answerId, Integer start){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        Integer sort =(Integer)ActionContext.getContext().getSession().get("commentsort");
+        if(sort ==null){
+            sort =ConstantUtil.COMMENT_DEFAULT_SORT;
         }
-        //json数组
-        List<Map<String, Object>> commentListMap;
-        //获取回答
-        Answer answer = answerDAO.getNotDelete(answerId);
-        //获取问题
-        Question question = answer.getQuestionByQuestionId();
-        //获取回答者
-        User answerOwner = answer.getUserByUserId();
-        //获取题主
-        User questionOwner = question.getUserByUserId();
-
         //获取问题评论数
         Integer count = commentDAO.getCount(answerId);
-        response.put("commentNum",count);
-        if (count != 0) {
-            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, visitor);
-        } else {
-            commentListMap = new ArrayList<>();
+        if (count == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
         }
-
-        response.put("comments",commentListMap);
-        return response;
+        else {
+            //获取问题下的20条评论
+            List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,start,20,sort);
+            if(comments.size()<=20){
+                return null;
+            }
+            //json数组
+            List<Map<String, Object>> commentListMap;
+            //获取回答
+            Answer answer = answerDAO.getNotDelete(answerId);
+            //获取问题
+            Question question = answer.getQuestionByQuestionId();
+            //获取回答者
+            User answerOwner = answer.getUserByUserId();
+            //获取题主
+            User questionOwner = question.getUserByUserId();
+            result.put("commentNum",count);
+            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, user);
+            result.put("comments",commentListMap);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
     }
 
     @Override

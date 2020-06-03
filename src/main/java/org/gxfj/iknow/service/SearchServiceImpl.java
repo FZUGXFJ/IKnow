@@ -30,6 +30,7 @@ public class SearchServiceImpl implements SearchService{
     @Autowired
     UserIdentityDAO userIdentityDAO;
     final static private int RESPONSE_NUM = 20;
+    final static private int MAX_ANSWER = 9999;
 
     @Override
     public Map<String, Object> searchHistory() {
@@ -82,7 +83,7 @@ public class SearchServiceImpl implements SearchService{
         List<Map<String,Object>> res=new ArrayList<>();
         Map<String,Object> question;
         for (Question q:questions) {
-            List<Answer> answers = answerDAO.listByQuestionIdSort(q.getId(),0, 2,0);;
+            List<Answer> answers = answerDAO.listByQuestionIdSort(q.getId(),0, MAX_ANSWER,0);;
             question=new HashMap<>(8);
             question.put("id",q.getId());
             question.put("title",q.getTitle());

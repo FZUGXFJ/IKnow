@@ -40,6 +40,8 @@ public class AnswerServiceImpl implements AnswerService{
     ExpUtil expUtil;
     @Autowired
     ReplyDAO replyDAO;
+    @Autowired
+    MessageUtil messageUtil;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -47,7 +49,7 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> getQuestiontitle(Integer questionId) {
         User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
-        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String, Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
@@ -96,7 +98,7 @@ public class AnswerServiceImpl implements AnswerService{
             result.put("answerID",answer.getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
-            MessageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
+            messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
                     user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
                     "questionId=" + questionId + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
         }
@@ -283,7 +285,7 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> adoptAnswer(Integer answerId) {
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if (user != null) {
             if (adoptAnswer(user, answerId)) {
                 //用户已登录，且用户为题主，返回采纳成功
@@ -324,7 +326,7 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> cancelAnonymous(Integer answerId) {
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         Answer answer = answerDAO.getNotDelete(answerId);
         if (user != null) {
             //用户是答主
@@ -355,12 +357,14 @@ public class AnswerServiceImpl implements AnswerService{
         questionstate.setId(Questionstate.QUESTION_STATE_UN_SOLVE_ID);
         question.setQuestionstateByStateId(questionstate);
         questionDAO.update(question);
+        User user = question.getUserByUserId();
+        user.setBadgeNum(user.getBadgeNum() - 1);
     }
 
     @Override
     public Map<String, Object> getRecommendAnswerForUser(Integer count) {
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         Map<String,Object> cUser=new HashMap<>(2);
         if (user != null) {
             result=getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, 0));
@@ -636,11 +640,11 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> approveAnswer(Integer answerId) {
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-        else if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) != -1){
+        else if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
             Answer answer=answerDAO.get(answerId);
             Approvalanswer approvalanswer=new Approvalanswer();
             approvalanswer.setDate(new Date());
@@ -651,13 +655,13 @@ public class AnswerServiceImpl implements AnswerService{
             answer.setApprovalCount(answer.getApprovalCount()+1);
             answerDAO.update(answer);
 
-            MessageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
+            messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
                     "</a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
                     answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS );
         }
         else{
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
         }
         return result;
     }
@@ -665,7 +669,7 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> cancelApprove(Integer answerId) {
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
@@ -686,7 +690,7 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> oppositionAnswer(Integer answerId) {
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
@@ -709,7 +713,7 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> cancelOppose(Integer answerId) {
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
@@ -727,24 +731,26 @@ public class AnswerServiceImpl implements AnswerService{
     @Override
     public Map<String, Object> moreRecommendAnswer( Integer count, Integer start) {
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        Map<String, Object> answers = null;
         if (user != null) {
-            if(getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, start))==null) {
+            answers = getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, start));
+            if(answers == null) {
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
             }
             else{
-                result = getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, start));
+                result = answers;
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
             }
 
         } else {
-            if(getRecommendJsonItems(selectRecommendAnswer
-                    (null,ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start))==null){
+            answers = getRecommendJsonItems(selectRecommendAnswer
+                    (null,ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start));
+            if(answers == null){
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
             }
             else{
-                result = getRecommendJsonItems(selectRecommendAnswer
-                        (null,ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start));
+                result = answers;
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
             }
         }
@@ -815,40 +821,65 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public boolean deleteAnswer(User user , Integer answerId){
-        Answer answer = answerDAO.get(answerId);
-        if( answer.getQuestionByQuestionId().getAnswerByAdoptId() !=null
-                && answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(answerId)){
-            setQuestionNotAdopt(answer.getQuestionByQuestionId());
-        }
-        for (Comment comment : answer.getCommentsById()) {
-            Collection<Reply> replyCollection = comment.getRepliesById();
+    public Map<String, Object> deleteAnswer(Integer answerId){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        if (user == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
+        } else {
+            if(isAnswerer(answerId,user)) {
+                Answer answer = answerDAO.get(answerId);
+                if( answer.getQuestionByQuestionId().getAnswerByAdoptId() !=null
+                        && answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(answerId)){
+                    setQuestionNotAdopt(answer.getQuestionByQuestionId());
+                }
+                for (Comment comment : answer.getCommentsById()) {
+                    Collection<Reply> replyCollection = comment.getRepliesById();
 
-            for (Reply reply : replyCollection) {
-                replyDAO.delete(reply);
+                    for (Reply reply : replyCollection) {
+                        replyDAO.delete(reply);
+                    }
+                    commentDAO.delete(comment);
+                }
+                answerDAO.delete(answer);
+
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else{
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
             }
-            commentDAO.delete(comment);
         }
-        answerDAO.delete(answer);
-
-        return true;
+        return result;
     }
 
     @Override
-    public String getAnswerContent(Integer answerId){
-        Answer answer = answerDAO.get(answerId);
-        return answer.getContentHtml();
+    public Map<String, Object> getAnswerContent(Integer answerId){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        if (user == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
+        } else {
+            if(isAnswerer(answerId,user)) {
+                result.put("content",answerDAO.get(answerId).getContentHtml());
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else{
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
+            }
+        }
+        return result;
     }
 
     @Override
-    public boolean updateAnswerContent(Integer answerId, String content){
-        if (!TextVerifyUtil.verifyCompliance(content)) {
-            return false;
+    public Map<String, Object> updateAnswerContent(Integer answerId, String content){
+        Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        if (TextVerifyUtil.verifyCompliance(content)) {
+            Answer answer = answerDAO.get(answerId);
+            answer.setContentHtml(content);
+            answer.setContentText(HtmlUtil.html2Text(HtmlUtil.changeImgTag(content)));
+            answerDAO.update(answer);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
         }
-        Answer answer = answerDAO.get(answerId);
-        answer.setContentHtml(content);
-        answer.setContentText(HtmlUtil.html2Text(HtmlUtil.changeImgTag(content)));
-        answerDAO.update(answer);
-        return true;
+        return result;
     }
 }
