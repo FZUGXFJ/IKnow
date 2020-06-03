@@ -129,7 +129,7 @@
                 <td class="msgInfo">
                     <table>
                         <tr>
-                            <td class="msgType"><b>回答</b></td>
+                            <td class="msgType"><b>评论与回复</b></td>
                             <td class="newestMsgTime">
                                 {{newestCoAndReMsg.time}}
                             </td>
@@ -149,91 +149,93 @@
         <div class="splitLine"></div>
     </div>
     <div id="sysMsg" v-if="showPanel===1">
-        <div class="messageItem" v-for="systemMessage in systemMessages" @click="showDetail(systemMessage.id)">
+        <div class="messageItem" v-for="systemMessage in systemMessages" @click="showDetail(systemMessage)">
             <table>
                 <td class="msgIcon">
                     <i class="fas fa-bell fa-3x" style="color: #3d69ca"></i>
                 </td>
-                <td class="msgRedDot" v-if="systemMessage.isRead===0">
-                    <div class="redDot"></div>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="systemMessage.isRead===0"></div>
                 </td>
                 <td class="msgInfo">
                     <div style="font-size: 0.9em">
                         {{systemMessage.time}}
                     </div>
                     <div class="msgContent">
-                        {{systemMessage.content}}
+                        {{clearTag(systemMessage.content)}}
                     </div>
                 </td>
             </table>
+            <div class="splitLine"></div>
         </div>
     </div>
     <div id="appMsg" v-if="showPanel===2">
-        <div class="messageItem" v-for="approveMessage in approveMessages">
+        <div class="messageItem" v-for="approveMessage in approveMessages" @click="showDetail(approveMessage)">
             <table>
                 <td class="msgIcon">
                     <i class="fas fa-heart fa-3x" style="color: #ff5300"></i>
                 </td>
-                <td class="msgRedDot" v-if="approveMessage.isRead===0">
-                    <div class="redDot"></div>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="approveMessage.isRead===0"></div>
                 </td>
                 <td class="msgInfo">
                     <div style="font-size: 0.9em">
                         {{approveMessage.time}}
                     </div>
                     <div class="msgContent">
-                        {{approveMessage.content}}
+                        {{clearTag(approveMessage.content)}}
                     </div>
                 </td>
             </table>
+            <div class="splitLine"></div>
         </div>
     </div>
     <div id="ansMsg" v-if="showPanel===3">
-        <div class="messageItem" v-for="answerMessage in answerMessages">
+        <div class="messageItem" v-for="answerMessage in answerMessages" @click="showDetail(answerMessage)">
             <table>
                 <td class="msgIcon">
                     <i class="fas fa-file-alt fa-3x" style="color:#8100ff;"></i>
                 </td>
-                <td class="msgRedDot" v-if="answerMessage.isRead===0">
-                    <div class="redDot"></div>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="answerMessage.isRead===0"></div>
                 </td>
                 <td class="msgInfo">
                     <div style="font-size: 0.9em">
                         {{answerMessage.time}}
                     </div>
                     <div class="msgContent">
-                        {{answerMessage.content}}
+                        {{clearTag(answerMessage.content)}}
                     </div>
                 </td>
             </table>
+            <div class="splitLine"></div>
         </div>
     </div>
     <div id="coAndReMsg" v-if="showPanel===4">
-        <div class="messageItem" v-for="coAndReMessage in coAndReMessages">
+        <div class="messageItem" v-for="coAndReMessage in coAndReMessages" @click="showDetail(coAndReMessage)">
             <table>
                 <td class="msgIcon">
                     <i class="fas fa-comment-dots fa-3x" style="color: #d3d3d3"></i>
                 </td>
-                <td class="msgRedDot" v-if="coAndReMessage.isRead===0">
-                    <div class="redDot"></div>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="coAndReMessage.isRead===0"></div>
                 </td>
                 <td class="msgInfo">
                     <div style="font-size: 0.9em">
                         {{coAndReMessage.time}}
                     </div>
                     <div class="msgContent">
-                        {{coAndReMessage.content}}
+                        {{clearTag(coAndReMessage.content)}}
                     </div>
                 </td>
             </table>
+            <div class="splitLine"></div>
         </div>
     </div>
     <mt-popup v-model="popupVisible" position="right" style="height: 100%;padding: 1em">
         <i class="fas fa-times" @click="popupVisible=!popupVisible" style="font-size: 1.5em;color: #acacac"></i>
-        <br>
-        <div v-html="currentMsg">
-
-        </div>
+        <br><br>
+        <div v-html="currentMsg"></div>
     </mt-popup>
 </div>
 <script>
@@ -246,19 +248,19 @@
             systemMessages:[],
             hasNewestSysMsg:false,
             newestSysMsg:{
-                content:"没有新的消息",
+                content:"没有新消息【查看历史消息】",
                 time:""
             },
             approveMessages:[],
             hasNewestAppMsg:false,
             newestAppMsg:{
-                content:"没有新的消息",
+                content:"没有新消息【查看历史消息】",
                 time:""
             },
             answerMessages:[],
             hasNewestAnsMsg:false,
             newestAnsMsg:{
-                content:"没有新的消息",
+                content:"没有新消息【查看历史消息】",
                 time:""
             },
             coAndReMessages:[],
@@ -275,19 +277,145 @@
         methods:{
             back:function () {
                 if (this.showPanel > 0 ) {
-                    this.showPanel = 0;
+                    history.go(0);
                 } else {
                     history.go(-1);
                 }
             },
-            clearHtmlTag:function () {
-
-            },
-            showDetail:function (id) {
+            showDetail:function (msg) {
                 this.popupVisible = true;
+                if (msg.isRead === 0) {
+                    msg.isRead = 1;
+                }
+                $.ajax({
+                    type:"POST",
+                    url:"../../message/readMessage.action",
+                    data:{
+                        messageId:msg.id
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            message.currentMsg = result.content;
+                            message.saveToLocal(msg);
+                        } else if (result.resultCode === 1) {
+                            location.href = "login.html?boot=1";
+                        } else if (result.resultCode === 2) {
+                            location.href = "../home.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             },
             toPanel:function (showPanel) {
                 this.showPanel = showPanel;
+            },
+            loadLocalMsg:function () {
+                let systemMessages = localStorage.getItem("systemMessages");
+                if (systemMessages != null) {
+                    systemMessages = JSON.parse(systemMessages);
+                    systemMessages.forEach(function (item) {
+                        message.systemMessages.push(item);
+                    });
+                }
+                let answerMessages = localStorage.getItem("answerMessages");
+                if (answerMessages != null) {
+                    answerMessages = JSON.parse(answerMessages);
+                    answerMessages.forEach(function (item) {
+                        message.answerMessages.push(item);
+                    });
+                }
+                let approveMessages = localStorage.getItem("approveMessages");
+                if (approveMessages != null) {
+                    approveMessages = JSON.parse(approveMessages);
+                    approveMessages.forEach(function (item) {
+                        message.approveMessages.push(item);
+                    });
+                }
+                let coAndReMessages = localStorage.getItem("coAndReMessages");
+                if (coAndReMessages != null) {
+                    coAndReMessages = JSON.parse(coAndReMessages);
+                    coAndReMessages.forEach(function (item) {
+                        message.coAndReMessages.push(item);
+                    })
+                }
+            },
+            saveToLocal:function (msg) {
+                msg.time = new Date().toLocaleDateString().replace("/","-");
+                msg.time = msg.time.replace("/","-");
+                if (msg.type === 1) {
+                    this.saveSys(msg);
+                } else if (msg.type === 2) {
+                    this.saveAns(msg);
+                } else if (msg.type === 3) {
+                    this.saveApp(msg);
+                } else if (msg.type === 4) {
+                    this.saveCR(msg);
+                }
+            },
+            saveSys:function (msg) {
+                let systemMessages = localStorage.getItem("systemMessages");
+                if (systemMessages == null) {
+                    systemMessages = [];
+                } else {
+                    systemMessages = JSON.parse(systemMessages);
+                }
+                if (systemMessages.length === 100) {
+                    systemMessages.pop();
+                } else {
+                    systemMessages.unshift(msg);
+                }
+                localStorage.setItem("systemMessages",JSON.stringify(systemMessages));
+            },
+            saveAns:function (msg) {
+                let answerMessages = localStorage.getItem("answerMessages");
+                if (answerMessages == null) {
+                    answerMessages = [];
+                } else {
+                    answerMessages = JSON.parse(answerMessages);
+                }
+                if (answerMessages.length === 100) {
+                    answerMessages.pop();
+                } else {
+                    answerMessages.unshift(msg);
+                }
+                localStorage.setItem("answerMessages",answerMessages);
+            },
+            saveApp:function (msg) {
+                let approveMessages = localStorage.getItem("approveMessages");
+                if (approveMessages == null) {
+                    approveMessages = [];
+                } else {
+                    approveMessages = JSON.parse(approveMessages);
+                }
+                if (approveMessages.length === 100) {
+                    approveMessages.pop();
+                } else {
+                    approveMessages.unshift(msg);
+                }
+                localStorage.setItem("approveMessages",approveMessages);
+            },
+            saveCR:function (msg) {
+                let coAndReMessages = localStorage.getItem("coAndReMessages");
+                if (coAndReMessages == null) {
+                    coAndReMessages = [];
+                } else {
+                    coAndReMessages = JSON.parse(coAndReMessages);
+                }
+                if (coAndReMessages.length === 100) {
+                    coAndReMessages.pop();
+                } else {
+                    coAndReMessages.unshift(msg);
+                }
+                localStorage.setItem("coAndReMessages",coAndReMessages);
+            },
+            clearTag:function (content) {
+                return content.replace(/<\/?.+?>/g, "");
             }
         },
         mounted:function () {
@@ -337,9 +465,10 @@
                             message.newestCoAndReMsg.time = message.coAndReMessages[0].time;
                             message.newestCoAndReMsg.content = message.coAndReMessages[0].content;
                         }
-                        this.loading = false;
+                        message.loadLocalMsg();
+                        message.loading = false;
                     } else {
-                        location.href = "user/login.html?boot=0";
+                        location.href = "login.html?boot=0";
                     }
                 },
                 error: function (request, status, error) {

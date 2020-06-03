@@ -24,7 +24,7 @@
             <div id="control">
                 <table>
                     <td style="width: 75%"></td>
-                    <td style="width: 10%;text-align: right">
+                    <td style="width: 10%;text-align: right" @click="viewMessage">
                         <i class="fas fa-bell" style="color: rgba(90,55,255,0.58)"></i>
                     </td>
                     <td style="width: 5%;">
@@ -197,6 +197,9 @@
             },
             toBrowsingRecord:function () {
                 location.href = "record/browsingRecord.html";
+            },
+            viewMessage:function () {
+                location.href = "user/message.html";
             }
         },
         mounted:function () {
