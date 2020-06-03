@@ -331,7 +331,7 @@ public class AdminServiceImpl implements AdminService{
         commentMap.put("userID",comment.getUserByUserId().getId());
         commentMap.put("content",comment.getContent());
         commentMap.put("date",Time.getTime1(comment.getDate()));
-        commentMap.put("isDelete",comment.getIsDelete()==1?"是":"否");
+        commentMap.put("isDelete",comment.getIsDelete() == 1 ? "是" : "否");
         return commentMap;
     }
     private Map<String,Object> getAnswerInfoMap(Integer answerId){
@@ -341,7 +341,7 @@ public class AdminServiceImpl implements AdminService{
         answerMap.put("userID",answer.getUserByUserId().getId());
         answerMap.put("content",answer.getContentHtml());
         answerMap.put("date",Time.getTime1(answer.getDate()));
-        answerMap.put("isDelete",answer.getIsDelete()==1?"是":"否");
+        answerMap.put("isDelete",answer.getIsDelete() == 1 ? "是" : "否");
         return answerMap;
     }
     private Map<String,Object> getReplyInfoMap(Integer replyId){
@@ -351,7 +351,7 @@ public class AdminServiceImpl implements AdminService{
         replyMap.put("userID",reply.getUserByUserId().getId());
         replyMap.put("content",reply.getContent());
         replyMap.put("date",Time.getTime1(reply.getDate()));
-        replyMap.put("isDelete",reply.getIsDelete()==1?"是":"否");
+        replyMap.put("isDelete",reply.getIsDelete()==1 ? "是" : "否");
         return replyMap;
     }
 
@@ -368,7 +368,32 @@ public class AdminServiceImpl implements AdminService{
     public Map<String, Object> ban(Integer userID, Integer days) {
 
 
+
         return null;
     }
 
+    @Override
+    public Map<String, Object> estoppel(Integer userID, Integer days) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> questionDel(Integer questionID) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> answerDel(Integer answerID) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> commentDel(Integer commentID) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> replyDel(Integer replyID) {
+        return null;
+    }
 }

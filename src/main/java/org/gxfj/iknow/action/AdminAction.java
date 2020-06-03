@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.Admin;
 import org.gxfj.iknow.service.AdminService;
+import org.gxfj.iknow.service.QuestionService;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,11 @@ public class AdminAction {
     private Integer type;
     private Integer reportID;
     private Integer days;
+    private Integer questionID;
+    private Integer answerID;
+    private Integer commentID;
+    private Integer replyID;
+
     @Autowired
     private AdminService adminService;
 
@@ -180,6 +186,39 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 禁言用户,根据userID禁言对应的用户days天
+     */
+    public String estoppel() {
+        Map<String, Object> result = adminService.estoppel(userID, days);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    public String questionDel() {
+        Map<String, Object> result = adminService.questionDel(questionID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    public String answerDel() {
+        Map<String, Object> result = adminService.answerDel(answerID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    public String commentDel() {
+        Map<String, Object> result = adminService.commentDel(commentID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    public String replyDel() {
+        Map<String, Object> result = adminService.replyDel(replyID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
 
     public Integer getAccountNum() {
         return accountNum;
@@ -267,5 +306,37 @@ public class AdminAction {
 
     public void setDays(Integer days) {
         this.days = days;
+    }
+
+    public Integer getQuestionID() {
+        return questionID;
+    }
+
+    public void setQuestionID(Integer questionID) {
+        this.questionID = questionID;
+    }
+
+    public Integer getAnswerID() {
+        return answerID;
+    }
+
+    public void setAnswerID(Integer answerID) {
+        this.answerID = answerID;
+    }
+
+    public Integer getCommentID() {
+        return commentID;
+    }
+
+    public void setCommentID(Integer commentID) {
+        this.commentID = commentID;
+    }
+
+    public Integer getReplyID() {
+        return replyID;
+    }
+
+    public void setReplyID(Integer replyID) {
+        this.replyID = replyID;
     }
 }

@@ -98,7 +98,44 @@ public interface AdminService {
      * 封禁用户
      * @param userID 要封禁的用户id
      * @param days 封禁的时间
+     * @return 返回的数据
      */
     Map<String, Object> ban(Integer userID, Integer days);
 
+    /**
+     * 禁言用户
+     * @param userID 要禁言的用户id
+     * @param days 禁言的时间
+     * @return 返回的数据
+     */
+    Map<String, Object> estoppel(Integer userID, Integer days);
+
+
+    /**
+     * 删除问题
+     * @param questionID 要删除的问题
+     * @return
+     */
+    Map<String, Object> questionDel(Integer questionID);
+
+    /**
+     * 删除问题
+     * @param answerID 要删除的问题
+     * @return
+     */
+    Map<String, Object> answerDel(Integer answerID);
+
+    /**
+     * 删除评论
+     * @param commentID 要删除的评论
+     * @return
+     */
+    Map<String, Object> commentDel(Integer commentID);
+
+    /**
+     * 删除回复
+     * @param replyID 要删除的回复
+     * @return
+     */
+    Map<String, Object> replyDel(Integer replyID);
 }
