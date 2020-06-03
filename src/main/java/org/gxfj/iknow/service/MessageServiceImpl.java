@@ -55,7 +55,7 @@ public class MessageServiceImpl implements MessageService{
         }
         else {
             Message message = messageDAO.get(messageId);
-            if(user.getId().equals(message.getUserByUserId().getId())){
+            if(!user.getId().equals(message.getUserByUserId().getId())){
                 response.put("resultCode",2);
                 return response;
             }
