@@ -38,6 +38,7 @@ public class IdentityAction {
     public String getSchools(){
         Map<String,Object> result = identityService.getSchool(keyword);
         result.put(ConstantUtil.RETURN_STRING,ConstantUtil.SUCCESS);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -124,5 +125,13 @@ public class IdentityAction {
 
     public void setSchool(Integer school) {
         this.school = school;
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
     }
 }

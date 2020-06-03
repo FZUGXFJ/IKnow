@@ -99,119 +99,62 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 主页的推荐回答
+     * @return SUCCESS
+     */
     public String recommendAnswer(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response;
-        Map<String,Object> cUser=new HashMap<>(2);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if (user != null) {
-            response=answerService.getRecommendAnswerForUser(user.getId(),20);
-        } else {
-            response=answerService.getRecommendAnswerForUser(null,20);
-        }
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-        if (user != null) {
-            cUser.put("id",user.getId());
-            cUser.put("head", ImgUtil.changeAvatar(user.getHead()));
-        } else {
-            cUser.put("id",0);
-            cUser.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
-        }
-        response.put("user",cUser);
+        Map<String, Object> response = answerService.getRecommendAnswerForUser(20);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 赞同回答
+     * @return SUCCESS
+     */
     public String approveAnswer(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(!answerService.approveAnswer(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
-        }
-        else{
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = answerService.approveAnswer(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 取消赞同
+     * @return SUCCESS
+     */
     public String cancelApprove(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(!answerService.cancelApprove(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
-        }
-        else{
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = answerService.cancelApprove(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
+
+    /**
+     * 反对回答
+     * @return SUCCESS
+     */
     public String oppositionAnswer(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(!answerService.oppositionAnswer(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
-        }
-        else{
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = answerService.oppositionAnswer(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 取消反对
+     * @return SUCCESS
+     */
     public String cancelOppose(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(!answerService.cancelOppose(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
-        }
-        else{
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = answerService.cancelOppose(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得更多推荐的回答
+     * @return
+     */
     public String moreRecommend(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if (user != null) {
-            if(answerService.moreRecommendAnswer(user.getId(), ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start)==null) {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
-            }
-            else{
-                response = answerService.moreRecommendAnswer(user.getId(), ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,
-                        start);
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-            }
-
-        } else {
-            if(answerService.moreRecommendAnswer(null,ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start)==null){
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
-            }
-            else{
-                response = answerService.moreRecommendAnswer(null, ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start);
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-            }
-        }
+        Map<String, Object> response=answerService.moreRecommendAnswer(ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

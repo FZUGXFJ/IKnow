@@ -91,8 +91,7 @@
             <br>
             <div id="security">
                     <span style="color: rgba(91,0,238,0.96)">
-                        <i class="fas fa-shield-alt"></i>
-                        &nbsp;安全
+                        <i class="fas fa-shield-alt"></i>&nbsp;安全
                     </span>
                 <div class="splitLine"></div>
                 <div><button class="btn" style="color: red" @click="toReset">修改密码</button></div>
@@ -100,11 +99,16 @@
             </div>
             <br>
             <div id="identification">
-                    <span style="color: rgba(91,0,238,0.96)">
-                        <i class="fas fa-shield-alt"></i>
-                        &nbsp;认证
-                    </span>
+                <span style="color: rgba(91,0,238,0.96)">
+                    <i class="fas fa-shield-alt"></i>&nbsp;认证
+                </span>
                 <div class="splitLine"></div>
+                <div v-if="inf.identity===undefined || inf.identity==null">
+                    <button class="btn btn-link" @click="toAuthentication">未认证</button>
+                </div>
+                <div v-else="">
+
+                </div>
             </div>
             <br>
             <div id="system">
@@ -200,6 +204,9 @@
             },
             viewMessage:function () {
                 location.href = "user/message.html";
+            },
+            toAuthentication:function () {
+                location.href = "user/authentication.html";
             }
         },
         mounted:function () {

@@ -52,7 +52,7 @@ public interface AnswerService {
      * @param count 推荐数
      * @return 问题表
      */
-    public Map<String,Object> getRecommendAnswerForUser(Integer userId, Integer count);
+    public Map<String,Object> getRecommendAnswerForUser(Integer count);
 
 
     void createRecommendAnswer();
@@ -60,43 +60,38 @@ public interface AnswerService {
     /**
      * 点赞回答
      * @param answerId 回答id
-     * @param user 点赞用户
      * @return 是否点赞
      */
-    public boolean approveAnswer(Integer answerId,User user);
+    public Map<String, Object> approveAnswer(Integer answerId);
 
     /**
      * 取消点赞
      * @param answerId 回答id
-     * @param user 用户
      * @return 是否取消成功
      */
-    public boolean cancelApprove(Integer answerId,User user);
+    public Map<String, Object> cancelApprove(Integer answerId);
 
     /**
      * 反对回答
      * @param answerId 回答id
-     * @param user 用户
      * @return 是否成功
      */
-    public boolean oppositionAnswer(Integer answerId,User user);
+    public Map<String, Object> oppositionAnswer(Integer answerId);
 
     /**
      * 取消反对
      * @param answerId 回答id
-     * @param user 用户
      * @return 是否取消成功
      */
-    public boolean cancelOppose(Integer answerId,User user);
+    public Map<String, Object> cancelOppose(Integer answerId);
 
     /**
      * 获得count条问题信息
      * @param count 推荐数
-     * @param userId 用户id
      * @param start 起始下标
      * @return 问题表
      */
-    public Map<String,Object> moreRecommendAnswer(Integer userId, Integer count,Integer start);
+    public Map<String,Object> moreRecommendAnswer( Integer count,Integer start);
 
     /**
      * 插入浏览记录
