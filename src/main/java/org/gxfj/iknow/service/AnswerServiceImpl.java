@@ -105,28 +105,29 @@ public class AnswerServiceImpl implements AnswerService{
 
 
     @Override
-    public Map<String, Object> getRecommendAnswer(Integer questionId, Integer answerId, User user) {
-        Map<String , Object> resultMap = new HashMap<>(MAP_NUM);
+    public Map<String, Object> getRecommendAnswerForQuestion(Integer questionId, Integer answerId) {
+        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String , Object> result = new HashMap<>(MAP_NUM);
         if(user!=null) {
             insertBrowsing(user,questionDAO.get(questionId),answerDAO.get(answerId));
         }
         //获得回答关联的问题
-        resultMap.put("question" , getQuestionMap(questionId));
+        result.put("question" , getQuestionMap(questionId));
         //获得回答答主
-        resultMap.put("answerer" , getAnswererMap(answerId));
+        result.put("answerer" , getAnswererMap(answerId));
         //回答的信息转化为json格式
         //获得一个存储评论列表
-        resultMap.put("comments" , getCommentsMap(questionId, answerId,user));
+        result.put("comments" , getCommentsMap(questionId, answerId,user));
         //获得查看回答的用户的头像
         //未登录
         if(user == null){
-            resultMap.put("userHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
-            resultMap.put("answer" , getAnswerMap(questionId, answerId,null));
+            result.put("userHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
+            result.put("answer" , getAnswerMap(questionId, answerId,null));
         }
         //已登录
         else{
-            resultMap.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
-            resultMap.put("userHead" , ImgUtil.changeAvatar(user.getHead(), 2));
+            result.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
+            result.put("userHead" , ImgUtil.changeAvatar(user.getHead(), 2));
         }
 
         Answer answer=answerDAO.getNotDelete(answerId);
@@ -140,9 +141,10 @@ public class AnswerServiceImpl implements AnswerService{
                 viewerIsAnswerer = 1;
             }
         }
-        resultMap.put("viewerIsAnswerer", viewerIsAnswerer);
-        resultMap.put("viewerIsQuestionOwner", viewerIsQuestionOwner);
-        return resultMap;
+        result.put("viewerIsAnswerer", viewerIsAnswerer);
+        result.put("viewerIsQuestionOwner", viewerIsQuestionOwner);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
     }
 
     /**
@@ -279,25 +281,40 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Boolean adoptAnswer(User user, Integer answerId) {
+    public Map<String, Object> adoptAnswer(Integer answerId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if (user != null) {
+            if (adoptAnswer(user, answerId)) {
+                //用户已登录，且用户为题主，返回采纳成功
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                //用户已登录，但用户不是题主，返回用户不是提问者
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_QUESTIONER);
+            }
+        } else {
+            //用户未登录，返回未登录
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+        }
+        return result;
+    }
+
+    private Boolean adoptAnswer(User user, Integer answerId) {
         Answer answer = answerDAO.getNotDelete(answerId);
         Question question = answer.getQuestionByQuestionId();
 
         //构造已解决的问题状态对象
         Questionstate questionstate = new Questionstate();
         questionstate.setId(Questionstate.QUESTION_STATE_SOLVED_ID);
-
         if (user.getId().equals(question.getUserByUserId().getId())) {
             //更新问题的采纳回答id
             question.setAnswerByAdoptId(answer);
             //更新问题状态为已解决
             question.setQuestionstateByStateId(questionstate);
             questionDAO.update(question);
-            
             //增加用户的徽章数
             user.setBadgeNum(user.getBadgeNum() + 1);
             userDAO.update(user);
-            
             return true;
         } else {
             return false;
@@ -305,19 +322,29 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Boolean cancelAnonymous(User user, Integer answerId) {
+    public Map<String, Object> cancelAnonymous(Integer answerId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         Answer answer = answerDAO.getNotDelete(answerId);
-        if (answer.getUserByUserId().getId().equals(user.getId())){
-            answer.setIsAnonymous((byte)0);
-            answerDAO.update(answer);
-            return true;
+        if (user != null) {
+            //用户是答主
+            if (answer.getUserByUserId().getId().equals(user.getId())) {
+                answer.setIsAnonymous((byte)0);
+                answerDAO.update(answer);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_ANSWERER);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-        return false;
+        return result;
     }
 
+
     /**
-     * 将回答对应的问题置于为解决状态
-     * @param question 推荐问题的条数
+     * 将回答对应的问题置于为未解决状态
+     * @param question 问题
      */
     private void setQuestionNotAdopt(Question question){
         //将问题采纳的回答id置0
@@ -331,7 +358,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> getRecommendAnswer(Integer userId, Integer count) {
+    public Map<String, Object> getRecommendAnswerForUser(Integer userId, Integer count) {
         List<Answer> answers = selectRecommendAnswer(userId, count, 0);
         return getRecommendJsonItems(answers);
     }
