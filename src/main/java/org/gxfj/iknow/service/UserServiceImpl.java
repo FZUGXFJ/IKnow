@@ -120,7 +120,7 @@ public class UserServiceImpl<result> implements UserService{
             result.put("resultCode",ConstantUtil.SUCCESS);
             result.put("email",user.getEmail());
             result.put("password",user.getPasswd());
-
+            result.put("user", user);
         }
         else {
             result.put("resultCode",ConstantUtil.WRONG_PASSWORD);
