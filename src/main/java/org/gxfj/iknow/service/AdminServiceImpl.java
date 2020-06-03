@@ -276,10 +276,10 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Map<String, Object> getReportedQuestion(Integer questioinId) {
+    public Map<String, Object> getReportedQuestion(Integer questionId) {
         Map<String, Object> questionMap = new HashMap<>(MIN_HASH_MAP_NUM);
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
-        Question question = questionDAO.get(questioinId);
+        Question question = questionDAO.get(questionId);
         questionMap.put("id", question.getId());
         questionMap.put("userID", question.getUserByUserId().getId());
         questionMap.put("title", question.getTitle());
