@@ -450,7 +450,7 @@ public class AdminServiceImpl implements AdminService{
             Collection<Answer> answerCollection = question.getAnswersById();
 
             for (Answer answer : answerCollection) {
-                ((AdminService)AopContext.currentProxy()).answerDel(answer.getId());
+                answerDel(answer.getId());
             }
             questionDAO.delete(question);
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
@@ -481,7 +481,7 @@ public class AdminServiceImpl implements AdminService{
                 }
                 //删除回答下的所有评论及回复
                 for (Comment comment : answer.getCommentsById()) {
-                    ((AdminService)AopContext.currentProxy()).commentDel(comment.getId());
+                    comment.getId();
                 }
                 //删除回答
                 answerDAO.delete(answer);
