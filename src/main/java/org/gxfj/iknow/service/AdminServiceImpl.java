@@ -46,6 +46,8 @@ public class AdminServiceImpl implements AdminService{
     private UserDAO userDAO;
     @Autowired
     CategoriesTypeDAO categoriesTypeDAO;
+    @Autowired
+    ReportTypeDAO reportTypeDAO;
 
     @Override
     public Map<String, Object> login(Integer accountNum, String password) {
@@ -524,6 +526,38 @@ public class AdminServiceImpl implements AdminService{
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
         }
 
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteAllQueReport(){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        reportDAO.deleteAllQueReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteAllAnsReport(){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        reportDAO.deleteAllAnsReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteAllComReport(){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        reportDAO.deleteAllComReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteAllRepReport(){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        reportDAO.deleteAllRepReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 }

@@ -138,4 +138,28 @@ public interface AdminService {
      * @return
      */
     Map<String, Object> replyDel(Integer replyID);
+
+    /**
+     * 删掉所有问题举报记录
+     * @return 包含响应码的map数据
+     */
+    Map<String, Object> deleteAllQueReport();
+
+    /**
+     * 删掉所有回答举报记录
+     * @return 包含响应码的map数据
+     */
+    Map<String, Object> deleteAllAnsReport();
+
+    /**
+     * 删掉所有评论举报记录
+     * @return 包含响应码的map数据
+     */
+    Map<String, Object> deleteAllComReport();
+
+    /**
+     * 删掉所有回复举报记录
+     * @return 包含响应码的map数据
+     */
+    Map<String, Object> deleteAllRepReport();
 }
