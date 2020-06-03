@@ -357,6 +357,8 @@ public class AnswerServiceImpl implements AnswerService{
         questionstate.setId(Questionstate.QUESTION_STATE_UN_SOLVE_ID);
         question.setQuestionstateByStateId(questionstate);
         questionDAO.update(question);
+        User user = question.getUserByUserId();
+        user.setBadgeNum(user.getBadgeNum() - 1);
     }
 
     @Override
