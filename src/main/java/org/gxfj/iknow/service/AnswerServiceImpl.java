@@ -1,5 +1,8 @@
 package org.gxfj.iknow.service;
 
+import com.fasterxml.jackson.databind.util.ObjectBuffer;
+import com.opensymphony.xwork2.ActionContext;
+import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
@@ -42,7 +45,8 @@ public class AnswerServiceImpl implements AnswerService{
     final static private int COMMENT_NUM = 2;
     final static private int ANONYMOUS = 1;
     @Override
-    public Map<String, Object> getQuestiontitle(User user, Integer questionId) {
+    public Map<String, Object> getQuestiontitle(Integer questionId) {
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -58,34 +62,44 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String,Object> postAnswer(Integer questionId, String content, Byte isAnonymous, User user) {
-
+    public Map<String,Object> postAnswer(Integer questionId, String content, Byte isAnonymous) {
+        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> result= new HashMap<>(MAP_NUM);
-        if (!TextVerifyUtil.verifyCompliance(content)) {
-            result.put("resultCode", JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
-            return result;
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
+        else if(questionId == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_QUESTIONID);
+        }
+        else if(content == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_ANSWER_IF);
+        }
+        else{
+            //得到新发布的回答的id
+            if (!TextVerifyUtil.verifyCompliance(content)) {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+                return result;
+            }
+            Answer answer=new Answer();
+            answer.setIsAnonymous(isAnonymous);
+            answer.setDate(new Date());
+            answer.setApprovalCount(0);
+            answer.setUserByUserId(user);
+            Question q = questionDAO.getNotDelete(questionId);
+            answer.setQuestionByQuestionId(q);
+            answer.setIsDelete((byte)0);
+            answer.setIsRoof((byte)0);
+            answer.setContentHtml(content);
+            answer.setContentText(HtmlUtil.html2Text(content));
 
+            answerDAO.add(answer);
+            result.put("answerID",answer.getId());
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
-        Answer answer=new Answer();
-        answer.setIsAnonymous(isAnonymous);
-        answer.setDate(new Date());
-        answer.setApprovalCount(0);
-        answer.setUserByUserId(user);
-        Question q = questionDAO.getNotDelete(questionId);
-        answer.setQuestionByQuestionId(q);
-        answer.setIsDelete((byte)0);
-        answer.setIsRoof((byte)0);
-        answer.setContentHtml(content);
-        answer.setContentText(HtmlUtil.html2Text(content));
-
-        answerDAO.add(answer);
-        result.put("answerID",answer.getId());
-        result.put("resultCode", 0);
-
-        MessageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
-                user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
-                "questionId=" + questionId + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
+            MessageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
+                    user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
+                    "questionId=" + questionId + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
+        }
         return result;
     }
 

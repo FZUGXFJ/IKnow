@@ -54,29 +54,17 @@ public class AnswerAction {
      * @return
      */
     public String questionTitle(){
-        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
-        Map<String, Object> response = answerService.getQuestiontitle(user, questionId);
+        Map<String, Object> response = answerService.getQuestiontitle(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 发布回答
+     * @return SUCCESS
+     */
     public String postAnswer() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User)session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(questionId == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_QUESTIONID);
-        }
-        else if(content == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_ANSWER_IF);
-        }
-        else{
-            //得到新发布的回答的id
-            response = answerService.postAnswer(questionId,content,isAnonymous,user);
-        }
+        Map<String, Object> response = answerService.postAnswer(questionId,content,isAnonymous);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
