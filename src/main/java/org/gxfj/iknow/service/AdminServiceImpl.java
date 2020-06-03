@@ -283,7 +283,7 @@ public class AdminServiceImpl implements AdminService{
         questionMap.put("userID", question.getUserByUserId().getId());
         questionMap.put("title", question.getTitle());
         questionMap.put("content", question.getContentHtml());
-        questionMap.put("date", question.getDate());
+        questionMap.put("date", Time.getTime1(question.getDate()));
         if(question.getIsDelete().equals(1)){
             questionMap.put("isDelete", "是");
         }
