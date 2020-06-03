@@ -490,6 +490,30 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="questionReportClear" class="org.gxfj.iknow.action.AdminAction" method="questionReportClear">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="answerReportClear" class="org.gxfj.iknow.action.AdminAction" method="answerReportClear">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="commentReportClear" class="org.gxfj.iknow.action.AdminAction" method="commentReportClear">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="replyReportClear" class="org.gxfj.iknow.action.AdminAction" method="replyReportClear">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
 
     </package>
 

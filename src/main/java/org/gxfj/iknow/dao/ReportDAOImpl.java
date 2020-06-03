@@ -55,4 +55,36 @@ public class ReportDAOImpl implements ReportDAO{
     public void delete(Report bean) {
         getHibernateTemplate().delete(bean);
     }
+
+    @Override
+    public void deleteAllQueReport(){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "delete from report where typeID = 1";
+        Query query = session.createSQLQuery(sql);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteAllAnsReport(){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "delete from report where typeID = 2";
+        Query query = session.createSQLQuery(sql);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteAllComReport(){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "delete from report where typeID = 3";
+        Query query = session.createSQLQuery(sql);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteAllRepReport(){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "delete from report where typeID = 4";
+        Query query = session.createSQLQuery(sql);
+        query.executeUpdate();
+    }
 }

@@ -219,6 +219,49 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 删掉所有问题举报记录
+     * @return “SUCCESS”
+     */
+    public String questionReportClear(){
+        Map<String,Object> result;
+        result = adminService.deleteAllQueReport();
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 删掉所有回答举报记录
+     * @return “SUCCESS”
+     */
+    public String answerReportClear(){
+        Map<String,Object> result;
+        result = adminService.deleteAllAnsReport();
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 删掉所有评论举报记录
+     * @return “SUCCESS”
+     */
+    public String commentReportClear(){
+        Map<String,Object> result;
+        result = adminService.deleteAllComReport();
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 删掉所有回复举报记录
+     * @return “SUCCESS”
+     */
+    public String replyReportClear(){
+        Map<String,Object> result;
+        result = adminService.deleteAllRepReport();
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
 
     public Integer getAccountNum() {
         return accountNum;

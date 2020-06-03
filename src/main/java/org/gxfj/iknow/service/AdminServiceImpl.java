@@ -46,6 +46,8 @@ public class AdminServiceImpl implements AdminService{
     private UserDAO userDAO;
     @Autowired
     CategoriesTypeDAO categoriesTypeDAO;
+    @Autowired
+    ReportTypeDAO reportTypeDAO;
 
     @Override
     public Map<String, Object> login(Integer accountNum, String password) {
@@ -479,7 +481,7 @@ public class AdminServiceImpl implements AdminService{
                 }
                 //删除回答下的所有评论及回复
                 for (Comment comment : answer.getCommentsById()) {
-                    commentDel(comment.getId());
+                    comment.getId();
                 }
                 //删除回答
                 answerDAO.delete(answer);
@@ -527,4 +529,35 @@ public class AdminServiceImpl implements AdminService{
         return result;
     }
 
+    @Override
+    public Map<String, Object> deleteAllQueReport(){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        reportDAO.deleteAllQueReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteAllAnsReport(){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        reportDAO.deleteAllAnsReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteAllComReport(){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        reportDAO.deleteAllComReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteAllRepReport(){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        reportDAO.deleteAllRepReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
 }
