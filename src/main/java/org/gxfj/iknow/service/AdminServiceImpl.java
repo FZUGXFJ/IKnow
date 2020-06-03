@@ -8,17 +8,14 @@ import org.gxfj.iknow.util.SecurityUtil;
 import static org.gxfj.iknow.util.ServiceConstantUtil.*;
 
 import org.gxfj.iknow.util.Time;
+import org.gxfj.iknow.util.UserStateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 /**
@@ -351,7 +348,7 @@ public class AdminServiceImpl implements AdminService{
         replyMap.put("userID",reply.getUserByUserId().getId());
         replyMap.put("content",reply.getContent());
         replyMap.put("date",Time.getTime1(reply.getDate()));
-        replyMap.put("isDelete",reply.getIsDelete()==1 ? "是" : "否");
+        replyMap.put("isDelete",reply.getIsDelete() == 1 ? "是" : "否");
         return replyMap;
     }
 
@@ -364,17 +361,79 @@ public class AdminServiceImpl implements AdminService{
         return result;
     }
 
+    @Autowired
+    UserStateUtil userStateUtill;
+
     @Override
     public Map<String, Object> ban(Integer userID, Integer days) {
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);;
 
+        if (userID != null || days != null) {
+            User user = userDAO.get(userID);
+            if (user != null) {
+                Date lastDate = user.getLastClosureTime();
 
+                Date date = new Date();
+                //如果在惩罚期间了，那在原有的惩罚基础上延长时间
+                if (lastDate != null && lastDate.after(date)) {
+                    date = lastDate;
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.add(Calendar.DAY_OF_YEAR, days);
 
-        return null;
+                date = calendar.getTime();
+                user.setLastClosureTime(date);
+                user.setUserstateByStateId(userStateUtill.getBanState());
+                user.setReportedTimes(user.getReportedTimes() + 1);
+                userDAO.update(user);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
+        }
+
+        return result;
     }
 
     @Override
     public Map<String, Object> estoppel(Integer userID, Integer days) {
-        return null;
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);;
+
+        if (userID != null || days != null) {
+            User user = userDAO.get(userID);
+            if (user != null) {
+                Date lastDate = user.getLastClosureTime();
+
+                Date date = new Date();
+                //如果在惩罚期间了，那在原有的惩罚基础上延长时间
+                if (lastDate != null && lastDate.after(date)) {
+                    date = lastDate;
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.add(Calendar.DAY_OF_YEAR, days);
+
+                Userstate userstate = user.getUserstateByStateId();
+                if (userstate != null ) {
+                    Integer userStateId = userstate.getId();
+                    if (!userStateId.equals(userStateUtill.getEstoppelState().getId()) &&
+                            !userStateId.equals(userStateUtill.getBanState().getId())) {
+                        user.setUserstateByStateId(userStateUtill.getEstoppelState());
+                    }
+                }
+
+                date = calendar.getTime();
+                user.setLastClosureTime(date);
+                user.setReportedTimes(user.getReportedTimes() + 1);
+                userDAO.update(user);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            }
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
+        }
+
+        return result;
     }
 
     @Override
