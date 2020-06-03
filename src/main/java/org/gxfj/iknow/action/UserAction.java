@@ -131,16 +131,15 @@ public class UserAction {
     }
 
     public String getSimpleUserInf() {
-        Map<String,Object> session = ActionContext.getContext().getSession();
+        Map<String, Object> session = ActionContext.getContext().getSession();
         String result=userService.getSimpleUserInf((User) session.get(ConstantUtil.SESSION_USER));
         inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 
     public String editInf() {
-        Map<String,Object> session = ActionContext.getContext().getSession();
-        String result=userService.editUserInf(head,username,gender,introduction,(User) session.get(ConstantUtil.SESSION_USER));
-        inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+        Map<String, Object> result = userService.editUserInf(head,username,gender,introduction);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 
