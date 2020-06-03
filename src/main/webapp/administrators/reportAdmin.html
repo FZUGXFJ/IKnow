@@ -171,7 +171,7 @@
                             </th>
                             <th>
                                 <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer2">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">全部删除</button>
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer3">全部删除</button>
                             </th>
                             <th>
                                 <button class="btn btn-primary btn-sm" data-toggle="modal">退出</button>
@@ -254,6 +254,31 @@
                     <div class="modal-body text-right">
                         <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
                         <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="dels()">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="dialog" class="modal fade bs-example-modal-sm" id="layer3">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ '确认删除么？'}} </h4>
+                    </div>
+                    <div class="modal-body text-right" v-if="questionPage">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="delAllQuestion()">确认</button>
+                    </div>
+                    <div class="modal-body text-right" v-if="anPage">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="delAllAnswer()">确认</button>
+                    </div>
+                    <div class="modal-body text-right" v-if="commentPage">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="delAllComment()">确认</button>
+                    </div>
+                    <div class="modal-body text-right" v-if="replyPage">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="delAllReply()">确认</button>
                     </div>
                 </div>
             </div>
@@ -733,6 +758,120 @@
                 reportAdmin.curAll=false;
                 for(i=0;i<array.length;i++)
                     this.delOne(array[i].id);
+            },
+            delAllQuestion:function(){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/questionReportClear.action",
+                    data:{
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if (result.resultCode === 0) {
+                                reportAdmin.questionLen=0;
+                                reportAdmin.reportInfoList.splice(0,reportAdmin.reportInfoList.length);
+                                if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
+                                    reportAdmin.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                reportAdmin.page();
+                                reportAdmin.curAll=false;
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delAllAnswer:function(){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/answerReportClear.action",
+                    data:{
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if (result.resultCode === 0) {
+                                reportAdmin.answerLen=0;
+                                reportAdmin.reportInfoList.splice(0,reportAdmin.reportInfoList.length);
+                                if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
+                                    reportAdmin.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                reportAdmin.page();
+                                reportAdmin.curAll=false;
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delAllComment:function(){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/commentReportClear.action",
+                    data:{
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if (result.resultCode === 0) {
+                                reportAdmin.commentLen=0;
+                                reportAdmin.reportInfoList.splice(0,reportAdmin.reportInfoList.length);
+                                if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
+                                    reportAdmin.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                reportAdmin.page();
+                                reportAdmin.curAll=false;
+                                console.log("评论");
+                                console.log(reportAdmin.reportInfoList);
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delAllReply:function(){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/replyReportClear.action",
+                    data:{
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if (result.resultCode === 0) {
+                                reportAdmin.replyLen=0;
+                                reportAdmin.reportInfoList.splice(0,reportAdmin.reportInfoList.length);
+                                if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
+                                    reportAdmin.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                reportAdmin.page();
+                                reportAdmin.curAll=false;
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             },
             addActive: function(){
                 if(this.questionPage === true)
