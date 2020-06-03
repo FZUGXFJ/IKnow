@@ -1,0 +1,74 @@
+div{
+    width: 100%;
+}
+table{
+    width: 100%;
+}
+#header{
+    background-color: white;
+    padding: 0.2em 1em;
+    box-shadow: 0 0.2em 0.3em #d6d6d6;
+    position: fixed;
+    top: 0;
+    z-index: 2000;
+}
+#selectMsgType{
+    width: 90%;
+    margin: 0 auto;
+}
+.messageType{
+    padding: 0.5em 0;
+}
+.msgIcon{
+    width: 15%;
+    text-align: center;
+}
+.msgRedDot{
+    width: 5%;
+}
+.msgInfo{
+    width: 80%;
+}
+.msgType{
+    font-size: 0.9em;
+    width: 75%;
+}
+.newestMsgTime{
+    font-size: 0.9em;
+    opacity: 0.5;
+    width: 25%;
+    text-align: right;
+}
+.newestContent{
+    opacity: 0.5;
+    font-size: 0.8em;
+}
+.redDot{
+    width: 0.5em;
+    height: 0.5em;
+    background-color: red;
+    border-radius: 100%;
+    position: relative;
+    top: -1em;
+    left: -0.5em;
+}
+.msgContent{
+    overflow: hidden;;
+    text-overflow: ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+.splitLine{
+    background-color: #acacac;
+    opacity: 0.5;
+    height: 1px;
+    margin: 0.5em 0;
+}
+#sysMsg,#appMsg,#ansMsg,#coAndReMsg{
+    width: 90%;
+    margin: 0 auto;
+}
+.messageItem{
+
+}

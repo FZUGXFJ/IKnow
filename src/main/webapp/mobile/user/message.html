@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>消息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mobile/user/message.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" href="https://lib.baomitu.com/mint-ui/2.2.13/style.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/mint-ui/2.2.13/index.js"></script>
+</head>
+<body>
+<div id="message">
+    <div id="header">
+        <table>
+            <td style="width: 33%;color: #acacac;font-size: 1.5em">
+                <i class="fas fa-times" @click="back"></i>
+            </td>
+            <td style="width: 34%;text-align: center">
+                <span v-if="!loading">{{text}}</span>
+                <span v-else>加载中&nbsp;<i class="fas fa-redo-alt fa-spin" style="color: #acacac"></i></span>
+            </td>
+            <td style="width: 33%;color: #acacac;font-size: 1.5em;text-align: right"></td>
+        </table>
+    </div>
+    <br><br><br>
+    <div id="selectMsgType" v-if="showPanel===0">
+        <div class="messageType" @click="toPanel(1)">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-bell fa-3x" style="color: #3d69ca"></i>
+                </td>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="hasNewestSysMsg"></div>
+                </td>
+                <td class="msgInfo">
+                    <table>
+                        <tr>
+                            <td class="msgType"><b>系统消息</b></td>
+                            <td class="newestMsgTime">
+                                {{newestSysMsg.time}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="newestContent">
+                                <div class="msgContent">
+                                    {{newestSysMsg.content}}
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+            </table>
+        </div>
+        <div class="splitLine"></div>
+        <div class="messageType" @click="toPanel(2)">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-heart fa-3x" style="color: #ff5300"></i>
+                </td>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="hasNewestAppMsg"></div>
+                </td>
+                <td class="msgInfo">
+                    <table>
+                        <tr>
+                            <td class="msgType"><b>赞同与点赞</b></td>
+                            <td class="newestMsgTime">
+                                {{newestAppMsg.time}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="newestContent">
+                                <div class="msgContent">
+                                    {{newestAppMsg.content}}
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+            </table>
+        </div>
+        <div class="splitLine"></div>
+        <div class="messageType" @click="toPanel(3)">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-file-alt fa-3x" style="color:#8100ff;"></i>
+                </td>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="hasNewestAnsMsg"></div>
+                </td>
+                <td class="msgInfo">
+                    <table>
+                        <tr>
+                            <td class="msgType"><b>回答</b></td>
+                            <td class="newestMsgTime">
+                                {{newestAnsMsg.time}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="newestContent">
+                                <div class="msgContent">
+                                    {{newestAnsMsg.content}}
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+            </table>
+        </div>
+        <div class="splitLine"></div>
+        <div class="messageType" @click="toPanel(4)">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-comment-dots fa-3x" style="color: #d3d3d3"></i>
+                </td>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="hasNewestCoAndReMsg"></div>
+                </td>
+                <td class="msgInfo">
+                    <table>
+                        <tr>
+                            <td class="msgType"><b>回答</b></td>
+                            <td class="newestMsgTime">
+                                {{newestCoAndReMsg.time}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="newestContent">
+                                <div class="msgContent">
+                                    {{newestCoAndReMsg.content}}
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+            </table>
+        </div>
+        <div class="splitLine"></div>
+    </div>
+    <div id="sysMsg" v-if="showPanel===1">
+        <div class="messageItem" v-for="systemMessage in systemMessages" @click="showDetail(systemMessage.id)">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-bell fa-3x" style="color: #3d69ca"></i>
+                </td>
+                <td class="msgRedDot" v-if="systemMessage.isRead===0">
+                    <div class="redDot"></div>
+                </td>
+                <td class="msgInfo">
+                    <div style="font-size: 0.9em">
+                        {{systemMessage.time}}
+                    </div>
+                    <div class="msgContent">
+                        {{systemMessage.content}}
+                    </div>
+                </td>
+            </table>
+        </div>
+    </div>
+    <div id="appMsg" v-if="showPanel===2">
+        <div class="messageItem" v-for="approveMessage in approveMessages">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-heart fa-3x" style="color: #ff5300"></i>
+                </td>
+                <td class="msgRedDot" v-if="approveMessage.isRead===0">
+                    <div class="redDot"></div>
+                </td>
+                <td class="msgInfo">
+                    <div style="font-size: 0.9em">
+                        {{approveMessage.time}}
+                    </div>
+                    <div class="msgContent">
+                        {{approveMessage.content}}
+                    </div>
+                </td>
+            </table>
+        </div>
+    </div>
+    <div id="ansMsg" v-if="showPanel===3">
+        <div class="messageItem" v-for="answerMessage in answerMessages">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-file-alt fa-3x" style="color:#8100ff;"></i>
+                </td>
+                <td class="msgRedDot" v-if="answerMessage.isRead===0">
+                    <div class="redDot"></div>
+                </td>
+                <td class="msgInfo">
+                    <div style="font-size: 0.9em">
+                        {{answerMessage.time}}
+                    </div>
+                    <div class="msgContent">
+                        {{answerMessage.content}}
+                    </div>
+                </td>
+            </table>
+        </div>
+    </div>
+    <div id="coAndReMsg" v-if="showPanel===4">
+        <div class="messageItem" v-for="coAndReMessage in coAndReMessages">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-comment-dots fa-3x" style="color: #d3d3d3"></i>
+                </td>
+                <td class="msgRedDot" v-if="coAndReMessage.isRead===0">
+                    <div class="redDot"></div>
+                </td>
+                <td class="msgInfo">
+                    <div style="font-size: 0.9em">
+                        {{coAndReMessage.time}}
+                    </div>
+                    <div class="msgContent">
+                        {{coAndReMessage.content}}
+                    </div>
+                </td>
+            </table>
+        </div>
+    </div>
+    <mt-popup v-model="popupVisible" position="right" style="height: 100%;padding: 1em">
+        <i class="fas fa-times" @click="popupVisible=!popupVisible" style="font-size: 1.5em;color: #acacac"></i>
+        <br>
+        <div v-html="currentMsg">
+
+        </div>
+    </mt-popup>
+</div>
+<script>
+    let message = new Vue({
+        el:"#message",
+        data:{
+            loading:false,
+            text:"消息",
+            messages:[],
+            systemMessages:[],
+            hasNewestSysMsg:false,
+            newestSysMsg:{
+                content:"没有新的消息",
+                time:""
+            },
+            approveMessages:[],
+            hasNewestAppMsg:false,
+            newestAppMsg:{
+                content:"没有新的消息",
+                time:""
+            },
+            answerMessages:[],
+            hasNewestAnsMsg:false,
+            newestAnsMsg:{
+                content:"没有新的消息",
+                time:""
+            },
+            coAndReMessages:[],
+            hasNewestCoAndReMsg:false,
+            newestCoAndReMsg:{
+                content:"没有新的消息",
+                time:""
+            },
+            showPanel:0,
+            popupVisible:false,
+            currentMsg:""
+
+        },
+        methods:{
+            back:function () {
+                if (this.showPanel > 0 ) {
+                    this.showPanel = 0;
+                } else {
+                    history.go(-1);
+                }
+            },
+            clearHtmlTag:function () {
+
+            },
+            showDetail:function (id) {
+                this.popupVisible = true;
+            },
+            toPanel:function (showPanel) {
+                this.showPanel = showPanel;
+            }
+        },
+        mounted:function () {
+            if (sessionStorage.getItem("notice") != null) {
+                this.$toast({
+                    message:sessionStorage.getItem("notice"),
+                    position: 'bottom',
+                    duration: 2000
+                });
+                sessionStorage.removeItem("notice");
+            }
+            $.ajax({
+                type:"POST",
+                url:"../../message/getMessage.action",
+                data:{},
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        result.messages.forEach(function (msg) {
+                            if (msg.type === 1) {
+                                message.systemMessages.push(msg);
+                                message.hasNewestSysMsg = true;
+                            } else if (msg.type === 2) {
+                                message.answerMessages.push(msg);
+                                message.hasNewestAnsMsg = true;
+                            } else if (msg.type === 3) {
+                                message.approveMessages.push(msg);
+                                message.hasNewestAppMsg = true;
+                            } else if (msg.type === 4) {
+                                message.coAndReMessages.push(msg);
+                                message.hasNewestCoAndReMsg = true;
+                            }
+                        });
+                        if (message.hasNewestSysMsg) {
+                            message.newestSysMsg.time = message.systemMessages[0].time;
+                            message.newestSysMsg.content = message.systemMessages[0].content;
+                        }
+                        if (message.hasNewestAnsMsg) {
+                            message.newestAnsMsg.time = message.newestAnsMsg[0].time;
+                            message.newestAnsMsg.content = message.newestAnsMsg[0].content;
+                        }
+                        if (message.hasNewestAppMsg) {
+                            message.newestAppMsg.time = message.newestAppMsg[0].time;
+                            message.newestAppMsg.content = message.newestAppMsg[0].content;
+                        }
+                        if (message.hasNewestCoAndReMsg) {
+                            message.newestCoAndReMsg.time = message.coAndReMessages[0].time;
+                            message.newestCoAndReMsg.content = message.coAndReMessages[0].content;
+                        }
+                        this.loading = false;
+                    } else {
+                        location.href = "user/login.html?boot=0";
+                    }
+                },
+                error: function (request, status, error) {
+                    alert("系统异常！");
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
