@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -46,7 +47,7 @@ public class IdentityAction {
      */
     public String stuAuthentication(){
         Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String,Object> result = identityService.getSchool(keyword);
+        Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         User user=(User)session.get(ConstantUtil.SESSION_USER);
         if(user==null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN_TWO);
@@ -64,7 +65,6 @@ public class IdentityAction {
         return ConstantUtil.RETURN_STRING;
     }
 
-    
     public String getKeyword() {
         return keyword;
     }
