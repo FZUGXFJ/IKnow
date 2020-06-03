@@ -256,7 +256,6 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String,Object> getUserInfo(Integer userId){
         Map<String,Object> userMap = new HashMap<>(MIN_HASH_MAP_NUM);
-        List<Map<String,Object>> userListMap = new ArrayList<>();
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         User user = userDAO.get(userId);
         userMap.put("id",user.getId());
@@ -268,8 +267,7 @@ public class AdminServiceImpl implements AdminService{
         userMap.put("state",user.getUserstateByStateId().getState());
         userMap.put("identity",user.getUseridentityByIdentityId().getType());
         userMap.put("reportedTimes",user.getReportedTimes());
-        userListMap.add(userMap);
-        result.put("userInfos",userListMap);
+        result.put("userInfos",userMap);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
