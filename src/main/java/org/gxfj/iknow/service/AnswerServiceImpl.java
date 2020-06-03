@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
@@ -42,9 +43,19 @@ public class AnswerServiceImpl implements AnswerService{
     final static private int QUESTION_STATE_UN_SOLVE = 1;
     final static private int ANONYMOUS = 1;
     @Override
-    public String getQuestiontitle(Integer questionId) {
-        Question question = questionDAO.getNotDelete(questionId);
-        return question.getTitle();
+    public Map<String, Object> getQuestiontitle(User user, Integer questionId) {
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+        }
+        else if(questionId == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.MISS_QUESTIONID);
+        }
+        else{
+            result.put("title" , questionDAO.getNotDelete(questionId).getTitle());
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
     }
 
     @Override
