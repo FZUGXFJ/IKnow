@@ -59,9 +59,9 @@ public class AdminAction {
      */
     public String login(){
 
-        Map<String, Object> resultMap = adminService.login(accountNum, password);
+        Map<String, Object> result = adminService.login(accountNum, password);
 
-        inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
@@ -94,7 +94,6 @@ public class AdminAction {
         } else if (typeSum == ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_TYPE_CODE) {
             result = adminService.getMonthlyActiveUserData(dateNow, ConstantUtil.MONTHLY_ACTIVATE_USER_STATICS_LENGTH);
         }
-
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -104,7 +103,6 @@ public class AdminAction {
      */
     public String questionTypeSum(){
         Map<String,Object> result = adminService.getQuestionTypeSumData();
-
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -168,7 +166,6 @@ public class AdminAction {
     public String reportDel(){
         Map<String,Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         result = adminService.deleteReport(reportID);
-
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
