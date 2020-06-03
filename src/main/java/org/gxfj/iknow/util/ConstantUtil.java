@@ -88,4 +88,8 @@ public class ConstantUtil {
     public final static Integer AUTHENTICATION_FAILED = 1;
 
 
+    /**
+     * 前端发来的数据出错
+     */
+    public static final Integer RESULT_CODE_PARAMS_ERROR = 2;
 }
