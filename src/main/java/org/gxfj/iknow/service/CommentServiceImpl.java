@@ -339,9 +339,15 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean deleteComment(Integer commentId, User user) {
         Comment comment=commentDAO.get(commentId);
-        User user1=comment.getUserByUserId();
-        if(user1.getId().equals(user.getId())){
-            comment.setIsDelete((byte)1);
+        User commentUserByUserId = comment.getUserByUserId();
+        if(commentUserByUserId.getId().equals(user.getId())){
+            comment.setIsDelete(Comment.COMMENT_DELETED);
+
+            for (Reply reply : comment.getRepliesById()) {
+                replyDAO.delete(reply);
+            }
+            commentDAO.delete(comment);
+
             commentDAO.update(comment);
             return true;
         }

@@ -1,7 +1,5 @@
 package org.gxfj.iknow.service;
 
-import com.fasterxml.jackson.databind.util.ObjectBuffer;
-import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
@@ -37,11 +35,11 @@ public class AnswerServiceImpl implements AnswerService{
     private OppositionAnswerDAO oppositionAnswerDAO;
     @Autowired
     ExpUtil expUtil;
+    @Autowired
+    ReplyDAO replyDAO;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
-    final static private int QUESTION_STATE_SOLVE = 2;
-    final static private int QUESTION_STATE_UN_SOLVE = 1;
     final static private int ANONYMOUS = 1;
     @Override
     public Map<String, Object> getQuestiontitle(User user, Integer questionId) {
@@ -273,7 +271,7 @@ public class AnswerServiceImpl implements AnswerService{
 
         //构造已解决的问题状态对象
         Questionstate questionstate = new Questionstate();
-        questionstate.setId(QUESTION_STATE_SOLVE);
+        questionstate.setId(Questionstate.QUESTION_STATE_SOLVED_ID);
 
         if (user.getId().equals(question.getUserByUserId().getId())) {
             //更新问题的采纳回答id
@@ -313,7 +311,7 @@ public class AnswerServiceImpl implements AnswerService{
         question.setAnswerByAdoptId(answerNull);
         //构造未解决的问题状态
         Questionstate questionstate = new Questionstate();
-        questionstate.setId(QUESTION_STATE_UN_SOLVE);
+        questionstate.setId(Questionstate.QUESTION_STATE_UN_SOLVE_ID);
         question.setQuestionstateByStateId(questionstate);
         questionDAO.update(question);
     }
@@ -715,6 +713,14 @@ public class AnswerServiceImpl implements AnswerService{
         if( answer.getQuestionByQuestionId().getAnswerByAdoptId() !=null
                 && answer.getQuestionByQuestionId().getAnswerByAdoptId().getId().equals(answerId)){
             setQuestionNotAdopt(answer.getQuestionByQuestionId());
+        }
+        for (Comment comment : answer.getCommentsById()) {
+            Collection<Reply> replyCollection = comment.getRepliesById();
+
+            for (Reply reply : replyCollection) {
+                replyDAO.delete(reply);
+            }
+            commentDAO.delete(comment);
         }
         answerDAO.delete(answer);
 

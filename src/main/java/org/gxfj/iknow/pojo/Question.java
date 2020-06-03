@@ -6,8 +6,8 @@ import java.util.Date;
 
 @Entity
 public class Question {
-    public static final int QUESTION_UN_DELETED = 0;
-    public static final int QUESTION_DELETED = 1;
+    public static final byte QUESTION_UN_DELETED = 0;
+    public static final byte QUESTION_DELETED = 1;
 
     private Integer id;
     private String title;

@@ -6,8 +6,8 @@ import java.util.Date;
 
 @Entity
 public class Reply {
-    public static final int REPLY_UN_DELETE = 0;
-    public static final int REPLY_DELETE = 1;
+    public static final byte REPLY_UN_DELETE = 0;
+    public static final byte REPLY_DELETE = 1;
 
     private Integer id;
     private String content;

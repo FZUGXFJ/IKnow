@@ -6,8 +6,8 @@ import java.util.Date;
 
 @Entity
 public class Answer {
-    public static final int ANSWER_UN_DELETED = 0;
-    public static final int ANSWER_DELETED = 1;
+    public static final byte ANSWER_UN_DELETED = 0;
+    public static final byte ANSWER_DELETED = 1;
 
     private Integer id;
     private String contentHtml;
