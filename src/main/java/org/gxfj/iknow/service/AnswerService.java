@@ -111,18 +111,17 @@ public interface AnswerService {
 
     /**
      * 删除回答
-     * @param user 用户
      * @param answerId 回答id
      * @return 是否成功
      */
-    public boolean deleteAnswer(User user , Integer answerId);
+    public Map<String, Object> deleteAnswer(Integer answerId);
 
     /**
      * 获取原回答的内容
      * @param answerId 回答id
      * @return 包含原回答内容的map
      */
-    public String getAnswerContent(Integer answerId);
+    public Map<String, Object> getAnswerContent(Integer answerId);
 
     /**
      * 更新回答内容
@@ -130,5 +129,5 @@ public interface AnswerService {
      * @param content 新的回答内容
      * @return 是否成功
      */
-    public boolean updateAnswerContent(Integer answerId, String content);
+    public Map<String, Object> updateAnswerContent(Integer answerId, String content);
 }
