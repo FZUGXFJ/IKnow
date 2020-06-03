@@ -640,7 +640,7 @@ public class AnswerServiceImpl implements AnswerService{
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         }
-        else if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) != -1){
+        else if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
             Answer answer=answerDAO.get(answerId);
             Approvalanswer approvalanswer=new Approvalanswer();
             approvalanswer.setDate(new Date());
@@ -654,10 +654,10 @@ public class AnswerServiceImpl implements AnswerService{
             MessageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
                     "</a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
                     answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS );
         }
         else{
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
         }
         return result;
     }
