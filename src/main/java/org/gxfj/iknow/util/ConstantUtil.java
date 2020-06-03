@@ -83,5 +83,9 @@ public class ConstantUtil {
     public final static String NO_USER = null;
     public final static int WRONG_PASSWORD = 1;
 
+    //IdentityAction
+    //认证失败
+    public final static Integer AUTHENTICATION_FAILED = 1;
+
 
 }
