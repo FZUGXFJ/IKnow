@@ -50,13 +50,10 @@ public class TextVerifyUtil {
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
-
         String url = VERIFY_URL + "?" + params;
         System.out.println(url);
         // 创建Post请求
         HttpPost httpPost = new HttpPost(url);
-
-
         // 设置ContentType(注:如果只是传普通参数的话,ContentType不一定非要用application/json)
         httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
