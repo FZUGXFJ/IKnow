@@ -139,7 +139,7 @@ public class AnswerDAOImpl implements AnswerDAO{
     @Override
     public Integer getUserAnswersCount(Integer userId) {
         Query query = getSession().createQuery("select count(a) from Answer as a WHERE " +
-                "( userID= " + userId + " ) ");
+                "( userID= " + userId + " ) and (isDelete = 0)");
         return ((Long)query.uniqueResult()).intValue();
     }
 
