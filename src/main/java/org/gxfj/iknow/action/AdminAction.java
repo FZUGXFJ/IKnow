@@ -218,12 +218,12 @@ public class AdminAction {
         return reportType;
     }
 
-    public void setUserId(Integer userID) {
-        this.userID = userID;
+    public Integer getUserID() {
+        return userID;
     }
 
-    public Integer getUserId() {
-        return userID;
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 
     public Integer getTypeID() {
