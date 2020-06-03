@@ -109,19 +109,12 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 赞同回答
+     * @return SUCCESS
+     */
     public String approveAnswer(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        }
-        else if(!answerService.approveAnswer(answerId,user)){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
-        }
-        else{
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = answerService.approveAnswer(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

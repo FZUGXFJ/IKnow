@@ -634,8 +634,13 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public boolean approveAnswer(Integer answerId, User user) {
-        if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) == -1){
+    public Map<String, Object> approveAnswer(Integer answerId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+        }
+        else if(approvalAnswerDAO.searchByUserIdandAnswerId(user.getId(),answerId) != -1){
             Answer answer=answerDAO.get(answerId);
             Approvalanswer approvalanswer=new Approvalanswer();
             approvalanswer.setDate(new Date());
@@ -649,9 +654,12 @@ public class AnswerServiceImpl implements AnswerService{
             MessageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
                     "</a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
                     answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
-            return true;
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 2 );
         }
-        return false;
+        else{
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
     }
 
     @Override

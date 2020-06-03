@@ -60,10 +60,9 @@ public interface AnswerService {
     /**
      * 点赞回答
      * @param answerId 回答id
-     * @param user 点赞用户
      * @return 是否点赞
      */
-    public boolean approveAnswer(Integer answerId,User user);
+    public Map<String, Object> approveAnswer(Integer answerId);
 
     /**
      * 取消点赞
