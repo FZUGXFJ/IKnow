@@ -448,7 +448,7 @@ public class AdminServiceImpl implements AdminService{
             Collection<Answer> answerCollection = question.getAnswersById();
 
             for (Answer answer : answerCollection) {
-                ((AdminService)AopContext.currentProxy()).answerDel(answer.getId());
+                answerDel(answer.getId());
             }
             questionDAO.delete(question);
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
@@ -460,7 +460,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Map<String, Object> answerDel(Integer answerID) {
-        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);;
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         if (answerID != null) {
             Answer answer = answerDAO.get(answerID);
             if (answer != null) {
@@ -479,13 +479,7 @@ public class AdminServiceImpl implements AdminService{
                 }
                 //删除回答下的所有评论及回复
                 for (Comment comment : answer.getCommentsById()) {
-                    ((AdminService)AopContext.currentProxy()).commentDel(comment.getId());
-                    Collection<Reply> replyCollection = comment.getRepliesById();
-
-                    for (Reply reply : replyCollection) {
-                        replyDAO.delete(reply);
-                    }
-                    commentDAO.delete(comment);
+                    commentDel(comment.getId());
                 }
                 //删除回答
                 answerDAO.delete(answer);
@@ -500,28 +494,37 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Map<String, Object> commentDel(Integer commentID) {
-        Map<String, Object> result = null;
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
 
         if (commentID != null) {
             Comment comment = commentDAO.get(commentID);
-            User commentUserByUserId = comment.getUserByUserId();
-            comment.setIsDelete(Comment.COMMENT_DELETED);
-
-            for (Reply reply : comment.getRepliesById()) {
-                replyDAO.delete(reply);
+            if (comment != null) {
+                for (Reply reply : comment.getRepliesById()) {
+                    replyDAO.delete(reply);
+                }
+                commentDAO.delete(comment);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             }
-            commentDAO.delete(comment);
-
-            commentDAO.update(comment);
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         } else {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
         }
-        return null;
+        return result;
     }
 
     @Override
     public Map<String, Object> replyDel(Integer replyID) {
-        return null;
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        if (replyID != null) {
+            Reply reply =replyDAO.get(replyID);
+            if (reply != null) {
+                replyDAO.delete(reply);
+            }
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        } else {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
+        }
+
+        return result;
     }
+
 }
