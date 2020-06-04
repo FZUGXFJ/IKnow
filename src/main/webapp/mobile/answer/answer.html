@@ -51,8 +51,8 @@
     </div>
     <div id="separator" v-if="load"></div>
     <div id="answererInf" v-if="load">
-        <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">
-            <h5><i class="fas fa-check"></i>此回答已被采纳</h5>
+        <div v-if="answer.isAdopt===1" style="color: #00a6ee;padding: 0.3em 0">
+            <h6><i class="fas fa-award"></i>&nbsp;此回答已被采纳</h6>
         </div>
         <table>
             <td style="width: 10%">
@@ -63,12 +63,12 @@
             </td>
             <td style="width: 40%;text-align: right">
                 <span class="lb">
-                    <b style="color: #12eee7">LV</b>
+                    <b style="color: #00d6ee">LV</b>
                     <i>{{answerer.level}}</i>
                 </span>
                 &nbsp;
                 <span class="lb">
-                    <i class="fas fa-award fa-1x" style="color: #12eee7"></i>
+                    <i class="fas fa-award fa-1x" style="color: #00d6ee"></i>
                     <i>{{answerer.badgeNum}}</i>
                 </span>
             </td>

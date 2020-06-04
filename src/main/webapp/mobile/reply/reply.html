@@ -212,9 +212,11 @@
                         if (result.resultCode === 0) {
                             location.href = "../reply/reply.html?commentId=" + commentId;
                         } else if (result.resultCode === 1) {
-                            if (confirm("登录后才能发送回复")) {
-                                location.href = "../user/login.html?boot=0"
-                            }
+                            allReply.$messagebox.confirm("请先登录").then(action =>{
+                                location.href = "../user/login.html?boot=0";
+                            }).catch(action =>{});
+                        } else if (result.resultCode === 10) {
+                            allReply.$messagebox.alert('内容中含有敏感词').then(action => {});
                         }
                     },
                     error: function (request, status, error) {
@@ -259,9 +261,9 @@
                                 comment.isApproved = 1;
                                 comment.approveNum += 1;
                             } else if (result.resultCode === 1) {
-                                if (confirm("请先登录")) {
+                                allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
-                                }
+                                }).catch(action =>{});
                             }
                             allReply.noAction = false;
                         },
@@ -284,9 +286,9 @@
                                 comment.isApproved = 0;
                                 comment.approveNum -= 1;
                             } else if (result.resultCode === 1) {
-                                if (confirm("请先登录")) {
+                                allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
-                                }
+                                }).catch(action =>{});
                             }
                             allReply.noAction = false;
                         },
@@ -321,9 +323,9 @@
                                 reply.isApproved = 1;
                                 reply.approveNum += 1;
                             } else if (result.resultCode === 1) {
-                                if (confirm("请先登录")) {
+                                allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
-                                }
+                                }).catch(action =>{});
                             }
                             allReply.noAction = false;
                         },
@@ -346,9 +348,9 @@
                                 reply.isApproved = 0;
                                 reply.approveNum -= 1;
                             } else if (result.resultCode === 1) {
-                                if (confirm("请先登录")) {
+                                allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
-                                }
+                                }).catch(action =>{});
                             }
                             allReply.noAction = false;
                         },
