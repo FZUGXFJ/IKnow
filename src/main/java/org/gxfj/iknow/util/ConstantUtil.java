@@ -10,8 +10,14 @@ public class ConstantUtil {
      * 返回的JSON中resultCode的值，代表用户未登录
      */
     public final static Integer UN_LOGIN = 1;
-
+    /**
+     * 返回的JSON中resultCode的值，代表内容存在敏感词
+     */
     public final static int JSON_RESULT_CODE_VERIFY_TEXT_FAIL = 10;
+    /**
+     * 返回的JSON中resultCode的值，代表用户被封禁
+     */
+    public final static int JSON_RESULT_CODE_BAN = 11;
 
     public final static int NO_MORE = 1;
     public final static String JSON_RETURN_CODE_NAME = "resultCode";
