@@ -159,49 +159,32 @@ public class AnswerAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 删除回答
+     * @return SUCCESS
+     */
     public String deleteAnswer(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if (user == null) {
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
-        } else {
-            if(answerService.isAnswerer(answerId,user)) {
-                answerService.deleteAnswer(user, answerId);
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            } else{
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
-            }
-        }
+        Map<String, Object> response =answerService.deleteAnswer(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得回答的内容
+     * @return
+     */
     public String getAnswerInfo(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if (user == null) {
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
-        } else {
-            if(answerService.isAnswerer(answerId,user)) {
-                response.put("content",answerService.getAnswerContent(answerId));
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            } else{
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.USER_IS_NOT_ANSWERER_TWO);
-            }
-        }
+        Map<String, Object> response = answerService.getAnswerContent(answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 编辑问题
+     * @return SUCCESS
+     */
     public String updateAnswer(){
-        Map<String, Object> response=new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        if (answerService.updateAnswerContent(answerId, content)) {
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        } else {
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
-        }
+        Map<String, Object> response=answerService.updateAnswerContent(answerId,content);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

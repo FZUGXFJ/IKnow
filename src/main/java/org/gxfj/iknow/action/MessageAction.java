@@ -32,16 +32,7 @@ public class MessageAction {
      * @return 前端
      */
     public String getMessage(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response;
-        User user = (User)session.get(SESSION_USER);
-        if(user == null){
-            response=messageService.messageInf(null);
-        }
-        else {
-            response=messageService.messageInf(user);
-        }
-
+        Map<String, Object> response = messageService.messageInf();
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
@@ -51,16 +42,7 @@ public class MessageAction {
      * @return 前端
      */
     public String readMessage(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response;
-        User user = (User)session.get(SESSION_USER);
-        if(user == null){
-            response=messageService.readMessage(null,messageId);
-        }
-        else {
-            response=messageService.readMessage(user,messageId);
-        }
-
+        Map<String, Object> response = messageService.readMessage(messageId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }

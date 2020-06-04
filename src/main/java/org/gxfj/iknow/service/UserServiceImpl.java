@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
-import org.gxfj.iknow.util.ConstantUtil;
-import org.gxfj.iknow.util.ExpUtil;
-import org.gxfj.iknow.util.MailUtil;
-import org.gxfj.iknow.util.SecurityUtil;
+import org.gxfj.iknow.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
@@ -194,16 +191,32 @@ public class UserServiceImpl<result> implements UserService{
     }
 
     @Override
-    public String editUserInf(String head, String username, String gender, String introduction,User userInf) {
-        if (!username.equals(userInf.getName()) && userDAO.hasUsername(username)) {
-            return "{\"resultCode\":1}";
+    public Map<String, Object> editUserInf(String head, String username, String gender, String introduction) {
+        Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        User user = (User)session.get(ConstantUtil.SESSION_USER);
+        //TODO: 统一接口势不可挡
+        if (user == null) {
+            //TODO: 未登录和用户名被占用是一样的返回码
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+            return result;
         }
-        userInf.setHead(head);
-        userInf.setGender(gender);
-        userInf.setName(username);
-        userInf.setIntroduction(introduction);
-        userDAO.update(userInf);
-        return "{\"resultCode\":0}";
+        if (!username.equals(user.getName()) && userDAO.hasUsername(username)) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, 1);
+            return result;
+        }
+        if (!TextVerifyUtil.verifyCompliance(username) || !TextVerifyUtil.verifyCompliance(introduction)) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            return result;
+        }
+
+        user.setHead(head);
+        user.setGender(gender);
+        user.setName(username);
+        user.setIntroduction(introduction);
+        userDAO.update(user);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
     }
 
     @Override

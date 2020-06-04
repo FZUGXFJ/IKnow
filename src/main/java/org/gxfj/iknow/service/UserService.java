@@ -64,10 +64,9 @@ public interface UserService {
      * @param username 新用户名
      * @param gender 新性别
      * @param introduction 新介绍信息
-     * @param userinf 旧的用户信息
      * @return json数据 resultCode：响应数据码，0表示修改成功，1表示用户名已占用
      */
-    public String editUserInf(String head,String username,String gender,String introduction,User userinf);
+    public Map<String, Object> editUserInf(String head,String username,String gender,String introduction);
 
 
     /**

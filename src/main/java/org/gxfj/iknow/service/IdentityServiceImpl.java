@@ -40,38 +40,58 @@ public class IdentityServiceImpl implements IdentityService{
         List<Map<String, Object>> schoolsListMap = new ArrayList<>();
         Map<String, Object> schoolMap;
         for(School school:schools){
-            schoolMap = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+            schoolMap = new HashMap<>(HASH_MAP_NUM);
             schoolMap.put("id",school.getId());
             schoolMap.put("name",school.getName());
             schoolsListMap.add(schoolMap);
         }
         resultMap.put("schools",schoolsListMap);
+        resultMap.put(RETURN_STRING, SUCCESS);
+        resultMap.put(JSON_RETURN_CODE_NAME, SUCCESS);
         return resultMap;
     }
 
     @Override
-    public boolean stuAuthentication(User user,Integer schoolId,String realName,String studentNum){
-        Useridentity useridentity = userIdentityDAO.getStuIdentitie(user.getId(),schoolId,realName,studentNum);
-        if(useridentity == null){
-            return false;
-        }else {
-            user.setIsAttest((byte)1);
-            user.setUseridentityByIdentityId(useridentity);
-            userDAO.update(user);
-            return true;
+    public Map<String, Object> stuAuthentication(String schoolName,String realName,String studentNum){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        School school = schoolDAO.getSchoolByName(schoolName);
+        Useridentity useridentity = userIdentityDAO.getStuIdentitie(user.getId(),school.getId(),realName,studentNum);
+        if(user==null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN_TWO);
         }
+        else {
+            if (useridentity != null){
+                user.setIsAttest((byte)1);
+                user.setUseridentityByIdentityId(useridentity);
+                userDAO.update(user);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+            }
+            else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.AUTHENTICATION_FAILED);
+            }
+        }
+       return result;
     }
 
     @Override
-    public boolean teaAuthentication(User user,Integer schoolId,String realName,String jobNum){
-        Useridentity useridentity = userIdentityDAO.getTeaIdentitie(user.getId(),schoolId,realName,jobNum);
-        if(useridentity == null){
-            return false;
-        }else {
-            user.setIsAttest((byte)1);
-            user.setUseridentityByIdentityId(useridentity);
-            userDAO.update(user);
-            return true;
+    public Map<String, Object> teaAuthentication(String schoolName,String realName,String jobNum) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        School school = schoolDAO.getSchoolByName(schoolName);
+        Useridentity useridentity = userIdentityDAO.getTeaIdentitie(user.getId(), school.getId(), realName, jobNum);
+        if (user == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN_TWO);
+        } else {
+            if (useridentity != null) {
+                user.setIsAttest((byte) 1);
+                user.setUseridentityByIdentityId(useridentity);
+                userDAO.update(user);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.AUTHENTICATION_FAILED);
+            }
         }
+        return result;
     }
 }

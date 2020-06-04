@@ -24,8 +24,8 @@ public class IdentityAction {
     IdentityService identityService;
 
     private String keyword;
-    //学校id
-    private Integer school;
+    //学校名
+    private String school;
     private String realName;
     private String studentNum;
     private String jobNum;
@@ -37,8 +37,6 @@ public class IdentityAction {
      */
     public String getSchools(){
         Map<String,Object> result = identityService.getSchool(keyword);
-        result.put(ConstantUtil.RETURN_STRING,ConstantUtil.SUCCESS);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -47,20 +45,7 @@ public class IdentityAction {
      * 学生认证
      */
     public String stuAuthentication(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-        User user=(User)session.get(ConstantUtil.SESSION_USER);
-        if(user==null){
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN_TWO);
-        }
-        else {
-            if (identityService.stuAuthentication(user,school,realName,studentNum)){
-                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-            }
-            else {
-                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.AUTHENTICATION_FAILED);
-            }
-        }
+        Map<String,Object> result = identityService.stuAuthentication(school , realName , studentNum);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -69,20 +54,7 @@ public class IdentityAction {
      * 教师认证
      */
     public String teaAuthentication(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-        User user=(User)session.get(ConstantUtil.SESSION_USER);
-        if(user==null){
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN_TWO);
-        }
-        else {
-            if (identityService.teaAuthentication(user,school,realName,jobNum)){
-                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-            }
-            else {
-                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.AUTHENTICATION_FAILED);
-            }
-        }
+        Map<String,Object> result = identityService.teaAuthentication(school, realName, jobNum);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -119,11 +91,11 @@ public class IdentityAction {
         this.jobNum = jobNum;
     }
 
-    public Integer getSchool() {
+    public String getSchool() {
         return school;
     }
 
-    public void setSchool(Integer school) {
+    public void setSchool(String school) {
         this.school = school;
     }
 

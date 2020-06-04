@@ -3,14 +3,11 @@ package org.gxfj.iknow.service;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
-import org.gxfj.iknow.util.ConstantUtil;
-import org.gxfj.iknow.util.SecurityUtil;
+import org.gxfj.iknow.util.*;
 
 import static org.gxfj.iknow.pojo.Questionstate.QUESTION_STATE_UN_SOLVE_ID;
 import static org.gxfj.iknow.util.ServiceConstantUtil.*;
 
-import org.gxfj.iknow.util.Time;
-import org.gxfj.iknow.util.UserStateUtil;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +45,8 @@ public class AdminServiceImpl implements AdminService{
     CategoriesTypeDAO categoriesTypeDAO;
     @Autowired
     ReportTypeDAO reportTypeDAO;
+    @Autowired
+    MessageUtil messageUtil;
 
     @Override
     public Map<String, Object> login(Integer accountNum, String password) {
@@ -276,10 +275,10 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Map<String, Object> getReportedQuestion(Integer questioinId) {
+    public Map<String, Object> getReportedQuestion(Integer questionId) {
         Map<String, Object> questionMap = new HashMap<>(MIN_HASH_MAP_NUM);
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
-        Question question = questionDAO.get(questioinId);
+        Question question = questionDAO.get(questionId);
         questionMap.put("id", question.getId());
         questionMap.put("userID", question.getUserByUserId().getId());
         questionMap.put("title", question.getTitle());
@@ -305,7 +304,7 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String, Object> getAnswerReported(Integer typeId, Integer type) {
         Map<String,Object> map;
-        List<Map<String,Object>> answerListMap = new ArrayList<>();
+
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         switch(type){
             case 0 :
@@ -320,8 +319,8 @@ public class AdminServiceImpl implements AdminService{
             default :
                 map = null;
         }
-        answerListMap.add(map);
-        result.put("answerReported",answerListMap);
+
+        result.put("answerReported",map);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
@@ -452,8 +451,14 @@ public class AdminServiceImpl implements AdminService{
             for (Answer answer : answerCollection) {
                 answerDel(answer.getId());
             }
+            User user = question.getAnswerByAdoptId().getUserByUserId();
+            user.setBadgeNum(user.getBadgeNum() - 1);
             questionDAO.delete(question);
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+
+            messageUtil.newMessage(1,question.getUserByUserId(),
+                    "<p>你发布的问题<b>\""+ question.getTitle() +"\"<b>被举报了，快去看看吧</P>");
+
         } else {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);
         }
@@ -478,6 +483,9 @@ public class AdminServiceImpl implements AdminService{
                     questionstate.setId(Questionstate.QUESTION_STATE_UN_SOLVE_ID);
                     question.setQuestionstateByStateId(questionstate);
                     questionDAO.update(question);
+                    //减少被采纳用户的徽章数
+                    User user = question.getUserByUserId();
+                    user.setBadgeNum(user.getBadgeNum() - 1);
                 }
                 //删除回答下的所有评论及回复
                 for (Comment comment : answer.getCommentsById()) {
@@ -485,6 +493,10 @@ public class AdminServiceImpl implements AdminService{
                 }
                 //删除回答
                 answerDAO.delete(answer);
+
+                messageUtil.newMessage(1,answer.getUserByUserId(),
+                        "<p>你发布的回答被举报了，快去看看吧</p>");
+
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             }
         } else {
@@ -505,6 +517,8 @@ public class AdminServiceImpl implements AdminService{
                     replyDAO.delete(reply);
                 }
                 commentDAO.delete(comment);
+                messageUtil.newMessage(1,comment.getUserByUserId(),
+                        "<p>你发布的评论被举报了，快去看看吧</p>");
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             }
         } else {
@@ -521,6 +535,8 @@ public class AdminServiceImpl implements AdminService{
             if (reply != null) {
                 replyDAO.delete(reply);
             }
+            messageUtil.newMessage(1,reply.getUserByUserId(),
+                    "<p>你发布的回复被举报了，快去看看吧</p>");
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         } else {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_PARAMS_ERROR);

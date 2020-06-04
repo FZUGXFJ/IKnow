@@ -1,8 +1,10 @@
 package org.gxfj.iknow.service;
 
+import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.MessageDAO;
 import org.gxfj.iknow.pojo.Message;
 import org.gxfj.iknow.pojo.User;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.gxfj.iknow.util.HtmlUtil;
 import org.gxfj.iknow.util.Time;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,12 @@ public class MessageServiceImpl implements MessageService{
     @Autowired
     MessageDAO messageDAO;
     @Override
-    public Map<String, Object> messageInf(User user) {
-        Map<String,Object> response = new HashMap<>(20);
+    public Map<String, Object> messageInf() {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null){
-            response.put("resultCode",1);
-            return response;
+            result.put("resultCode",1);
+            return result;
         }
         else {
             List<Map<String,Object>> messages = new ArrayList<>();
@@ -40,30 +43,31 @@ public class MessageServiceImpl implements MessageService{
 
                 messages.add(message);
             }
-            response.put("messages",messages);
-            response.put("resultCode",0);
-            return response;
+            result.put("messages",messages);
+            result.put("resultCode",ConstantUtil.SUCCESS);
+            return result;
         }
     }
 
     @Override
-    public Map<String, Object> readMessage(User user, Integer messageId) {
-        Map<String,Object> response = new HashMap<>(20);
+    public Map<String, Object> readMessage( Integer messageId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null){
-            response.put("resultCode",1);
-            return response;
+            result.put("resultCode",1);
+            return result;
         }
         else {
             Message message = messageDAO.get(messageId);
-            if(user.getId().equals(message.getId())){
-                response.put("resultCode",2);
-                return response;
+            if(!user.getId().equals(message.getUserByUserId().getId())){
+                result.put("resultCode",2);
+                return result;
             }
             message.setIsRead((byte)1);
             messageDAO.update(message);
-            response.put("resultCode",0);
-            response.put("content",message.getContent());
-            return response;
+            result.put("resultCode",0);
+            result.put("content",message.getContent());
+            return result;
         }
     }
 }
