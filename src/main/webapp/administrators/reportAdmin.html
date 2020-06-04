@@ -337,7 +337,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="table-responsive" v-if="questionPage">
+            <div class="table-responsive" v-if="questionPage&& reportInfoList.length>0">
                 <h5 style="font-weight: bold">问题信息:</h5>
                 <table class="table table-striped table-sm">
                     <tbody>
@@ -353,7 +353,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="table-responsive" v-if="questionPage">
+            <div class="table-responsive" v-if="questionPage && reportInfoList.length>0">
                 <table class="table table-striped table-sm">
                     <tbody>
                     <tr>
@@ -399,19 +399,19 @@
                 </table>
             </div>
 
-            <div class="table-responsive" v-if="anPage">
+            <div class="table-responsive" v-if="anPage && reportInfoList.length>0">
                 <h5 style="font-weight: bold">回答信息:</h5>
                 <table class="table table-striped table-sm">
                     <tbody>
                     <tr>
-                        <td>回答ID:{{reportedInfo[0].id}}</td>
-                        <td>创建时间:{{reportedInfo[0].date}}</td>
-                        <td>是否删除:{{reportedInfo[0].isDelete}}</td>
+                        <td>回答ID:{{reportedInfo.id}}</td>
+                        <td>创建时间:{{reportedInfo.date}}</td>
+                        <td>是否删除:{{reportedInfo.isDelete}}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="table-responsive" v-if="anPage">
+            <div class="table-responsive" v-if="anPage && reportInfoList.length>0">
                 <table class="table table-striped table-sm">
                     <tbody>
                     <tr>
@@ -420,7 +420,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td v-html="reportedInfo[0].content">
+                        <td v-html="reportedInfo.content">
                         </td>
                     </tr>
                     <tr>
@@ -462,9 +462,9 @@
                 <table class="table table-striped table-sm">
                     <tbody>
                     <tr>
-                        <td>评论ID:{{reportedInfo[0].id}}</td>
-                        <td>创建时间:{{reportedInfo[0].date}}</td>
-                        <td>是否删除:{{reportedInfo[0].isDelete}}</td>
+                        <td>评论ID:{{reportedInfo.id}}</td>
+                        <td>创建时间:{{reportedInfo.date}}</td>
+                        <td>是否删除:{{reportedInfo.isDelete}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -478,7 +478,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td v-html="reportedInfo[0].content">
+                        <td v-html="reportedInfo.content">
                         </td>
                     </tr>
                     <tr>
@@ -520,9 +520,9 @@
                 <table class="table table-striped table-sm">
                     <tbody>
                     <tr>
-                        <td>回复ID:{{reportedInfo[0].id}}</td>
-                        <td>创建时间:{{reportedInfo[0].date}}</td>
-                        <td>是否删除:{{reportedInfo[0].isDelete}}</td>
+                        <td>回复ID:{{reportedInfo.id}}</td>
+                        <td>创建时间:{{reportedInfo.date}}</td>
+                        <td>是否删除:{{reportedInfo.isDelete}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -536,7 +536,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td v-html="reportedInfo[0].content">
+                        <td v-html="reportedInfo.content">
                         </td>
                     </tr>
                     <tr>
