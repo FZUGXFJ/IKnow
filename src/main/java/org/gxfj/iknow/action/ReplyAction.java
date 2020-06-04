@@ -37,86 +37,37 @@ public class ReplyAction {
 
     public InputStream getInputStream() { return inputStream; }
     final static private int RESPONSE_NUM = 20;
+
+    /**
+     * 发送回复
+     * @return SUCCESS
+     */
     public String sendReply(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if(user == null){
-            response.put("resultCode" , UN_LOGIN);
-        } else if(content == null){
-            response.put("resultCode" , MISS_COMMENT_INF );
-        } else{
-            if (replyService.postReply(commentId,content, replyTarget,user) != null) {
-                response.put("resultCode", SUCCESS);
-            } else {
-                response.put("resultCode", ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
-            }
-        }
+        Map<String, Object> response = replyService.postReply(commentId, content, replyTarget);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String showMoreReply(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response=new HashMap<>(20);
-        User user = (User) session.get(SESSION_USER);
-        response = replyService.showAllReplys(commentId, user, sortType);
-        response.put("resultCode" , SUCCESS);
-        //在session中保存排序的方式
-        session.put("sortType", sortType);
+        Map<String, Object> response = replyService.showAllReplys(commentId, sortType);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String approveReply(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get(SESSION_USER);
-        if(user == null){
-            response.put("resultCode" , UN_LOGIN);
-        }
-        else if(!replyService.approveReply(replyId,user)){
-            response.put("resultCode" , 2 );
-        }
-        else{
-            response.put("resultCode" , SUCCESS);
-        }
+        Map<String, Object> response = replyService.approveReply(replyId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelApprove(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get(SESSION_USER);
-        if(user == null){
-            response.put("resultCode" , UN_LOGIN);
-        }
-        else if(!replyService.cancelApprove(replyId,user)){
-            response.put("resultCode" , 2 );
-        }
-        else{
-            response.put("resultCode" , SUCCESS);
-        }
+        Map<String, Object> response = replyService.cancelApprove(replyId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String deleteReply(){
-        Map<String , Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response= new HashMap<>(RESPONSE_NUM);
-        User user=(User)session.get(ConstantUtil.SESSION_USER);
-        if(user==null){
-            response.put(JSON_RETURN_CODE_NAME,UN_LOGIN);
-        }
-        else {
-            if (replyService.deleteReply(replyId,user)){
-                response.put(JSON_RETURN_CODE_NAME,SUCCESS);
-            }
-            else {
-                response.put(JSON_RETURN_CODE_NAME,NO_REPLYER);
-            }
-        }
+        Map<String, Object> response= replyService.deleteReply(replyId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
