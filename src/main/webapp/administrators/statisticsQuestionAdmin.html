@@ -64,28 +64,31 @@
                 <div class="sidebar-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" @click="toReportPage(0)">
                                 <span data-feather="book"></span>
                                 问题举报
                                 <span class="badge badge-pill badge-dark" v-if="questionReport>0">{{questionReport}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" @click="toReportPage(1)">
                                 <span data-feather="feather"></span>
                                 回答举报
+                                <span class="badge badge-pill badge-dark" v-if="answerReport>0">{{answerReport}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" @click="toReportPage(2)">
                                 <span data-feather="message-circle"></span>
                                 评论举报
+                                <span class="badge badge-pill badge-dark" v-if="commentReport>0">{{commentReport}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" @click="toReportPage(3)">
                                 <span data-feather="refresh-cw"></span>
                                 回复举报
+                                <span class="badge badge-pill badge-dark" v-if="replyReport>0">{{replyReport}}</span>
                             </a>
                         </li>
                     </ul>
@@ -132,7 +135,7 @@
                     <h1 class="h2">数据统计</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="questionSum=true;questionType=true;getStatistics(getBeforeDate(0),1);getTypeStatistics()">总览</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="questionSum=true;questionType=true;getStatistics(getBeforeDate(0),0);getTypeStatistics()">总览</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary">导出</button>
                         </div>
                         <!--                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
@@ -140,7 +143,7 @@
                         <!--                            统计-->
                         <!--                        </button>-->
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),1);questionSum=true;questionType=false">总数统计</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getStatistics(getBeforeDate(0),0);questionSum=true;questionType=false">总数统计</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="getTypeStatistics();questionSum=false;questionType=true">类别统计</button>
                         </div>
                     </div>
@@ -166,6 +169,9 @@
             questionSums:[],
             questionTypeSums:[],
             questionReport:0,
+            answerReport:0,
+            commentReport:0,
+            replyReport:0,
             all: 8, //总页数
             cur: 1//当前页码
         },
@@ -382,6 +388,9 @@
                     }
                 });
             },
+            toReportPage: function(type){
+                location.href = "reportAdmin.html?type=" +type;
+            },
             getTypeStatistics:function () {
                 $.ajax({
                     url: "../admin/questionTypeSum.action",
@@ -459,7 +468,14 @@
                     dataType:"json",
                     success:function (result) {
                         if (result.resultCode === 0) {
-                            index.questionReport=result.reportInfoList.length;
+                            if(reportType===0)
+                                index.questionReport=result.reportInfoList.length;
+                            if(reportType===1)
+                                index.answerReport=result.reportInfoList.length;
+                            if(reportType===2)
+                                index.commentReport=result.reportInfoList.length;
+                            if(reportType===3)
+                                index.replyReport=result.reportInfoList.length;
                         }
                     },
                     error:function (request,status,error) {
@@ -506,6 +522,9 @@
             this.getStatistics(date,0);
             this.getTypeStatistics();
             this.getReportType(0);
+            this.getReportType(1);
+            this.getReportType(2);
+            this.getReportType(3);
         }
 
     });

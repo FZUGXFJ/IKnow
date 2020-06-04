@@ -1317,6 +1317,40 @@
             }
         },
         mounted:function () {
+            let loc = location.href;
+            let qid = loc.replace("?","&").split("&")[1];
+            let type;
+            if (qid.indexOf("type=")!==-1) {
+                type = parseInt(qid.replace("type=",""));
+                console.log("类别为:"+type);
+                if(type===0) {
+                    this.questionPage = true;
+                    this.anPage = false;
+                    this.commentPage = false;
+                    this.replyPage = false;
+                }
+                if(type===1) {
+                    this.questionPage = false;
+                    this.anPage = true;
+                    this.commentPage = false;
+                    this.replyPage = false;
+                    console.log("anPage为："+this.anPage);
+                }
+                if(type===2) {
+                    this.questionPage = false;
+                    this.anPage = false;
+                    this.commentPage = true;
+                    this.replyPage = false;
+                }
+                if(type===3) {
+                    this.questionPage = false;
+                    this.anPage = false;
+                    this.commentPage = false;
+                    this.replyPage = true;
+                }
+            } else {
+                location.href = "../../error/admin/404error.html"
+            }
             this.isLogin();
             this.getReportType(0);
             this.getReportType(1);
