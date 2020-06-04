@@ -370,7 +370,7 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <select class="custom-select d-block w-100" required>
-                                        <option select @click="isSel=false">惩罚方式..</option>
+                                        <option select v-if="isSel==false" @click="isSel=false">惩罚方式..</option>
                                         <option @click="ban=true;isSel=true">封禁</option>
                                         <option @click="ban=false;isSel=true">禁言</option>
                                     </select>
@@ -391,8 +391,9 @@
 
                         </td>
                         <td>
-                            <button @click="dealEnd()" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="dealEnd();isSel=false" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
                         </td>
                     </tr>
                     </tbody>
@@ -451,6 +452,7 @@
                         <td>
                             <button @click="dealEnd()" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
                         </td>
                     </tr>
                     </tbody>
@@ -509,6 +511,7 @@
                         <td>
                             <button @click="dealEnd()" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
                         </td>
                     </tr>
                     </tbody>
@@ -567,6 +570,7 @@
                         <td>
                             <button @click="dealEnd()" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
                         </td>
                     </tr>
                     </tbody>
