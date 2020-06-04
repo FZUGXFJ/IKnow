@@ -60,14 +60,13 @@
         <table style="font-size: 0.8em">
             <td style="width: 50%"><span style="opacity: 0.6">回答{{answerCount}}</span></td>
             <td style="width: 50%;text-align: right">
-
-                <el-dropdown>
+                <el-dropdown @command="changeSort">
                     <span class="el-dropdown-link">
-                        排序方式<i class="el-icon-arrow-down el-icon--right"></i>
+                        {{sortType.sortMethod}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>默认排序</el-dropdown-item>
-                        <el-dropdown-item>按时间排序</el-dropdown-item>
+                        <el-dropdown-item command="1">默认排序</el-dropdown-item>
+                        <el-dropdown-item command="0">按时间排序</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </td>
@@ -187,8 +186,10 @@
             browsingCount:0,
             answerCount:0,
             answers:[],
-            sortMethod:"默认排序",
-            sortType:0,
+            sortType:{
+                sortMethod:"默认排序",
+                sort:1
+            },
             headFirstPart:"<img src='../../head/",
             headLastPart:"' width='100%' height='100%' alt=''>",
             loading:0,
@@ -337,6 +338,7 @@
                                 question.questionData.questionAnswers.push(item);
                             });
                             question.hasMore = size >= 20;
+                            question.start += size;
                         } else {
                             result.answers.forEach(function (item) {
                                 question.answers.push(item);
@@ -432,6 +434,25 @@
                 }).catch(action => {
 
                 });
+            },
+            changeSort:function (type) {
+                type = parseInt(type);
+                let answerSort;
+                if (type === 1) {
+                    answerSort = {
+                        sortMethod: "默认排序",
+                        sort:1
+                    };
+                } else {
+                    answerSort = {
+                        sortMethod: "按时间排序",
+                        sort:0
+                    };
+                }
+                sessionStorage.setItem("answerSort",JSON.stringify(answerSort));
+                sessionStorage.removeItem("questionData");
+                sessionStorage.removeItem("questionInfo");
+                history.go(0);
             }
         },
         mounted:function () {
@@ -442,6 +463,9 @@
                     duration: 2000
                 });
                 sessionStorage.removeItem("notice");
+            }
+            if (sessionStorage.getItem("answerSort") != null) {
+                this.sortType = JSON.parse(sessionStorage.getItem("answerSort"));
             }
             let loc = location.href;
             let qid = loc.replace("?","&").split("&")[1];
@@ -457,11 +481,13 @@
                 this.loadingMore = false;
                 return;
             }
+            let sort = this.sortType.sort;
             $.ajax({
                 url:"../../question/viewQuestion.action",
                 type:"POST",
                 data:{
-                    questionId:questionId
+                    questionId:questionId,
+                    sort:sort
                 },
                 dataType:"json",
                 success:function (result) {

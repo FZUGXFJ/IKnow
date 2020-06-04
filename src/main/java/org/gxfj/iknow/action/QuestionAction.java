@@ -210,7 +210,7 @@ public class QuestionAction {
             response.put("resultCode",ConstantUtil.NO_MORE);
         }
         else {
-            response=questionService.moreAnswers(user,questionId,start, ConstantUtil.SHOW_ANSWERS_NUM,sort );
+            response=questionService.moreAnswers(user,questionId,start, ConstantUtil.SHOW_ANSWERS_NUM,sort1);
             response.put("resultCode",ConstantUtil.SUCCESS);
         }
 
