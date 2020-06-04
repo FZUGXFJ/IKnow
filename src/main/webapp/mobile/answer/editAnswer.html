@@ -94,10 +94,10 @@
                         if (result.resultCode === 0) {
                             sessionStorage.removeItem("questionData");
                             sessionStorage.removeItem("questionInfo");
-                            sessionStorage.setItem("notice", "问题已更新");
+                            sessionStorage.setItem("notice", "回答已更新");
                             history.go(-1);
-                        } else {
-                            postAnswer.alertMsg.head = "未知错误！";
+                        } else if (result.resultCode === 10) {
+                            postAnswer.alertMsg.head = "回答中存在敏感词，请检查后重新发布！";
                             $("#alert").slideDown();
                         }
                     },

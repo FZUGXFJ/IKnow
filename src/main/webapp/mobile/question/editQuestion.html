@@ -176,6 +176,9 @@
                             history.go(-1);
                        } else if (result.resultCode === 1) {
                            location.href = "../user/login.html?boot=1";
+                       } else if (result.resultCode === 10) {
+                           postAnswer.alertMsg.head = "内容中存在敏感词，请检查后重新发布！";
+                           $("#alert").slideDown();
                        }
                    },
                    error:function (request,status,error) {
