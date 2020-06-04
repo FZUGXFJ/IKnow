@@ -32,11 +32,11 @@
     </div>
     <br>
     <div id="questionInf">
-        <table style="color: #12eee7;margin-bottom: 1em">
-            <td style="width: 15%">
+        <table style="margin-bottom: 1em">
+            <td style="width: 12%">
                 <div v-html="headPortrait" class="headPortrait"></div>
             </td>
-            <td style="width: 50%"><span>{{owner.username}}</span>的提问</td>
+            <td style="width: 53%;color: #00a0ee"><span style="color: #ff4d26">{{owner.username}}</span>&nbsp;的提问</td>
             <td style="width: 35%;text-align: right">
                 <span v-if="isSolved"><i class="fas fa-check-circle"></i>&nbsp;问题已解决</span>
                 <span v-else style="color: #acacac"><i class="fas fa-times-circle"></i>&nbsp;问题未解决</span>

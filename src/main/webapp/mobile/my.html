@@ -124,11 +124,11 @@
     <div id="footer">
         <table>
             <td style="width: 33%;text-align: center">
-                <i class="fas fa-home" @click="toRecommendPage"></i>
+                <i class="fas fa-home" @click="toRecommendPage" style="color: #44ff20"></i>
                 <div>首页</div>
             </td>
             <td style="width: 34%;text-align: center">
-                <i class="fas fa-plus" style="color: #12eee7" @click="add"></i>
+                <i class="fas fa-plus" style="color: #ee8318" @click="add"></i>
                 <div>添加</div>
             </td>
             <td style="width: 33%;text-align: center">
@@ -229,6 +229,8 @@
                         myInfo.loaded = true;
                         if (myInfo.inf.hasNotReadMsg === 0) {
                             sessionStorage.setItem("hasNotReadMsg","0");
+                        } else {
+                            sessionStorage.setItem("hasNotReadMsg","1");
                         }
                     } else {
                         location.href = "user/login.html?boot=0";

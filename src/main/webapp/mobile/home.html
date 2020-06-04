@@ -78,8 +78,8 @@
                         <span style="color: #2f4bff">&nbsp;此回答已被采纳</span>
                     </div>
                     <div class="answerInf">
-                        <p class="answerView" v-html="recommend.content"
-                           @click="toAnswerPage(recommend.questionId,recommend.answerId)"></p>
+                        <div class="answerView" v-html="recommend.content"
+                           @click="toAnswerPage(recommend.questionId,recommend.answerId)"></div>
                         <table>
                             <tr>
                                 <td style="width: 80%;opacity: 0.5">
@@ -116,7 +116,7 @@
                 <div>添加</div>
             </td>
             <td style="width: 33%;text-align: center">
-                <i class="fas fa-user" @click="toMyPage"></i>
+                <i class="fas fa-user" style="color: #44ff20" @click="toMyPage"></i>
                 <div>我的</div>
             </td>
         </table>
