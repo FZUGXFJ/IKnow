@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Administrator hhj
@@ -45,6 +42,8 @@ public class UserServiceImpl<result> implements UserService{
     private ExpUtil expUtil;
     @Autowired
     MessageDAO messageDAO;
+    @Autowired
+    UserStateUtil userStateUtil;
 
     private static int MAP_NUM = 20;
 
@@ -117,13 +116,24 @@ public class UserServiceImpl<result> implements UserService{
         User user = userDAO.getUserByEmail(email);
         if (user != null && (password.length() == 32 && password.equals(user.getPasswd()) ||
                 SecurityUtil.md5Compare(password, user.getPasswd()))) {
-            result.put("resultCode",ConstantUtil.SUCCESS);
-            result.put("email",user.getEmail());
-            result.put("password",user.getPasswd());
-            ActionContext.getContext().getSession().put("user",user);
+
+            //判断用户是否处于封禁
+            if (user.getUserstateByStateId().getId().equals(userStateUtil.getBanState().getId())) {
+                Date now = new Date();
+                if (user.getLastClosureTime().after(now)) {
+                    result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_BAN);
+                    return result;
+                } else {
+                    user.setUserstateByStateId(userStateUtil.getStateByName(Userstate.NORMAL));
+                }
+            }
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            result.put("email", user.getEmail());
+            result.put("password", user.getPasswd());
+            ActionContext.getContext().getSession().put("user", user);
         }
         else {
-            result.put("resultCode",ConstantUtil.WRONG_PASSWORD);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.WRONG_PASSWORD);
         }
         return result;
     }
@@ -147,11 +157,20 @@ public class UserServiceImpl<result> implements UserService{
             if (user == null) {
                 response.put("response", 3);
             } else {
+                //判断用户是否处于封禁
+                if (user.getUserstateByStateId().getId().equals(userStateUtil.getBanState().getId())) {
+                    Date now = new Date();
+                    if (user.getLastClosureTime().after(now)) {
+                        result.put("response", ConstantUtil.JSON_RESULT_CODE_BAN);
+                        return result;
+                    } else {
+                        user.setUserstateByStateId(userStateUtil.getStateByName(Userstate.NORMAL));
+                    }
+                }
                 response.put("response", 0);
                 ActionContext.getContext().getSession().put("user", user);
                 response.put("email", user.getEmail());
                 response.put("password", user.getPasswd());
-//                result.put("user",user);
             }
         }
         return response;
