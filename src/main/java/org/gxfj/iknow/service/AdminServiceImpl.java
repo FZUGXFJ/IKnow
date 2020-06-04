@@ -445,7 +445,7 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);;
 
         Question question = questionDAO.get(questionID);
-        if (question != null && question.getIsDelete() == 1) {
+        if (question != null && question.getIsDelete() == Question.QUESTION_UN_DELETED) {
             Collection<Answer> answerCollection = question.getAnswersById();
 
             for (Answer answer : answerCollection) {
@@ -470,7 +470,7 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         if (answerID != null) {
             Answer answer = answerDAO.get(answerID);
-            if (answer != null) {
+            if (answer != null && answer.getIsDelete() == Answer.ANSWER_UN_DELETED) {
                 //如果被删除的回答所属的问题没有被删除，那么就需要判断回答是否被采纳，如果被采纳就需要删除采纳
                 if (answer.getQuestionByQuestionId().getIsDelete() == Question.QUESTION_UN_DELETED
                         && answer.getQuestionByQuestionId().getAnswerByAdoptId() != null
@@ -512,7 +512,7 @@ public class AdminServiceImpl implements AdminService{
 
         if (commentID != null) {
             Comment comment = commentDAO.get(commentID);
-            if (comment != null) {
+            if (comment != null && comment.getIsDelete() == Comment.COMMENT_UN_DELETED) {
                 for (Reply reply : comment.getRepliesById()) {
                     replyDAO.delete(reply);
                 }
@@ -532,7 +532,7 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         if (replyID != null) {
             Reply reply =replyDAO.get(replyID);
-            if (reply != null) {
+            if (reply != null && reply.getIsDelete() == Reply.REPLY_UN_DELETE) {
                 replyDAO.delete(reply);
             }
             messageUtil.newMessage(1,reply.getUserByUserId(),
