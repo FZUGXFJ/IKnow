@@ -43,6 +43,8 @@ public class UserServiceImpl<result> implements UserService{
     private MailUtil mailUtil;
     @Autowired
     private ExpUtil expUtil;
+    @Autowired
+    MessageDAO messageDAO;
 
     private static int MAP_NUM = 20;
 
@@ -185,6 +187,14 @@ public class UserServiceImpl<result> implements UserService{
             userInf.put("browseNum" , browsingHistoryDAO.getUserBrowseCount(userId));
             userInf.put("achievementList" , listUserAchievements(userId));
             userInf.put("identity" , getUserIdentity(userId));
+
+            List<Message> messageList = messageDAO.listByUserId(userId);
+            if(messageList.size()>0){
+                userInf.put("hasNotReadMsg",1);
+            }
+            else {
+                userInf.put("hasNotReadMsg",0);
+            }
             result.put("information" , userInf);
         }
         return result;
