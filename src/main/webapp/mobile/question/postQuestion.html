@@ -139,6 +139,9 @@
                     success:function (result) {
                         if (result.resultCode === 0) {
                             location.href = "question.html?questionId=" + result.questionId;
+                        } else if (result.resultCode === 10) {
+                            postQuestion.alertMsg.head = "内容含有敏感词，请检查后再重新提交";
+                            $("#alert").slideDown();
                         }
                     },
                     error:function (e) {
@@ -240,8 +243,9 @@
                     if (result.resultCode === 0) {
                         choseClassification.categoriesTypes = result.categoriesTypes;
                     } else if (result.resultCode === 1) {
-                        alert("请先登录后再发布提问！");
-                        window.location.href = "../user/login.html?boot=0";
+                        postQuestion.$messagebox.alert("请先登录后再发布问题").then(action =>{
+                            window.location.href = "../user/login.html?boot=0";
+                        });
                     }
                 },
                 error:function (a,b,c) {
