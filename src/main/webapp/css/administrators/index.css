@@ -80,14 +80,19 @@ tr td{
     border-style: none;
     background-color: aliceblue;
     z-index: 11;
-    overflow-y:auto;
-    overflow-x:auto;
+
 }
 .head{
     background: #2b2b2b;
     color: white;
     padding-bottom: 5px;
     padding-top: 5px;
+    position: fixed;
+    top: 0;
+}
+.body{
+    overflow-y:auto;
+    overflow-x:auto;
 }
 .userInfo{
     width: 80%;
