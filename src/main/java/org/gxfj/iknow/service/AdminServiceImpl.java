@@ -451,8 +451,11 @@ public class AdminServiceImpl implements AdminService{
             for (Answer answer : answerCollection) {
                 answerDel(answer.getId());
             }
-            User user = question.getAnswerByAdoptId().getUserByUserId();
-            user.setBadgeNum(user.getBadgeNum() - 1);
+            if (question.getAnswerByAdoptId() != null) {
+                User user = question.getAnswerByAdoptId().getUserByUserId();
+                user.setBadgeNum(user.getBadgeNum() - 1);
+            }
+
             questionDAO.delete(question);
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
