@@ -21,8 +21,7 @@ public interface ReportService {
      * @param reason 原因类型
      * @param targetId 目标id
      * @param type 举报类型
-     * @param user 用户
      *
      */
-    boolean doReport(Integer type, Integer reason, String description, Integer targetId, User user);
+    Map<String, Object> doReport(Integer type, Integer reason, String description, Integer targetId);
 }
