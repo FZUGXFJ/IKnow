@@ -42,6 +42,8 @@ public class AnswerServiceImpl implements AnswerService{
     ReplyDAO replyDAO;
     @Autowired
     MessageUtil messageUtil;
+    @Autowired
+    MessageDAO messageDAO;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -377,6 +379,13 @@ public class AnswerServiceImpl implements AnswerService{
         }
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         result.put("user",cUser);
+        List<Message> messageList = messageDAO.listByUserId(user.getId());
+        if(messageList.size()>0){
+            result.put("hasNotReadMsg",1);
+        }
+        else {
+            result.put("hasNotReadMsg",0);
+        }
         return result;
     }
 
