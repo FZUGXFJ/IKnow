@@ -1,21 +1,15 @@
 package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
-import com.opensymphony.xwork2.ActionContext;
-import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.AnswerService;
 import org.gxfj.iknow.util.ConstantUtil;
-import org.gxfj.iknow.util.ImgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
-
-import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
 
 /**
  * @author hhj
@@ -74,7 +68,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String viewAnswer() {
-        Map<String,Object> response = answerService.getRecommendAnswerForQuestion(questionId,answerId);
+        Map<String,Object> response = answerService.viewAnswer(questionId,answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

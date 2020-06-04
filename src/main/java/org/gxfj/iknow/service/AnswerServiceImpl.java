@@ -105,7 +105,7 @@ public class AnswerServiceImpl implements AnswerService{
 
 
     @Override
-    public Map<String, Object> getRecommendAnswerForQuestion(Integer questionId, Integer answerId) {
+    public Map<String, Object> viewAnswer(Integer questionId, Integer answerId) {
         User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String , Object> result = new HashMap<>(MAP_NUM);
         if(user!=null) {
