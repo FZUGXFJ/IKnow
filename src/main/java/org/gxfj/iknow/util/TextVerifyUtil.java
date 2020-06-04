@@ -98,6 +98,9 @@ public class TextVerifyUtil {
      * @return 是否合规
      */
     public static boolean verifyCompliance(String text) {
+        if (text == null || text.equals("")) {
+            return true;
+        }
         JSONObject jsonObject = verifyText(text);
         if (VERIFY_RESULT_SUCCESS.equals(jsonObject.get(VERIFY_RESULT_KEY))) {
             return true;
