@@ -1,6 +1,7 @@
 package org.gxfj.iknow.service;
 
 import com.alibaba.fastjson.JSON;
+import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
@@ -128,23 +129,32 @@ public class UserServiceImpl<result> implements UserService{
     }
 
     @Override
-    public Map<String,Object> loginByNoPassword(String email, String sessionEmail, String verifyCode,
-                                                String sessionVerifyCode) {
-        Map<String,Object> result = new HashMap<>(16);
+    public Map<String,Object> loginByNoPassword(String email, String verifyCode) {
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        String sessionEmail = (String)session.get(ConstantUtil.EMAIL);
+        String sessionVerifyCode = (String)session.get(ConstantUtil.VERIFY_CODE);
+
+        session.put(ConstantUtil.VERIFY_CODE, null);
+
+        Map<String, Object> response = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         if (!email.equals(sessionEmail)) {
-            result.put("value",1);
+            response.put("response",1);
         } else if (!verifyCode.equals(sessionVerifyCode)) {
-            result.put("value",2);
+            response.put("response",2);
         } else {
             User user = userDAO.getUserByEmail(email);
             if (user == null) {
-                result.put("value",3);
+                response.put("response", 3);
             } else {
-                result.put("value",0);
-                result.put("user",user);
+                response.put("response", 0);
+                ActionContext.getContext().getSession().put("user", user);
+                response.put("email", user.getEmail());
+                response.put("password", user.getPasswd());
+//                result.put("user",user);
             }
         }
-        return result;
+        return response;
     }
 
     @Override

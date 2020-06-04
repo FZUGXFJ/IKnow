@@ -77,22 +77,8 @@ public class UserAction {
     }
 
     public String emailLogin() {
-        User loginInf = new User();
-        loginInf.setEmail(email);
-        Map<String,Object> session = ActionContext.getContext().getSession();
-        Map<String,Object> result = userService.loginByNoPassword(email,(String)session.get(EMAIL), verifyCode
-                , (String) session.get(VERIFY_CODE));
-        Map<String,Object> resultMap = new HashMap<>(MIN_HASH_MAP_NUM);
-        User user = (User) result.get(ConstantUtil.SESSION_USER);
-        if (user != null) {
-            ActionContext.getContext().getSession().put("user",user);
-            resultMap.put("response",0);
-            resultMap.put("email",user.getEmail());
-            resultMap.put("password",user.getPasswd());
-        } else {
-            resultMap.put("response",result.get("value"));
-        }
-        inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
+        Map<String,Object> result = userService.loginByNoPassword(email, verifyCode);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 

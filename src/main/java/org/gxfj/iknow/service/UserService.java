@@ -37,12 +37,10 @@ public interface UserService {
     /**
      *免密码登录
      * @param email 登录用的email
-     * @param sessionEmail 发送邮件用的email
      * @param verifyCode 登录的验证码
-     * @param sessionVerifyCode 生成的验证码
      * @return 消息集合
      */
-    public Map<String,Object> loginByNoPassword(String email,String sessionEmail,String verifyCode,String sessionVerifyCode);
+    public Map<String,Object> loginByNoPassword(String email,String verifyCode);
 
     /**
      *获得简略的用户信息
