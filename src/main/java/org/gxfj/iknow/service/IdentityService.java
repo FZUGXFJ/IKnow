@@ -19,11 +19,11 @@ public interface IdentityService {
      * 学生认证
      * @return 是否认证成功
      */
-    boolean stuAuthentication(User user,String schoolName, String realName, String studentNum);
+    Map<String, Object> stuAuthentication(String schoolName, String realName, String studentNum);
 
     /**
      * 教师认证
      * @return 是否认证成功
      */
-    boolean teaAuthentication(User user,String schoolName, String realName, String jobNum);
+    Map<String, Object> teaAuthentication(String schoolName, String realName, String jobNum);
 }
