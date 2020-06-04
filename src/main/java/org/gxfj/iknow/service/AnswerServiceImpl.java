@@ -1,8 +1,6 @@
 package org.gxfj.iknow.service;
 
-import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import com.opensymphony.xwork2.ActionContext;
-import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
@@ -12,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.*;
-
-import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
 
 /**
  * @author erniumo ,hhj
@@ -379,7 +375,7 @@ public class AnswerServiceImpl implements AnswerService{
         }
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         result.put("user",cUser);
-        List<Message> messageList = messageDAO.listByUserId(user.getId());
+        List<Message> messageList = messageDAO.listUnReadMessageByUserId(user.getId());
         if(messageList.size()>0){
             result.put("hasNotReadMsg",1);
         }

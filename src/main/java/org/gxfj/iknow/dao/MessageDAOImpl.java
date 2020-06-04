@@ -43,7 +43,7 @@ public class MessageDAOImpl implements MessageDAO{
     }
 
     @Override
-    public List<Message> listByUserId(Integer userId) {
+    public List<Message> listUnReadMessageByUserId(Integer userId) {
         Query query = getSession().createQuery("from Message as m WHERE ( userID= " + userId + " ) and " +
                 "(isRead = 0) order by date desc");
         List<Message> messages = query.list();

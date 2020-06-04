@@ -6,7 +6,6 @@ import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -188,7 +187,7 @@ public class UserServiceImpl<result> implements UserService{
             userInf.put("achievementList" , listUserAchievements(userId));
             userInf.put("identity" , getUserIdentity(userId));
 
-            List<Message> messageList = messageDAO.listByUserId(userId);
+            List<Message> messageList = messageDAO.listUnReadMessageByUserId(userId);
             if(messageList.size()>0){
                 userInf.put("hasNotReadMsg",1);
             }

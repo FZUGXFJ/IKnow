@@ -32,7 +32,7 @@ public class MessageServiceImpl implements MessageService{
         else {
             List<Map<String,Object>> messages = new ArrayList<>();
             Map<String,Object> message;
-            List<Message> messageList = messageDAO.listByUserId(user.getId());
+            List<Message> messageList = messageDAO.listUnReadMessageByUserId(user.getId());
             for (Message message1 : messageList){
                 message = new HashMap<>(5);
                 message.put("id",message1.getId());
