@@ -391,7 +391,7 @@
 
                         </td>
                         <td>
-                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
                         </td>
                     </tr>
@@ -449,7 +449,7 @@
 
                         </td>
                         <td>
-                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
                         </td>
                     </tr>
@@ -507,7 +507,7 @@
 
                         </td>
                         <td>
-                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
                         </td>
                     </tr>
@@ -565,7 +565,7 @@
 
                         </td>
                         <td>
-                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
                         </td>
                     </tr>
@@ -1051,6 +1051,90 @@
                     }
                 });
             },
+            delOneQuetion: function(questionID){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/questionDel.action",
+                    data:{
+                        questionID:questionID
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            console.log(questionID);
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delOneAnswer: function(questionID){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/answerDel.action",
+                    data:{
+                        answerID:answerID
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            console.log(answerID);
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delOneComment: function(commentID){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/commentDel.action",
+                    data:{
+                        commentID:commentID
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            console.log(commentID);
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delOneReply: function(replyID){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/replyDel.action",
+                    data:{
+                        replyID:replyID
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            console.log(replyID);
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
             addActive: function(){
                 if(this.questionPage === true)
                 {
@@ -1081,6 +1165,50 @@
                     $("#questionPage").removeClass("active");
                 }
 
+            },
+            banUser: function(userID,days){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/ban.action",
+                    data:{
+                        userID:userID,
+                        days:days
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            alert("处理完成");
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            estoppUser: function(userID,days){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/estoppel.action",
+                    data:{
+                        userID:userID,
+                        days:days
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            alert("处理完成");
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             },
             page: function(){
                 reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
