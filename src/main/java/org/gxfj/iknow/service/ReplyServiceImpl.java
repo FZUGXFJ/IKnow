@@ -41,9 +41,9 @@ public class ReplyServiceImpl implements ReplyService {
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         if(user == null){
-            result.put("resultCode" , UN_LOGIN);
+            result.put(JSON_RETURN_CODE_NAME , UN_LOGIN);
         } else if(content == null){
-            result.put("resultCode" , MISS_COMMENT_INF );
+            result.put(JSON_RETURN_CODE_NAME , MISS_COMMENT_INF );
         } else{
             if (TextVerifyUtil.verifyCompliance(content)) {
                 User targetUser= userDAO.get(replyTarget);
@@ -61,9 +61,9 @@ public class ReplyServiceImpl implements ReplyService {
                 messageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='#'>"+
                         user.getName() + "</a>回复了你的评论，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
                         + reply.getCommentByCommentId().getAnswerByAnswerId().getId() + "'>[回复链接]</a>");
-                result.put("resultCode", SUCCESS);
+                result.put(JSON_RETURN_CODE_NAME, SUCCESS);
             } else {
-                result.put("resultCode", JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+                result.put(JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
             }
         }
         return result;
@@ -75,7 +75,7 @@ public class ReplyServiceImpl implements ReplyService {
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         result.put("comment" , getComment(commentId, user));
         result.put("replies" , listReplies(commentId, user, sortType));
-        result.put("resultCode" , SUCCESS);
+        result.put(JSON_RETURN_CODE_NAME , SUCCESS);
         //在session中保存排序的方式
         ActionContext.getContext().getSession().put("sortType", sortType);
         return result;
@@ -265,10 +265,10 @@ public class ReplyServiceImpl implements ReplyService {
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         if(user == null){
-            result.put("resultCode" , UN_LOGIN);
+            result.put(JSON_RETURN_CODE_NAME , UN_LOGIN);
         }
         else if(approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId) != -1){
-            result.put("resultCode" , 2 );
+            result.put(JSON_RETURN_CODE_NAME , 2 );
         }
         else{
             Reply reply=replyDAO.getNotDelete(replyId);
@@ -285,7 +285,7 @@ public class ReplyServiceImpl implements ReplyService {
             messageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='#'>"+
                     user.getName() + "</a>赞同了你的回复</P><a href='../../mobile/comment/comment.html?answerId=" +
                     reply.getCommentByCommentId().getAnswerByAnswerId().getId() + "'>[回复链接]</a>");
-            result.put("resultCode" , SUCCESS);
+            result.put(JSON_RETURN_CODE_NAME , SUCCESS);
         }
         return result;
     }
@@ -295,10 +295,10 @@ public class ReplyServiceImpl implements ReplyService {
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         if(user == null){
-            result.put("resultCode" , UN_LOGIN);
+            result.put(JSON_RETURN_CODE_NAME , UN_LOGIN);
         }
         else if(approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId) == -1){
-            result.put("resultCode" , 2 );
+            result.put(JSON_RETURN_CODE_NAME , 2 );
         }
         else{
             approvalReplyDAO.delete(approvalReplyDAO.get
@@ -306,7 +306,7 @@ public class ReplyServiceImpl implements ReplyService {
             Reply reply = replyDAO.getNotDelete(replyId);
             reply.setCount(reply.getCount()-1);
             replyDAO.update(reply);
-            result.put("resultCode" , SUCCESS);
+            result.put(JSON_RETURN_CODE_NAME , SUCCESS);
         }
         return result;
     }

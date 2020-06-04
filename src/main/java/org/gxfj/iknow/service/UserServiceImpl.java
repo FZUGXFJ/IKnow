@@ -203,7 +203,7 @@ public class UserServiceImpl<result> implements UserService{
     public String getSimpleUserInf(User user) {
         Map<String,Object> resultMap = new HashMap<>();
         if(user ==null) {
-            resultMap.put("resultCode",1);
+            resultMap.put(JSON_RETURN_CODE_NAME,1);
         }
         else {
             Map<String,Object> userMap = new HashMap<>();
@@ -212,7 +212,7 @@ public class UserServiceImpl<result> implements UserService{
             userMap.put("introduction",user.getIntroduction());
             userMap.put("head",user.getHead());
             resultMap.put("userInf",userMap);
-            resultMap.put("resultCode",0);
+            resultMap.put(JSON_RETURN_CODE_NAME,0);
         }
         return JSON.toJSONString(resultMap);
     }
@@ -221,10 +221,10 @@ public class UserServiceImpl<result> implements UserService{
     public Map<String, Object> getAllUserInf(User user) {
         Map<String, Object> result = new HashMap<>(MAP_NUM);
         if(user == null){
-            result.put("resultCode" , 1 );
+            result.put(JSON_RETURN_CODE_NAME , 1 );
         }
         else{
-            result.put("resultCode" , 0);
+            result.put(JSON_RETURN_CODE_NAME , 0);
             Integer userId = user.getId();
             Map<String, Object> userInf = new HashMap<>(MAP_NUM);
             userInf.put("name" , user.getName());
