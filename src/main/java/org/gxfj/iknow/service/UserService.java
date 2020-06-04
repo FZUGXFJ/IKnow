@@ -96,4 +96,11 @@ public interface UserService {
      * @return 返回结果集合
      */
     Map<String,String> sendVerifyCoderesetemail(String email);
+
+    /**
+     * 获得用户的主页信息
+     * @param userId 用户id
+     * @return json形式的用户信息
+     */
+    Map<String, Object> getHomedata(Integer userId);
 }

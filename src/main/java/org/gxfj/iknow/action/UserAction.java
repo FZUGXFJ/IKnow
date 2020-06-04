@@ -25,6 +25,7 @@ import java.util.Map;
 @Scope("prototype")
 public class UserAction {
 
+    Integer userId;
     String username;
     String email;
     String password;
@@ -304,6 +305,12 @@ public class UserAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
+
+    public String userHome(){
+        Map<String, Object> result = userService.getHomedata(userId);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return RETURN_STRING;
+    }
     
     public String getUsername() {
         return username;
@@ -383,5 +390,13 @@ public class UserAction {
 
     public InputStream getInputStream() {
         return inputStream;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

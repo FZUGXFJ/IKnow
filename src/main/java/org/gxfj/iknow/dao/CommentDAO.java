@@ -24,6 +24,13 @@ public interface CommentDAO extends BaseDAO<Comment>{
     List<Comment> listByAnswerId(int answerId, int start, int length);
 
     /**
+     * 获得用户发布的未被删除的评论列表
+     * @param userId 用户id
+     * @return  评论列表
+     */
+    List<Comment> listByuserId(int userId);
+
+    /**
      * 获得问题所有评论列表
      * @param answerId 回答id
      * @return  评论列表

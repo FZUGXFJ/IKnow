@@ -50,6 +50,13 @@ public interface QuestionDAO extends BaseDAO<Question>{
     List<Question> listPartByUserId(Integer userId);
 
     /**
+     * 活得用户发布的所有问题
+     * @param userId 用户id
+     * @return 问题列表，没有为null
+     */
+    List<Question> listPartbyUseridNodelete(Integer userId);
+
+    /**
      * 获得用户发布的问题的数目
      * @param userId 用户id
      * @return 发布的回答数目

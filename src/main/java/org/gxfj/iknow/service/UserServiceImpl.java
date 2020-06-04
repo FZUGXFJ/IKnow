@@ -48,6 +48,10 @@ public class UserServiceImpl<result> implements UserService{
     MessageDAO messageDAO;
     @Autowired
     UserStateUtil userStateUtil;
+    @Autowired
+    ReplyDAO replyDAO;
+    @Autowired
+    CommentDAO commentDAO;
 
     private static int MAP_NUM = 20;
 
@@ -366,5 +370,72 @@ public class UserServiceImpl<result> implements UserService{
         result = "{\"head\":\"发送成功\",\"body\":\"请进入邮箱查看验证码\"}";
         map.put("result",result);
         return map;
+    }
+
+    @Override
+    public Map<String, Object> getHomedata(Integer userId) {
+        Map<String, Object> result = new HashMap<>(MAP_NUM);
+        User user = userDAO.get(userId);
+        if(user == null){
+            result.put(JSON_RETURN_CODE_NAME , 1 );
+        }
+        else{
+            result.put(JSON_RETURN_CODE_NAME , 0);
+            Map<String, Object> userInf = new HashMap<>(MAP_NUM);
+            userInf.put("name" , user.getName());
+            userInf.put("head" , "<img src='../head/" + user.getHead() +
+                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            userInf.put("introduction",user.getIntroduction());
+            userInf.put("gender",user.getGender());
+            int sum = 0;
+            List<Answer> answerList = answerDAO.listPartByUserIdNodelete(userId);
+            List<Comment> commentList = commentDAO.listByuserId(userId);
+            List<Reply> replyList = replyDAO.listByuserId(userId);
+            for (Answer answer:answerList){
+                sum += answer.getApprovalCount();
+            }
+            for (Comment comment:commentList){
+                sum += comment.getCount();
+            }
+            for (Reply reply:replyList){
+                sum += reply.getCount();
+            }
+            userInf.put("gainApproveNum",sum);
+            userInf.put("badgeNum" , user.getBadgeNum());
+
+            List<Question> questionList = questionDAO.listPartByUserId(userId,0,10);
+            List<Map<String,Object>> questions = new ArrayList<>();
+            Map<String,Object> question;
+            for (Question question1:questionList){
+                question = new HashMap<>(5);
+                question.put("id",question1.getId());
+                question.put("title",question1.getTitle());
+                question.put("browsingNum",browsingHistoryDAO.getBrowsingCount(question1.getId()));
+                question.put("answerNum",answerDAO.getAnswersbyQid(question1.getId()).size());
+                question.put("collectionNum",collectionProblemDAO.getCollectionCount(question1.getId()));
+
+                questions.add(question);
+            }
+            userInf.put("questionDynamic",questions);
+
+            List<Answer> answerList1 = answerDAO.listPartByUserId(userId,0,10);
+            List<Map<String,Object>> answers = new ArrayList<>();
+            Map<String,Object> answer;
+            for (Answer answer1:answerList1){
+                answer = new HashMap<>(6);
+                answer.put("id",answer1.getId());
+                answer.put("content",answer1.getContentText());
+                answer.put("questionTitle",answer1.getQuestionByQuestionId().getTitle());
+                answer.put("time",Time.getTime(answer1.getDate()));
+                answer.put("approvNum",answer1.getApprovalCount());
+                answer.put("commentNum",commentDAO.getCount(answer1.getId()));
+
+                answers.add(answer);
+            }
+
+            userInf.put("answerDynamic",answers);
+            result.put("information" , userInf);
+        }
+        return result;
     }
 }
