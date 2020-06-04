@@ -497,7 +497,11 @@
         },
         mounted:function () {
             if (sessionStorage.getItem("notice") != null) {
-                this.$toast(sessionStorage.getItem("notice"));
+                this.$toast({
+                    message:sessionStorage.getItem("notice"),
+                    position: 'bottom',
+                    duration: 2000
+                });
                 sessionStorage.removeItem("notice");
             }
             let loc = location.href;

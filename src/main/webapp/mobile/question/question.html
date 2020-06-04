@@ -36,9 +36,9 @@
             <td style="width: 12%">
                 <div v-html="headPortrait" class="headPortrait"></div>
             </td>
-            <td style="width: 53%;color: #00a0ee"><span style="color: #ff4d26">{{owner.username}}</span>&nbsp;的提问</td>
+            <td style="width: 53%;color: #00a0ee"><span style="color: #ff4d26">{{owner.username}}&nbsp;的提问</span></td>
             <td style="width: 35%;text-align: right">
-                <span v-if="isSolved"><i class="fas fa-check-circle"></i>&nbsp;问题已解决</span>
+                <span v-if="isSolved" style="color: #8000ee"><i class="fas fa-check-circle"></i>&nbsp;问题已解决</span>
                 <span v-else style="color: #acacac"><i class="fas fa-times-circle"></i>&nbsp;问题未解决</span>
             </td>
         </table>
@@ -48,7 +48,7 @@
         <table style="font-size: 0.8em;opacity: 0.5">
             <td style="width: 50%">{{collectionCount}}人收藏-{{browsingCount}}次浏览</td>
             <td style="width: 50%;text-align: right">
-                <span style="color: #12eee7" v-if="isCollected == 1" @click="cancelCollect">
+                <span style="color: #ee9400" v-if="isCollected == 1" @click="cancelCollect">
                     <i class="fas fa-star"></i>&nbsp;问题已收藏
                 </span>
                 <span @click="collect" v-else>
@@ -76,7 +76,7 @@
     <div id="answerList">
         <div class="item" v-for="answer in answers">
             <div class="separator"></div>
-            <h6 style="color: #12eee7" v-if="answer.isAdopt == 1"><i class="fas fa-check"></i>&nbsp;此回答已被采纳</h6>
+            <h6 style="color: #00d6ee" v-if="answer.isAdopt == 1"><i class="fas fa-check"></i>&nbsp;此回答已被采纳</h6>
             <div class="answer">
                 <div class="answererInf">
                     <table style="margin-bottom: 0.5em">
@@ -88,10 +88,13 @@
                             <span class="identity"></span>
                         </td>
                         <td style="width: 30%;text-align: right">
-                            <span class="lb"><b>LV&nbsp;{{answer.answererLevel}}</b></span>
                             <span class="lb">
-                                <i class="fas fa-award fa-1x"></i>
-                                <b>{{answer.answererBadge}}</b>
+                                <b style="color: #00d6ee">LV</b>
+                                <i>&nbsp;{{answer.answererLevel}}</i>
+                            </span>
+                            <span class="lb">
+                                <i class="fas fa-award fa-1x" style="color: #00d6ee"></i>
+                                <i>{{answer.answererBadge}}</i>
                             </span>
                         </td>
                     </table>
@@ -433,7 +436,11 @@
         },
         mounted:function () {
             if (sessionStorage.getItem("notice") != null) {
-                this.$toast(sessionStorage.getItem("notice"));
+                this.$toast({
+                    message:sessionStorage.getItem("notice"),
+                    position: 'bottom',
+                    duration: 2000
+                });
                 sessionStorage.removeItem("notice");
             }
             let loc = location.href;
