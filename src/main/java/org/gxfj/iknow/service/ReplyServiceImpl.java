@@ -122,10 +122,12 @@ public class ReplyServiceImpl implements ReplyService {
             replyMap.put("time" , Time.getTime(reply.getDate()));
             //如果浏览者已登录，且有点赞记录，则isApproved为1，否则为0
             int isApproved = 0;
-            if (visitor != null) {
-                isApproved = approvalReplyDAO.searchByUserIdandReplyId(visitor.getId(), reply.getId());
+            if (visitor != null && comment.getCount() != 0 &&
+                    approvalCommentDAO.get(visitor.getId(), comment.getId()) != null) {
+                replyMap.put("isApproved", 1);
+            } else {
+                replyMap.put("isApproved", 0);
             }
-            replyMap.put("isApproved", isApproved);
             if(visitor == null) {
                 replyMap.put("viewerIsOwner", 0);
             } else {
