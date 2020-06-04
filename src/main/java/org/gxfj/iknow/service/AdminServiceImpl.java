@@ -304,7 +304,7 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String, Object> getAnswerReported(Integer typeId, Integer type) {
         Map<String,Object> map;
-        List<Map<String,Object>> answerListMap = new ArrayList<>();
+
         Map<String,Object> result = new HashMap<>(MIN_HASH_MAP_NUM);
         switch(type){
             case 0 :
@@ -319,8 +319,8 @@ public class AdminServiceImpl implements AdminService{
             default :
                 map = null;
         }
-        answerListMap.add(map);
-        result.put("answerReported",answerListMap);
+
+        result.put("answerReported",map);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
