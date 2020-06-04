@@ -368,20 +368,22 @@ public class AnswerServiceImpl implements AnswerService{
             result=getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, 0));
             cUser.put("id",user.getId());
             cUser.put("head", ImgUtil.changeAvatar(user.getHead()));
+            List<Message> messageList = messageDAO.listUnReadMessageByUserId(user.getId());
+            if(messageList.size()>0){
+                cUser.put("hasNotReadMsg",1);
+            }
+            else {
+                cUser.put("hasNotReadMsg",0);
+            }
         } else {
             result=getRecommendJsonItems(selectRecommendAnswer(null, count, 0));
             cUser.put("id",0);
             cUser.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            cUser.put("hasNotReadMsg",0);
         }
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         result.put("user",cUser);
-        List<Message> messageList = messageDAO.listUnReadMessageByUserId(user.getId());
-        if(messageList.size()>0){
-            result.put("hasNotReadMsg",1);
-        }
-        else {
-            result.put("hasNotReadMsg",0);
-        }
+
         return result;
     }
 
