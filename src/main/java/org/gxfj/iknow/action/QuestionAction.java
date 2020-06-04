@@ -69,6 +69,11 @@ public class QuestionAction {
     }
 
     final static private int RESPONSE_NUM = 20;
+
+    /**
+     * 发布问题
+     * @return SUCCESS
+     */
     public String postQuestion() {
         /*
         测试用输出到屏幕
@@ -80,86 +85,34 @@ public class QuestionAction {
         System.out.println(subjectType);
         System.out.println(majorType);
         /////////////
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if (user == null) {
-            response.put("resultCode",ConstantUtil.UN_LOGIN);
-        }
-        else if (questionTitle == null || questionContent == null || categoriesType == null || subjectType == null
-            || majorType == null || isAnonymous == null) {
-            response.put("resultCode",ConstantUtil.MISS_QUESTION_INF);
-        }
-        else {
-            Integer x = questionService.postQuestion(user, questionTitle, questionContent, categoriesType, subjectType
-                    , majorType, isAnonymous);
-            if (x != null) {
-                response.put("questionId",x);
-                response.put("resultCode", ConstantUtil.SUCCESS);
-            } else {
-                response.put("resultCode", ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
-            }
-        }
+        Map<String, Object> response = questionService.postQuestion
+                (questionTitle,questionContent,categoriesType,subjectType,majorType,isAnonymous);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得问题类型
+     * @return SUCCESS
+     */
     public String questionType() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        if (user == null) {
-            response.put("resultCode",ConstantUtil.UN_LOGIN);
-        } else {
-            response = questionService.getQuestionType();
-            response.put("resultCode", ConstantUtil.SUCCESS);
-        }
-        System.out.println(JSON.toJSONString(response));
+        Map<String, Object> response = questionService.getQuestionType();
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String viewQuestion() {
-        System.out.println(questionId);
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        int sort1;
-        if (sort==null){
-            session.put("answersort",ConstantUtil.QUESTION_DEFAULT_SORT);
-            sort1=ConstantUtil.QUESTION_DEFAULT_SORT;
-        }
-        else {
-            sort1=sort;
-            session.put("answersort",sort);
-        }
-        //题主
-        User viewUser = questionService.get(questionId);
-        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        response.put("question",questionService.getQuestion(user,questionId, 20,sort1));
-        response.put("resultCode",ConstantUtil.SUCCESS);
-        if(user == null || !isQuestionUser){
-            response.put("viewerIsOwner",0);
-        }
-        if(isQuestionUser){
-            response.put("viewerIsOwner",1);
-        }
+        Map<String, Object> response = questionService.getQuestion(questionId, 20, sort);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 取消采纳
+     * @return SUCCESS
+     */
     public String cancelAdopt() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        User viewUser = questionService.get(questionId);
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
-        if(user == null || !isQuestionUser){
-            response.put("resultCode",1);
-        }else{
-            questionService.cancelAdopt(questionId);
-            response.put("resultCode",ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = questionService.cancelAdopt(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

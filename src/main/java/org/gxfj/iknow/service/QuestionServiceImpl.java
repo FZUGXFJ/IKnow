@@ -1,6 +1,7 @@
 package org.gxfj.iknow.service;
 
 
+import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
@@ -54,84 +55,129 @@ public class QuestionServiceImpl implements QuestionService{
     final static private int MILLIS_PER_MINUTE = 60;
 
     @Override
-    public Integer postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
+    public Map<String, Object> postQuestion(String title, String context, Integer categoryType, Integer subjectType
             , Integer majorType, Byte isAnonymous) {
-        if (!TextVerifyUtil.verifyCompliance(title) || !TextVerifyUtil.verifyCompliance(context)) {
-            return null;
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if (user == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
         }
+        else if (title == null || context == null || categoryType == null || subjectType == null
+                || majorType == null || isAnonymous == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.MISS_QUESTION_INF);
+        }
+        else {
+            if (TextVerifyUtil.verifyCompliance(title) && TextVerifyUtil.verifyCompliance(context)) {
+                Question question = new Question();
+                Questiontype questiontype = questionTypeDAO.get(categoryType,subjectType,majorType);
+                Questionstate questionstate = new Questionstate();
+                Questionscenario questionscenario = new Questionscenario();
 
-        Question question = new Question();
-        Questiontype questiontype = questionTypeDAO.get(categoryType,subjectType,majorType);
-        Questionstate questionstate = new Questionstate();
-        Questionscenario questionscenario = new Questionscenario();
+                questionstate.setId(QUESTION_STATE_UNSOLVE);
+                questionscenario.setId(QUESTION_SCENARIO_STUDENT);
 
-        questionstate.setId(QUESTION_STATE_UNSOLVE);
-        questionscenario.setId(QUESTION_SCENARIO_STUDENT);
-
-        question.setUserByUserId(user);
-        question.setTitle(title);
-        question.setContentHtml(context);
-        question.setContentText(HtmlUtil.html2Text(context));
-        question.setQuestiontypeByTypeId(questiontype);
-        question.setQuestionstateByStateId(questionstate);
-        question.setQuestionscenarioByScenarioId(questionscenario);
-        question.setDate(new Date());
-        question.setIsDelete((byte)0);
-        question.setIsAnonymous(isAnonymous);
-
-        return questionDAO.add(question);
+                question.setUserByUserId(user);
+                question.setTitle(title);
+                question.setContentHtml(context);
+                question.setContentText(HtmlUtil.html2Text(context));
+                question.setQuestiontypeByTypeId(questiontype);
+                question.setQuestionstateByStateId(questionstate);
+                question.setQuestionscenarioByScenarioId(questionscenario);
+                question.setDate(new Date());
+                question.setIsDelete((byte)0);
+                question.setIsAnonymous(isAnonymous);
+                result.put("questionId",questionDAO.add(question));
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            }
+        }
+        return result;
     }
 
     final static private int MAP_NUM = 20;
 
     @Override
     public Map<String, Object> getQuestionType() {
-        Map<String, Object> questionType= new HashMap<>(MAP_NUM);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if(user == null) {
+            result.put("resultCode",ConstantUtil.UN_LOGIN);
+        } else {
+            //查询到的所有门类
+            List<Categoriestype> categoriestypeList = categoriesTypeDAO.list();
+            //JSON中数组
+            List<Map<String, Object>> categoriesTypeList = new ArrayList<>();
+            List<Map<String, Object>> subjectTypeList;
+            List<Map<String, Object>> majorTypeList;
+            //JSON中数组的成员
+            Map<String, Object> categoriesTypeMap;
+            Map<String, Object> subjectTypeMap;
+            Map<String, Object> majorTypeMap;
+            for (Categoriestype categoriestype: categoriestypeList) {
+                categoriesTypeMap = new HashMap<>(MAP_NUM);
+                categoriesTypeMap.put("id", categoriestype.getId());
+                categoriesTypeMap.put("name", categoriestype.getName());
 
-        //查询到的所有门类
-        List<Categoriestype> categoriestypeList = categoriesTypeDAO.list();
-        //JSON中数组
-        List<Map<String, Object>> categoriesTypeList = new ArrayList<>();
-        List<Map<String, Object>> subjectTypeList;
-        List<Map<String, Object>> majorTypeList;
-        //JSON中数组的成员
-        Map<String, Object> categoriesTypeMap;
-        Map<String, Object> subjectTypeMap;
-        Map<String, Object> majorTypeMap;
+                subjectTypeList = new ArrayList<>();
+                for (Subjecttype subjecttype : subjectTypeDAO.list(categoriestype.getId())) {
+                    subjectTypeMap = new HashMap<>(MAP_NUM);
+                    subjectTypeMap.put("id", subjecttype.getId());
+                    subjectTypeMap.put("name", subjecttype.getName());
 
-        for (Categoriestype categoriestype: categoriestypeList) {
-            categoriesTypeMap = new HashMap<>(MAP_NUM);
-            categoriesTypeMap.put("id", categoriestype.getId());
-            categoriesTypeMap.put("name", categoriestype.getName());
+                    majorTypeList = new ArrayList<>();
+                    for (Majortype majortype : majorTypeDAO.list(subjecttype.getId())) {
+                        majorTypeMap = new HashMap<>(MAP_NUM);
+                        majorTypeMap.put("id", majortype.getId());
+                        majorTypeMap.put("name", majortype.getName());
 
-            subjectTypeList = new ArrayList<>();
-            for (Subjecttype subjecttype : subjectTypeDAO.list(categoriestype.getId())) {
-                subjectTypeMap = new HashMap<>(MAP_NUM);
-                subjectTypeMap.put("id", subjecttype.getId());
-                subjectTypeMap.put("name", subjecttype.getName());
+                        majorTypeList.add(majorTypeMap);
+                    }
 
-                majorTypeList = new ArrayList<>();
-                for (Majortype majortype : majorTypeDAO.list(subjecttype.getId())) {
-                    majorTypeMap = new HashMap<>(MAP_NUM);
-                    majorTypeMap.put("id", majortype.getId());
-                    majorTypeMap.put("name", majortype.getName());
-
-                    majorTypeList.add(majorTypeMap);
+                    subjectTypeMap.put("majorTypes", majorTypeList);
+                    subjectTypeList.add(subjectTypeMap);
                 }
-
-                subjectTypeMap.put("majorTypes", majorTypeList);
-                subjectTypeList.add(subjectTypeMap);
+                categoriesTypeMap.put("subjectTypes", subjectTypeList);
+                categoriesTypeList.add(categoriesTypeMap);
             }
-            categoriesTypeMap.put("subjectTypes", subjectTypeList);
-            categoriesTypeList.add(categoriesTypeMap);
+            result.put("categoriesTypes", categoriesTypeList);
+            result.put("resultCode", ConstantUtil.SUCCESS);
         }
-
-        questionType.put("categoriesTypes", categoriesTypeList);
-        return questionType;
+        return result;
     }
 
     @Override
-    public Map<String, Object> getQuestion(User user, Integer questionId, int length,int sort){
+    public Map<String, Object> getQuestion(Integer questionId, Integer length,Integer sort){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if (sort == null){
+            sort=ConstantUtil.QUESTION_DEFAULT_SORT;
+        }
+        ActionContext.getContext().getSession().put("answersort",sort);
+        //题主
+        User viewUser =get(questionId);
+        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
+        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
+        response.put("question",getQuestion(user, questionId, length, sort));
+        response.put("resultCode",ConstantUtil.SUCCESS);
+        if(user == null || !isQuestionUser){
+            response.put("viewerIsOwner",0);
+        }
+        if(isQuestionUser){
+            response.put("viewerIsOwner",1);
+        }
+        return result;
+    }
+
+    /**
+     * 将获取问题分离出来
+     * @param user 用户
+     * @param questionId 问题id
+     * @param length 长度
+     * @param sort 排序方法
+     * @return 问题map
+     */
+    private Map<String, Object> getQuestion(User user, Integer questionId, Integer length,Integer sort){
         Map<String, Object> questionMap = new HashMap<>(MAP_NUM);
         if(user!=null){
             insertBrowsing(user.getId(),questionId);
@@ -147,7 +193,6 @@ public class QuestionServiceImpl implements QuestionService{
         List<Map<String, Object>> questionAnswers;
         //JSON中的数组成员
         Map<String, Object> questionAnswerMap;
-
         //Question的owner的JSON数据
         questionMap.put("owner",setQueOwnerByIfAnonymous(question));
         questionMap.put("isAnonymous",question.getIsAnonymous());
@@ -162,7 +207,6 @@ public class QuestionServiceImpl implements QuestionService{
         } else {
             questionMap.put("answerCount", answers.size());
         }
-
         //包含采纳回答的列表
         List<Answer> nAnswers = new ArrayList<>();
         //将采纳的回答放入列表第一位
@@ -281,10 +325,20 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public void cancelAdopt(Integer questionId){
-        Question question = questionDAO.getNotDelete(questionId);
-        question.setIsAnonymous((byte)0);
-        questionDAO.update(question);
+    public Map<String, Object> cancelAdopt(Integer questionId){
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        User viewUser = get(questionId);
+        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
+        if(user == null || !isQuestionUser){
+            result.put("resultCode",1);
+        }else{
+            Question question = questionDAO.getNotDelete(questionId);
+            question.setIsAnonymous((byte)0);
+            questionDAO.update(question);
+            result.put("resultCode",ConstantUtil.SUCCESS);
+        }
+        return result;
     }
 
     @Override
@@ -354,7 +408,7 @@ public class QuestionServiceImpl implements QuestionService{
     public Map<String, Object> getQuestioninf(Integer questionId,User user) {
         Map<String,Object> result = getQuestionType();
         if(user == null){
-            result.put("resultCode",1);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);
             return result;
         }
         else {
@@ -365,7 +419,7 @@ public class QuestionServiceImpl implements QuestionService{
             result.put("subjectId",question.getQuestiontypeByTypeId().getSubjecttypeBySubjectId().getId());
             result.put("majorId",question.getQuestiontypeByTypeId().getMajortypeByMajorId().getId());
             User user1 = question.getUserByUserId();
-            result.put("resultCode",user1.getId().equals(user.getId()) ? 0 : 2);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,user1.getId().equals(user.getId()) ? 0 : 2);
             return result;
         }
     }

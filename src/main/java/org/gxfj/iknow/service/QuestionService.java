@@ -14,7 +14,6 @@ import java.util.Map;
 public interface QuestionService {
     /**
      * 根据参数构造Qustion对象并存储存储到数据库中
-     * @param user 发表问题的用户
      * @param title 问题标题
      * @param context 问题详情
      * @param categoryType 问题所属的门类
@@ -23,7 +22,7 @@ public interface QuestionService {
      * @param isAnonymous 提问者发布问题时，是否匿名
      * @return 问题id
      */
-    public Integer postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
+    public Map<String, Object> postQuestion(String title, String context, Integer categoryType, Integer subjectType
         , Integer majorType, Byte isAnonymous);
 
     /**
@@ -34,19 +33,18 @@ public interface QuestionService {
     
     /**
      * 根据问题的id，获得问题及问题下的前length个回答的相关信息
-     * @param user 用户
      * @param questionId 要获得的问题
      * @param length 要加载的回答个数
      * @param sort 排序方式
      * @return json格式的问题信息
      */
-    public Map<String, Object>getQuestion(User user, Integer questionId, int length,int sort);
+    public Map<String, Object>getQuestion(Integer questionId, Integer length,Integer sort);
 
     /**
      * 根据问题的id，获得问题及问题下的前length个回答的相关信息
      * @param questionId 取消匿名的问题
      */
-    public void cancelAdopt(Integer questionId);
+    public Map<String, Object> cancelAdopt(Integer questionId);
 
     /**
      * 获取题主
