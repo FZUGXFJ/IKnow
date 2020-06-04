@@ -451,11 +451,11 @@
                                 message.answerMessages.push(msg);
                                 message.hasNewestAnsMsg = true;
                             } else if (msg.type === 3) {
-                                message.approveMessages.push(msg);
-                                message.hasNewestAppMsg = true;
-                            } else if (msg.type === 4) {
                                 message.coAndReMessages.push(msg);
                                 message.hasNewestCoAndReMsg = true;
+                            } else if (msg.type === 4) {
+                                message.approveMessages.push(msg);
+                                message.hasNewestAppMsg = true;
                             }
                         });
                         if (message.hasNewestSysMsg) {
