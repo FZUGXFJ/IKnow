@@ -102,7 +102,7 @@ public class QuestionServiceImpl implements QuestionService{
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if(user == null) {
-            result.put("resultCode",ConstantUtil.UN_LOGIN);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
         } else {
             //查询到的所有门类
             List<Categoriestype> categoriestypeList = categoriesTypeDAO.list();
@@ -141,7 +141,7 @@ public class QuestionServiceImpl implements QuestionService{
                 categoriesTypeList.add(categoriesTypeMap);
             }
             result.put("categoriesTypes", categoriesTypeList);
-            result.put("resultCode", ConstantUtil.SUCCESS);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         return result;
     }
@@ -157,14 +157,13 @@ public class QuestionServiceImpl implements QuestionService{
         //题主
         User viewUser =get(questionId);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
-        Map<String, Object> response = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        response.put("question",getQuestion(user, questionId, length, sort));
-        response.put("resultCode",ConstantUtil.SUCCESS);
+        result.put("question",getQuestion(user, questionId, length, sort));
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         if(user == null || !isQuestionUser){
-            response.put("viewerIsOwner",0);
+            result.put("viewerIsOwner",0);
         }
         if(isQuestionUser){
-            response.put("viewerIsOwner",1);
+            result.put("viewerIsOwner",1);
         }
         return result;
     }
@@ -331,12 +330,12 @@ public class QuestionServiceImpl implements QuestionService{
         User viewUser = get(questionId);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
         if(user == null || !isQuestionUser){
-            result.put("resultCode",1);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);
         }else{
             Question question = questionDAO.getNotDelete(questionId);
             question.setIsAnonymous((byte)0);
             questionDAO.update(question);
-            result.put("resultCode",ConstantUtil.SUCCESS);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         }
         return result;
     }

@@ -108,7 +108,8 @@ public class QuestionAction {
     }
 
     /**
-     * 取消采纳
+     * 取消采纳，没有实现这个功能
+     * TODO 删除这个方法
      * @return SUCCESS
      */
     public String cancelAdopt() {
@@ -118,35 +119,13 @@ public class QuestionAction {
     }
 
     public String collectQuestion() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        if (user == null) {
-            response.put("resultCode",ConstantUtil.UN_LOGIN);
-        } else if(collectionService.getCollectionQuestion(user.getId(),questionId) != null){
-            //resultCode = 2 表示已收藏无法再次收藏
-            response.put("resultCode", 2);
-        } else {
-            collectionService.collectProblem(user,questionId);
-            response.put("resultCode", ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = collectionService.collectProblem(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String cancelCollect() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        if (user == null) {
-            response.put("resultCode",ConstantUtil.UN_LOGIN);
-        } else if(collectionService.getCollectionQuestion(user.getId(),questionId) == null){
-            //resultCode = 2 表示未收藏无法取消收藏
-            response.put("resultCode", 2);
-        } else {
-            collectionService.cancelCollect(user,questionId);
-            response.put("resultCode", ConstantUtil.SUCCESS);
-        }
+        Map<String, Object> response = collectionService.cancelCollect(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -160,11 +139,11 @@ public class QuestionAction {
         }
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (questionService.moreAnswers(user,questionId,start, ConstantUtil.SHOW_ANSWERS_NUM,sort1 )==null){
-            response.put("resultCode",ConstantUtil.NO_MORE);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
         }
         else {
             response=questionService.moreAnswers(user,questionId,start, ConstantUtil.SHOW_ANSWERS_NUM,sort1);
-            response.put("resultCode",ConstantUtil.SUCCESS);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         }
 
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -176,12 +155,12 @@ public class QuestionAction {
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
         if (user == null) {
-            response.put("resultCode", ConstantUtil.UN_LOGIN);
+            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
         } else {
             if (questionService.deleteQuestion(user, questionId)) {
-                response.put("resultCode", ConstantUtil.SUCCESS);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
-                response.put("resultCode", ConstantUtil.USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT);
+                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT);
             }
         }
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
