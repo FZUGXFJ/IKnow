@@ -122,7 +122,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public List<Question> listByQuestionType(Integer questionTypeId, Integer start, Integer count) {
-        String hql = "FROM Question WHERE typeId = ?";
+        String hql = "FROM Question WHERE (typeId = ?) and (isDelete = 0)";
         Query query = getSession().createQuery(hql);
         return query.setInteger(0,questionTypeId).setFirstResult(start).setMaxResults(count).list();
     }
