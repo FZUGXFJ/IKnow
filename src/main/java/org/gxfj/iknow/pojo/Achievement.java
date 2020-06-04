@@ -10,6 +10,7 @@ import java.util.Collection;
 public class Achievement {
     private Integer id;
     private String name;
+    private String introduct;
     private Collection<Achievementrecord> achievementrecordsById;
 
     @Id
@@ -31,6 +32,17 @@ public class Achievement {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Basic
+    @Column(name = "introduct", nullable = false, length = 20)
+    public String getIntroduct() {
+        return introduct;
+    }
+
+    public void setIntroduct(String introduct) {
+        this.introduct = introduct;
+    }
+
 
     @Override
     public boolean equals(Object o) {
