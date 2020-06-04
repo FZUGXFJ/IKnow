@@ -10,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.*;
+
+import static org.gxfj.iknow.util.ConstantUtil.*;
 
 /**
  * @author Administrator hhj
@@ -48,15 +52,32 @@ public class UserServiceImpl<result> implements UserService{
     private static int MAP_NUM = 20;
 
     @Override
-    public Map<String,Object> logon(String username, String password, String email) {
-        Map<String,Object> resultMap = new HashMap<>(16);
+    public Map<String,Object> logon(String username, String password, String email, String verifyCode) {
+        Map<String,Object> resultMap = new HashMap<>(MIN_HASH_MAP_NUM);
+
+        Map<String,Object> session = ActionContext.getContext().getSession();
+
+        String sessionVerifyCode = (String)session.get(VERIFY_CODE);
+        String sessionEmail = (String)session.get(EMAIL);
+        session.put(VERIFY_CODE, null);
+        session.put(EMAIL, null);
+
+        if (!verifyCode.equals(sessionVerifyCode)) {
+            resultMap.put("response", 3);
+            return resultMap;
+        } else if (!email.equals(sessionEmail)) {
+            resultMap.put("response", 4);
+            return resultMap;
+        }
+
+
         User user = new User();
         if (userDAO.hasUsername(username)) {
-            resultMap.put("value",1);
+            resultMap.put("response",1);
             return resultMap;
         }
         if (userDAO.hasUserEmail(email)) {
-            resultMap.put("value",2);
+            resultMap.put("response",2);
             return resultMap;
         }
         user.setName(username);
@@ -80,10 +101,12 @@ public class UserServiceImpl<result> implements UserService{
         user.setUserstateByStateId(userstate);
         //初始头像
         user.setHead("1.jpg");
+        user.setReportedTimes(0);
         userDAO.add(user);
-        resultMap.put("value",0);
-        resultMap.put("result","注册成功");
-        resultMap.put("user",user);
+
+        resultMap.put("response", SUCCESS);
+        session.put("user", user);
+
         return resultMap;
     }
 
