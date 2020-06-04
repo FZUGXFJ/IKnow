@@ -28,7 +28,7 @@
                         <i class="fas fa-bell" style="color: rgba(90,55,255,0.58)"></i>
                     </td>
                     <td style="width: 5%;">
-                        <div class="redDot"></div>
+                        <div class="redDot" v-if="inf.hasNotReadMsg === 1"></div>
                     </td>
                     <td style="width: 10%">
                         <i class="fas fa-pen" style="color: rgba(90,55,255,0.58)" @click="toModify"></i>
@@ -227,6 +227,9 @@
                     if (result.resultCode === 0) {
                         myInfo.inf = result.information;
                         myInfo.loaded = true;
+                        if (myInfo.inf.hasNotReadMsg === 0) {
+                            sessionStorage.setItem("hasNotReadMsg","0");
+                        }
                     } else {
                         location.href = "user/login.html?boot=0";
                     }

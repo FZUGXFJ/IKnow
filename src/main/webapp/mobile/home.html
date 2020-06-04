@@ -30,6 +30,9 @@
                 <td style="width: 12%;text-align: center">
                     <div class="headPortrait" v-html="user.head" @click="toMyPage"></div>
                 </td>
+                <td v-if="hasNotReadMsg === 1">
+                    <div class="redDot1"></div>
+                </td>
             </table>
             <br>
             <table>
@@ -109,7 +112,7 @@
                 <div>首页</div>
             </td>
             <td style="width: 34%;text-align: center">
-                <i class="fas fa-plus" style="color: #12eee7" @click="add"></i>
+                <i class="fas fa-plus" style="color: #ee8318" @click="add"></i>
                 <div>添加</div>
             </td>
             <td style="width: 33%;text-align: center">
@@ -154,7 +157,8 @@
                 }
             ],
             selectAid:0,
-            showSheet:false
+            showSheet:false,
+            hasNotReadMsg:0
         },
         methods:{
             add:function () {
@@ -217,8 +221,12 @@
             saveToSession:function () {
                 sessionStorage.setItem("recommends",JSON.stringify(homePage.recommends));
                 sessionStorage.setItem("user",JSON.stringify(homePage.user));
-                sessionStorage.setItem("loading",homePage.loading);
-                sessionStorage.setItem("start",homePage.start);
+                let recommendsInfo = {
+                    loading:this.loading,
+                    start:this.start
+                };
+                sessionStorage.setItem("recommendsInfo",JSON.stringify(recommendsInfo));
+                sessionStorage.setItem("hasNotReadMsg",this.hasNotReadMsg);
             },
             toMyPage:function () {
                 if (this.loading === 0) {
@@ -249,8 +257,10 @@
             if (sessionStorage.getItem("recommends") != null) {
                 this.recommends = JSON.parse(sessionStorage.getItem("recommends"));
                 this.user = JSON.parse(sessionStorage.getItem("user"));
-                this.loading = parseInt(sessionStorage.getItem("loading"));
-                this.start = parseInt(sessionStorage.getItem("start"));
+                let recommendsInfo = JSON.parse(sessionStorage.getItem("recommendsInfo"));
+                this.loading = recommendsInfo.loading;
+                this.start = recommendsInfo.start;
+                this.hasNotReadMsg = parseInt(sessionStorage.getItem("hasNotReadMsg"));
             } else {
                 $.ajax({
                     url: "../answer/recommendAnswer.action",
@@ -263,6 +273,7 @@
                             homePage.user = result.user;
                             homePage.loading = 2;
                             homePage.start = result.recommends.length;
+                            homePage.hasNotReadMsg = result.hasNotReadMsg;
                             homePage.saveToSession();
                         }
                     },
