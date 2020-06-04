@@ -16,5 +16,5 @@ public interface SearchService {
      *  按关键词搜索
      *  @param keyword 搜索的关键字
      */
-    Map<String,Object> searchResult(String keyword,Integer userId);
+    Map<String,Object> searchResult(String keyword);
 }

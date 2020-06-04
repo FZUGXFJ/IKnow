@@ -33,22 +33,16 @@ public class SearchAction {
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
+
+
     public String searchHistory() {
         Map<String,Object> response = searchService.searchHistory();
-        response.put(JSON_RETURN_CODE_NAME,SUCCESS);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 
     public String searchResult() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(SESSION_USER);
-        Integer userId = -1;
-        if (user != null) {
-            userId = user.getId();
-        }
-        Map<String,Object> response = searchService.searchResult(keyword,userId);
-        response.put(JSON_RETURN_CODE_NAME,SUCCESS);
+        Map<String, Object> response = searchService.searchResult(keyword);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
