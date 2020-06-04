@@ -55,14 +55,12 @@ public interface QuestionService {
 
     /**
      * 根据问题的id，获得问题及问题下的前length个回答的相关信息
-     * @param user 用户
      * @param questionId 要获得的问题
      * @param length 要加载的回答个数
      * @param start 起始地址
-     * @param sort 排序方式
      * @return json格式的问题信息
      */
-    Map<String,Object> moreAnswers(User user, Integer questionId,int start, int length,int sort);
+    Map<String,Object> moreAnswers (Integer questionId,int start, int length);
 
     /**
      * 插入浏览记录
@@ -73,19 +71,17 @@ public interface QuestionService {
 
     /**
      * 删除问题
-     * @param user 执行操作的用户
      * @param questionId 要删除问题
      * @return 删除的结果
      */
-    boolean deleteQuestion(User user, Integer questionId);
+    Map<String, Object> deleteQuestion(Integer questionId);
 
     /**
      * 获取问题信息
      * @param questionId 问题id
-     * @param user 用户信息
      * @return 问题信息
      */
-    Map<String,Object> getQuestioninf(Integer questionId,User user);
+    Map<String,Object> getQuestioninf(Integer questionId);
 
     /**
      * 修改问题信息

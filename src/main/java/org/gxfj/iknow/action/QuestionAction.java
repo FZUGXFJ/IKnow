@@ -118,65 +118,52 @@ public class QuestionAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 收藏问题
+     * @return SUCCESS
+     */
     public String collectQuestion() {
         Map<String, Object> response = collectionService.collectProblem(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 取消收藏
+     * @return SUCCESS
+     */
     public String cancelCollect() {
         Map<String, Object> response = collectionService.cancelCollect(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 查看更多回答
+     * @return SUCCESS
+     */
     public String moreAnswer() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        Integer sort1 =(Integer)session.get("answersort");
-        if(sort1 ==null){
-            sort1 = ConstantUtil.QUESTION_DEFAULT_SORT;
-        }
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        if (questionService.moreAnswers(user,questionId,start, ConstantUtil.SHOW_ANSWERS_NUM,sort1 )==null){
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
-        }
-        else {
-            response=questionService.moreAnswers(user,questionId,start, ConstantUtil.SHOW_ANSWERS_NUM,sort1);
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-        }
-
+        Map<String, Object> response = questionService.moreAnswers(questionId, start, 20);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 删除问题
+     * @return SUCCESS
+     */
     public String deleteQuestion() {
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        if (user == null) {
-            response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
-        } else {
-            if (questionService.deleteQuestion(user, questionId)) {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            } else {
-                response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT);
-            }
-        }
+        Map<String, Object> response =questionService.deleteQuestion(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得问题的信息
+     * @return SUCCESS
+     */
     public String getQuestionInfo(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        User user = (User) session.get(ConstantUtil.SESSION_USER);
-        Map<String, Object> response;
-        if(user == null){
-            response = questionService.getQuestioninf(questionId,null);
-        }
-        else {
-            response = questionService.getQuestioninf(questionId,user);
-        }
+        Map<String, Object> response = questionService.getQuestioninf(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

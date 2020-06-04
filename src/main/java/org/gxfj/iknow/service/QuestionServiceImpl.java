@@ -346,19 +346,28 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> moreAnswers(User user, Integer questionId,int start, int length,int sort) {
-        Map<String, Object> moreAns = new HashMap<>(MAP_NUM);
+    public Map<String, Object> moreAnswers(Integer questionId,int start, int length) {
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        User user = (User) session.get(ConstantUtil.SESSION_USER);
+        Integer sort =(Integer)session.get("answersort");
+        if(sort ==null){
+            sort = ConstantUtil.QUESTION_DEFAULT_SORT;
+        }
         //根据问题id查询到的问题
         Question question = questionDAO.getNotDelete(questionId);
         //问题的回答
         List<Answer> answers = answerDAO.listByQuestionIdSort(question.getId(),start, length,sort);
         if (answers.size() == 0){
-            return null;
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.NO_MORE);
         }
-        List<Map<String, Object>> questionAnswers;
-        questionAnswers = setAnswersJson(answers,question);
-        moreAns.put("answers",questionAnswers);
-        return moreAns;
+        else {
+            List<Map<String, Object>> questionAnswers;
+            questionAnswers = setAnswersJson(answers,question);
+            result.put("answers",questionAnswers);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+        }
+        return result;
     }
 
     @Override
@@ -372,43 +381,41 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public boolean deleteQuestion(User user, Integer questionId) {
-        if (user == null || user.getId() == null) {
-            return false;
-        }
-        Question question = questionDAO.get(questionId);
-        if (question == null || !question.getUserByUserId().getId().equals(user.getId())) {
-            return false;
-        }
-
-
-        Collection<Answer> answerCollection = question.getAnswersById();
-
-        for (Answer answer : answerCollection) {
-            Collection<Comment> commentCollection = answer.getCommentsById();
-
-            for (Comment comment : commentCollection) {
-                Collection<Reply> replyCollection = comment.getRepliesById();
-
-                for (Reply reply : replyCollection) {
-                    replyDAO.delete(reply);
+    public Map<String, Object> deleteQuestion(Integer questionId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if (user == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+        } else {
+            Question question = questionDAO.get(questionId);
+            if (question.getUserByUserId().getId().equals(user.getId())) {
+                Collection<Answer> answerCollection = question.getAnswersById();
+                for (Answer answer : answerCollection) {
+                    Collection<Comment> commentCollection = answer.getCommentsById();
+                    for (Comment comment : commentCollection) {
+                        Collection<Reply> replyCollection = comment.getRepliesById();
+                        for (Reply reply : replyCollection) {
+                            replyDAO.delete(reply);
+                        }
+                        commentDAO.delete(comment);
+                    }
+                    answerDAO.delete(answer);
                 }
-                commentDAO.delete(comment);
+                questionDAO.delete(question);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            } else {
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT);
             }
-
-            answerDAO.delete(answer);
         }
-        questionDAO.delete(question);
-
-        return true;
+        return result;
     }
 
     @Override
-    public Map<String, Object> getQuestioninf(Integer questionId,User user) {
+    public Map<String, Object> getQuestioninf(Integer questionId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String,Object> result = getQuestionType();
         if(user == null){
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);
-            return result;
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);;
         }
         else {
             Question question = questionDAO.get(questionId);
@@ -419,8 +426,9 @@ public class QuestionServiceImpl implements QuestionService{
             result.put("majorId",question.getQuestiontypeByTypeId().getMajortypeByMajorId().getId());
             User user1 = question.getUserByUserId();
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,user1.getId().equals(user.getId()) ? 0 : 2);
-            return result;
         }
+        return result;
+
     }
 
     @Override
