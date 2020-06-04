@@ -83,23 +83,9 @@ public class UserAction {
     }
 
     public String logon() {
-        Map<String,Object> session = ActionContext.getContext().getSession();
-        String result = null;
-        if (session.get(VERIFY_CODE) == null || !verifyCode.equals(session.get(VERIFY_CODE))) {
-            result = "{\"response\":3}";
-            inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            return RETURN_STRING;
-        } else if (session.get(EMAIL) == null || !email.equals(session.get(EMAIL))) {
-            result = "{\"response\":4}";
-            inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            return RETURN_STRING;
-        }
-        Map<String,Object> resultMap = userService.logon(username,password,email);
-        if ((Integer) resultMap.get("value") == SUCCESS_LOGON) {
-            session.put("user",resultMap.get("user"));
-        }
-        result = "{\"response\":" + resultMap.get("value") + "}";
-        inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+        Map<String,Object> resultMap = userService.logon(username,password,email, verifyCode);
+
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 

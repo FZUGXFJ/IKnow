@@ -56,7 +56,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Integer postQuestion(User user, String title, String context, Integer categoryType, Integer subjectType
             , Integer majorType, Byte isAnonymous) {
-        if (!TextVerifyUtil.verifyCompliance(title) && !TextVerifyUtil.verifyCompliance(context)) {
+        if (!TextVerifyUtil.verifyCompliance(title) || !TextVerifyUtil.verifyCompliance(context)) {
             return null;
         }
 
