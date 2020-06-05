@@ -324,7 +324,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> cancelAdopt(Integer questionId){
+    public Map<String, Object> cancelAnonymous(Integer questionId){
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         User viewUser = get(questionId);
