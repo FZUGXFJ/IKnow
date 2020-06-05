@@ -44,7 +44,8 @@
         <p></p>
     </div>
 </div>
-<div id="toolbar" style="border: 0;bottom:0;position: fixed;z-index: 9999;margin: 1em 0">
+<br><br><br>
+<div id="toolbar" style="border: 0;bottom:0;position: fixed;z-index: 9999;margin-top: 1em;background-color: white">
     <table>
         <td style="width: 60%">
             <button class="ql-bold">Bold</button>
@@ -103,8 +104,8 @@
                             sessionStorage.removeItem("questionData");
                             sessionStorage.removeItem("questionInfo");
                             history.go(-1);
-                        } else {
-                            postAnswer.alertMsg.head = "未知错误！";
+                        } else if (result.resultCode === 10) {
+                            postAnswer.alertMsg.head = "回答中存在敏感词，请检查后重新发布！";
                             $("#alert").slideDown();
                         }
                     },

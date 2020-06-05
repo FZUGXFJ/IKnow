@@ -272,7 +272,6 @@
             showPanel:0,
             popupVisible:false,
             currentMsg:""
-
         },
         methods:{
             back:function () {
@@ -362,9 +361,9 @@
                 } else if (msg.type === 2) {
                     this.saveAns(msg);
                 } else if (msg.type === 3) {
-                    this.saveApp(msg);
-                } else if (msg.type === 4) {
                     this.saveCR(msg);
+                } else if (msg.type === 4) {
+                    this.saveApp(msg);
                 }
             },
             saveSys:function (msg) {
@@ -451,11 +450,11 @@
                                 message.answerMessages.push(msg);
                                 message.hasNewestAnsMsg = true;
                             } else if (msg.type === 3) {
-                                message.approveMessages.push(msg);
-                                message.hasNewestAppMsg = true;
-                            } else if (msg.type === 4) {
                                 message.coAndReMessages.push(msg);
                                 message.hasNewestCoAndReMsg = true;
+                            } else if (msg.type === 4) {
+                                message.approveMessages.push(msg);
+                                message.hasNewestAppMsg = true;
                             }
                         });
                         if (message.hasNewestSysMsg) {

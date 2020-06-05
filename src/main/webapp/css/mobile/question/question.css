@@ -54,7 +54,6 @@ table{
     color: #12eee7;
 }
 .lb{
-    color: #12eee7;
     padding-left: 2%;
 }
 #footer{
@@ -100,4 +99,21 @@ table{
 }
 .answerInf{
     margin-bottom: 0.3em;
+}
+.head{
+    border-radius: 100%;
+}
+.inviteItem{
+    padding-bottom: 1em;
+}
+.inviteName{
+    color: #ee6400;
+}
+.inviteInt{
+    font-size: 0.8em;
+    opacity: 0.5;
+}
+.inviteBtn{
+    color: #003aee;
+    border-radius: 0.5em;
 }

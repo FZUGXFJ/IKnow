@@ -370,19 +370,19 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <select class="custom-select d-block w-100" required>
-                                        <option select>惩罚方式..</option>
-                                        <option @click="ban=true">封禁</option>
-                                        <option @click="ban=false">禁言</option>
+                                        <option select v-if="isSel==false" @click="isSel=false">惩罚方式..</option>
+                                        <option @click="ban=true;isSel=true">封禁</option>
+                                        <option @click="ban=false;isSel=true">禁言</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <select class="custom-select d-block w-100" required>
                                         <option select>天数..</option>
-                                        <option>7天</option>
-                                        <option>30天</option>
-                                        <option>90天</option>
-                                        <option>365天</option>
-                                        <option v-if="ban==true">永久</option>
+                                        <option v-if="isSel==true" @click="isWeek=true;isMon=false;isTrMon=false;isYear=false;isFor=false">7天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=true;isTrMon=false;isYear=false;isFor=false">30天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=false;isTrMon=true;isYear=false;isFor=false">90天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=false;isTrMon=false;isYear=true;isFor=false">365天</option>
+                                        <option v-if="ban==true" @click="isWeek=false;isMon=false;isTrMon=false;isYear=false;isFor=true">永久</option>
                                     </select>
                                 </div>
                             </div>
@@ -391,8 +391,9 @@
 
                         </td>
                         <td>
-                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="dealEnd();isSel=false" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
                         </td>
                     </tr>
                     </tbody>
@@ -428,19 +429,19 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <select class="custom-select d-block w-100" required>
-                                        <option select>惩罚方式..</option>
-                                        <option @click="ban=true">封禁</option>
-                                        <option @click="ban=false">禁言</option>
+                                        <option select @click="isSel=false">惩罚方式..</option>
+                                        <option @click="ban=true;isSel=true">封禁</option>
+                                        <option @click="ban=false;isSel=true">禁言</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <select class="custom-select d-block w-100" required>
                                         <option select>天数..</option>
-                                        <option>7天</option>
-                                        <option>30天</option>
-                                        <option>90天</option>
-                                        <option>365天</option>
-                                        <option v-if="ban==true">永久</option>
+                                        <option v-if="isSel==true" @click="isWeek=true;isMon=false;isTrMon=false;isYear=false;isFor=false">7天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=true;isTrMon=false;isYear=false;isFor=false">30天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=false;isTrMon=true;isYear=false;isFor=false">90天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=false;isTrMon=false;isYear=true;isFor=false">365天</option>
+                                        <option v-if="ban==true" @click="isWeek=false;isMon=false;isTrMon=false;isYear=false;isFor=true">永久</option>
                                     </select>
                                 </div>
                             </div>
@@ -449,8 +450,9 @@
 
                         </td>
                         <td>
-                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="dealEnd()" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
                         </td>
                     </tr>
                     </tbody>
@@ -486,19 +488,19 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <select class="custom-select d-block w-100" required>
-                                        <option select>惩罚方式..</option>
-                                        <option @click="ban=true">封禁</option>
-                                        <option @click="ban=false">禁言</option>
+                                        <option select @click="isSel=false">惩罚方式..</option>
+                                        <option @click="ban=true;isSel=true">封禁</option>
+                                        <option @click="ban=false;isSel=true">禁言</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <select class="custom-select d-block w-100" required>
                                         <option select>天数..</option>
-                                        <option>7天</option>
-                                        <option>30天</option>
-                                        <option>90天</option>
-                                        <option>365天</option>
-                                        <option v-if="ban==true">永久</option>
+                                        <option v-if="isSel==true" @click="isWeek=true;isMon=false;isTrMon=false;isYear=false;isFor=false">7天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=true;isTrMon=false;isYear=false;isFor=false">30天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=false;isTrMon=true;isYear=false;isFor=false">90天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=false;isTrMon=false;isYear=true;isFor=false">365天</option>
+                                        <option v-if="ban==true" @click="isWeek=false;isMon=false;isTrMon=false;isYear=false;isFor=true">永久</option>
                                     </select>
                                 </div>
                             </div>
@@ -507,8 +509,9 @@
 
                         </td>
                         <td>
-                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="dealEnd()" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
                         </td>
                     </tr>
                     </tbody>
@@ -516,7 +519,7 @@
             </div>
 
             <div class="table-responsive" v-if="replyPage">
-                <h5 style="font-weight: bold">问题信息:</h5>
+                <h5 style="font-weight: bold">回复信息:</h5>
                 <table class="table table-striped table-sm">
                     <tbody>
                     <tr>
@@ -544,19 +547,19 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <select class="custom-select d-block w-100" id="state" required>
-                                        <option select>惩罚方式..</option>
-                                        <option @click="ban=true">封禁</option>
-                                        <option @click="ban=false">禁言</option>
+                                        <option select @click="isSel=false">惩罚方式..</option>
+                                        <option @click="ban=true;isSel=true">封禁</option>
+                                        <option @click="ban=false;isSel=true">禁言</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <select class="custom-select d-block w-100" required>
                                         <option select>天数..</option>
-                                        <option>7天</option>
-                                        <option>30天</option>
-                                        <option>90天</option>
-                                        <option>365天</option>
-                                        <option v-if="ban==true">永久</option>
+                                        <option v-if="isSel==true" @click="isWeek=true;isMon=false;isTrMon=false;isYear=false;isFor=false">7天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=true;isTrMon=false;isYear=false;isFor=false">30天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=false;isTrMon=true;isYear=false;isFor=false">90天</option>
+                                        <option v-if="isSel==true" @click="isWeek=false;isMon=false;isTrMon=false;isYear=true;isFor=false">365天</option>
+                                        <option v-if="ban==true" @click="isWeek=false;isMon=false;isTrMon=false;isYear=false;isFor=true">永久</option>
                                     </select>
                                 </div>
                             </div>
@@ -565,8 +568,9 @@
 
                         </td>
                         <td>
-                            <button @click="" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="dealEnd()" class="btn btn-primary" data-toggle="modal" onclick="hideWindow()">完成</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button @click="del(reportInfoList[now].id,now)" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
                         </td>
                     </tr>
                     </tbody>
@@ -622,8 +626,13 @@
             targetInfo:[],
             reportedInfo:[],
             ban:false,
-            curAll:false
-
+            curAll:false,
+            isSel:false,
+            isWeek:false,
+            isMon:false,
+            isTrMon:false,
+            isYear:false,
+            isFor:false
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -829,6 +838,56 @@
                         console.log(status);
                     }
                 });
+            },
+            dealEnd: function(){
+                if(reportAdmin.isSel===true)
+                {
+                    if(reportAdmin.ban===true){
+                        if(reportAdmin.isWeek===true)
+                            this.banUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,7);
+                        if(reportAdmin.isMon===true)
+                            this.banUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,30);
+                        if(reportAdmin.isTrMon===true)
+                            this.banUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,90);
+                        if(reportAdmin.isYear===true)
+                            this.banUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,365);
+                        if(reportAdmin.isFor===true)
+                            this.banUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,999);
+
+                        if(reportAdmin.questionPage===true)
+                            this.delOneQuestion(reportAdmin.reportInfoList[reportAdmin.now].typeID);
+                        if(reportAdmin.anPage===true)
+                            this.delOneAnswer(reportAdmin.reportInfoList[reportAdmin.now].typeID);
+                        if(reportAdmin.commentPage===true)
+                            this.delOneComment(reportAdmin.reportInfoList[reportAdmin.now].typeID);
+                        if(reportAdmin.replyPage===true)
+                            this.delOneReply(reportAdmin.reportInfoList[reportAdmin.now].typeID);
+                        this.
+                        del(reportAdmin.reportInfoList[reportAdmin.now].id,reportAdmin.now);
+                    }
+                    else{
+                        if(reportAdmin.isWeek===true)
+                            this.estoppelUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,7);
+                        if(reportAdmin.isMon===true)
+                            this.estoppelUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,30);
+                        if(reportAdmin.isTrMon===true)
+                            this.estoppelUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,90);
+                        if(reportAdmin.isYear===true)
+                            this.estoppelUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,365);
+                        if(reportAdmin.isFor===true)
+                            this.estoppelUser(reportAdmin.reportInfoList[reportAdmin.now].targetID,999);
+
+                        if(reportAdmin.questionPage===true)
+                            this.delOneQuestion(reportAdmin.reportInfoList[reportAdmin.now].typeID);
+                        if(reportAdmin.anPage===true)
+                            this.delOneAnswer(reportAdmin.reportInfoList[reportAdmin.now].typeID);
+                        if(reportAdmin.commentPage===true)
+                            this.delOneComment(reportAdmin.reportInfoList[reportAdmin.now].typeID);
+                        if(reportAdmin.replyPage===true)
+                            this.delOneReply(reportAdmin.reportInfoList[reportAdmin.now].typeID);
+                        this.del(reportAdmin.reportInfoList[reportAdmin.now].id,reportAdmin.now);
+                    }
+                }
             },
             del: function(i,n){
                 $.ajax({
@@ -1051,7 +1110,7 @@
                     }
                 });
             },
-            delOneQuetion: function(questionID){
+            delOneQuestion: function(questionID){
                 $.ajax({
                     type:"POST",
                     url:"../admin/questionDel.action",
@@ -1188,7 +1247,7 @@
                     }
                 });
             },
-            estoppUser: function(userID,days){
+            estoppelUser: function(userID,days){
                 $.ajax({
                     type:"POST",
                     url:"../admin/estoppel.action",
@@ -1258,6 +1317,40 @@
             }
         },
         mounted:function () {
+            let loc = location.href;
+            let qid = loc.replace("?","&").split("&")[1];
+            let type;
+            if (qid.indexOf("type=")!==-1) {
+                type = parseInt(qid.replace("type=",""));
+                console.log("类别为:"+type);
+                if(type===0) {
+                    this.questionPage = true;
+                    this.anPage = false;
+                    this.commentPage = false;
+                    this.replyPage = false;
+                }
+                if(type===1) {
+                    this.questionPage = false;
+                    this.anPage = true;
+                    this.commentPage = false;
+                    this.replyPage = false;
+                    console.log("anPage为："+this.anPage);
+                }
+                if(type===2) {
+                    this.questionPage = false;
+                    this.anPage = false;
+                    this.commentPage = true;
+                    this.replyPage = false;
+                }
+                if(type===3) {
+                    this.questionPage = false;
+                    this.anPage = false;
+                    this.commentPage = false;
+                    this.replyPage = true;
+                }
+            } else {
+                location.href = "../../error/admin/404error.html"
+            }
             this.isLogin();
             this.getReportType(0);
             this.getReportType(1);

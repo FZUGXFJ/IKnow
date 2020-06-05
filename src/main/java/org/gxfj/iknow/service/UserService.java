@@ -17,14 +17,14 @@ public interface UserService {
      * @param password 密码
      * @return 返回信息如下
      */
-    public Map<String,Object> logon(String username, String password, String email);
+    Map<String,Object> logon(String username, String password, String email, String verifyCode);
 
     /**
      * 发送验证码到邮箱
      * @param email 目标邮箱
      * @return 返回结果集合
      */
-    public Map<String,String> sendVerifyCode(String email);
+    Map<String,String> sendVerifyCode(String email);
 
     /**
      * 用密码登录
@@ -32,31 +32,29 @@ public interface UserService {
      * @param password 用户输入的密码
      * @return 返回验证结果的Map
      */
-    public Map<String, Object> loginByPassword(String email, String password);
+    Map<String, Object> loginByPassword(String email, String password);
 
     /**
      *免密码登录
      * @param email 登录用的email
-     * @param sessionEmail 发送邮件用的email
      * @param verifyCode 登录的验证码
-     * @param sessionVerifyCode 生成的验证码
      * @return 消息集合
      */
-    public Map<String,Object> loginByNoPassword(String email,String sessionEmail,String verifyCode,String sessionVerifyCode);
+    Map<String,Object> loginByNoPassword(String email,String verifyCode);
 
     /**
      *获得简略的用户信息
      * @param user 用户
      * @return json数据 包含头像，用户名，性别和介绍
      */
-    public String getSimpleUserInf(User user);
+    String getSimpleUserInf(User user);
 
     /**
      * 获得用户的全部信息
      * @param user 用户
      * @return json形式的用户信息
      */
-    public Map<String, Object> getAllUserInf(User user);
+    Map<String, Object> getAllUserInf(User user);
 
     /**
      *修改用户信息
@@ -66,7 +64,7 @@ public interface UserService {
      * @param introduction 新介绍信息
      * @return json数据 resultCode：响应数据码，0表示修改成功，1表示用户名已占用
      */
-    public Map<String, Object> editUserInf(String head,String username,String gender,String introduction);
+    Map<String, Object> editUserInf(String head,String username,String gender,String introduction);
 
 
     /**
@@ -75,7 +73,7 @@ public interface UserService {
      * @param newPassword 新密码
      * @return 成功返回true，失败返回false
      */
-    public Boolean resetPassword(User user, String newPassword);
+    Boolean resetPassword(User user, String newPassword);
 
     /**
      * 将用户的邮箱更新。
@@ -83,19 +81,26 @@ public interface UserService {
      * @param newEmail 新邮件
      * @return 是否成功
      */
-    public boolean reBindEmail(User user , String newEmail);
+    boolean reBindEmail(User user , String newEmail);
 
     /**
      * 是否存在邮箱
      * @param email 判断的邮箱
      * @return 是否存在:0不存在可以更新，1存在
      */
-    public boolean existEmail(String email);
+    boolean existEmail(String email);
 
     /**
      * 发送验证码到邮箱
      * @param email 目标邮箱
      * @return 返回结果集合
      */
-    public Map<String,String> sendVerifyCoderesetemail(String email);
+    Map<String,String> sendVerifyCoderesetemail(String email);
+
+    /**
+     * 获得用户的主页信息
+     * @param userId 用户id
+     * @return json形式的用户信息
+     */
+    Map<String, Object> getHomedata(Integer userId);
 }

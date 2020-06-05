@@ -43,6 +43,7 @@ public class SearchHistoryDAOImpl implements SearchHistoryDAO{
     }
 
     //获取热门搜索记录
+    @Override
     public List<String> getHotSearch() {
         Session session = sessionFactory.getCurrentSession();
         String hql = "select content from Searchhistory as s group by content order by count(s) desc";

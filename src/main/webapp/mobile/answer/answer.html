@@ -51,11 +51,11 @@
     </div>
     <div id="separator" v-if="load"></div>
     <div id="answererInf" v-if="load">
-        <div v-if="answer.isAdopt===1" style="color: #12eee7;padding: 0.3em 0">
-            <h5><i class="fas fa-check"></i>此回答已被采纳</h5>
+        <div v-if="answer.isAdopt===1" style="color: #00a6ee;padding: 0.3em 0">
+            <h6><i class="fas fa-award"></i>&nbsp;此回答已被采纳</h6>
         </div>
         <table>
-            <td style="width: 10%">
+            <td style="width: 10%" @click="toUserPage(answerer.id)">
                 <div id="answererHead" class="headPortrait" v-html="answerer.head"></div>
             </td>
             <td style="width: 50%">
@@ -63,12 +63,12 @@
             </td>
             <td style="width: 40%;text-align: right">
                 <span class="lb">
-                    <b style="color: #12eee7">LV</b>
+                    <b style="color: #00d6ee">LV</b>
                     <i>{{answerer.level}}</i>
                 </span>
                 &nbsp;
                 <span class="lb">
-                    <i class="fas fa-award fa-1x" style="color: #12eee7"></i>
+                    <i class="fas fa-award fa-1x" style="color: #00d6ee"></i>
                     <i>{{answerer.badgeNum}}</i>
                 </span>
             </td>
@@ -81,7 +81,7 @@
         <div class="comment" v-for="comment in comments">
             <br>
             <table>
-                <td style="width: 10%">
+                <td style="width: 10%" @click="toUserPage(comment.uid)">
                     <div class="headPortrait" v-html="comment.uHead"></div>
                 </td>
                 <td style="width: 50%;opacity: 0.5;padding: 0 0.5em">
@@ -164,7 +164,7 @@
                                 <span>采纳回答</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsAnswerer == 1">
-                                <div><i class="fas fa-user-times fa-2x" @click="deleteAnswer"></i></div>
+                                <div><i class="fas fa-trash-alt fa-2x" @click="deleteAnswer"></i></div>
                                 <span>删除回答</span>
                             </td>
                             <td class="operateItem" v-if="viewerIsAnswerer == 1 && answer.isAnonymous == 1">
@@ -494,10 +494,20 @@
 
                 });
             },
+            toUserPage:function (id) {
+                if (id === 0 || id === "0") {
+                    return;
+                }
+                location.href = "../user/user.html?userId=" + id;
+            }
         },
         mounted:function () {
             if (sessionStorage.getItem("notice") != null) {
-                this.$toast(sessionStorage.getItem("notice"));
+                this.$toast({
+                    message:sessionStorage.getItem("notice"),
+                    position: 'bottom',
+                    duration: 2000
+                });
                 sessionStorage.removeItem("notice");
             }
             let loc = location.href;

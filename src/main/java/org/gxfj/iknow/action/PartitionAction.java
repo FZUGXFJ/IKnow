@@ -40,34 +40,35 @@ public class PartitionAction {
     private final static int PARTITION_QUESTION_COUNT = 20;
      */
 
+    /**
+     * 获取类别
+     * @return SUCCESS
+     */
     public String getCategories(){
-        Map<String, Object> response;
-        response=partitionService.getCategories();
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+        Map<String, Object> response = partitionService.getCategories();
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获得学科
+     * @return SUCCESS
+     */
     public String getSubjects(){
-        Map<String, Object> response;
-        response=partitionService.getSubjects(categoryId);
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+        Map<String, Object> response = partitionService.getSubjects(categoryId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String getMajors(){
-        Map<String, Object> response;
-        response=partitionService.getMajors(subjectId);
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+        Map<String, Object> response = partitionService.getMajors(subjectId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String getQuestion() {
-        Map<String, Object> response;
-        response = partitionService.getQuestion(categoryId,subjectId,majorId,start,ConstantUtil.PARTITION_QUESTION_COUNT);
-        response.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        Map<String, Object> response = partitionService.getQuestion
+                (categoryId,subjectId,majorId,start,ConstantUtil.PARTITION_QUESTION_COUNT);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

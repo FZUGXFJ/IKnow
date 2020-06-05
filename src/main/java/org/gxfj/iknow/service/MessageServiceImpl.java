@@ -26,13 +26,13 @@ public class MessageServiceImpl implements MessageService{
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null){
-            result.put("resultCode",1);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);
             return result;
         }
         else {
             List<Map<String,Object>> messages = new ArrayList<>();
             Map<String,Object> message;
-            List<Message> messageList = messageDAO.listByUserId(user.getId());
+            List<Message> messageList = messageDAO.listUnReadMessageByUserId(user.getId());
             for (Message message1 : messageList){
                 message = new HashMap<>(5);
                 message.put("id",message1.getId());
@@ -44,7 +44,7 @@ public class MessageServiceImpl implements MessageService{
                 messages.add(message);
             }
             result.put("messages",messages);
-            result.put("resultCode",ConstantUtil.SUCCESS);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
             return result;
         }
     }
@@ -54,18 +54,18 @@ public class MessageServiceImpl implements MessageService{
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null){
-            result.put("resultCode",1);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);
             return result;
         }
         else {
             Message message = messageDAO.get(messageId);
             if(!user.getId().equals(message.getUserByUserId().getId())){
-                result.put("resultCode",2);
+                result.put(ConstantUtil.JSON_RETURN_CODE_NAME,2);
                 return result;
             }
             message.setIsRead((byte)1);
             messageDAO.update(message);
-            result.put("resultCode",0);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,0);
             result.put("content",message.getContent());
             return result;
         }

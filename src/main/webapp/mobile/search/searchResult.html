@@ -102,7 +102,7 @@
         <div v-if="userResultNum > 0">
             用户
             <div class="splitLine"></div>
-            <div class="resultItem" v-for="item in userResultCom">
+            <div class="resultItem" v-for="item in userResultCom" @click="toUserPage(item.userId)">
                 <table>
                     <td style="width: 18%">
                         <div class="head" v-html="item.userHead"></div>
@@ -155,7 +155,7 @@
         </div>
     </div>
     <div id="userResult" v-if="selectedIndex===4">
-        <div class="resultItem" v-for="item in userResult">
+        <div class="resultItem" v-for="item in userResult" @click="toUserPage(item.userId)">
             <table>
                 <td style="width: 18%">
                     <div class="head" v-html="item.userHead"></div>
@@ -277,6 +277,12 @@
                 searchHistory.unshift(kwObj);
                 localStorage.setItem("searchHistory",JSON.stringify(searchHistory));
                 location.href = "../search/searchResult.html?keyword=" + kw;
+            },
+            toUserPage:function (id) {
+                if (id === 0 || id === "0") {
+                    return;
+                }
+                location.href = "../user/user.html?userId=" + id;
             }
         },
         mounted:function () {

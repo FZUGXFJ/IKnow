@@ -98,7 +98,20 @@ public class AnswerDAOImpl implements AnswerDAO{
     @Override
     public List<Answer> listPartByUserId(Integer userId, Integer start, Integer length){
         List<Answer> answers = null;
-        String hql = "from Answer as a WHERE ( userID= " + userId + " ) and (a.isDelete = 0) order by a.id desc";
+        String hql = "from Answer as a WHERE ( userID= " + userId + " ) and (a.isDelete = 0) order by date desc";
+        //Session session = sessionFactory.openSession();
+        Query query = getSession().createQuery(hql);
+        //Query query = session.createQuery(hql);
+        answers = query.setFirstResult(start).setMaxResults(length).list();
+        //session.close();
+        return answers;
+    }
+
+    @Override
+    public List<Answer> listPartByUserIdnoAn(Integer userId, Integer start, Integer length) {
+        List<Answer> answers = null;
+        String hql = "from Answer as a WHERE ( userID= " + userId + " ) and (a.isDelete = 0)" +
+                " and (a.isAnonymous = 0) order by date desc";
         //Session session = sessionFactory.openSession();
         Query query = getSession().createQuery(hql);
         //Query query = session.createQuery(hql);
@@ -150,5 +163,13 @@ public class AnswerDAOImpl implements AnswerDAO{
                 " and (a.isDelete = 0)";
         Query query = session.createQuery(hql);
         return query.setMaxResults(20).list();
+    }
+
+    @Override
+    public List<Answer> listPartByUserIdNodelete(Integer userId) {
+        Query query = getSession().createQuery("from Answer as a WHERE ( userID= " +
+                userId + " ) and (isDelete = 0) order by date desc");
+        List<Answer> answers = query.list();
+        return answers;
     }
 }

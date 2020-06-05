@@ -1,20 +1,21 @@
 package org.gxfj.iknow.service;
 
 import com.alibaba.fastjson.JSON;
+import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.gxfj.iknow.util.ConstantUtil.*;
 
 /**
  * @author Administrator hhj
@@ -43,19 +44,44 @@ public class UserServiceImpl<result> implements UserService{
     private MailUtil mailUtil;
     @Autowired
     private ExpUtil expUtil;
+    @Autowired
+    MessageDAO messageDAO;
+    @Autowired
+    UserStateUtil userStateUtil;
+    @Autowired
+    ReplyDAO replyDAO;
+    @Autowired
+    CommentDAO commentDAO;
 
     private static int MAP_NUM = 20;
 
     @Override
-    public Map<String,Object> logon(String username, String password, String email) {
-        Map<String,Object> resultMap = new HashMap<>(16);
+    public Map<String,Object> logon(String username, String password, String email, String verifyCode) {
+        Map<String,Object> resultMap = new HashMap<>(MIN_HASH_MAP_NUM);
+
+        Map<String,Object> session = ActionContext.getContext().getSession();
+
+        String sessionVerifyCode = (String)session.get(VERIFY_CODE);
+        String sessionEmail = (String)session.get(EMAIL);
+        session.put(VERIFY_CODE, null);
+        session.put(EMAIL, null);
+
+        if (!verifyCode.equals(sessionVerifyCode)) {
+            resultMap.put("response", 3);
+            return resultMap;
+        } else if (!email.equals(sessionEmail)) {
+            resultMap.put("response", 4);
+            return resultMap;
+        }
+
+
         User user = new User();
         if (userDAO.hasUsername(username)) {
-            resultMap.put("value",1);
+            resultMap.put("response",1);
             return resultMap;
         }
         if (userDAO.hasUserEmail(email)) {
-            resultMap.put("value",2);
+            resultMap.put("response",2);
             return resultMap;
         }
         user.setName(username);
@@ -79,10 +105,12 @@ public class UserServiceImpl<result> implements UserService{
         user.setUserstateByStateId(userstate);
         //初始头像
         user.setHead("1.jpg");
+        user.setReportedTimes(0);
         userDAO.add(user);
-        resultMap.put("value",0);
-        resultMap.put("result","注册成功");
-        resultMap.put("user",user);
+
+        resultMap.put("response", SUCCESS);
+        session.put("user", user);
+
         return resultMap;
     }
 
@@ -115,42 +143,71 @@ public class UserServiceImpl<result> implements UserService{
         User user = userDAO.getUserByEmail(email);
         if (user != null && (password.length() == 32 && password.equals(user.getPasswd()) ||
                 SecurityUtil.md5Compare(password, user.getPasswd()))) {
-            result.put("resultCode",ConstantUtil.SUCCESS);
-            result.put("email",user.getEmail());
-            result.put("password",user.getPasswd());
-            ActionContext.getContext().getSession().put("user",user);
+
+            //判断用户是否处于封禁
+            if (user.getUserstateByStateId().getId().equals(userStateUtil.getBanState().getId())) {
+                Date now = new Date();
+                if (user.getLastClosureTime().after(now)) {
+                    result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_BAN);
+                    return result;
+                } else {
+                    user.setUserstateByStateId(userStateUtil.getStateByName(Userstate.NORMAL));
+                }
+            }
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            result.put("email", user.getEmail());
+            result.put("password", user.getPasswd());
+            ActionContext.getContext().getSession().put("user", user);
         }
         else {
-            result.put("resultCode",ConstantUtil.WRONG_PASSWORD);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.WRONG_PASSWORD);
         }
         return result;
     }
 
     @Override
-    public Map<String,Object> loginByNoPassword(String email, String sessionEmail, String verifyCode,
-                                                String sessionVerifyCode) {
-        Map<String,Object> result = new HashMap<>(16);
+    public Map<String,Object> loginByNoPassword(String email, String verifyCode) {
+        Map<String,Object> session = ActionContext.getContext().getSession();
+        String sessionEmail = (String)session.get(ConstantUtil.EMAIL);
+        String sessionVerifyCode = (String)session.get(ConstantUtil.VERIFY_CODE);
+
+        session.put(ConstantUtil.VERIFY_CODE, null);
+
+        Map<String, Object> response = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         if (!email.equals(sessionEmail)) {
-            result.put("value",1);
+            response.put("response",1);
         } else if (!verifyCode.equals(sessionVerifyCode)) {
-            result.put("value",2);
+            response.put("response",2);
         } else {
             User user = userDAO.getUserByEmail(email);
             if (user == null) {
-                result.put("value",3);
+                response.put("response", 3);
             } else {
-                result.put("value",0);
-                result.put("user",user);
+                //判断用户是否处于封禁
+                if (user.getUserstateByStateId().getId().equals(userStateUtil.getBanState().getId())) {
+                    Date now = new Date();
+                    if (user.getLastClosureTime().after(now)) {
+                        result.put("response", ConstantUtil.JSON_RESULT_CODE_BAN);
+                        return result;
+                    } else {
+                        user.setUserstateByStateId(userStateUtil.getStateByName(Userstate.NORMAL));
+                    }
+                }
+                response.put("response", 0);
+                ActionContext.getContext().getSession().put("user", user);
+                response.put("email", user.getEmail());
+                response.put("password", user.getPasswd());
             }
         }
-        return result;
+        return response;
     }
 
     @Override
     public String getSimpleUserInf(User user) {
         Map<String,Object> resultMap = new HashMap<>();
         if(user ==null) {
-            resultMap.put("resultCode",1);
+            resultMap.put(JSON_RETURN_CODE_NAME,1);
         }
         else {
             Map<String,Object> userMap = new HashMap<>();
@@ -159,7 +216,7 @@ public class UserServiceImpl<result> implements UserService{
             userMap.put("introduction",user.getIntroduction());
             userMap.put("head",user.getHead());
             resultMap.put("userInf",userMap);
-            resultMap.put("resultCode",0);
+            resultMap.put(JSON_RETURN_CODE_NAME,0);
         }
         return JSON.toJSONString(resultMap);
     }
@@ -168,12 +225,13 @@ public class UserServiceImpl<result> implements UserService{
     public Map<String, Object> getAllUserInf(User user) {
         Map<String, Object> result = new HashMap<>(MAP_NUM);
         if(user == null){
-            result.put("resultCode" , 1 );
+            result.put(JSON_RETURN_CODE_NAME , 1 );
         }
         else{
-            result.put("resultCode" , 0);
+            result.put(JSON_RETURN_CODE_NAME , 0);
             Integer userId = user.getId();
             Map<String, Object> userInf = new HashMap<>(MAP_NUM);
+            userInf.put("id",user.getId());
             userInf.put("name" , user.getName());
             userInf.put("head" , "<img src='../head/" + user.getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
@@ -185,6 +243,14 @@ public class UserServiceImpl<result> implements UserService{
             userInf.put("browseNum" , browsingHistoryDAO.getUserBrowseCount(userId));
             userInf.put("achievementList" , listUserAchievements(userId));
             userInf.put("identity" , getUserIdentity(userId));
+
+            List<Message> messageList = messageDAO.listUnReadMessageByUserId(userId);
+            if(messageList.size()>0){
+                userInf.put("hasNotReadMsg",1);
+            }
+            else {
+                userInf.put("hasNotReadMsg",0);
+            }
             result.put("information" , userInf);
         }
         return result;
@@ -284,6 +350,32 @@ public class UserServiceImpl<result> implements UserService{
         }
     }
 
+    /**
+     * 获得用户的身份（老师或者学生）
+     * @param userId 用户id
+     * @return 用户的真实姓名，学校，学院;没有身份返回空
+     */
+    private Map<String, Object> getUserIdentityNew(Integer userId){
+        Map<String, Object> userIdentityMap = new HashMap<>(MAP_NUM);
+        List<Useridentity> userIdentities = userIdentityDAO.listUserIdentitiesByUserId(userId);
+        if(userIdentities == null || userIdentities.size() ==0){
+            userIdentityMap.put("type",0);
+            userIdentityMap.put("realName",null);
+            return userIdentityMap;
+        }
+        else{
+            Useridentity useridentity = userIdentities.get(0);
+            if(useridentity.getType().equals("教师")){
+                userIdentityMap.put("type",2);
+            }
+            else {
+                userIdentityMap.put("type",1);
+            }
+            userIdentityMap.put("realName" , useridentity.getName());
+            return userIdentityMap;
+        }
+    }
+
     @Override
     public Map<String, String> sendVerifyCoderesetemail(String email) {
         Map<String,String> map = new HashMap<>(MAP_NUM);
@@ -305,5 +397,77 @@ public class UserServiceImpl<result> implements UserService{
         result = "{\"head\":\"发送成功\",\"body\":\"请进入邮箱查看验证码\"}";
         map.put("result",result);
         return map;
+    }
+
+    @Override
+    public Map<String, Object> getHomedata(Integer userId) {
+        Map<String, Object> result = new HashMap<>(MAP_NUM);
+        User user = userDAO.get(userId);
+        if(user == null){
+            result.put(JSON_RETURN_CODE_NAME , 1 );
+        }
+        else{
+            result.put(JSON_RETURN_CODE_NAME , 0);
+            Map<String, Object> userInf = new HashMap<>(MAP_NUM);
+            userInf.put("name" , user.getName());
+            userInf.put("head" , "<img src='../../head/" + user.getHead() +
+                    "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
+            userInf.put("introduction",user.getIntroduction());
+            userInf.put("gender",user.getGender());
+            int sum = 0;
+            List<Answer> answerList = answerDAO.listPartByUserIdNodelete(userId);
+            List<Comment> commentList = commentDAO.listByuserId(userId);
+            List<Reply> replyList = replyDAO.listByuserId(userId);
+            for (Answer answer:answerList){
+                sum += answer.getApprovalCount();
+            }
+            for (Comment comment:commentList){
+                sum += comment.getCount();
+            }
+            for (Reply reply:replyList){
+                sum += reply.getCount();
+            }
+            userInf.put("gainApproveNum",sum);
+            userInf.put("badgeNum" , user.getBadgeNum());
+
+            List<Question> questionList = questionDAO.listPartByUserIdnoAn(userId,0,10);
+            List<Map<String,Object>> questions = new ArrayList<>();
+            Map<String,Object> question;
+            for (Question question1:questionList){
+                question = new HashMap<>(5);
+                question.put("id",question1.getId());
+                question.put("title",question1.getTitle());
+                question.put("browsingNum",browsingHistoryDAO.getBrowsingCount(question1.getId()));
+                question.put("answerNum",answerDAO.getAnswersbyQid(question1.getId()).size());
+                question.put("collectionNum",collectionProblemDAO.getCollectionCount(question1.getId()));
+
+                questions.add(question);
+            }
+            userInf.put("questionDynamic",questions);
+
+            List<Answer> answerList1 = answerDAO.listPartByUserIdnoAn(userId,0,10);
+            List<Map<String,Object>> answers = new ArrayList<>();
+            Map<String,Object> answer;
+            for (Answer answer1:answerList1){
+                answer = new HashMap<>(6);
+                answer.put("id",answer1.getId());
+                answer.put("content",answer1.getContentText());
+                answer.put("questionId",answer1.getQuestionByQuestionId().getId());
+                answer.put("questionTitle",answer1.getQuestionByQuestionId().getTitle());
+                answer.put("time",Time.getTime(answer1.getDate()));
+                answer.put("approvNum",answer1.getApprovalCount());
+                answer.put("commentNum",commentDAO.getCount(answer1.getId()));
+
+                answers.add(answer);
+            }
+
+            userInf.put("answerDynamic",answers);
+
+            userInf.put("level" , expUtil.getLevelLabel(user.getExp()));
+            userInf.put("identity" , getUserIdentityNew(userId));
+
+            result.put("userInfo" , userInf);
+        }
+        return result;
     }
 }

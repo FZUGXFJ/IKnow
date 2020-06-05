@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.ConstantUtil;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static org.gxfj.iknow.util.ConstantUtil.*;
 
 @Service("searchService")
 public class SearchServiceImpl implements SearchService{
@@ -42,22 +45,27 @@ public class SearchServiceImpl implements SearchService{
             hotSearchContent.put("content",content);
             hotSearchContents.add(hotSearchContent);
         }
-        Map<String,Object> response=new HashMap<>(RESPONSE_NUM);
-        response.put("hotSearch",hotSearchContents);
-        return response;
+        Map<String,Object> result=new HashMap<>(RESPONSE_NUM);
+        result.put("hotSearch",hotSearchContents);
+        result.put(JSON_RETURN_CODE_NAME,SUCCESS);
+        return result;
     }
 
     @Override
-    public Map<String, Object> searchResult(String keyword,Integer userId) {
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        if (userId!=-1) {
-            User user=userDAO.get(userId);
-            postSearchHistory(user,keyword);
+    public Map<String, Object> searchResult(String keyword) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if(user == null){
+            result.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
         }
-        response.put("questionResult",getQuestionsByKeyword(keyword));
-        response.put("answerResult",getAnswersByKeyword(keyword));
-        response.put("userResult",getUsersByKeyword(keyword));
-        return response;
+       else {
+            postSearchHistory(user,keyword);
+            result.put("questionResult",getQuestionsByKeyword(keyword));
+            result.put("answerResult",getAnswersByKeyword(keyword));
+            result.put("userResult",getUsersByKeyword(keyword));
+            result.put(JSON_RETURN_CODE_NAME,SUCCESS);
+        }
+        return result;
     }
 
     /**

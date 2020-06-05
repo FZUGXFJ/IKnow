@@ -2,6 +2,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class PartitionServiceImpl implements PartitionService{
             categories.add(category);
         }
         result.put("categories",categories);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -53,6 +55,7 @@ public class PartitionServiceImpl implements PartitionService{
             subjects.add(subject);
         }
         result.put("subjects",subjects);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -72,6 +75,7 @@ public class PartitionServiceImpl implements PartitionService{
         }
 
         result.put("majors",majors);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -100,6 +104,7 @@ public class PartitionServiceImpl implements PartitionService{
             questionsMapList.add(questionMap);
         }
         result.put("question", questionsMapList);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 

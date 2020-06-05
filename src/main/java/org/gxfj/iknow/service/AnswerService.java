@@ -31,7 +31,7 @@ public interface AnswerService {
      * @param answerId 回答的id
      * @return json数据（答案的信息，关联的用户，评论，问题的信息）
      */
-    public Map<String,Object> getRecommendAnswerForQuestion(Integer questionId , Integer answerId );
+    public Map<String,Object> viewAnswer(Integer questionId , Integer answerId );
 
     /**
      * 执行用户采纳问题操作。如果用户是题主，采纳成功，否则采纳失败

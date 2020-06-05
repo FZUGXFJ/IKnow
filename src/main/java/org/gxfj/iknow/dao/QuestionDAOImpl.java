@@ -96,7 +96,20 @@ public class QuestionDAOImpl implements QuestionDAO {
     @Override
     public List<Question> listPartByUserId(Integer userId, Integer start, Integer length){
         List<Question> questions = null;
-        String hql = "from Question as q WHERE ( userID= " + userId + " ) and (q.isDelete = 0) order by q.id desc";
+        String hql = "from Question as q WHERE ( userID= " + userId + " ) and (q.isDelete = 0) order by date desc";
+        //Session session = sessionFactory.openSession();
+        Query query = getSession().createQuery(hql);
+        //Query query = session.createQuery(hql);
+        questions = query.setFirstResult(start).setMaxResults(length).list();
+        //session.close();
+        return questions;
+    }
+
+    @Override
+    public List<Question> listPartByUserIdnoAn(Integer userId, Integer start, Integer length) {
+        List<Question> questions = null;
+        String hql = "from Question as q WHERE ( userID= " + userId + " ) and (q.isDelete = 0) and " +
+                "(q.isAnonymous = 0) order by date desc";
         //Session session = sessionFactory.openSession();
         Query query = getSession().createQuery(hql);
         //Query query = session.createQuery(hql);
@@ -114,6 +127,14 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
+    public List<Question> listPartbyUseridNodelete(Integer userId) {
+        Query query = getSession().createQuery("from Question as q WHERE ( userID= " +
+                userId + " ) and ( isDelete = 0) order by date desc");
+        List<Question> questions = questions = query.list();
+        return questions;
+    }
+
+    @Override
     public Integer getUserQuestionCount(Integer userId) {
         Query query = getSession().createQuery("select count(q) from Question as q WHERE" +
                 "(userID = "+ userId +") and (q.isDelete = 0) ");
@@ -122,7 +143,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
     @Override
     public List<Question> listByQuestionType(Integer questionTypeId, Integer start, Integer count) {
-        String hql = "FROM Question WHERE typeId = ?";
+        String hql = "FROM Question WHERE (typeId = ?) and (isDelete = 0)";
         Query query = getSession().createQuery(hql);
         return query.setInteger(0,questionTypeId).setFirstResult(start).setMaxResults(count).list();
     }

@@ -32,13 +32,13 @@
     </div>
     <br>
     <div id="questionInf">
-        <table style="color: #12eee7;margin-bottom: 1em">
-            <td style="width: 15%">
+        <table style="margin-bottom: 1em">
+            <td style="width: 12%" @click="toUserPage(owner.id)">
                 <div v-html="headPortrait" class="headPortrait"></div>
             </td>
-            <td style="width: 50%"><span>{{owner.username}}</span>的提问</td>
+            <td style="width: 53%;color: #00a0ee"><span style="color: #ff4d26">{{owner.username}}&nbsp;的提问</span></td>
             <td style="width: 35%;text-align: right">
-                <span v-if="isSolved"><i class="fas fa-check-circle"></i>&nbsp;问题已解决</span>
+                <span v-if="isSolved" style="color: #8000ee"><i class="fas fa-check-circle"></i>&nbsp;问题已解决</span>
                 <span v-else style="color: #acacac"><i class="fas fa-times-circle"></i>&nbsp;问题未解决</span>
             </td>
         </table>
@@ -48,7 +48,7 @@
         <table style="font-size: 0.8em;opacity: 0.5">
             <td style="width: 50%">{{collectionCount}}人收藏-{{browsingCount}}次浏览</td>
             <td style="width: 50%;text-align: right">
-                <span style="color: #12eee7" v-if="isCollected == 1" @click="cancelCollect">
+                <span style="color: #ee9400" v-if="isCollected == 1" @click="cancelCollect">
                     <i class="fas fa-star"></i>&nbsp;问题已收藏
                 </span>
                 <span @click="collect" v-else>
@@ -60,14 +60,13 @@
         <table style="font-size: 0.8em">
             <td style="width: 50%"><span style="opacity: 0.6">回答{{answerCount}}</span></td>
             <td style="width: 50%;text-align: right">
-
-                <el-dropdown>
+                <el-dropdown @command="changeSort">
                     <span class="el-dropdown-link">
-                        排序方式<i class="el-icon-arrow-down el-icon--right"></i>
+                        {{sortType.sortMethod}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>默认排序</el-dropdown-item>
-                        <el-dropdown-item>按时间排序</el-dropdown-item>
+                        <el-dropdown-item command="1">默认排序</el-dropdown-item>
+                        <el-dropdown-item command="0">按时间排序</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </td>
@@ -76,11 +75,11 @@
     <div id="answerList">
         <div class="item" v-for="answer in answers">
             <div class="separator"></div>
-            <h6 style="color: #12eee7" v-if="answer.isAdopt == 1"><i class="fas fa-check"></i>&nbsp;此回答已被采纳</h6>
+            <h6 style="color: #00d6ee" v-if="answer.isAdopt == 1"><i class="fas fa-check"></i>&nbsp;此回答已被采纳</h6>
             <div class="answer">
                 <div class="answererInf">
                     <table style="margin-bottom: 0.5em">
-                        <td style="width: 15%">
+                        <td style="width: 15%" @click="toUserPage(answer.answererId)">
                             <div class="headPortrait" v-html="answer.answererHead"></div>
                         </td>
                         <td style="width: 55%">
@@ -88,10 +87,13 @@
                             <span class="identity"></span>
                         </td>
                         <td style="width: 30%;text-align: right">
-                            <span class="lb"><b>LV&nbsp;{{answer.answererLevel}}</b></span>
                             <span class="lb">
-                                <i class="fas fa-award fa-1x"></i>
-                                <b>{{answer.answererBadge}}</b>
+                                <b style="color: #00d6ee">LV</b>
+                                <i>&nbsp;{{answer.answererLevel}}</i>
+                            </span>
+                            <span class="lb">
+                                <i class="fas fa-award fa-1x" style="color: #00d6ee"></i>
+                                <i>{{answer.answererBadge}}</i>
                             </span>
                         </td>
                     </table>
@@ -119,7 +121,7 @@
     <br><br><br>
     <div id="footer">
         <table>
-            <td><button><i class="fas fa-user-plus"></i>&nbsp;邀请回答</button></td>
+            <td><button @click="popupVisible=true"><i class="fas fa-user-plus"></i>&nbsp;邀请回答</button></td>
             <td><button @click="addAnswer"><i class="fas fa-pen" @click="postAnswer"></i>&nbsp;写回答</button></td>
             <td  v-if="isCollected===1"><button @click="cancelCollect"><i class="fas fa-star"></i>&nbsp;已收藏</button></td>
             <td  v-else><button style="color: #acacac" @click="collect"><i class="fas fa-star"></i>&nbsp;收藏问题</button></td>
@@ -164,6 +166,45 @@
             </div>
         </div>
     </div>
+    <mt-popup v-model="popupVisible" position="right" style="height: 100%;padding: 1em">
+        <table>
+            <td style="width: 10%">
+                <i class="fas fa-times" @click="popupVisible=false" style="font-size: 1.5em;color: #acacac"></i>
+            </td>
+            <td style="width: 90%;text-align: center">
+                <input type="text" class="form-control" placeholder="搜索用户" aria-label="invite" v-model="keyword">
+            </td>
+        </table>
+        <br>
+        <div>
+            <div class="inviteItem" v-for="invite in inviteList">
+                <table>
+                    <td style="width: 15%">
+                        <div v-html="invite.head" class="head"></div>
+                    </td>
+                    <td style="width: 55%;padding-left: 0.5em">
+                        <div class="inviteName">
+                            {{invite.name}}
+                            <span v-if="invite.identity.isAuth!=0">
+                                （{{invite.identity.realName}}）
+                                <i class="fas fa-shield-alt" style="color: #eec100" v-if="invite.identity.type==1"></i>
+                                <i class="fas fa-shield-alt" style="color: #0051ee" v-else=""></i>
+                            </span>
+                        </div>
+                        <div class="inviteInt">{{invite.introduction}}</div>
+                    </td>
+                    <td style="width: 30%;text-align: right">
+                        <span style="color: #acacac" v-if="invite.invited">
+                            <i class="fas fa-check"></i>&nbsp;已邀请
+                        </span>
+                        <span class="inviteBtn" v-else="" @click="doInvite(invite.id)">
+                            <i class="fas fa-user-plus"></i>&nbsp;邀请
+                        </span>
+                    </td>
+                </table>
+            </div>
+        </div>
+    </mt-popup>
     <mt-actionsheet :actions="actions" v-model="showSheet"></mt-actionsheet>
 </div>
 <script type="text/javascript">
@@ -184,8 +225,10 @@
             browsingCount:0,
             answerCount:0,
             answers:[],
-            sortMethod:"默认排序",
-            sortType:0,
+            sortType:{
+                sortMethod:"默认排序",
+                sort:1
+            },
             headFirstPart:"<img src='../../head/",
             headLastPart:"' width='100%' height='100%' alt=''>",
             loading:0,
@@ -205,10 +248,13 @@
                         sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
                         location.href = "../report/report.html";
                     }
-                }
+                },
             ],
             selectAid:0,
-            showSheet:false
+            showSheet:false,
+            popupVisible:false,
+            inviteList:[],
+            keyword:""
         },
         methods:{
             postAnswer:function () {
@@ -334,6 +380,7 @@
                                 question.questionData.questionAnswers.push(item);
                             });
                             question.hasMore = size >= 20;
+                            question.start += size;
                         } else {
                             result.answers.forEach(function (item) {
                                 question.answers.push(item);
@@ -429,12 +476,44 @@
                 }).catch(action => {
 
                 });
+            },
+            changeSort:function (type) {
+                type = parseInt(type);
+                let answerSort;
+                if (type === 1) {
+                    answerSort = {
+                        sortMethod: "默认排序",
+                        sort:1
+                    };
+                } else {
+                    answerSort = {
+                        sortMethod: "按时间排序",
+                        sort:0
+                    };
+                }
+                sessionStorage.setItem("answerSort",JSON.stringify(answerSort));
+                sessionStorage.removeItem("questionData");
+                sessionStorage.removeItem("questionInfo");
+                history.go(0);
+            },
+            toUserPage:function (id) {
+                if (id === 0 || id === "0") {
+                    return;
+                }
+                location.href = "../user/user.html?userId=" + id;
             }
         },
         mounted:function () {
             if (sessionStorage.getItem("notice") != null) {
-                this.$toast(sessionStorage.getItem("notice"));
+                this.$toast({
+                    message:sessionStorage.getItem("notice"),
+                    position: 'bottom',
+                    duration: 2000
+                });
                 sessionStorage.removeItem("notice");
+            }
+            if (sessionStorage.getItem("answerSort") != null) {
+                this.sortType = JSON.parse(sessionStorage.getItem("answerSort"));
             }
             let loc = location.href;
             let qid = loc.replace("?","&").split("&")[1];
@@ -450,11 +529,13 @@
                 this.loadingMore = false;
                 return;
             }
+            let sort = this.sortType.sort;
             $.ajax({
                 url:"../../question/viewQuestion.action",
                 type:"POST",
                 data:{
-                    questionId:questionId
+                    questionId:questionId,
+                    sort:sort
                 },
                 dataType:"json",
                 success:function (result) {
@@ -481,6 +562,11 @@
         computed:{
             headPortrait:function () {
                 return this.headFirstPart + this.owner.head + this.headLastPart;
+            }
+        },
+        watch:{
+            keyword:function (val,oldVal) {
+
             }
         }
     });

@@ -9,3 +9,6 @@ input::-webkit-inner-spin-button{
 input[type="number"]{
     -moz-appearance: textfield;
 }
+div{
+    word-break: break-all;
+}

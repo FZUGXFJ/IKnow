@@ -1,5 +1,6 @@
 package org.gxfj.iknow.service;
 
+import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
@@ -7,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static org.gxfj.iknow.util.ConstantUtil.*;
+
 /**
  * @author hhj
  */
@@ -33,37 +37,50 @@ public class ReplyServiceImpl implements ReplyService {
     private final int IS_ANSWERER = 2;
 
     @Override
-    public Integer postReply(Integer commentId, String content, Integer replyTarget, User user) {
-        if (!TextVerifyUtil.verifyCompliance(content)) {
-            return null;
+    public Map<String, Object> postReply(Integer commentId, String content, Integer replyTarget) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
+        if(user == null){
+            result.put(JSON_RETURN_CODE_NAME , UN_LOGIN);
+        } else if(content == null){
+            result.put(JSON_RETURN_CODE_NAME , MISS_COMMENT_INF );
+        } else{
+            if (TextVerifyUtil.verifyCompliance(content)) {
+                User targetUser= userDAO.get(replyTarget);
+                Comment comment = commentDAO.getNotDelete(commentId);
+
+                Reply reply = new Reply();
+                reply.setContent(content);
+                reply.setIsDelete((byte)0);
+                reply.setCount(0);
+                reply.setDate(new Date());
+                reply.setUserByTargetUserId(targetUser);
+                reply.setCommentByCommentId(comment);
+                reply.setUserByUserId(user);
+                replyDAO.add(reply);
+                messageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='user.html?userId=" +
+                        user.getId() +"'><i class=\"fas fa-link\">"+ user.getName() +
+                        "</i></a>回复了你的评论，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
+                        + reply.getCommentByCommentId().getAnswerByAnswerId().getId()
+                        + "'><i class=\"fas fa-link\">[回复链接]</i></a>");
+                result.put(JSON_RETURN_CODE_NAME, SUCCESS);
+            } else {
+                result.put(JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+            }
         }
-
-        User targetUser= userDAO.get(replyTarget);
-        Comment comment = commentDAO.getNotDelete(commentId);
-
-        Reply reply = new Reply();
-        reply.setContent(content);
-        reply.setIsDelete((byte)0);
-        reply.setCount(0);
-        reply.setDate(new Date());
-        reply.setUserByTargetUserId(targetUser);
-        reply.setCommentByCommentId(comment);
-        reply.setUserByUserId(user);
-
-        replyDAO.add(reply);
-
-        messageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='#'>"+
-                user.getName() + "</a>回复了你的评论，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
-                + reply.getCommentByCommentId().getAnswerByAnswerId().getId() + "'>[回复链接]</a>");
-        return reply.getId();
+        return result;
     }
 
     @Override
-    public Map<String, Object> showAllReplys(Integer commentId, User visitor, Integer sortType) {
-        Map<String , Object> resultMap = new HashMap<>(MAP_NUM);
-        resultMap.put("comment" , getComment(commentId, visitor));
-        resultMap.put("replies" , listReplies(commentId, visitor, sortType));
-        return resultMap;
+    public Map<String, Object> showAllReplys(Integer commentId, Integer sortType) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
+        result.put("comment" , getComment(commentId, user));
+        result.put("replies" , listReplies(commentId, user, sortType));
+        result.put(JSON_RETURN_CODE_NAME , SUCCESS);
+        //在session中保存排序的方式
+        ActionContext.getContext().getSession().put("sortType", sortType);
+        return result;
 
     }
 
@@ -122,10 +139,12 @@ public class ReplyServiceImpl implements ReplyService {
             replyMap.put("time" , Time.getTime(reply.getDate()));
             //如果浏览者已登录，且有点赞记录，则isApproved为1，否则为0
             int isApproved = 0;
-            if (visitor != null) {
-                isApproved = approvalReplyDAO.searchByUserIdandReplyId(visitor.getId(), reply.getId());
+            if (visitor != null && comment.getCount() != 0 &&
+                    approvalCommentDAO.get(visitor.getId(), comment.getId()) != null) {
+                replyMap.put("isApproved", 1);
+            } else {
+                replyMap.put("isApproved", 0);
             }
-            replyMap.put("isApproved", isApproved);
             if(visitor == null) {
                 replyMap.put("viewerIsOwner", 0);
             } else {
@@ -244,8 +263,16 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public boolean approveReply(Integer replyId, User user) {
-        if(approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId) == -1){
+    public Map<String, Object> approveReply(Integer replyId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
+        if(user == null){
+            result.put(JSON_RETURN_CODE_NAME , UN_LOGIN);
+        }
+        else if(approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId) != -1){
+            result.put(JSON_RETURN_CODE_NAME , 2 );
+        }
+        else{
             Reply reply=replyDAO.getNotDelete(replyId);
             Comment comment=reply.getCommentByCommentId();
             Approvalreply approvalreply=new Approvalreply();
@@ -257,35 +284,55 @@ public class ReplyServiceImpl implements ReplyService {
             reply.setCount(reply.getCount()+1);
             replyDAO.update(reply);
 
-            messageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='#'>"+
-                    user.getName() + "</a>赞同了你的回复</P><a href='../../mobile/comment/comment.html?answerId=" +
-                    reply.getCommentByCommentId().getAnswerByAnswerId().getId() + "'>[回复链接]</a>");
-            return true;
+            messageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='user.html?userId=" +
+                    user.getId() + "'><i class=\"fas fa-link\">"+
+                    user.getName() + "</i></a>赞同了你的回复</P><a href='../../mobile/comment/comment.html?answerId=" +
+                    reply.getCommentByCommentId().getAnswerByAnswerId().getId()
+                    + "'><i class=\"fas fa-link\">[回复链接]</i></a>");
+            result.put(JSON_RETURN_CODE_NAME , SUCCESS);
         }
-        return false;
+        return result;
     }
 
     @Override
-    public boolean cancelApprove(Integer replyId, User user) {
-        Integer x = approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId);
-        if (x == -1) {
-            return false;
+    public Map<String, Object> cancelApprove(Integer replyId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
+        if(user == null){
+            result.put(JSON_RETURN_CODE_NAME , UN_LOGIN);
         }
-        approvalReplyDAO.delete(approvalReplyDAO.get(x));
-        Reply reply = replyDAO.getNotDelete(replyId);
-        reply.setCount(reply.getCount()-1);
-        replyDAO.update(reply);
-        return true;
-    }
-
-    @Override
-    public boolean deleteReply(Integer replyId, User user) {
-        Reply reply=replyDAO.get(replyId);
-        if(user.getId().equals(reply.getUserByUserId().getId())){
-            reply.setIsDelete((byte)1);
+        else if(approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId) == -1){
+            result.put(JSON_RETURN_CODE_NAME , 2 );
+        }
+        else{
+            approvalReplyDAO.delete(approvalReplyDAO.get
+                    (approvalReplyDAO.searchByUserIdandReplyId(user.getId(),replyId)));
+            Reply reply = replyDAO.getNotDelete(replyId);
+            reply.setCount(reply.getCount()-1);
             replyDAO.update(reply);
-            return true;
+            result.put(JSON_RETURN_CODE_NAME , SUCCESS);
         }
-        return false;
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteReply(Integer replyId) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
+        if(user==null){
+            result.put(JSON_RETURN_CODE_NAME,UN_LOGIN);
+        }
+        else {
+            Reply reply=replyDAO.get(replyId);
+            if (user.getId().equals(reply.getUserByUserId().getId())){
+                reply.setIsDelete((byte)1);
+                replyDAO.update(reply);
+                result.put(JSON_RETURN_CODE_NAME,SUCCESS);
+            }
+            else {
+                result.put(JSON_RETURN_CODE_NAME,NO_REPLYER);
+            }
+        }
+        return result;
     }
 }

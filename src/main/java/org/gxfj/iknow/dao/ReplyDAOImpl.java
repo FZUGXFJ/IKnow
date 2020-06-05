@@ -113,4 +113,12 @@ public class ReplyDAOImpl implements ReplyDAO{
         bean.setIsDelete((byte)DELETED);
         update(bean);
     }
+
+    @Override
+    public List<Reply> listByuserId(Integer userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Reply WHERE (userId = ?) and (isDelete = 0)");
+        List<Reply> list = query.setInteger(0, userId).list();
+        return list;
+    }
 }

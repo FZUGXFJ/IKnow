@@ -25,6 +25,7 @@ import java.util.Map;
 @Scope("prototype")
 public class UserAction {
 
+    Integer userId;
     String username;
     String email;
     String password;
@@ -77,43 +78,15 @@ public class UserAction {
     }
 
     public String emailLogin() {
-        User loginInf = new User();
-        loginInf.setEmail(email);
-        Map<String,Object> session = ActionContext.getContext().getSession();
-        Map<String,Object> result = userService.loginByNoPassword(email,(String)session.get(EMAIL), verifyCode
-                , (String) session.get(VERIFY_CODE));
-        Map<String,Object> resultMap = new HashMap<>(MIN_HASH_MAP_NUM);
-        User user = (User) result.get(ConstantUtil.SESSION_USER);
-        if (user != null) {
-            ActionContext.getContext().getSession().put("user",user);
-            resultMap.put("response",0);
-            resultMap.put("email",user.getEmail());
-            resultMap.put("password",user.getPasswd());
-        } else {
-            resultMap.put("response",result.get("value"));
-        }
-        inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
+        Map<String,Object> result = userService.loginByNoPassword(email, verifyCode);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 
     public String logon() {
-        Map<String,Object> session = ActionContext.getContext().getSession();
-        String result = null;
-        if (session.get(VERIFY_CODE) == null || !verifyCode.equals(session.get(VERIFY_CODE))) {
-            result = "{\"response\":3}";
-            inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            return RETURN_STRING;
-        } else if (session.get(EMAIL) == null || !email.equals(session.get(EMAIL))) {
-            result = "{\"response\":4}";
-            inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            return RETURN_STRING;
-        }
-        Map<String,Object> resultMap = userService.logon(username,password,email);
-        if ((Integer) resultMap.get("value") == SUCCESS_LOGON) {
-            session.put("user",resultMap.get("user"));
-        }
-        result = "{\"response\":" + resultMap.get("value") + "}";
-        inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+        Map<String,Object> resultMap = userService.logon(username,password,email, verifyCode);
+
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(resultMap).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 
@@ -332,6 +305,12 @@ public class UserAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
+
+    public String userHome(){
+        Map<String, Object> result = userService.getHomedata(userId);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return RETURN_STRING;
+    }
     
     public String getUsername() {
         return username;
@@ -411,5 +390,13 @@ public class UserAction {
 
     public InputStream getInputStream() {
         return inputStream;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

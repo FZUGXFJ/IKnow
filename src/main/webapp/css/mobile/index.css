@@ -50,11 +50,12 @@ table{
     width: 50%;
     text-align: center;
     cursor: pointer;
+    color: #00beee;
 }
 .selected{
-    color: #12eee7;
+    color: #00beee;
     border: 0;
-    border-bottom: 2px solid #12eee7;
+    border-bottom: 2px solid #00beee;
 }
 .lb{
     padding-left: 2%;
@@ -72,7 +73,6 @@ table{
     font-size: 0.7em;
 }
 .answerView{
-    white-space: nowrap;
     overflow: hidden;;
     text-overflow: ellipsis;
     display:-webkit-box;
@@ -98,9 +98,6 @@ table{
     outline: none;
     border-color: transparent;
     box-shadow:none;
-}
-.select{
-    color: #12eee7;
 }
 .headPortrait{
     border-radius: 100%;
@@ -136,6 +133,15 @@ table{
     position: relative;
     top: -0.3em;
     left: -0.2em;
+}
+.redDot1{
+    width: 0.5em;
+    height: 0.5em;
+    background-color: red;
+    border-radius: 100%;
+    position: relative;
+    top: -0.6em;
+    left: -0.3em;
 }
 #myInf{
     width: 90%;

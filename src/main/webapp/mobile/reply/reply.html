@@ -36,7 +36,7 @@
     <div v-if="load">
         <div id="commentInf">
             <table>
-                <td style="width: 12%;text-align: center">
+                <td style="width: 12%;text-align: center" @click="toUserPage(comment.userId)">
                     <div class="userHead" v-html="comment.head"></div>
                 </td>
                 <td style="width: 73%">
@@ -72,7 +72,7 @@
         <div id="replies">
             <div id="reply" v-for="reply in replies">
                 <table>
-                    <td style="width: 12%;text-align: center">
+                    <td style="width: 12%;text-align: center" @click="toUserPage(reply.userId)">
                         <div class="userHead" v-html="reply.head"></div>
                     </td>
                     <td style="width: 73%;font-size: 0.8em">
@@ -212,9 +212,11 @@
                         if (result.resultCode === 0) {
                             location.href = "../reply/reply.html?commentId=" + commentId;
                         } else if (result.resultCode === 1) {
-                            if (confirm("登录后才能发送回复")) {
-                                location.href = "../user/login.html?boot=0"
-                            }
+                            allReply.$messagebox.confirm("请先登录").then(action =>{
+                                location.href = "../user/login.html?boot=0";
+                            }).catch(action =>{});
+                        } else if (result.resultCode === 10) {
+                            allReply.$messagebox.alert('内容中含有敏感词').then(action => {});
                         }
                     },
                     error: function (request, status, error) {
@@ -259,9 +261,9 @@
                                 comment.isApproved = 1;
                                 comment.approveNum += 1;
                             } else if (result.resultCode === 1) {
-                                if (confirm("请先登录")) {
+                                allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
-                                }
+                                }).catch(action =>{});
                             }
                             allReply.noAction = false;
                         },
@@ -284,9 +286,9 @@
                                 comment.isApproved = 0;
                                 comment.approveNum -= 1;
                             } else if (result.resultCode === 1) {
-                                if (confirm("请先登录")) {
+                                allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
-                                }
+                                }).catch(action =>{});
                             }
                             allReply.noAction = false;
                         },
@@ -321,9 +323,9 @@
                                 reply.isApproved = 1;
                                 reply.approveNum += 1;
                             } else if (result.resultCode === 1) {
-                                if (confirm("请先登录")) {
+                                allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
-                                }
+                                }).catch(action =>{});
                             }
                             allReply.noAction = false;
                         },
@@ -346,9 +348,9 @@
                                 reply.isApproved = 0;
                                 reply.approveNum -= 1;
                             } else if (result.resultCode === 1) {
-                                if (confirm("请先登录")) {
+                                allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
-                                }
+                                }).catch(action =>{});
                             }
                             allReply.noAction = false;
                         },
@@ -456,7 +458,13 @@
                         }
                     });
                 }).catch(action => {});
-            }
+            },
+            toUserPage:function (id) {
+                if (id === 0 || id === "0") {
+                    return;
+                }
+                location.href = "../user/user.html?userId=" + id;
+            },
         },
         mounted:function () {
             if (sessionStorage.getItem("notice") != null) {

@@ -1,8 +1,6 @@
 package org.gxfj.iknow.service;
 
-import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import com.opensymphony.xwork2.ActionContext;
-import org.apache.struts2.ServletActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
 import org.gxfj.iknow.util.*;
@@ -12,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.*;
-
-import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
 
 /**
  * @author erniumo ,hhj
@@ -42,6 +38,8 @@ public class AnswerServiceImpl implements AnswerService{
     ReplyDAO replyDAO;
     @Autowired
     MessageUtil messageUtil;
+    @Autowired
+    MessageDAO messageDAO;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -98,16 +96,18 @@ public class AnswerServiceImpl implements AnswerService{
             result.put("answerID",answer.getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
-            messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
-                    user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
-                    "questionId=" + questionId + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
+            messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='user.html?userId=" +
+                    user.getId() +"'><i class=\"fas fa-link\">"+ user.getName()
+                    + "</i></a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
+                    "questionId=" + questionId + "&answerId=" + answer.getId()
+                    + "'><i class=\"fas fa-link\">[回答链接]</i></a>");
         }
         return result;
     }
 
 
     @Override
-    public Map<String, Object> getRecommendAnswerForQuestion(Integer questionId, Integer answerId) {
+    public Map<String, Object> viewAnswer(Integer questionId, Integer answerId) {
         User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String , Object> result = new HashMap<>(MAP_NUM);
         if(user!=null) {
@@ -370,13 +370,22 @@ public class AnswerServiceImpl implements AnswerService{
             result=getRecommendJsonItems(selectRecommendAnswer(user.getId(), count, 0));
             cUser.put("id",user.getId());
             cUser.put("head", ImgUtil.changeAvatar(user.getHead()));
+            List<Message> messageList = messageDAO.listUnReadMessageByUserId(user.getId());
+            if(messageList.size()>0){
+                cUser.put("hasNotReadMsg",1);
+            }
+            else {
+                cUser.put("hasNotReadMsg",0);
+            }
         } else {
             result=getRecommendJsonItems(selectRecommendAnswer(null, count, 0));
             cUser.put("id",0);
             cUser.put("head",ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR));
+            cUser.put("hasNotReadMsg",0);
         }
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
         result.put("user",cUser);
+
         return result;
     }
 
@@ -655,9 +664,11 @@ public class AnswerServiceImpl implements AnswerService{
             answer.setApprovalCount(answer.getApprovalCount()+1);
             answerDAO.update(answer);
 
-            messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
-                    "</a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
-                    answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
+            messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='user.html?userId=" +
+                    user.getId() +"'><i class=\"fas fa-link\">" + user.getName() +
+                    "</i></a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
+                    answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId()
+                    + "'><i class=\"fas fa-link\">[回答链接]</i></a>");
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS );
         }
         else{
@@ -767,7 +778,7 @@ public class AnswerServiceImpl implements AnswerService{
             User quser = question.getUserByUserId();
             recommend.put("questionId",question.getId());
             recommend.put("questionTitle",question.getTitle());
-            recommend.put("answererId",user.getId());
+
             //判断答主是否匿名
 //            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1) ;
             boolean isAnonymous = (answer.getIsAnonymous() == ANONYMOUS);
@@ -776,11 +787,13 @@ public class AnswerServiceImpl implements AnswerService{
                 recommend.put("answererName", ConstantUtil.ANONYMOUS_USER_NAME);
                 recommend.put("answererLevel",0);
                 recommend.put("answererBadge",0);
+                recommend.put("answererId",0);
             } else {
                 recommend.put("answererHead",ImgUtil.changeAvatar(user.getHead()));
                 recommend.put("answererName",user.getName());
                 recommend.put("answererLevel",expUtil.getLevelLabel(user.getExp()));
                 recommend.put("answererBadge",user.getBadgeNum());
+                recommend.put("answererId",user.getId());
             }
             recommend.put("answerId",answer.getId());
             //使用HtmlUtil工具类，将图片转换掉

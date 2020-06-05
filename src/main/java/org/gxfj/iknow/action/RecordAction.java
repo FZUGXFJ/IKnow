@@ -42,90 +42,25 @@ public class RecordAction {
     public InputStream getInputStream() { return inputStream; }
 
     public String collectionRecord(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
-        if(user == null){
-            response.put("resultCode" , UN_LOGIN);
-        }
-        else {
-            response=recordService.collectionRecord(user,start);
-            Integer x=(Integer)response.get("Num");
-            if(x<20){
-                response.put("resultCode",NO_MORE);
-            }
-            else
-            {
-                response.put("resultCode",SUCCESS);
-            }
-        }
+        Map<String, Object> response = recordService.collectionRecord(start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String browsingRecord(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
-        if(user == null){
-            response.put("resultCode" , UN_LOGIN);
-        }
-        else {
-            response=recordService.browsingRecord(user,start);
-            Integer x=(Integer)response.get("Num");
-            if(x<20){
-                response.put("resultCode",NO_MORE);
-            }
-            else {
-                response.put("resultCode",SUCCESS);
-            }
-        }
+        Map<String, Object> response = recordService.browsingRecord(start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String postQueRecord(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
-        if(user == null){
-            response.put("resultCode" , UN_LOGIN_TWO);
-        }
-        else {
-            List<Map<String, Object>> records = recordService.listPostQuestionRecord(user,start);
-            response.put("records",records);
-            Integer x=(Integer)records.size();
-            if(x<20){
-                response.put("resultCode",NO_MORE);
-            }
-            else
-            {
-                response.put("resultCode",SUCCESS);
-            }
-        }
+        Map<String, Object> response = recordService.listPostQuestionRecord(start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String postAnsRecord(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
-        if(user == null){
-            response.put("resultCode" , UN_LOGIN);
-        }
-        else {
-            List<Map<String, Object>> records = recordService.listPostAnswerRecord(user,start);
-            response.put("records",records);
-            Integer x=(Integer)records.size();
-            if(x<20){
-                response.put("resultCode",NO_MORE);
-            }
-            else
-            {
-                response.put("resultCode",SUCCESS);
-            }
-        }
+        Map<String, Object> response = recordService.listPostAnswerRecord(start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

@@ -32,32 +32,13 @@ public class ReportAction {
     private InputStream inputStream;
 
     public String getReportReason(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
-        if(user == null){
-            response.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
-        }
-        else {
-            response = reportService.reportReasonmap();
-            response.put(JSON_RETURN_CODE_NAME,SUCCESS);
-        }
-
+        Map<String, Object> response = reportService.reportReasonmap();
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
 
     public String doReport(){
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        Map<String, Object> response = new HashMap<>(RESPONSE_NUM);
-        User user = (User)session.get(SESSION_USER);
-        if(user == null){
-            response.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
-        }
-        else if (reportService.doReport(type,reason,description,targetId,user)){
-            response.put(JSON_RETURN_CODE_NAME,SUCCESS);
-        }
-
+        Map<String, Object> response = reportService.doReport(type,reason,description,targetId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }

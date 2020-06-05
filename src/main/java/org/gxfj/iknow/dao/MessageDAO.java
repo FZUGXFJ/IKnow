@@ -12,6 +12,6 @@ public interface MessageDAO extends BaseDAO<Message>{
      * @param userId 用户id
      * @return 消息列表
      */
-    List<Message> listByUserId(Integer userId);
+    List<Message> listUnReadMessageByUserId(Integer userId);
 
 }

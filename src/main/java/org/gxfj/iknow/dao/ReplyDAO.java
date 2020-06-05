@@ -44,4 +44,11 @@ public interface ReplyDAO extends BaseDAO<Reply>{
      * @param bean 要删除的回答
      */
     void delete(Reply bean);
+
+    /**
+     * 获取用户的回复列表
+     * @param userId 用户id
+     * @return 回复列表
+     */
+    List<Reply> listByuserId(Integer userId);
 }
