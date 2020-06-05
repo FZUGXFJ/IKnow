@@ -65,7 +65,7 @@ table{
     height: 1px;
     margin: 0.5em 0;
 }
-#sysMsg,#appMsg,#ansMsg,#coAndReMsg{
+#sysMsg,#appMsg,#ansMsg,#coAndReMsg,#invMsg{
     width: 90%;
     margin: 0 auto;
 }

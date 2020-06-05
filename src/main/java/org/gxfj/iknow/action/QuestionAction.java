@@ -109,12 +109,11 @@ public class QuestionAction {
     }
 
     /**
-     * 取消采纳，没有实现这个功能
-     * TODO 删除这个方法
+     * 取消匿名，没有实现这个功能
      * @return SUCCESS
      */
-    public String cancelAdopt() {
-        Map<String, Object> response = questionService.cancelAdopt(questionId);
+    public String cancelAnonymous() {
+        Map<String, Object> response = questionService.cancelAnonymous(questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

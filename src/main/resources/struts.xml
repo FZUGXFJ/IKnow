@@ -150,7 +150,7 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
-        <action name="cancelAdopt" class="org.gxfj.iknow.action.QuestionAction" method="cancelAdopt">
+        <action name="cancelAnonymous" class="org.gxfj.iknow.action.QuestionAction" method="cancelAnonymous">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>
@@ -254,12 +254,6 @@
             </result>
         </action>
         <action name="adoptAnswer" class="org.gxfj.iknow.action.AnswerAction" method="adoptAnswer">
-            <result name="success" type="stream">
-                <param name="contentType">application/json;charset=utf-8</param>
-                <param name="inputName">inputStream</param>
-            </result>
-        </action>
-        <action name="cancelAdopt" class="org.gxfj.iknow.action.AnswerAction" method="cancelAdopt">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>

@@ -264,9 +264,9 @@
                 $("#operateMenu").slideToggle();
             },
             cancelAnonymous:function () {
-                if (confirm("确定取消匿名吗？")) {
+                this.$messagebox.confirm("确定取消匿名吗？").then(action => {
                     $.ajax({
-                        url:"../../question/cancelAdopt.action",
+                        url:"../../question/cancelAnonymous.action",
                         type:"POST",
                         data:{
                             questionId:question.questionId
@@ -274,6 +274,8 @@
                         dataType:"json",
                         success:function (result) {
                             if (result.resultCode === 0) {
+                                sessionStorage.removeItem("questionData");
+                                sessionStorage.removeItem("questionInfo");
                                 history.go(0);
                             }
                         },
@@ -284,7 +286,7 @@
                             console.log(status);
                         }
                     });
-                }
+                }).catch(action => {});
             },
             answerPage: function (answerId) {
                 location.href = "../answer/answer.html?questionId=" + this.questionId
@@ -308,9 +310,9 @@
                             question.collectionCount++;
                             question.noAction = false;
                         } else if (result.resultCode === 1) {
-                            if (confirm("登录后才能收藏问题")) {
+                            question.$messagebox.confirm("登录后才能收藏问题").then(action => {
                                 location.href = "../user/login.html?boot=0";
-                            }
+                            }).catch(action => {});
                             question.noAction = false;
                         }
                     },

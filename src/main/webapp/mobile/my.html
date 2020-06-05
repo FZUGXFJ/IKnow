@@ -109,7 +109,21 @@
                     <button class="btn btn-link" @click="toAuthentication">未认证</button>
                 </div>
                 <div v-else="">
-
+                    <table>
+                        <tr>
+                            <td><div><button class="btn">学校:</button></div></td>
+                            <td style="text-align: right">{{inf.identity.school}}</td>
+                        </tr>
+                        <tr>
+                            <td><div><button class="btn">学院:</button></div></td>
+                            <td style="text-align: right">{{inf.identity.college}}</td>
+                        </tr>
+                        <tr>
+                            <td><div><button class="btn">姓名:</button></div></td>
+                            <td style="text-align: right">{{inf.identity.realName}}</td>
+                        </tr>
+                    </table>
+                    <button class="btn btn-link" @click="toAuthentication">修改认证信息</button>
                 </div>
             </div>
             <br>

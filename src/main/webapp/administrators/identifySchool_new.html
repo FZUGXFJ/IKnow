@@ -18,6 +18,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/xlsx/0.11.5/xlsx.core.min.js"></script>
 
     <style>
         .bd-placeholder-img {
@@ -78,7 +79,6 @@
                             <a class="nav-link active" href="#">
                                 <span data-feather="feather"></span>
                                 回答举报
-                                <span class="badge badge-pill badge-dark" v-if="reportInfoList.length>0">{{reportInfoList.length}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -132,20 +132,23 @@
             </nav>
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">举报管理</h1>
+                    <h1 class="h2">认证学校管理</h1>
+                    <label class="col-sm-2 control-label"></label>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">导出</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">总览</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">上传</button>
                         </div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                            <span data-feather="calendar"></span>
-                            This week
-                        </button>
                     </div>
                 </div>
                 <!--            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
-                <h2>评论举报管理</h2>
+                <h2>认证学校管理</h2>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">选择文件..</label>
+                    <input type="button" class="btn btn-sm btn-outline-secondary" onclick="$('#file')".click()>选择文件</input>
+                    <input id="file" type="file" style="display:none"  οnchange="testImport(this)" accept="*">
+                    <button class="btn btn-sm btn-outline-secondary">上传</button>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead align="center">
@@ -308,172 +311,172 @@
         document.getElementById("window").style.display = "none";
         document.getElementById("shadow").style.display = "none";
     }
-    let reportAdmin=new Vue({
-        el:"#reportAdmin",
-        data:{
-            reportInfoList:[],
-            pageInfoList:[],
-            isRmb:false,
-            accountNumError:false,
-            accountNumErrorMsg:"",
-            passwordError:false,
-            passwordErrorMsg:"",
-            alertMsg:{head:"",body:""},
-            all: 1, //总页数
-            cur: 1,//当前页码
-            now:-1//当前索引
-        },
-        watch: {
-            cur: function(oldValue , newValue){
-                console.log(arguments);
-            }
-        },
-        methods:{
-            logout:function () {
-                $.ajax({
-                    type:"POST",
-                    url:"../admin/logout.action",
-                    data:{},
-                    dataType:"json",
-                    success:function (result) {
-                        if (result.response === 0) {
-                            location.href = "login.html";
-                        }
-                    },
-                    error:function (request,status,error) {
-                        alert("系统异常！");
-                        console.log(request.status);
-                        console.log(request.readyState);
-                        console.log(status);
-                    }
-                });
-            },
-            isLogin:function(){
-                $.ajax({
-                    url: "../admin/isLogin.action",
-                    type: "POST",
-                    data: {},
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.resultCode === 1) {
-                            location.href="login.html";
-                        }
-                    },
-                    error: function (request, status, error) {
-                        alert("系统异常！");
-                        console.log(request.status);
-                        console.log(request.readyState);
-                        console.log(status);
-                    }
-                });
-            },
-            getReportType: function(reportType){
-                $.ajax({
-                    type:"POST",
-                    url:"../admin/reportType.action",
-                    data:{
-                        reportType:reportType,
-                    },
-                    dataType:"json",
-                    success:function (result) {
-                        if (result.resultCode === 0) {
-                            reportAdmin.reportInfoList = result.reportInfoList;
-                            reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
-                            console.log(reportAdmin.all);
-                            for(let i = 0;i < reportAdmin.reportInfoList.length;i++)
-                            {
-                                reportAdmin.pageInfoList[i] = reportAdmin.reportInfoList.slice(15*i,15*(i+1));
-                                console.log(reportAdmin.pageInfoList[i]);
-                            }
-                        }
-                    },
-                    error:function (request,status,error) {
-                        alert("系统异常！");
-                        console.log(request.status);
-                        console.log(request.readyState);
-                        console.log(status);
-                    }
-                });
-            },
-            del: function(){
-                $.ajax({
-                    type:"POST",
-                    url:"../admin/reportDel.action",
-                    data:{
-                        reportID:reportAdmin.reportInfoList[reportAdmin.now].id,
-                    },
-                    dataType:"json",
-                    success:function (result) {
-                        if (result.resultCode === 0) {
-                            reportAdmin.reportInfoList.splice(reportAdmin.now,1);
-                            if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
-                                reportAdmin.cur--;
-                            }   //当最后一页的最后一条数据被删除时，也要改变当前页面
-                            reportAdmin.page();
-                            console.log(reportAdmin.now);
-                        }
-                    },
-                    error:function (request,status,error) {
-                        alert("系统异常！");
-                        console.log(request.status);
-                        console.log(request.readyState);
-                        console.log(status);
-                    }
-                });
-            },
-            page: function(){
-                reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
-                console.log(reportAdmin.all);
-            },
-            btnClick: function(data){
-                if(data != this.cur){
-                    this.cur = data;
-                    // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
-                }
-            },
-            pageClick: function(){
-                console.log('现在在'+this.cur+'页');
-                // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
-            }
-        },
-        computed: {
-            indexs: function(){
-                var left = 1;
-                var right = this.all;
-                var ar = [];
-                if(this.all>= 5){
-                    //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
-                    if(this.cur > 3 && this.cur < this.all-1){
-                        //以4为参考基准，左面加2右边加2
-                        left = this.cur - 2
-                        right = this.cur + 2
-                    }else{
-                        if(this.cur<=3){
-                            left = 1
-                            right = 5
-                        }else{
-                            right = this.all
-                            left = this.all -4
-                        }
-                    }
-                }
-                while (left <= right){
-                    ar.push(left)
-                    left ++
-                }
-                console.log(ar);
-                return ar
-            },
-            subArr() {
-                console.log(this.reportInfoList.slice((this.cur-1)*15,this.cur*15));
-                return this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
-            }
-        },
-        mounted:function () {
-            this.isLogin();
-            this.getReportType(2);
-        }
-    });
+    // let reportAdmin=new Vue({
+    //     el:"#reportAdmin",
+    //     data:{
+    //         reportInfoList:[],
+    //         pageInfoList:[],
+    //         isRmb:false,
+    //         accountNumError:false,
+    //         accountNumErrorMsg:"",
+    //         passwordError:false,
+    //         passwordErrorMsg:"",
+    //         alertMsg:{head:"",body:""},
+    //         all: 1, //总页数
+    //         cur: 1,//当前页码
+    //         now:-1//当前索引
+    //     },
+    //     watch: {
+    //         cur: function(oldValue , newValue){
+    //             console.log(arguments);
+    //         }
+    //     },
+    //     methods:{
+    //         logout:function () {
+    //             $.ajax({
+    //                 type:"POST",
+    //                 url:"../admin/logout.action",
+    //                 data:{},
+    //                 dataType:"json",
+    //                 success:function (result) {
+    //                     if (result.response === 0) {
+    //                         location.href = "login.html";
+    //                     }
+    //                 },
+    //                 error:function (request,status,error) {
+    //                     alert("系统异常！");
+    //                     console.log(request.status);
+    //                     console.log(request.readyState);
+    //                     console.log(status);
+    //                 }
+    //             });
+    //         },
+    //         isLogin:function(){
+    //             $.ajax({
+    //                 url: "../admin/isLogin.action",
+    //                 type: "POST",
+    //                 data: {},
+    //                 dataType: "json",
+    //                 success: function (result) {
+    //                     if (result.resultCode === 1) {
+    //                         location.href="login.html";
+    //                     }
+    //                 },
+    //                 error: function (request, status, error) {
+    //                     alert("系统异常！");
+    //                     console.log(request.status);
+    //                     console.log(request.readyState);
+    //                     console.log(status);
+    //                 }
+    //             });
+    //         },
+    //         getReportType: function(reportType){
+    //             $.ajax({
+    //                 type:"POST",
+    //                 url:"../admin/reportType.action",
+    //                 data:{
+    //                     reportType:reportType,
+    //                 },
+    //                 dataType:"json",
+    //                 success:function (result) {
+    //                     if (result.resultCode === 0) {
+    //                         reportAdmin.reportInfoList = result.reportInfoList;
+    //                         reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
+    //                         console.log(reportAdmin.all);
+    //                         for(let i = 0;i < reportAdmin.reportInfoList.length;i++)
+    //                         {
+    //                             reportAdmin.pageInfoList[i] = reportAdmin.reportInfoList.slice(15*i,15*(i+1));
+    //                             console.log(reportAdmin.pageInfoList[i]);
+    //                         }
+    //                     }
+    //                 },
+    //                 error:function (request,status,error) {
+    //                     alert("系统异常！");
+    //                     console.log(request.status);
+    //                     console.log(request.readyState);
+    //                     console.log(status);
+    //                 }
+    //             });
+    //         },
+    //         del: function(){
+    //             $.ajax({
+    //                 type:"POST",
+    //                 url:"../admin/reportDel.action",
+    //                 data:{
+    //                     reportID:reportAdmin.reportInfoList[reportAdmin.now].id,
+    //                 },
+    //                 dataType:"json",
+    //                 success:function (result) {
+    //                     if (result.resultCode === 0) {
+    //                         reportAdmin.reportInfoList.splice(reportAdmin.now,1);
+    //                         if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
+    //                             reportAdmin.cur--;
+    //                         }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+    //                         reportAdmin.page();
+    //                         console.log(reportAdmin.now);
+    //                     }
+    //                 },
+    //                 error:function (request,status,error) {
+    //                     alert("系统异常！");
+    //                     console.log(request.status);
+    //                     console.log(request.readyState);
+    //                     console.log(status);
+    //                 }
+    //             });
+    //         },
+    //         page: function(){
+    //             reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
+    //             console.log(reportAdmin.all);
+    //         },
+    //         btnClick: function(data){
+    //             if(data != this.cur){
+    //                 this.cur = data;
+    //                 // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+    //             }
+    //         },
+    //         pageClick: function(){
+    //             console.log('现在在'+this.cur+'页');
+    //             // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+    //         }
+    //     },
+    //     computed: {
+    //         indexs: function(){
+    //             var left = 1;
+    //             var right = this.all;
+    //             var ar = [];
+    //             if(this.all>= 5){
+    //                 //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
+    //                 if(this.cur > 3 && this.cur < this.all-1){
+    //                     //以4为参考基准，左面加2右边加2
+    //                     left = this.cur - 2
+    //                     right = this.cur + 2
+    //                 }else{
+    //                     if(this.cur<=3){
+    //                         left = 1
+    //                         right = 5
+    //                     }else{
+    //                         right = this.all
+    //                         left = this.all -4
+    //                     }
+    //                 }
+    //             }
+    //             while (left <= right){
+    //                 ar.push(left)
+    //                 left ++
+    //             }
+    //             console.log(ar);
+    //             return ar
+    //         },
+    //         subArr() {
+    //             console.log(this.reportInfoList.slice((this.cur-1)*15,this.cur*15));
+    //             return this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
+    //         }
+    //     },
+    //     mounted:function () {
+    //         this.isLogin();
+    //         this.getReportType(1);
+    //     }
+    // });
     (function () {
         'use strict'
         feather.replace()
@@ -481,6 +484,53 @@
         var ctx = document.getElementById('myChart')
         // eslint-disable-next-line no-unused-vars
     }())
+</script>
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/xlsx.full.min.js"></script>
+<script type="text/javascript" src="js/layui.all.js"></script>
+<script type="text/javascript">
+    function testImport(obj) {
+        //判断是否为文件
+        if (!obj.files) {
+            return;
+        }
+        var index = layer.load(1, { shade: [0.1,'#fff']});
+        var f = obj.files[0];
+        var reader = new FileReader();
+        reader.onabort = function(e) {
+            alert("中断了")
+        }
+        reader.onerror = function(e) {
+            alert("出错了")
+        }
+        reader.onloadstart = function() {
+            //开始
+            console.log("onloadstart")
+        }
+        reader.onloadend = function() {
+            //结束
+            console.log("onloadend")
+        }
+        reader.onload = function(e) {
+            //$("#testImport").val(null); //清空文件栏
+            var data = e.target.result;
+            var wb = XLSX.read(data, {
+                type: 'binary'		//设置类型,读取二进制
+            });
+
+            //读第一个Sheet文件内容
+            var studentSheet = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
+            studentSheet = JSON.parse(studentSheet);
+            console.log(studentSheet)
+
+            //读第二个Sheet文件内容
+            var teacherSheet = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]]));
+            teacherSheet = JSON.parse(teacherSheet);
+            console.log(teacherSheet)
+            layer.closeAll();
+        }
+        reader.readAsBinaryString(f);
+    }
 </script>
 </body>
 </html>

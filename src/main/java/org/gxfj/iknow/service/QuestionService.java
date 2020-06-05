@@ -44,7 +44,7 @@ public interface QuestionService {
      * 根据问题的id，获得问题及问题下的前length个回答的相关信息
      * @param questionId 取消匿名的问题
      */
-    public Map<String, Object> cancelAdopt(Integer questionId);
+    public Map<String, Object> cancelAnonymous(Integer questionId);
 
     /**
      * 获取题主

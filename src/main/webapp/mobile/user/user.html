@@ -46,6 +46,11 @@
                 <div class="introduction">
                     {{userInfo.introduction}}
                 </div>
+                <div v-if="userInfo.identity.type!==0" style="margin-top: 0.2em">
+                    <i class="fas fa-shield-alt" style="color: #2f4bff" v-if="userInfo.identity.type===1"></i>
+                    <i class="fas fa-shield-alt" style="color: #ffb100" v-if="userInfo.identity.type===2"></i>
+                    &nbsp;{{userInfo.identity.realName}}
+                </div>
             </td>
         </table>
         <div class="splitLine"></div>
