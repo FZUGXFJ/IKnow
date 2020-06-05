@@ -96,8 +96,8 @@ public class AnswerServiceImpl implements AnswerService{
             result.put("answerID",answer.getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
-            messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='#'>"+
-                    user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
+            messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='user/user.html?userId=" +
+                    user.getId() +"'>"+ user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
                     "questionId=" + questionId + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
         }
         return result;
@@ -662,7 +662,8 @@ public class AnswerServiceImpl implements AnswerService{
             answer.setApprovalCount(answer.getApprovalCount()+1);
             answerDAO.update(answer);
 
-            messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='#'>" + user.getName() +
+            messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='user/user.html?userId=" +
+                    user.getId() +"'>" + user.getName() +
                     "</a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
                     answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS );

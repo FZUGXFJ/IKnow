@@ -58,8 +58,9 @@ public class ReplyServiceImpl implements ReplyService {
                 reply.setCommentByCommentId(comment);
                 reply.setUserByUserId(user);
                 replyDAO.add(reply);
-                messageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='#'>"+
-                        user.getName() + "</a>回复了你的评论，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
+                messageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='user/user.html?userId=" +
+                        user.getId() +"'>"+ user.getName() +
+                        "</a>回复了你的评论，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
                         + reply.getCommentByCommentId().getAnswerByAnswerId().getId() + "'>[回复链接]</a>");
                 result.put(JSON_RETURN_CODE_NAME, SUCCESS);
             } else {
@@ -282,7 +283,8 @@ public class ReplyServiceImpl implements ReplyService {
             reply.setCount(reply.getCount()+1);
             replyDAO.update(reply);
 
-            messageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='#'>"+
+            messageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='user/user.html?userId=" +
+                    user.getId() + "'>"+
                     user.getName() + "</a>赞同了你的回复</P><a href='../../mobile/comment/comment.html?answerId=" +
                     reply.getCommentByCommentId().getAnswerByAnswerId().getId() + "'>[回复链接]</a>");
             result.put(JSON_RETURN_CODE_NAME , SUCCESS);

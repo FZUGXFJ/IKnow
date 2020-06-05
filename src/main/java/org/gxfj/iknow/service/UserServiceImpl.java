@@ -349,6 +349,32 @@ public class UserServiceImpl<result> implements UserService{
         }
     }
 
+    /**
+     * 获得用户的身份（老师或者学生）
+     * @param userId 用户id
+     * @return 用户的真实姓名，学校，学院;没有身份返回空
+     */
+    private Map<String, Object> getUserIdentityNew(Integer userId){
+        Map<String, Object> userIdentityMap = new HashMap<>(MAP_NUM);
+        List<Useridentity> userIdentities = userIdentityDAO.listUserIdentitiesByUserId(userId);
+        if(userIdentities == null || userIdentities.size() ==0){
+            userIdentityMap.put("type",0);
+            userIdentityMap.put("realName",null);
+            return userIdentityMap;
+        }
+        else{
+            Useridentity useridentity = userIdentities.get(0);
+            if(useridentity.getType().equals("教师")){
+                userIdentityMap.put("type",2);
+            }
+            else {
+                userIdentityMap.put("type",1);
+            }
+            userIdentityMap.put("realName" , useridentity.getName());
+            return userIdentityMap;
+        }
+    }
+
     @Override
     public Map<String, String> sendVerifyCoderesetemail(String email) {
         Map<String,String> map = new HashMap<>(MAP_NUM);
@@ -434,7 +460,11 @@ public class UserServiceImpl<result> implements UserService{
             }
 
             userInf.put("answerDynamic",answers);
-            result.put("information" , userInf);
+
+            userInf.put("level" , expUtil.getLevelLabel(user.getExp()));
+            userInf.put("identity" , getUserIdentityNew(userId));
+
+            result.put("userInfo" , userInf);
         }
         return result;
     }
