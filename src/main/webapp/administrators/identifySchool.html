@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.0.1">
-    <title>管理员主页</title>
+    <title>认证学校管理主页</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
@@ -363,7 +363,7 @@
 
             //读第一个Sheet文件内容
             var items = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
-            console.log(items);
+            console.log(JSON.stringify(items));
             items = JSON.parse(items);
             console.log(items);
 
