@@ -61,10 +61,10 @@
     <h1 class="h3 mb-3 font-weight-normal">管理员登录</h1>
     <label for="accountNum" class="sr-only">Admin Account</label>
     <input type="text" id="accountNum" class="form-control input space" placeholder="请输入您的账号">
-        <div class="errorMessage" v-if="accountNumError" style="margin-left: 5px">{{accountNumErrorMsg}}</div>
+    <div class="errorMessage" v-if="accountNumError" style="margin-left: 5px">{{accountNumErrorMsg}}</div>
     <label for="password" class="sr-only" >Password</label>
     <input type="password" id="password" class="form-control input"placeholder="请输入您的密码" maxlength="20" style="margin-top: 1%">
-        <div class="errorMessage" v-if="passwordError" style="margin-left: 5px">{{passwordErrorMsg}}</div>
+    <div class="errorMessage" v-if="passwordError" style="margin-left: 5px">{{passwordErrorMsg}}</div>
     <div class="checkbox mb-3">
         <label>
             <input type="checkbox" value="remember-me"> 记住我
