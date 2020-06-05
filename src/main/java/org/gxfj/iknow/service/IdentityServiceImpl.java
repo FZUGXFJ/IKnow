@@ -52,8 +52,7 @@ public class IdentityServiceImpl implements IdentityService{
     }
 
     @Override
-    public Map<String, Object> stuAuthentication(String schoolName,String realName,String studentNum){
-        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+    public Map<String, Object> stuAuthentication(User user, String schoolName,String realName,String studentNum){
         Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         School school = schoolDAO.getSchoolByName(schoolName);
         Useridentity useridentity = userIdentityDAO.getStuIdentitie(school.getId(),realName,studentNum);
@@ -79,8 +78,7 @@ public class IdentityServiceImpl implements IdentityService{
     }
 
     @Override
-    public Map<String, Object> teaAuthentication(String schoolName,String realName,String jobNum) {
-        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+    public Map<String, Object> teaAuthentication(User user, String schoolName,String realName,String jobNum) {
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         School school = schoolDAO.getSchoolByName(schoolName);
         Useridentity useridentity = userIdentityDAO.getTeaIdentitie(school.getId(), realName, jobNum);

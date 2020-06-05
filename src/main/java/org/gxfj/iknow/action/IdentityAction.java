@@ -45,7 +45,8 @@ public class IdentityAction {
      * 学生认证
      */
     public String stuAuthentication(){
-        Map<String,Object> result = identityService.stuAuthentication(school , realName , studentNum);
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String,Object> result = identityService.stuAuthentication(user, school , realName , studentNum);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -54,7 +55,8 @@ public class IdentityAction {
      * 教师认证
      */
     public String teaAuthentication(){
-        Map<String,Object> result = identityService.teaAuthentication(school, realName, jobNum);
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String,Object> result = identityService.teaAuthentication(user, school, realName, jobNum);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
