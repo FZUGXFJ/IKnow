@@ -363,11 +363,10 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> moreAnswers(Integer questionId,int start, int length) {
+    public Map<String, Object> moreAnswers(Integer questionId,int start, int length, Integer sort) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         Map<String, Object> session = ActionContext.getContext().getSession();
         User user = (User) session.get(ConstantUtil.SESSION_USER);
-        Integer sort =(Integer)session.get("answersort");
         if(sort ==null){
             sort = ConstantUtil.ANSWER_DEFAULT_SORT;
         }

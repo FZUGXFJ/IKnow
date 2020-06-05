@@ -366,12 +366,14 @@
                     return;
                 }
                 this.loadingMore = true;
+
                 $.ajax({
                     url:"../../question/moreAnswer.action",
                     type:"POST",
                     data:{
                         start:question.start,
-                        questionId:question.questionId
+                        questionId:question.questionId,
+                        sort:this.sortType.sort
                     },
                     dataType:"json",
                     success:function (result) {

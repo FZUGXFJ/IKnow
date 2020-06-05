@@ -144,7 +144,7 @@ public class QuestionAction {
      * @return SUCCESS
      */
     public String moreAnswer() {
-        Map<String, Object> response = questionService.moreAnswers(questionId, start, 20);
+        Map<String, Object> response = questionService.moreAnswers(questionId, start, 20, sort);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
