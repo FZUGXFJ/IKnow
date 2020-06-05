@@ -121,7 +121,7 @@
     <br><br><br>
     <div id="footer">
         <table>
-            <td><button><i class="fas fa-user-plus"></i>&nbsp;邀请回答</button></td>
+            <td><button @click="popupVisible=true"><i class="fas fa-user-plus"></i>&nbsp;邀请回答</button></td>
             <td><button @click="addAnswer"><i class="fas fa-pen" @click="postAnswer"></i>&nbsp;写回答</button></td>
             <td  v-if="isCollected===1"><button @click="cancelCollect"><i class="fas fa-star"></i>&nbsp;已收藏</button></td>
             <td  v-else><button style="color: #acacac" @click="collect"><i class="fas fa-star"></i>&nbsp;收藏问题</button></td>
@@ -166,6 +166,45 @@
             </div>
         </div>
     </div>
+    <mt-popup v-model="popupVisible" position="right" style="height: 100%;padding: 1em">
+        <table>
+            <td style="width: 10%">
+                <i class="fas fa-times" @click="popupVisible=false" style="font-size: 1.5em;color: #acacac"></i>
+            </td>
+            <td style="width: 90%;text-align: center">
+                <input type="text" class="form-control" placeholder="搜索用户" aria-label="invite" v-model="keyword">
+            </td>
+        </table>
+        <br>
+        <div>
+            <div class="inviteItem" v-for="invite in inviteList">
+                <table>
+                    <td style="width: 15%">
+                        <div v-html="invite.head" class="head"></div>
+                    </td>
+                    <td style="width: 55%;padding-left: 0.5em">
+                        <div class="inviteName">
+                            {{invite.name}}
+                            <span v-if="invite.identity.isAuth!=0">
+                                （{{invite.identity.realName}}）
+                                <i class="fas fa-shield-alt" style="color: #eec100" v-if="invite.identity.type==1"></i>
+                                <i class="fas fa-shield-alt" style="color: #0051ee" v-else=""></i>
+                            </span>
+                        </div>
+                        <div class="inviteInt">{{invite.introduction}}</div>
+                    </td>
+                    <td style="width: 30%;text-align: right">
+                        <span style="color: #acacac" v-if="invite.invited">
+                            <i class="fas fa-check"></i>&nbsp;已邀请
+                        </span>
+                        <span class="inviteBtn" v-else="" @click="doInvite(invite.id)">
+                            <i class="fas fa-user-plus"></i>&nbsp;邀请
+                        </span>
+                    </td>
+                </table>
+            </div>
+        </div>
+    </mt-popup>
     <mt-actionsheet :actions="actions" v-model="showSheet"></mt-actionsheet>
 </div>
 <script type="text/javascript">
@@ -209,10 +248,13 @@
                         sessionStorage.setItem("reportInfo", JSON.stringify(reportInfo));
                         location.href = "../report/report.html";
                     }
-                }
+                },
             ],
             selectAid:0,
-            showSheet:false
+            showSheet:false,
+            popupVisible:false,
+            inviteList:[],
+            keyword:""
         },
         methods:{
             postAnswer:function () {
@@ -514,6 +556,11 @@
         computed:{
             headPortrait:function () {
                 return this.headFirstPart + this.owner.head + this.headLastPart;
+            }
+        },
+        watch:{
+            keyword:function (val,oldVal) {
+
             }
         }
     });
