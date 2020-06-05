@@ -38,8 +38,8 @@ public class CommentServiceImpl implements CommentService {
     final static private int REPLY_NUM = 2;
 
     @Override
-    public Map<String, Object> postComment(Integer answerId, String content){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> postComment(User user, Integer answerId, String content){
+
         Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -73,8 +73,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<String, Object> getComments(Integer answerId, Integer sort){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> getComments(User user, Integer answerId, Integer sort){
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         Integer commentsSort;
         if (sort == null) {
@@ -110,8 +109,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<String, Object> approveComment(Integer commentId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> approveComment(User user, Integer commentId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user != null) {
             Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
@@ -149,8 +147,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<String, Object> cancelApprove(Integer commentId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> cancelApprove(User user, Integer commentId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user != null) {
             Approvalcomment approvalcomment = approvalCommentDAO.get(user.getId(), commentId);
@@ -337,10 +334,9 @@ public class CommentServiceImpl implements CommentService {
         return replyListMap;
     }
     @Override
-    public Map<String, Object> moreComments(Integer answerId, Integer start){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> moreComments(User user, Integer answerId, Integer start, Integer sort){
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
-        Integer sort =(Integer)ActionContext.getContext().getSession().get("commentsort");
+//        Integer sort =(Integer)ActionContext.getContext().getSession().get("commentsort");
         if(sort ==null){
             sort =ConstantUtil.COMMENT_DEFAULT_SORT;
         }
@@ -352,9 +348,7 @@ public class CommentServiceImpl implements CommentService {
         else {
             //获取问题下的20条评论
             List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,start,20,sort);
-            if(comments.size()<=20){
-                return null;
-            }
+            
             //json数组
             List<Map<String, Object>> commentListMap;
             //获取回答
@@ -374,8 +368,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<String, Object> deleteComment(Integer commentId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> deleteComment(User user, Integer commentId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if(user==null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
