@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>管理员主页</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/administrators/reportAdmin.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+</head>
+<body>
+<div id="reportAdmin" style="width: 100%;height: 100%">
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">IKnow</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="搜索" aria-label="Search">
+        <ul class="navbar-nav px-5">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">搜索</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav px-3" style="background-color: crimson">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#" @click="logout">登出</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="sidebar-sticky pt-3">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>举报管理</span>
+                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+                        <!--                        <span data-feather="plus-circle"></span>-->
+                        <!--                    </a>-->
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a id="questionPage" class="nav-link" href="#" @click="questionPage=true;anPage=false;commentPage=false;replyPage=false;addActive();getReportType(0)">
+                                <span data-feather="book"></span>
+                                问题举报
+                                <span class="badge badge-pill badge-dark" v-if="questionLen>0">{{questionLen}}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" >
+                            <a id="anPage" class="nav-link" href="#" @click="questionPage=false;anPage=true;commentPage=false;replyPage=false;addActive();getReportType(1)">
+                                <span data-feather="feather"></span>
+                                回答举报
+                                <span class="badge badge-pill badge-dark" v-if="answerLen>0">{{answerLen}}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="commentPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=true;replyPage=false;addActive();getReportType(2)">
+                                <span data-feather="message-circle"></span>
+                                评论举报
+                                <span class="badge badge-pill badge-dark" v-if="commentLen>0">{{commentLen}}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="replyPage" class="nav-link" href="#" @click="questionPage=false;anPage=false;commentPage=false;replyPage=true;addActive();getReportType(3)">
+                                <span data-feather="refresh-cw"></span>
+                                回复举报
+                                <span class="badge badge-pill badge-dark" v-if="replyLen>0">{{replyLen}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>学校认证管理</span>
+                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+                        <!--                        <span data-feather="plus-circle"></span>-->
+                        <!--                    </a>-->
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="statisticsUserAdmin.html">
+                                <span data-feather="check-circle"></span>
+                                学校认证管理
+                            </a>
+                        </li>
+                    </ul>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>相关统计</span>
+                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+                        <!--                        <span data-feather="plus-circle"></span>-->
+                        <!--                    </a>-->
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="statisticsUserAdmin.html">
+                                <span data-feather="users"></span>
+                                用户统计
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="statisticsQuestionAdmin.html">
+                                <span data-feather="book"></span>
+                                问题统计
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">举报管理</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group mr-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">总览</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="isBatch=!isBatch">批量操作</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                            <span data-feather="calendar"></span>
+                            This week
+                        </button>
+                    </div>
+                </div>
+
+                <!--            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
+                <h2 v-if="questionPage">问题举报管理</h2>
+                <h2 v-if="anPage">回答举报管理</h2>
+                <h2 v-if="commentPage">评论举报管理</h2>
+                <h2 v-if="replyPage">回复举报管理</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead align="center">
+                        <tr v-if="isBatch">
+                            <th>
+                                全选
+                                <svg class="bi bi-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" @click="curAll=true;chooseAll(0)" v-if="!curAll">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                </svg>
+                                <svg class="bi bi-check-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" @click="curAll=false;chooseAll(1)" v-if="curAll">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                                </svg>
+                            </th>
+                            <th>
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer2">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">全部删除</button>
+                            </th>
+                            <th>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal">退出</button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th v-if="isBatch">选择</th>
+                            <th>举报ID</th>
+                            <th>举报者ID</th>
+                            <th>被举报者ID</th>
+                            <th>举报类别</th>
+                            <th>举报日期</th>
+                            <th>原因类别</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody align="center">
+                        <tr v-for="(reportInfo,i) in subArr">
+                            <td v-if="isBatch">
+                                <svg class="bi bi-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-if="!reportInfo.isDeal" @click="now=i+(cur-1)*15;reportInfo.isDeal=1;isAll()">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                </svg>
+                                <svg class="bi bi-check-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-if="reportInfo.isDeal" @click="now=i+(cur-1)*15;reportInfo.isDeal=0;curAll=false;isAll()">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                                </svg>
+                            </td>
+                            <td>{{reportInfo.id}}</td>
+                            <td>{{reportInfo.userID}}</td>
+                            <td>{{reportInfo.targetID}}</td>
+                            <td>{{reportInfo.type}}</td>
+                            <td>{{reportInfo.date}}</td>
+                            <td>{{reportInfo.reason}}</td>
+                            <td>
+                                <button @click="now=i+(cur-1)*15;getUserInfo(reportInfo.userID,0);getUserInfo(reportInfo.targetID,1);getReportedInfo()" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="page-bar">
+                        <ul>
+                            <li v-if="cur>1"><a v-on:click="cur=1,pageClick()">首页</a></li>
+                            <li v-if="cur==1"><a class="banclick">首页</a></li>
+                            <li v-if="cur>1"><a v-on:click="cur--,pageClick()">上一页</a></li>
+                            <li v-if="cur==1"><a class="banclick">上一页</a></li>
+                            <!--当前页背景色为蓝色-->
+                            <li v-for="index in indexs"  v-bind:class="{ 'active': cur == index}">
+                                <a v-on:click="btnClick(index)">{{ index }}</a>
+                            </li>
+                            <li v-if="cur<all"><a v-on:click="cur++,pageClick()">下一页</a></li>
+                            <li v-if="cur == all"><a class="banclick">下一页</a></li>
+                            <li v-if="cur<all"><a v-on:click="cur=all,pageClick()">尾页</a></li>
+                            <li v-if="cur == all"><a class="banclick">尾页</a></li>
+                            <li><a>共<i>{{all}}</i>页</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ '确认删除么？'}} </h4>
+                    </div>
+                    <div class="modal-body text-right">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="del(reportInfoList[now].id,now)">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="dialog" class="modal fade bs-example-modal-sm" id="layer2">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ '确认删除么？'}} </h4>
+                    </div>
+                    <div class="modal-body text-right">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="dels()">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="window" class="window_css" style="background-color: white">
+            <div class="head">
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white">问题举报信息</span>
+                <a href="javascript:void(0)" onclick="hideWindow()">
+                    <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
+                </a>
+            </div>
+            <div class="body">
+                <div class="table-responsive">
+                <h5 style="font-weight: bold">举报者信息:</h5>
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td>举报者ID:{{userInfo.id}}</td>
+                        <td>举报者邮箱:{{userInfo.email}}</td>
+                        <td>举报者名称:{{userInfo.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>是否认证:{{userInfo.isAttest}}</td>
+                        <td>创建时间:{{userInfo.date}}</td>
+                        <td>徽章数:{{userInfo.badgeNum}}</td>
+                    </tr>
+                    <tr>
+                        <td>用户状态:{{userInfo.state}}</td>
+                        <td>用户身份:{{userInfo.identity}}</td>
+                        <td>被举报成功次数:{{userInfo.reportedTimes}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div class="table-responsive">
+                <h5 style="font-weight: bold">被举报者信息:</h5>
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td>被举报者ID:{{targetInfo.id}}</td>
+                        <td>被举报者邮箱:{{targetInfo.email}}</td>
+                        <td>被举报者名称:{{targetInfo.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>是否认证:{{targetInfo.isAttest}}</td>
+                        <td>创建时间:{{targetInfo.date}}</td>
+                        <td>徽章数:{{targetInfo.badgeNum}}</td>
+                    </tr>
+                    <tr>
+                        <td>用户状态:{{targetInfo.state}}</td>
+                        <td>用户身份:{{targetInfo.identity}}</td>
+                        <td>被举报成功次数:{{targetInfo.reportedTimes}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div class="table-responsive">
+                <h5 style="font-weight: bold">问题信息:</h5>
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td>问题ID:{{reportedInfo.id}}</td>
+                        <td>问题类别:{{reportedInfo.type}}</td>
+                        <td>创建时间:{{reportedInfo.date}}</td>
+                    </tr>
+                    <tr>
+                        <td>问题标题:{{reportedInfo.title}}</td>
+                        <td>是否删除:{{reportedInfo.isDelete}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <tbody>
+                    <tr>
+                        <td><h6 style="font-weight: bold">问题内容:</h6></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td v-html="reportedInfo.content">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <select class="custom-select d-block w-100" id="state" required>
+                                        <option select>惩罚方式..</option>
+                                        <option @click="ban=true">封禁</option>
+                                        <option @click="ban=false">禁言</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <select class="custom-select d-block w-100" required>
+                                        <option select>天数..</option>
+                                        <option>7天</option>
+                                        <option>30天</option>
+                                        <option>90天</option>
+                                        <option>365天</option>
+                                        <option v-if="ban==true">永久</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button @click="now=i+(cur-1)*15;getUserInfo(reportInfo.userID,0);getUserInfo(reportInfo.targetID,1);getReportedInfo()" class="btn btn-primary" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button @click="now=i+(cur-1)*15" class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        <!--出现悬浮窗口后,背景变暗-->
+        <div id="shadow" class="shadow_css"></div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script>
+    /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
+    function displayWindow() {
+        /*悬浮窗口的显示,需要将display变成block*/
+        document.getElementById("window").style.display = "block";
+        /*将背景变暗*/
+        document.getElementById("shadow").style.display = "block";
+    }
+
+    /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+    function hideWindow() {
+        document.getElementById("window").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+
+    let reportAdmin=new Vue({
+        el:"#reportAdmin",
+        data:{
+            reportInfoList:[],
+            pageInfoList:[],
+            isRmb:false,
+            accountNumError:false,
+            accountNumErrorMsg:"",
+            passwordError:false,
+            passwordErrorMsg:"",
+            alertMsg:{head:"",body:""},
+            all: 1, //总页数
+            cur: 1,//当前页码
+            now:-1,//当前索引
+            isBatch:false,
+            isChoose:false,
+            questionPage:true,
+            anPage:false,
+            commentPage:false,
+            replyPage:false,
+            questionLen:0,
+            answerLen:0,
+            commentLen:0,
+            replyLen:0,
+            userInfo:[],
+            targetInfo:[],
+            reportedInfo:[],
+            ban:false,
+            curAll:false
+
+        },
+        watch: {
+            cur: function(oldValue , newValue){
+                console.log(arguments);
+            }
+        },
+        methods:{
+            logout:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/logout.action",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            location.href = "login.html";
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            isLogin:function(){
+                $.ajax({
+                    url: "../admin/isLogin.action",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 1) {
+                            location.href="login.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            chooseAll:function(type){
+                let now=[];
+                now=this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
+                if(type===0)
+                {
+                    for(let i=0;i<now.length;i++)
+                    {
+                        now[i].isDeal=1;
+                    }
+                }
+                if(type===1)
+                {
+                    for(let i=0;i<now.length;i++)
+                    {
+                        now[i].isDeal=0;
+                    }
+                }
+
+            },
+            isAll:function(){
+                let now=[];
+                now=this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
+                let i=0;
+                let flag=false;
+                for(i=0;i<now.length;i++)
+                {
+                    if(now[i].isDeal===0) {
+                        this.curAll = false;
+                        flag=true;
+                        console.log("false");
+                    }
+                }
+                if(i===now.length && !flag)
+                    this.curAll=true;
+
+            },
+            getUserInfo: function(userID,type){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/userInfo.action",
+                    data:{
+                        userID:userID
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if(type === 0)
+                                reportAdmin.userInfo=result.userInfos;
+                            if(type === 1)
+                                reportAdmin.targetInfo=result.userInfos;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            getQuestionInfo: function(){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/questionReported.action",
+                    data:{
+                        typeID:reportAdmin.reportInfoList[reportAdmin.now].id,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            reportAdmin.reportedInfo=result.questionReported;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            getReportedInfo: function(type){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/answerReported.action",
+                    data:{
+                        typeID:reportAdmin.reportInfoList[reportAdmin.now].id,
+                        type:type
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            reportAdmin.reportedInfo=result.answerReported;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            getReportedInfo:function(){
+                if(this.questionPage === true)
+                {
+                    this.getQuestionInfo();
+                    console.log("问题");
+                }
+                if(this.anPage === true)
+                {
+                    this.getReportedInfo(0);
+                    console.log("回答");
+                }
+                if(this.commentPage === true)
+                {
+                    this.getReportedInfo(1);
+                    console.log("评论");
+                }
+                if(this.replyPage === true)
+                {
+                    this.getReportedInfo(2);
+                    console.log("回复");
+                }
+            },
+            getReportType: function(reportType){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/reportType.action",
+                    data:{
+                        reportType:reportType,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            reportAdmin.reportInfoList = result.reportInfoList;
+                            reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
+                            if(reportType === 0)
+                                reportAdmin.questionLen=reportAdmin.reportInfoList.length;
+                            if(reportType === 1)
+                                reportAdmin.answerLen=reportAdmin.reportInfoList.length;
+                            if(reportType === 2)
+                                reportAdmin.commentLen=reportAdmin.reportInfoList.length;
+                            if(reportType === 3)
+                                reportAdmin.replyLen=reportAdmin.reportInfoList.length;
+                            for(let i = 0;i < reportAdmin.reportInfoList.length;i++)
+                            {
+                                reportAdmin.pageInfoList[i] = reportAdmin.reportInfoList.slice(15*i,15*(i+1));
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            del: function(i,n){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/reportDel.action",
+                    data:{
+                        reportID:i,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if (result.resultCode === 0) {
+                                reportAdmin.reportInfoList.splice(n,1);
+                                if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
+                                    reportAdmin.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                reportAdmin.page();
+                                if(reportAdmin.questionPage === true)
+                                {
+                                    reportAdmin.questionLen = reportAdmin.questionLen - 1;
+                                }
+                                if(reportAdmin.anPage === true)
+                                {
+                                    reportAdmin.answerLen = reportAdmin.answerLen - 1;
+                                }
+                                if(reportAdmin.commentPage === true)
+                                {
+                                    reportAdmin.commentLen = reportAdmin.commentLen - 1;
+                                }
+                                if(reportAdmin.replyPage === true)
+                                {
+                                    reportAdmin.replyLen = reportAdmin.replyLen - 1;
+                                }
+                                console.log(reportAdmin.now);
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delOne: function(i){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/reportDel.action",
+                    data:{
+                        reportID:i,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if (result.resultCode === 0) {
+                                console.log(i);
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            dels: function(){
+                let array=[];
+                array=this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
+                let flag=0;
+                for(i=0;i<array.length;i++)
+                {
+                    if(array[i].isDeal===1)
+                    {
+                        flag=flag+1;
+                    }
+                }
+                array=array.filter(e=>{
+                    return e.isDeal;
+                })
+                this.reportInfoList=this.reportInfoList.filter(e=>{
+                        return !e.isDeal;
+                    })
+                if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
+                    reportAdmin.cur--;
+                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                reportAdmin.page();
+                if(reportAdmin.questionPage === true)
+                {
+                    reportAdmin.questionLen = reportAdmin.questionLen - flag;
+                }
+                if(reportAdmin.anPage === true)
+                {
+                    reportAdmin.answerLen = reportAdmin.answerLen - flag;
+                }
+                if(reportAdmin.commentPage === true)
+                {
+                    reportAdmin.commentLen = reportAdmin.commentLen - flag;
+                }
+                if(reportAdmin.replyPage === true)
+                {
+                    reportAdmin.replyLen = reportAdmin.replyLen - flag;
+                }
+                reportAdmin.curAll=false;
+                for(i=0;i<array.length;i++)
+                    this.delOne(array[i].id);
+            },
+            addActive: function(){
+                if(this.questionPage === true)
+                {
+                    $("#questionPage").addClass("active");
+                    $("#anPage").removeClass("active");
+                    $("#commentPage").removeClass("active");
+                    $("#replyPage").removeClass("active");
+                    console.log("questionPage");
+                }
+                if(this.anPage === true)
+                {
+                    $("#anPage").addClass("active");
+                    $("#questionPage").removeClass("active");
+                    $("#commentPage").removeClass("active");
+                    $("#replyPage").removeClass("active");
+                    console.log("anPage");
+                }
+                if(this.commentPage === true)
+                {
+                    $("#commentPage").addClass("active");
+                    $("#anPage").removeClass("active");
+                    $("#questionPage").removeClass("active");
+                    $("#replyPage").removeClass("active");
+                    console.log("commentPage");
+                }
+                if(this.replyPage === true)
+                {
+                    $("#replyPage").addClass("active");
+                    $("#anPage").removeClass("active");
+                    $("#commentPage").removeClass("active");
+                    $("#questionPage").removeClass("active");
+                    console.log("replyPage");
+                }
+
+            },
+            page: function(){
+                reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
+                console.log(reportAdmin.all);
+            },
+            btnClick: function(data){
+                if(data != this.cur){
+                    this.cur = data;
+                    // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+                }
+            },
+            pageClick: function(){
+                console.log('现在在'+this.cur+'页');
+                // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+            }
+        },
+        computed: {
+            indexs: function(){
+                var left = 1;
+                var right = this.all;
+                var ar = [];
+                if(this.all>= 5){
+                    //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
+                    if(this.cur > 3 && this.cur < this.all-1){
+                        //以4为参考基准，左面加2右边加2
+                        left = this.cur - 2
+                        right = this.cur + 2
+                    }else{
+                        if(this.cur<=3){
+                            left = 1
+                            right = 5
+                        }else{
+                            right = this.all
+                            left = this.all -4
+                        }
+                    }
+                }
+                while (left <= right){
+                    ar.push(left)
+                    left ++
+                }
+                console.log(ar);
+                return ar
+            },
+            subArr() {
+                console.log("subArr");
+                return this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
+            }
+        },
+        mounted:function () {
+            this.isLogin();
+            this.getReportType(0);
+            this.getReportType(1);
+            this.getReportType(2);
+            this.getReportType(3);
+            this.addActive();
+        }
+    });
+    (function () {
+        'use strict'
+
+        feather.replace()
+
+        // Graphs
+        var ctx = document.getElementById('myChart')
+        // eslint-disable-next-line no-unused-vars
+
+    }())
+</script>
+</body>
+</html>
