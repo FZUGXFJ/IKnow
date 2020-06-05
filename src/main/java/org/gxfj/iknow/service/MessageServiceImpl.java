@@ -22,8 +22,7 @@ public class MessageServiceImpl implements MessageService{
     @Autowired
     MessageDAO messageDAO;
     @Override
-    public Map<String, Object> messageInf() {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> messageInf(User user) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);
@@ -50,11 +49,10 @@ public class MessageServiceImpl implements MessageService{
     }
 
     @Override
-    public Map<String, Object> readMessage( Integer messageId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> readMessage(User user, Integer messageId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null){
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
             return result;
         }
         else {
@@ -65,7 +63,7 @@ public class MessageServiceImpl implements MessageService{
             }
             message.setIsRead((byte)1);
             messageDAO.update(message);
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,0);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             result.put("content",message.getContent());
             return result;
         }

@@ -32,7 +32,8 @@ public class MessageAction {
      * @return 前端
      */
     public String getMessage(){
-        Map<String, Object> response = messageService.messageInf();
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = messageService.messageInf(user);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
@@ -42,7 +43,8 @@ public class MessageAction {
      * @return 前端
      */
     public String readMessage(){
-        Map<String, Object> response = messageService.readMessage(messageId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = messageService.readMessage(user, messageId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
     }
