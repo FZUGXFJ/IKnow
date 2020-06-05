@@ -44,6 +44,7 @@ public class QuestionAction {
     private InputStream inputStream;
     private Integer start;
     private Integer sort;
+    private Integer userId;
     @Autowired
     private QuestionService questionService;
     @Autowired
@@ -175,6 +176,16 @@ public class QuestionAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 邀请回答
+     * @return SUCCESS
+     */
+    public String inviteAnswer(){
+        Map<String, Object> response = questionService.inviteAnswer(questionId, userId);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public String getQuestionTitle() {
         return questionTitle;
     }
@@ -245,5 +256,13 @@ public class QuestionAction {
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }
