@@ -64,7 +64,7 @@ public class ConstantUtil {
     //Question
     public static final int QUESTION_SHOW_ANSWER_NUM = 10;
     public final static int MISS_QUESTION_INF = 2;
-    public final static int QUESTION_DEFAULT_SORT = 1;
+    public final static int ANSWER_DEFAULT_SORT = 0;
     public final static int USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT = 2;
     public final static int SHOW_ANSWERS_NUM = 20;
 

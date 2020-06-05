@@ -16,23 +16,21 @@ public interface UserIdentityDAO extends BaseDAO<Useridentity>{
 
     /**
      * 获得满足身份的学生信息
-     * @param userId 用户id
      * @param schoolId 学校id
      * @param realName 用户姓名
      * @param studentNum 用户学号
      * @return 用户身份，没有返回null
      */
-    public Useridentity getStuIdentitie (Integer userId, Integer schoolId, String realName, String studentNum);
+    public Useridentity getStuIdentitie (Integer schoolId, String realName, String studentNum);
 
     /**
      * 获得满足身份的教师信息
-     * @param userId 用户id
      * @param schoolId 学校id
      * @param realName 用户姓名
      * @param jobNum 用户工号
      * @return 用户身份，没有返回null
      */
-    public Useridentity getTeaIdentitie (Integer userId, Integer schoolId, String realName, String jobNum);
+    public Useridentity getTeaIdentitie (Integer schoolId, String realName, String jobNum);
 
     /**
      * 获得指定学校，指定学号的学生

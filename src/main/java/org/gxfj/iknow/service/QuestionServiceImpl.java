@@ -168,7 +168,7 @@ public class QuestionServiceImpl implements QuestionService{
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (sort == null){
-            sort=ConstantUtil.QUESTION_DEFAULT_SORT;
+            sort = ConstantUtil.ANSWER_DEFAULT_SORT;
         }
         ActionContext.getContext().getSession().put("answersort",sort);
         //题主
@@ -369,7 +369,7 @@ public class QuestionServiceImpl implements QuestionService{
         User user = (User) session.get(ConstantUtil.SESSION_USER);
         Integer sort =(Integer)session.get("answersort");
         if(sort ==null){
-            sort = ConstantUtil.QUESTION_DEFAULT_SORT;
+            sort = ConstantUtil.ANSWER_DEFAULT_SORT;
         }
         //根据问题id查询到的问题
         Question question = questionDAO.getNotDelete(questionId);
