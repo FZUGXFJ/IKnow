@@ -266,7 +266,7 @@
             cancelAnonymous:function () {
                 if (confirm("确定取消匿名吗？")) {
                     $.ajax({
-                        url:"../../question/cancelAdopt.action",
+                        url:"../../question/cancelAnonymous.action",
                         type:"POST",
                         data:{
                             questionId:question.questionId

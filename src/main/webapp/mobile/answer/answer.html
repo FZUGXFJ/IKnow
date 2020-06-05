@@ -238,7 +238,7 @@
             cancelAnonymous: function () {
                 answer.$messagebox.confirm("确定取消匿名吗？").then(action => {
                     $.ajax({
-                        url: "../../answer/cancelAdopt.action",
+                        url: "../../answer/cancelAnonymous.action",
                         type: "POST",
                         data: {
                             answerId: answer.answerId

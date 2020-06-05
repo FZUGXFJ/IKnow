@@ -147,6 +147,35 @@
             </table>
         </div>
         <div class="splitLine"></div>
+        <div class="messageType" @click="toPanel(5)">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-user-plus fa-3x" style="color: orange"></i>
+                </td>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="hasNewestInvMsg"></div>
+                </td>
+                <td class="msgInfo">
+                    <table>
+                        <tr>
+                            <td class="msgType"><b>邀请</b></td>
+                            <td class="newestMsgTime">
+                                {{newestInvMsg.time}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="newestContent">
+                                <div class="msgContent">
+                                    {{newestInvMsg.content}}
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+            </table>
+        </div>
+        <div class="splitLine"></div>
     </div>
     <div id="sysMsg" v-if="showPanel===1">
         <div class="messageItem" v-for="systemMessage in systemMessages" @click="showDetail(systemMessage)">
@@ -232,6 +261,27 @@
             <div class="splitLine"></div>
         </div>
     </div>
+    <div id="invMsg" v-if="showPanel===5">
+        <div class="messageItem" v-for="inviteMessage in inviteMessages" @click="showDetail(inviteMessage)">
+            <table>
+                <td class="msgIcon">
+                    <i class="fas fa-user-plus fa-3x" style="color: orange"></i>
+                </td>
+                <td class="msgRedDot">
+                    <div class="redDot" v-if="inviteMessage.isRead===0"></div>
+                </td>
+                <td class="msgInfo">
+                    <div style="font-size: 0.9em">
+                        {{inviteMessage.time}}
+                    </div>
+                    <div class="msgContent">
+                        {{clearTag(inviteMessage.content)}}
+                    </div>
+                </td>
+            </table>
+            <div class="splitLine"></div>
+        </div>
+    </div>
     <mt-popup v-model="popupVisible" position="right" style="height: 100%;padding: 1em">
         <i class="fas fa-times" @click="popupVisible=!popupVisible" style="font-size: 1.5em;color: #acacac"></i>
         <br><br>
@@ -266,6 +316,12 @@
             coAndReMessages:[],
             hasNewestCoAndReMsg:false,
             newestCoAndReMsg:{
+                content:"没有新消息【查看历史消息】",
+                time:""
+            },
+            inviteMessages:[],
+            hasNewestInvMsg:false,
+            newestInvMsg:{
                 content:"没有新消息【查看历史消息】",
                 time:""
             },
@@ -320,6 +376,8 @@
                     this.text = "回答";
                 } else if (showPanel === 4) {
                     this.text = "评论/回复";
+                } else if (showPanel === 5) {
+                    this.text = "邀请";
                 }
                 this.showPanel = showPanel;
             },
@@ -350,7 +408,14 @@
                     coAndReMessages = JSON.parse(coAndReMessages);
                     coAndReMessages.forEach(function (item) {
                         message.coAndReMessages.push(item);
-                    })
+                    });
+                }
+                let inviteMessages = localStorage.getItem("inviteMessages");
+                if (inviteMessages != null) {
+                    inviteMessages = JSON.parse(inviteMessages);
+                    inviteMessages.forEach(function (item) {
+                        message.inviteMessages.push(item);
+                    });
                 }
             },
             saveToLocal:function (msg) {
@@ -364,6 +429,8 @@
                     this.saveCR(msg);
                 } else if (msg.type === 4) {
                     this.saveApp(msg);
+                } else if (msg.type === 5) {
+                    this.saveInv(msg);
                 }
             },
             saveSys:function (msg) {
@@ -422,6 +489,20 @@
                 }
                 localStorage.setItem("coAndReMessages",JSON.stringify(coAndReMessages));
             },
+            saveInv:function (msg) {
+                let inviteMessages = localStorage.getItem("inviteMessages");
+                if (inviteMessages == null) {
+                    inviteMessages = [];
+                } else {
+                    inviteMessages = JSON.parse(inviteMessages);
+                }
+                if (inviteMessages.length === 100) {
+                    inviteMessages.pop();
+                } else {
+                    inviteMessages.unshift(msg);
+                }
+                localStorage.setItem("inviteMessages",JSON.stringify(inviteMessages));
+            },
             clearTag:function (content) {
                 return content.replace(/<\/?.+?>/g, "");
             }
@@ -455,6 +536,9 @@
                             } else if (msg.type === 4) {
                                 message.approveMessages.push(msg);
                                 message.hasNewestAppMsg = true;
+                            } else if (msg.type === 5) {
+                                message.inviteMessages.push(msg);
+                                message.hasNewestInvMsg = true;
                             }
                         });
                         if (message.hasNewestSysMsg) {
@@ -472,6 +556,10 @@
                         if (message.hasNewestCoAndReMsg) {
                             message.newestCoAndReMsg.time = message.coAndReMessages[0].time;
                             message.newestCoAndReMsg.content = message.coAndReMessages[0].content;
+                        }
+                        if (message.hasNewestInvMsg) {
+                            message.newestInvMsg.time = message.inviteMessages[0].time;
+                            message.newestInvMsg.content = message.inviteMessages[0].content;
                         }
                         message.loadLocalMsg();
                         message.loading = false;
