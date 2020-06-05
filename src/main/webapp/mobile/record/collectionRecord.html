@@ -102,7 +102,7 @@
                             collectionRecord.hasMore = size >= 20;
                             collectionRecord.start += size;
                             collectionRecord.loadingMore = false;
-                        } else if (result.resultCode === 1) {
+                        } else if (result.resultCode === 2) {
                             result.records.forEach(function (item) {
                                 collectionRecord.records.push(item);
                             });

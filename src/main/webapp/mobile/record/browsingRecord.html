@@ -93,7 +93,7 @@
                             browsingRecord.start += size;
                             browsingRecord.loadingMore = false;
                             browsingRecord.loading = false;
-                        } else if (result.resultCode === 1) {
+                        } else if (result.resultCode === 2) {
                             result.records.forEach(function (item) {
                                 browsingRecord.records.push(item);
                             });

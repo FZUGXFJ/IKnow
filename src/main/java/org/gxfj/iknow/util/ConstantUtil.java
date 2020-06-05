@@ -19,7 +19,7 @@ public class ConstantUtil {
      */
     public final static int JSON_RESULT_CODE_BAN = 11;
 
-    public final static int NO_MORE = 1;
+    public final static int NO_MORE = 2;
     public final static String JSON_RETURN_CODE_NAME = "resultCode";
     public final static String SESSION_USER = "user";
     public final static String RETURN_STRING = "success";

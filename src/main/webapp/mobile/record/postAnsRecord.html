@@ -98,7 +98,7 @@
                             postAnsRecord.hasMore = size >= 20;
                             postAnsRecord.start += size;
                             postAnsRecord.loadingMore = false;
-                        } else if (result.resultCode === 1) {
+                        } else if (result.resultCode === 2) {
                             result.records.forEach(function (item) {
                                 postAnsRecord.records.push(item);
                             });
