@@ -33,7 +33,7 @@
     <br>
     <div id="questionInf">
         <table style="margin-bottom: 1em">
-            <td style="width: 12%">
+            <td style="width: 12%" @click="toUserPage(owner.id)">
                 <div v-html="headPortrait" class="headPortrait"></div>
             </td>
             <td style="width: 53%;color: #00a0ee"><span style="color: #ff4d26">{{owner.username}}&nbsp;的提问</span></td>
@@ -79,7 +79,7 @@
             <div class="answer">
                 <div class="answererInf">
                     <table style="margin-bottom: 0.5em">
-                        <td style="width: 15%">
+                        <td style="width: 15%" @click="toUserPage(answer.answererId)">
                             <div class="headPortrait" v-html="answer.answererHead"></div>
                         </td>
                         <td style="width: 55%">
@@ -495,6 +495,12 @@
                 sessionStorage.removeItem("questionData");
                 sessionStorage.removeItem("questionInfo");
                 history.go(0);
+            },
+            toUserPage:function (id) {
+                if (id === 0 || id === "0") {
+                    return;
+                }
+                location.href = "../user/user.html?userId=" + id;
             }
         },
         mounted:function () {

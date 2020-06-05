@@ -53,7 +53,7 @@
                     <div class="userInf">
                         <table>
                             <tr>
-                                <td style="width: 10%">
+                                <td style="width: 10%" @click="toUserPage(recommend.answererId)">
                                     <div class="headPortrait" v-html="recommend.answererHead"></div>
                                 </td>
                                 <td style="width: 60%">
@@ -247,6 +247,12 @@
             actionSheet:function(id) {
                 this.selectAid = id;
                 this.showSheet = true;
+            },
+            toUserPage:function (id) {
+                if (id === 0 || id === "0") {
+                    return;
+                }
+                location.href = "user/user.html?userId=" + id;
             }
         },
         mounted:function () {

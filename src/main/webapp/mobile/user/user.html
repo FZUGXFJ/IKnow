@@ -18,9 +18,19 @@
 <body>
 <div id="userHome">
     <div id="header">
-        <i class="fas fa-chevron-left" style="color: white;font-size: 1.5em" @click="back"></i>
+        <table>
+            <td style="width: 15%">
+                <i class="fas fa-chevron-left" style="color: white;font-size: 1.5em" @click="back"></i>
+            </td>
+            <td style="width: 70%;text-align: center">
+                <span v-if="loading">
+                    加载中&nbsp;<i class="fas fa-redo-alt fa-spin"></i>
+                </span>
+            </td>
+            <td style="width: 15%"></td>
+        </table>
     </div>
-    <div id="container">
+    <div id="container" v-if="!loading">
         <table>
             <td style="width: 30%">
                 <div class="head" v-html="userInfo.head"></div>
@@ -56,7 +66,7 @@
         </div>
         <div class="splitLine"></div>
         <div v-if="selectedIndex===1">
-            <div class="dynamicItem" v-for="item in userInfo.questionDynamic">
+            <div class="dynamicItem" v-for="item in userInfo.questionDynamic" @click="toQuestionPage(item.id)">
                 <h6><b>{{item.title}}</b></h6>
                 <div class="info">
                     {{item.browsingNum}}浏览-{{item.answerNum}}回答-{{item.collectionNum}}收藏
@@ -64,7 +74,7 @@
             </div>
         </div>
         <div v-else="">
-            <div class="dynamicItem" v-for="item in userInfo.answerDynamic">
+            <div class="dynamicItem" v-for="item in userInfo.answerDynamic" @click="toAnswerPage(item.questionId,item.id)">
                 <h6><b>{{item.questionTitle}}</b></h6>
                 <div class="answerView">{{item.content}}</div>
                 <div class="info">
@@ -87,11 +97,18 @@
         data:{
             selectedIndex:1,
             userInfo:{},
-            userId:0
+            userId:0,
+            loading:true
         },
         methods:{
             back:function () {
                 history.go(-1);
+            },
+            toQuestionPage:function (qid) {
+                location.href = "../question/question.html?questionId=" + qid;
+            },
+            toAnswerPage:function (qid,aid) {
+                location.href = "../answer/answer.html?questionId=" + qid + "&answerId=" + aid;
             }
         },
         mounted:function () {
@@ -114,6 +131,7 @@
                 success:function (result) {
                     if (result.resultCode === 0) {
                         userHome.userInfo = result.userInfo;
+                        userHome.loading = false;
                     }
                 },
                 error:function (request,status,error) {

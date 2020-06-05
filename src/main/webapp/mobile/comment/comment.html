@@ -39,7 +39,7 @@
     <div id="comments" v-if="load">
         <div class="comment" v-for="comment in comments">
             <table>
-                <td style="width: 12%">
+                <td style="width: 12%" @click="toUserPage(comment.userId)">
                     <div class="commentUserHead" v-html="comment.head"></div>
                 </td>
                 <td style="width: 58%">
@@ -72,7 +72,7 @@
             <div class="replies">
                 <div class="reply" v-for="reply in comment.replies">
                     <table>
-                        <td style="width: 10%">
+                        <td style="width: 10%" @click="toUserPage(reply.userId)">
                             <div class="commentUserHead" v-html="reply.head"></div>
                         </td>
                         <td style="width: 60%;font-size: 0.8em">
@@ -594,6 +594,12 @@
                         }
                     });
                 }).catch(action => {});
+            },
+            toUserPage:function (id) {
+                if (id === 0 || id === "0") {
+                    return;
+                }
+                location.href = "../user/user.html?userId=" + id;
             }
         },
         mounted:function () {
