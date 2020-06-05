@@ -532,6 +532,36 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="saveSchool" class="org.gxfj.iknow.action.AdminAction" method="saveSchool">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="saveStudents" class="org.gxfj.iknow.action.AdminAction" method="saveStudents">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="saveStudent" class="org.gxfj.iknow.action.AdminAction" method="saveStudent">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="saveTeachers" class="org.gxfj.iknow.action.AdminAction" method="saveTeachers">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="saveTeacher" class="org.gxfj.iknow.action.AdminAction" method="saveTeacher">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
 
     </package>
 
