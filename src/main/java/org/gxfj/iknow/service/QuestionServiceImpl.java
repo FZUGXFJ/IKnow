@@ -452,4 +452,23 @@ public class QuestionServiceImpl implements QuestionService{
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
+
+    @Override
+    public Map<String,Object> inviteAnswer(Integer questionId, Integer userId){
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String,Object> result = getQuestionType();
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
+        }else {
+            MessageUtil messageUtil = new MessageUtil();
+            User invitedUser = userDAO.get(userId);
+            String content = "<p><a href='user.html?userId="+user.getId()+"'>" +
+                    "<i class=\"fas fa-link\">"+user.getName()+"</i></a>邀请你回答问题，快去看看吧</P>" +
+                    "<a href='../../mobile/question/question.html?questionId="+questionId+"'>" +
+                    "<i class=\"fas fa-link\">[问题链接]</i></a>";
+            messageUtil.newMessage(ConstantUtil.INVITE_USER_TO_ANSWER,invitedUser,content);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+        }
+        return result;
+    }
 }
