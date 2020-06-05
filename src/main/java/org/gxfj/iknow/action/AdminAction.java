@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +36,16 @@ public class AdminAction {
     private Integer answerID;
     private Integer commentID;
     private Integer replyID;
+    //字符串形式的json数据
+    private String studentInfo;
+    private String teachersInfo;
+
+    private Integer schoolID;
+    private String teacherNO;
+    private String name;
+    //存教师接口的教师id
+    private Integer school;
+    private String colloge;
 
     @Autowired
     private AdminService adminService;
@@ -263,6 +274,38 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 存入学生信息
+     * @return “SUCCESS”
+     */
+    public String saveStudent(){
+        Map<String,Object> result;
+        result = adminService.saveStudent(studentInfo);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 存入教师信息（json数组）
+     * @return “SUCCESS”
+     */
+    public String saveTeachers(){
+        Map<String,Object> result;
+        result = adminService.saveTeachers(teachersInfo, schoolID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 存入教师信息
+     * @return “SUCCESS”
+     */
+    public String saveTeacher(){
+        Map<String,Object> result;
+        result = adminService.saveTeacher(teacherNO, name, school, colloge);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -381,5 +424,61 @@ public class AdminAction {
 
     public void setReplyID(Integer replyID) {
         this.replyID = replyID;
+    }
+
+    public String getStudentInfo() {
+        return studentInfo;
+    }
+
+    public void setStudentInfo(String studentInfo) {
+        this.studentInfo = studentInfo;
+    }
+
+    public String getTeachersInfo() {
+        return teachersInfo;
+    }
+
+    public void setTeachersInfo(String teachersInfo) {
+        this.teachersInfo = teachersInfo;
+    }
+
+    public Integer getSchoolID() {
+        return schoolID;
+    }
+
+    public void setSchoolID(Integer schoolID) {
+        this.schoolID = schoolID;
+    }
+
+    public String getTeacherNO() {
+        return teacherNO;
+    }
+
+    public void setTeacherNO(String teacherNO) {
+        this.teacherNO = teacherNO;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getSchool() {
+        return school;
+    }
+
+    public void setSchool(Integer school) {
+        this.school = school;
+    }
+
+    public String getColloge() {
+        return colloge;
+    }
+
+    public void setColloge(String colloge) {
+        this.colloge = colloge;
     }
 }
