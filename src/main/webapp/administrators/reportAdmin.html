@@ -632,7 +632,8 @@
             isMon:false,
             isTrMon:false,
             isYear:false,
-            isFor:false
+            isFor:false,
+            qid:1
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -1317,8 +1318,12 @@
             }
         },
         mounted:function () {
+            this.isLogin();
             let loc = location.href;
-            let qid = loc.replace("?","&").split("&")[1];
+            console.log("loc:"+loc);
+            qid = loc.replace("?","&").split("&")[1];
+            if(qid === undefined)
+                qid="0";
             let type;
             if (qid.indexOf("type=")!==-1) {
                 type = parseInt(qid.replace("type=",""));
@@ -1349,9 +1354,8 @@
                     this.replyPage = true;
                 }
             } else {
-                location.href = "../../error/admin/404error.html"
+                location.href = "login_new.html"
             }
-            this.isLogin();
             this.getReportType(0);
             this.getReportType(1);
             this.getReportType(2);
