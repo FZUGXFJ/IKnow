@@ -55,16 +55,13 @@ public class SearchServiceImpl implements SearchService{
     public Map<String, Object> searchResult(String keyword) {
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
-        if(user == null){
-            result.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
-        }
-       else {
+        if(user != null){
             postSearchHistory(user,keyword);
-            result.put("questionResult",getQuestionsByKeyword(keyword));
-            result.put("answerResult",getAnswersByKeyword(keyword));
-            result.put("userResult",getUsersByKeyword(keyword));
-            result.put(JSON_RETURN_CODE_NAME,SUCCESS);
         }
+        result.put("questionResult",getQuestionsByKeyword(keyword));
+        result.put("answerResult",getAnswersByKeyword(keyword));
+        result.put("userResult",getUsersByKeyword(keyword));
+        result.put(JSON_RETURN_CODE_NAME,SUCCESS);
         return result;
     }
 
