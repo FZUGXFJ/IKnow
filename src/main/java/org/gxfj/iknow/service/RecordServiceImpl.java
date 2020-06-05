@@ -123,7 +123,7 @@ public class RecordServiceImpl implements RecordService {
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         if(user == null){
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME , UN_LOGIN_TWO);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME , UN_LOGIN);
         }
         else {
             List<Question> questions  = questionDAO.listPartByUserId(user.getId(),start,20);
