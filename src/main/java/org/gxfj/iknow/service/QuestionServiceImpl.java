@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static org.gxfj.iknow.util.ConstantUtil.*;
+
 
 /**
  * @author qmbx
@@ -44,6 +46,8 @@ public class QuestionServiceImpl implements QuestionService{
     ReplyDAO replyDAO;
     @Autowired
     ExpUtil expUtil;
+    @Autowired
+    UserIdentityDAO userIdentityDAO;
     @Autowired
     AchievementUtil achievementUtil;
 
@@ -461,6 +465,47 @@ public class QuestionServiceImpl implements QuestionService{
         question.setId(questionId);
         questionDAO.update(question);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> findUser(String keyword) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if(user == null){
+            result.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
+        }
+        else {
+            List<User> users=userDAO.listByKeyword(keyword);
+            List<Map<String,Object>> userMapList=new ArrayList<>();
+            Map<String,Object> userMap;
+            for (User u:users) {
+                userMap = new HashMap<>(5);
+                userMap.put("userId", u.getId());
+                userMap.put("userName", u.getName());
+                userMap.put("userHead", ImgUtil.changeAvatar(u.getHead(), 2));
+                userMap.put("userIntroduction", u.getIntroduction());
+                //获得用户的身份
+                Map<String, Object> userIdentityMap = new HashMap<>(MIN_HASH_MAP_NUM);
+                List<Useridentity> userIdentities = userIdentityDAO.listUserIdentitiesByUserId(u.getId());
+                if (userIdentities == null || userIdentities.size() == 0) {
+                    userIdentityMap.put("type", -1);
+                    userIdentityMap.put("realName", "");
+                } else {
+                    Useridentity useridentity = userIdentities.get(0);
+                    userIdentityMap.put("realName", useridentity.getName());
+                    if (useridentity.getType().equals("教师")) {
+                        userIdentityMap.put("identityType", 2);
+                    } else {
+                        userIdentityMap.put("identityType", 1);
+                    }
+                }
+                userMap.put("identity", userIdentityMap);
+                userMapList.add(userMap);
+            }
+            result.put("users", userMapList);
+            result.put(JSON_RETURN_CODE_NAME,SUCCESS);
+        }
         return result;
     }
 

@@ -44,6 +44,7 @@ public class QuestionAction {
     private InputStream inputStream;
     private Integer start;
     private Integer sort;
+    private String keyword;
     private Integer userId;
     @Autowired
     private QuestionService questionService;
@@ -175,6 +176,12 @@ public class QuestionAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    public String findUser(){
+        Map<String, Object> response = questionService.findUser(keyword);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     /**
      * 邀请回答
      * @return SUCCESS
@@ -263,5 +270,13 @@ public class QuestionAction {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }
