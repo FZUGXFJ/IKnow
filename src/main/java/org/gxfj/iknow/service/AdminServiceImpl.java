@@ -1,5 +1,7 @@
 package org.gxfj.iknow.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.dao.*;
 import org.gxfj.iknow.pojo.*;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -53,13 +56,13 @@ public class AdminServiceImpl implements AdminService{
     @Autowired
     MessageUtil messageUtil;
     @Autowired
-    UserIdentityDAO userIdentityDAO;
-    @Autowired
     SchoolDAO schoolDAO;
+    @Autowired
+    CollegeDAO collegeDAO;
     @Autowired
     MajorDAO majorDAO;
     @Autowired
-    CollegeDAO collegeDAO;
+    UserIdentityDAO userIdentityDAO;
 
     @Override
     public Map<String, Object> login(Integer accountNum, String password) {
@@ -590,6 +593,78 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         reportDAO.deleteAllRepReport();
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> saveSchool(String schoolName) {
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        School school = new School();
+        school.setName(schoolName);
+        schoolDAO.add(school);
+        School school1 = schoolDAO.getSchoolByName(schoolName);
+        if(school1 == null){
+            System.out.println("存入失败！");
+        }
+        else{
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            result.put("schoolID", school1.getId());
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> saveStudents(String studentsInfo, Integer schoolId) {
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        List<Map<String, Object>> collogeInfoList = new ArrayList<>();
+        List<Map<String, Object>> majorInfoList = new ArrayList<>();
+        //将字符串转化为json数组
+        JSONArray studentsInfoArray = JSONArray.parseArray(studentsInfo);
+
+        if(studentsInfoArray.size()>0){
+            for(int i = 0;i < studentsInfoArray.size(); i ++){
+                Map<String, Object> studentInfoMap = studentsInfoArray.getJSONObject(i);
+                String collegeName = (String) studentInfoMap.get("学院");
+                String majorName = (String) studentInfoMap.get("专业");
+                Integer studentNum = (Integer) studentInfoMap.get("学号");
+                String realname = (String) studentInfoMap.get("姓名");
+
+                Map<String, Object> collegeInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+                Map<String, Object> majorInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+
+                if(collegeDAO.getCollegeByName(collegeName) == null){
+                    College college = new College();
+                    college.setSchoolBySchoolId(schoolDAO.get(schoolId));
+                    college.setName(collegeName);
+                    collegeDAO.add(college);
+                }
+                collegeInfo.put("name" , collegeName);
+                collegeInfo.put("id", collegeDAO.getCollegeByName(collegeName).getId());
+                collogeInfoList.add(collegeInfo);
+                if(majorDAO.getMajorByName(majorName) == null){
+                    Major major = new Major();
+                    major.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
+                    major.setName(collegeName);
+                    majorDAO.add(major);
+                }
+                majorInfo.put("name", majorName);
+                majorInfo.put("id", majorDAO.getMajorByName(majorName).getId());
+                majorInfoList.add(majorInfo);
+                if(userIdentityDAO.getStudentIdentity(schoolId, studentNum) == null){
+                    Useridentity useridentity = new Useridentity();
+                    useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
+                    useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
+                    useridentity.setMajorByMajorId(majorDAO.getMajorByName(majorName));
+                    useridentity.setStudentNum(studentNum);
+                    useridentity.setName(realname);
+                    useridentity.setType("学生");
+                    userIdentityDAO.add(useridentity);
+                }
+            }
+        }
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        result.put("collogeInfo", collogeInfoList);
+        result.put("majorInfo", collogeInfoList);
         return result;
     }
 

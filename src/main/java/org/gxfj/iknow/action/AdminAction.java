@@ -36,11 +36,13 @@ public class AdminAction {
     private Integer answerID;
     private Integer commentID;
     private Integer replyID;
+    private String schoolName;
+    private String studentsInfo;
+    private Integer schoolID;
     //字符串形式的json数据
     private String studentInfo;
     private String teachersInfo;
 
-    private Integer schoolID;
     private String teacherNO;
     private String name;
     //存教师接口的教师id
@@ -275,6 +277,25 @@ public class AdminAction {
     }
 
     /**
+     * 存入学校
+     * @return SUCCESS
+     */
+    public String saveSchool(){
+        Map<String,Object> response = adminService.saveSchool(schoolName);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 存入学生、学院、专业信息
+     * @return SUCCESS
+     */
+    public String saveStudents(){
+        Map<String,Object> response = adminService.saveStudents(studentsInfo, schoolID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+    /**
      * 存入学生信息
      * @return “SUCCESS”
      */
@@ -426,20 +447,20 @@ public class AdminAction {
         this.replyID = replyID;
     }
 
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
     public String getStudentInfo() {
-        return studentInfo;
+        return studentsInfo;
     }
 
     public void setStudentInfo(String studentInfo) {
-        this.studentInfo = studentInfo;
-    }
-
-    public String getTeachersInfo() {
-        return teachersInfo;
-    }
-
-    public void setTeachersInfo(String teachersInfo) {
-        this.teachersInfo = teachersInfo;
+        this.studentsInfo = studentsInfo;
     }
 
     public Integer getSchoolID() {
@@ -448,6 +469,14 @@ public class AdminAction {
 
     public void setSchoolID(Integer schoolID) {
         this.schoolID = schoolID;
+    }
+
+    public String getTeachersInfo() {
+        return teachersInfo;
+    }
+
+    public void setTeachersInfo(String teachersInfo) {
+        this.teachersInfo = teachersInfo;
     }
 
     public String getTeacherNO() {
@@ -480,5 +509,13 @@ public class AdminAction {
 
     public void setColloge(String colloge) {
         this.colloge = colloge;
+    }
+
+    public String getStudentsInfo() {
+        return studentsInfo;
+    }
+
+    public void setStudentsInfo(String studentsInfo) {
+        this.studentsInfo = studentsInfo;
     }
 }

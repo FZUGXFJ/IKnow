@@ -2,6 +2,7 @@ package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.pojo.Admin;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Map;
 
 /**
@@ -162,6 +163,21 @@ public interface AdminService {
      * @return 包含响应码的map数据
      */
     Map<String, Object> deleteAllRepReport();
+
+    /**
+     * 存入学校
+     * @param schoolName 学校名
+     * @return 包含学校Id的返回信息
+     */
+    Map<String, Object> saveSchool(String schoolName);
+
+    /**
+     * 存入学生、学院、专业信息
+     * @param studentsInfo 学生信息
+     * @param schoolId 学校Id
+     * @return 学院，专业的返回信息
+     */
+    Map<String, Object> saveStudents(String studentsInfo, Integer schoolId);
 
     /**
      * 存入学生信息
