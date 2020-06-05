@@ -203,7 +203,13 @@
         },
         methods:{
             turnAnonymous : function () {
-                this.isAnonymous = !this.isAnonymous && confirm("确定要匿名吗？");
+                if (!this.isAnonymous) {
+                    this.$messagebox.confirm("确定匿名吗？").then(action => {
+                        this.isAnonymous = true;
+                    }).catch(action => {});
+                } else {
+                    this.isAnonymous = false;
+                }
             }
         }
     });
