@@ -97,8 +97,10 @@ public class AnswerServiceImpl implements AnswerService{
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
             messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='user/user.html?userId=" +
-                    user.getId() +"'>"+ user.getName() + "</a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
-                    "questionId=" + questionId + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
+                    user.getId() +"'><i class=\"fas fa-link\">"+ user.getName()
+                    + "</i></a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
+                    "questionId=" + questionId + "&answerId=" + answer.getId()
+                    + "'><i class=\"fas fa-link\">[回答链接]</i></a>");
         }
         return result;
     }
@@ -663,9 +665,10 @@ public class AnswerServiceImpl implements AnswerService{
             answerDAO.update(answer);
 
             messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='user/user.html?userId=" +
-                    user.getId() +"'>" + user.getName() +
-                    "</a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
-                    answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId() + "'>[回答链接]</a>");
+                    user.getId() +"'><i class=\"fas fa-link\">" + user.getName() +
+                    "</i></a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
+                    answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId()
+                    + "'><i class=\"fas fa-link\">[回答链接]</i></a>");
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS );
         }
         else{

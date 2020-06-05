@@ -59,9 +59,9 @@ public class CommentServiceImpl implements CommentService {
                 commentDAO.add(comment);
 
                 messageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='user/user.html?userId=" +
-                        user.getId() +"'>"+ user.getName() +
-                        "</a>评论了你的回答，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
-                        + answerId + "'>[评论链接]</a>");
+                        user.getId() +"'><i class=\"fas fa-link\">"+ user.getName() +
+                        "</i></a>评论了你的回答，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
+                        + answerId + "'><i class=\"fas fa-link\">[评论链接]</i></a>");
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
@@ -127,9 +127,9 @@ public class CommentServiceImpl implements CommentService {
                 approvalCommentDAO.add(approvalcomment);
 
                 messageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='user/user.html?userId=" +
-                        user.getId() + "'>"+
-                        user.getName() + "</a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
-                        + comment.getAnswerByAnswerId().getId() + "'>[评论链接]</a>");
+                        user.getId() + "'><i class=\"fas fa-link\">"+
+                        user.getName() + "</i></a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
+                        + comment.getAnswerByAnswerId().getId() + "'><i class=\"fas fa-link\">[评论链接]</i></a>");
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_APPROVED);
