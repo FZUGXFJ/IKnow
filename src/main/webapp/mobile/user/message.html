@@ -282,7 +282,7 @@
             <div class="splitLine"></div>
         </div>
     </div>
-    <mt-popup v-model="popupVisible" position="right" style="height: 100%;padding: 1em">
+    <mt-popup v-model="popupVisible" position="right" style="height: 100%;padding: 1em;overflow-y: auto">
         <i class="fas fa-times" @click="popupVisible=!popupVisible" style="font-size: 1.5em;color: #acacac"></i>
         <br><br>
         <div v-html="currentMsg"></div>
