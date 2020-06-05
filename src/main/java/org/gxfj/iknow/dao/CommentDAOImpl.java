@@ -104,7 +104,7 @@ public class CommentDAOImpl implements CommentDAO{
     @Override
     public List<Comment> listByuserId(int userId) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Comment WHERE (userID = ?) and (idDelete = 0)");
+        Query query = session.createQuery("from Comment WHERE (userID = ?) and (isDelete = 0)");
         return query.setInteger(0,userId).list();
     }
 }

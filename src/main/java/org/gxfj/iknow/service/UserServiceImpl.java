@@ -231,6 +231,7 @@ public class UserServiceImpl<result> implements UserService{
             result.put(JSON_RETURN_CODE_NAME , 0);
             Integer userId = user.getId();
             Map<String, Object> userInf = new HashMap<>(MAP_NUM);
+            userInf.put("id",user.getId());
             userInf.put("name" , user.getName());
             userInf.put("head" , "<img src='../head/" + user.getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
@@ -409,7 +410,7 @@ public class UserServiceImpl<result> implements UserService{
             result.put(JSON_RETURN_CODE_NAME , 0);
             Map<String, Object> userInf = new HashMap<>(MAP_NUM);
             userInf.put("name" , user.getName());
-            userInf.put("head" , "<img src='../head/" + user.getHead() +
+            userInf.put("head" , "<img src='../../head/" + user.getHead() +
                     "' width='100%' height='100%' style='border-radius: 100%' alt=''>");
             userInf.put("introduction",user.getIntroduction());
             userInf.put("gender",user.getGender());

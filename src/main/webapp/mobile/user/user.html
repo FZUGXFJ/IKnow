@@ -18,7 +18,7 @@
 <body>
 <div id="userHome">
     <div id="header">
-        <i class="fas fa-chevron-left" style="color: white;font-size: 1.5em"></i>
+        <i class="fas fa-chevron-left" style="color: white;font-size: 1.5em" @click="back"></i>
     </div>
     <div id="container">
         <table>
@@ -86,11 +86,43 @@
         el:"#userHome",
         data:{
             selectedIndex:1,
-            userInfo:{}
+            userInfo:{},
+            userId:0
         },
-        methods:{},
+        methods:{
+            back:function () {
+                history.go(-1);
+            }
+        },
         mounted:function () {
-
+            let loc = location.href;
+            let uid = loc.replace("?","&").split("&")[1];
+            let userId;
+            if (uid.indexOf("userId=")!==-1) {
+                userId = uid.replace("userId=","");
+                this.userId = userId;
+            } else {
+                location.href = "../../error/mobile/404error.html"
+            }
+            $.ajax({
+                type:"POST",
+                url:"../../user/userHome.action",
+                data:{
+                    userId:userId
+                },
+                dataType:"json",
+                success:function (result) {
+                    if (result.resultCode === 0) {
+                        userHome.userInfo = result.userInfo;
+                    }
+                },
+                error:function (request,status,error) {
+                    alert("系统异常！");
+                    console.log(request.status);
+                    console.log(request.readyState);
+                    console.log(status);
+                }
+            });
         }
     });
 </script>

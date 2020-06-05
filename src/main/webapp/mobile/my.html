@@ -48,7 +48,7 @@
                         </div>
                     </td>
                     <td style="width: 30%;text-align: center;font-size: 0.8em;opacity: 0.5">
-                        <span>个人主页></span>
+                        <span @click="toUserPage(inf.id)">个人主页></span>
                     </td>
                 </table>
                 <br>
@@ -209,6 +209,9 @@
             },
             toAuthentication:function () {
                 location.href = "user/authentication.html";
+            },
+            toUserPage:function (id) {
+                location.href = "user/user.html?userId=" + id;
             }
         },
         mounted:function () {
