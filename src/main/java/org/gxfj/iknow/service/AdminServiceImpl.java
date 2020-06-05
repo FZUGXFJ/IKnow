@@ -17,6 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigInteger;
 import java.util.*;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+
+
 
 /**
  * @author hhj
@@ -47,6 +52,14 @@ public class AdminServiceImpl implements AdminService{
     ReportTypeDAO reportTypeDAO;
     @Autowired
     MessageUtil messageUtil;
+    @Autowired
+    UserIdentityDAO userIdentityDAO;
+    @Autowired
+    SchoolDAO schoolDAO;
+    @Autowired
+    MajorDAO majorDAO;
+    @Autowired
+    CollegeDAO collegeDAO;
 
     @Override
     public Map<String, Object> login(Integer accountNum, String password) {
@@ -576,6 +589,64 @@ public class AdminServiceImpl implements AdminService{
     public Map<String, Object> deleteAllRepReport(){
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         reportDAO.deleteAllRepReport();
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> saveStudent(String studentInfo){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Map<String, Object> studentInfoMap = (Map<String, Object>)JSON.parse(studentInfo);
+
+        String studentNO = (String)studentInfoMap.get("studentNO");
+        String name = (String)studentInfoMap.get("name");
+        Integer school = (Integer) studentInfoMap.get("school");
+        String colloge = (String)studentInfoMap.get("colloge");
+        String major = (String)studentInfoMap.get("major");
+
+        Useridentity useridentity = new Useridentity();
+        useridentity.setName(name);
+        useridentity.setSchoolBySchoolId(schoolDAO.get(school));
+        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(colloge));
+        useridentity.setMajorByMajorId(majorDAO.getMajorByName(major));
+        useridentity.setStudentNum(Integer.parseInt(studentNO));
+        userIdentityDAO.add(useridentity);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> saveTeachers(String teachersInfo, Integer schoolID){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        List<Map<String, Object>> teachersInfoMap = (List<Map<String,Object>>) JSONArray.parse(teachersInfo);
+
+        for(Map<String, Object> teacherInfoMap:teachersInfoMap){
+            String teacherNO = (String)teacherInfoMap.get("工号");
+            String name = (String)teacherInfoMap.get("姓名");
+            String colloge = (String)teacherInfoMap.get("学院");
+
+            Useridentity useridentity = new Useridentity();
+            useridentity.setName(name);
+            useridentity.setSchoolBySchoolId(schoolDAO.get(schoolID));
+            useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(colloge));
+            useridentity.setJobNum(Integer.parseInt(teacherNO));
+            userIdentityDAO.add(useridentity);
+        }
+
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String colloge){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+
+        Useridentity useridentity = new Useridentity();
+        useridentity.setName(name);
+        useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
+        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(colloge));
+        useridentity.setJobNum(Integer.parseInt(teacherNO));
+        userIdentityDAO.add(useridentity);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }

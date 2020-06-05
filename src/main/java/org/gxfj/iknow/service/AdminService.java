@@ -162,4 +162,29 @@ public interface AdminService {
      * @return 包含响应码的map数据
      */
     Map<String, Object> deleteAllRepReport();
+
+    /**
+     * 存入学生信息
+     * @param studentInfo 学生信息
+     * @return 包含响应码的map数据
+     */
+    Map<String, Object> saveStudent(String studentInfo);
+
+    /**
+     * 存入教师信息
+     * @param teachersInfo 字符串形式的json数组多个教师信息
+     * @param schoolID 学校id
+     * @return 包含响应码的map数据
+     */
+    Map<String, Object> saveTeachers(String teachersInfo, Integer schoolID);
+
+    /**
+     * 存入教师信息
+     * @param teacherNO 教师工号
+     * @param name 姓名
+     * @param schoolId 学校id
+     * @param colloge 学院名
+     * @return 包含响应码的map数据
+     */
+    Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String colloge);
 }
