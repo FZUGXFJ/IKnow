@@ -1,6 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Approvalcomment;
+import org.gxfj.iknow.pojo.User;
 
 public interface ApprovalCommentDAO extends BaseDAO<Approvalcomment>{
 
@@ -25,5 +26,11 @@ public interface ApprovalCommentDAO extends BaseDAO<Approvalcomment>{
      */
     Integer getCount(Integer commentId);
 
+    /**
+     * 根据用户id获得用户给评论的点赞数
+     * @param user 用户
+     * @return 用户给多少评论点过赞
+     */
+    Integer getCountByUser(User user);
 
 }

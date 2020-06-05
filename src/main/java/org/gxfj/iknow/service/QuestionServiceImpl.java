@@ -44,6 +44,8 @@ public class QuestionServiceImpl implements QuestionService{
     ReplyDAO replyDAO;
     @Autowired
     ExpUtil expUtil;
+    @Autowired
+    AchievementUtil achievementUtil;
 
     final static private int QUESTION_STATE_UNSOLVE = 1;
     final static private int QUESTION_STATE_SOLVE = 2;
@@ -88,6 +90,15 @@ public class QuestionServiceImpl implements QuestionService{
                 question.setIsAnonymous(isAnonymous);
                 result.put("questionId",questionDAO.add(question));
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+                //成就：我有问题、我是专业的
+                Integer questionCount = questionDAO.getUserQuestionCount(user.getId());
+                if (questionCount == 1) {
+                    achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_I_HAVE_PROBLEM);
+                } else if (questionCount == 100) {
+                    achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_ONE_HUNDRED_THOUSAND_WHY);
+                }
+
+
             } else {
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
             }

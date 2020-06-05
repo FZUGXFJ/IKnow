@@ -49,4 +49,12 @@ public class AchievementRecordDAOImpl implements AchievementRecordDAO{
                 " userID = :userId");
         return (List)query.setParameter("userId",userId).setFirstResult(start).list();
     }
+
+    @Override
+    public Achievementrecord get(Integer userId, Integer achievementId) {
+        String hql = "FROM Achievementrecord as a WHERE (userID = ?) and (achievementID = ?)";
+        Query query = getSession().createQuery(hql);
+        return (Achievementrecord) query.setParameter(0,userId).setParameter(1, achievementId)
+                .uniqueResult();
+    }
 }

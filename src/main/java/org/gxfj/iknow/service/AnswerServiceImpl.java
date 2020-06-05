@@ -40,6 +40,8 @@ public class AnswerServiceImpl implements AnswerService{
     MessageUtil messageUtil;
     @Autowired
     MessageDAO messageDAO;
+    @Autowired
+    AchievementUtil achievementUtil;
 
     final static private int MAP_NUM = 20;
     final static private int COMMENT_NUM = 2;
@@ -317,6 +319,18 @@ public class AnswerServiceImpl implements AnswerService{
             //增加用户的徽章数
             user.setBadgeNum(user.getBadgeNum() + 1);
             userDAO.update(user);
+
+            //成就
+            switch (user.getBadgeNum()) {
+                case 1: achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_I_KNOW);
+                        break;
+                case 10: achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_ANSWER_EXPERT);
+                        break;
+                case 100: achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_NOTHING_I_DONT_UNDERSTAND);
+                        break;
+            }
+
+
             return true;
         } else {
             return false;
@@ -669,6 +683,12 @@ public class AnswerServiceImpl implements AnswerService{
                     "</i></a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
                     answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId()
                     + "'><i class=\"fas fa-link\">[回答链接]</i></a>");
+
+            //成就：我是专业的
+            if (answer.getApprovalCount() >= 1000) {
+                achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_I_AM_PROFESSIONAL);
+            }
+
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS );
         }
         else{
