@@ -96,7 +96,7 @@ public class AnswerServiceImpl implements AnswerService{
             result.put("answerID",answer.getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
 
-            messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='user/user.html?userId=" +
+            messageUtil.newMessage(2,q.getUserByUserId(),"<p><a href='user.html?userId=" +
                     user.getId() +"'><i class=\"fas fa-link\">"+ user.getName()
                     + "</i></a>&nbsp;回答了你的问题，快去看看吧</P><a href='../../mobile/answer/answer.html?" +
                     "questionId=" + questionId + "&answerId=" + answer.getId()
@@ -664,7 +664,7 @@ public class AnswerServiceImpl implements AnswerService{
             answer.setApprovalCount(answer.getApprovalCount()+1);
             answerDAO.update(answer);
 
-            messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='user/user.html?userId=" +
+            messageUtil.newMessage(4,answer.getUserByUserId(), "<p><a href='user.html?userId=" +
                     user.getId() +"'><i class=\"fas fa-link\">" + user.getName() +
                     "</i></a>赞同了你的回答</P><a href='../../mobile/answer/answer.html?questionId=" +
                     answer.getQuestionByQuestionId().getId() + "&answerId=" + answer.getId()

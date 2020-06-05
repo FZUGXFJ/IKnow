@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
 
                 commentDAO.add(comment);
 
-                messageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='user/user.html?userId=" +
+                messageUtil.newMessage(3,answer.getUserByUserId(),"<p><a href='user.html?userId=" +
                         user.getId() +"'><i class=\"fas fa-link\">"+ user.getName() +
                         "</i></a>评论了你的回答，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
                         + answerId + "'><i class=\"fas fa-link\">[评论链接]</i></a>");
@@ -126,7 +126,7 @@ public class CommentServiceImpl implements CommentService {
                 approvalcomment.setDate(new Date());
                 approvalCommentDAO.add(approvalcomment);
 
-                messageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='user/user.html?userId=" +
+                messageUtil.newMessage(4,comment.getUserByUserId(),"<p><a href='user.html?userId=" +
                         user.getId() + "'><i class=\"fas fa-link\">"+
                         user.getName() + "</i></a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
                         + comment.getAnswerByAnswerId().getId() + "'><i class=\"fas fa-link\">[评论链接]</i></a>");

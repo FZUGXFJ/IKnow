@@ -58,7 +58,7 @@ public class ReplyServiceImpl implements ReplyService {
                 reply.setCommentByCommentId(comment);
                 reply.setUserByUserId(user);
                 replyDAO.add(reply);
-                messageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='user/user.html?userId=" +
+                messageUtil.newMessage(3,comment.getUserByUserId(),"<p><a href='user.html?userId=" +
                         user.getId() +"'><i class=\"fas fa-link\">"+ user.getName() +
                         "</i></a>回复了你的评论，快去看看吧</P><a href='../../mobile/comment/comment.html?answerId="
                         + reply.getCommentByCommentId().getAnswerByAnswerId().getId()
@@ -284,7 +284,7 @@ public class ReplyServiceImpl implements ReplyService {
             reply.setCount(reply.getCount()+1);
             replyDAO.update(reply);
 
-            messageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='user/user.html?userId=" +
+            messageUtil.newMessage(4,reply.getUserByUserId(),"<p><a href='user.html?userId=" +
                     user.getId() + "'><i class=\"fas fa-link\">"+
                     user.getName() + "</i></a>赞同了你的回复</P><a href='../../mobile/comment/comment.html?answerId=" +
                     reply.getCommentByCommentId().getAnswerByAnswerId().getId()
