@@ -53,10 +53,10 @@ public class IdentityServiceImpl implements IdentityService{
 
     @Override
     public Map<String, Object> stuAuthentication(String schoolName,String realName,String studentNum){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String , Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         School school = schoolDAO.getSchoolByName(schoolName);
-        Useridentity useridentity = userIdentityDAO.getStuIdentitie(user.getId(),school.getId(),realName,studentNum);
+        Useridentity useridentity = userIdentityDAO.getStuIdentitie(school.getId(),realName,studentNum);
         if(user==null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN_TWO);
         }
@@ -64,7 +64,11 @@ public class IdentityServiceImpl implements IdentityService{
             if (useridentity != null){
                 user.setIsAttest((byte)1);
                 user.setUseridentityByIdentityId(useridentity);
+                //用户表设置已认证，标明身份信息
                 userDAO.update(user);
+                useridentity.setUserByUserId(user);
+                //身份表标明已认证用户信息的用户
+                userIdentityDAO.update(useridentity);
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
             }
             else {
@@ -76,10 +80,10 @@ public class IdentityServiceImpl implements IdentityService{
 
     @Override
     public Map<String, Object> teaAuthentication(String schoolName,String realName,String jobNum) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         School school = schoolDAO.getSchoolByName(schoolName);
-        Useridentity useridentity = userIdentityDAO.getTeaIdentitie(user.getId(), school.getId(), realName, jobNum);
+        Useridentity useridentity = userIdentityDAO.getTeaIdentitie(school.getId(), realName, jobNum);
         if (user == null) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN_TWO);
         } else {
@@ -87,6 +91,8 @@ public class IdentityServiceImpl implements IdentityService{
                 user.setIsAttest((byte) 1);
                 user.setUseridentityByIdentityId(useridentity);
                 userDAO.update(user);
+                useridentity.setUserByUserId(user);
+                userIdentityDAO.update(useridentity);
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.AUTHENTICATION_FAILED);
