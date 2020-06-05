@@ -1,6 +1,8 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.College;
 import org.gxfj.iknow.pojo.Major;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +39,13 @@ public class MajorDAOImpl implements MajorDAO{
     @Override
     public void update(Major bean) {
         getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public Major getMajorByName(String majorName) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "from Major as m WHERE m.name = :majorName";
+        Query query = session.createQuery(hql);
+        return (Major) query.setParameter("majorName",majorName).uniqueResult();
     }
 }

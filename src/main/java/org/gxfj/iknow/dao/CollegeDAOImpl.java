@@ -1,6 +1,8 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.College;
+import org.gxfj.iknow.pojo.School;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +39,13 @@ public class CollegeDAOImpl implements CollegeDAO{
     @Override
     public void update(College bean) {
         getHibernateTemplate().update(bean);
+    }
+
+    @Override
+    public College getCollegeByName(String collegeName) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "from College as c WHERE c.name = :collegelName";
+        Query query = session.createQuery(hql);
+        return (College) query.setParameter("collegeName",collegeName).uniqueResult();
     }
 }
