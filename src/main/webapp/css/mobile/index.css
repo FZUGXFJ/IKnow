@@ -73,7 +73,6 @@ table{
     font-size: 0.7em;
 }
 .answerView{
-    white-space: nowrap;
     overflow: hidden;;
     text-overflow: ellipsis;
     display:-webkit-box;
