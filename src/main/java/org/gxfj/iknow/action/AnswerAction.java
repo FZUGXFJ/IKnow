@@ -1,6 +1,8 @@
 package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
+import com.opensymphony.xwork2.ActionContext;
+import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.AnswerService;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,9 @@ public class AnswerAction {
      * @return
      */
     public String questionTitle(){
-        Map<String, Object> response = answerService.getQuestiontitle(questionId);
+
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String, Object> response = answerService.getQuestiontitle(user, questionId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -58,7 +62,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String postAnswer() {
-        Map<String, Object> response = answerService.postAnswer(questionId,content,isAnonymous);
+        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String, Object> response = answerService.postAnswer(user, questionId,content,isAnonymous);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -68,7 +73,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String viewAnswer() {
-        Map<String,Object> response = answerService.viewAnswer(questionId,answerId);
+        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String,Object> response = answerService.viewAnswer(user, questionId,answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -78,7 +84,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String adoptAnswer() {
-        Map<String, Object> response = answerService.adoptAnswer(answerId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = answerService.adoptAnswerService(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -88,7 +95,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String cancelAnonymous(){
-        Map<String, Object> response = answerService.cancelAnonymous(answerId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = answerService.cancelAnonymous(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -98,7 +106,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String recommendAnswer(){
-        Map<String, Object> response = answerService.getRecommendAnswerForUser(20);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = answerService.getRecommendAnswerForUser(user, 20);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -108,7 +117,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String approveAnswer(){
-        Map<String, Object> response = answerService.approveAnswer(answerId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = answerService.approveAnswer(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -118,7 +128,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String cancelApprove(){
-        Map<String, Object> response = answerService.cancelApprove(answerId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = answerService.cancelApprove(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -128,7 +139,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String oppositionAnswer(){
-        Map<String, Object> response = answerService.oppositionAnswer(answerId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = answerService.oppositionAnswer(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -138,7 +150,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String cancelOppose(){
-        Map<String, Object> response = answerService.cancelOppose(answerId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = answerService.cancelOppose(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -148,7 +161,9 @@ public class AnswerAction {
      * @return
      */
     public String moreRecommend(){
-        Map<String, Object> response=answerService.moreRecommendAnswer(ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME, start);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response=answerService.moreRecommendAnswer(user,
+                ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -158,7 +173,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String deleteAnswer(){
-        Map<String, Object> response =answerService.deleteAnswer(answerId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response =answerService.deleteAnswer(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -168,7 +184,8 @@ public class AnswerAction {
      * @return
      */
     public String getAnswerInfo(){
-        Map<String, Object> response = answerService.getAnswerContent(answerId);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = answerService.getAnswerContent(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -178,7 +195,8 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String updateAnswer(){
-        Map<String, Object> response=answerService.updateAnswerContent(answerId,content);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response=answerService.updateAnswerContent(user, answerId,content);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

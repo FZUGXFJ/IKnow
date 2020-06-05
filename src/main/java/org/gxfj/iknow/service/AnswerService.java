@@ -15,7 +15,7 @@ public interface AnswerService {
      * @param questionId 问题Id
      * @return Map
      */
-    public Map<String, Object> getQuestiontitle( Integer questionId);
+    Map<String, Object> getQuestiontitle(User user, Integer questionId);
     /**
      * 获取回答id
      * @param questionId 问题Id
@@ -23,7 +23,7 @@ public interface AnswerService {
      * @param isAnonmyous 是否匿名
      * @return json数据
      */
-    public Map<String,Object> postAnswer(Integer questionId,String content,Byte isAnonmyous);
+    Map<String,Object> postAnswer(User user, Integer questionId,String content,Byte isAnonmyous);
 
     /**
      * 查看回答
@@ -31,28 +31,28 @@ public interface AnswerService {
      * @param answerId 回答的id
      * @return json数据（答案的信息，关联的用户，评论，问题的信息）
      */
-    public Map<String,Object> viewAnswer(Integer questionId , Integer answerId );
+    Map<String,Object> viewAnswer(User user, Integer questionId , Integer answerId );
 
     /**
      * 执行用户采纳问题操作。如果用户是题主，采纳成功，否则采纳失败
      * @param answerId 要采纳的回答的id
      * @return 成功为true,失败为false
      */
-    public Map<String, Object> adoptAnswer( Integer answerId);
+    Map<String, Object> adoptAnswerService(User user, Integer answerId);
 
     /**
      * 执行回答取消匿名
      * @param answerId 要采纳的回答的id
      * @return 成功为true,失败为false
      */
-    public Map<String, Object> cancelAnonymous(Integer answerId);
+    Map<String, Object> cancelAnonymous(User user, Integer answerId);
 
     /**
      * 获得count条问题信息
      * @param count 推荐数
      * @return 问题表
      */
-    public Map<String,Object> getRecommendAnswerForUser(Integer count);
+    Map<String,Object> getRecommendAnswerForUser(User user, Integer count);
 
 
     void createRecommendAnswer();
@@ -62,28 +62,28 @@ public interface AnswerService {
      * @param answerId 回答id
      * @return 是否点赞
      */
-    public Map<String, Object> approveAnswer(Integer answerId);
+    Map<String, Object> approveAnswer(User user, Integer answerId);
 
     /**
      * 取消点赞
      * @param answerId 回答id
      * @return 是否取消成功
      */
-    public Map<String, Object> cancelApprove(Integer answerId);
+    Map<String, Object> cancelApprove(User user, Integer answerId);
 
     /**
      * 反对回答
      * @param answerId 回答id
      * @return 是否成功
      */
-    public Map<String, Object> oppositionAnswer(Integer answerId);
+    Map<String, Object> oppositionAnswer(User user, Integer answerId);
 
     /**
      * 取消反对
      * @param answerId 回答id
      * @return 是否取消成功
      */
-    public Map<String, Object> cancelOppose(Integer answerId);
+    Map<String, Object> cancelOppose(User user, Integer answerId);
 
     /**
      * 获得count条问题信息
@@ -91,7 +91,7 @@ public interface AnswerService {
      * @param start 起始下标
      * @return 问题表
      */
-    public Map<String,Object> moreRecommendAnswer( Integer count,Integer start);
+    Map<String,Object> moreRecommendAnswer(User user, Integer count,Integer start);
 
     /**
      * 插入浏览记录
@@ -107,21 +107,21 @@ public interface AnswerService {
      * @param user 用户
      * @return 是否成功
      */
-    public boolean isAnswerer(Integer answerId,User user);
+    boolean isAnswerer(Integer answerId,User user);
 
     /**
      * 删除回答
      * @param answerId 回答id
      * @return 是否成功
      */
-    public Map<String, Object> deleteAnswer(Integer answerId);
+    Map<String, Object> deleteAnswer(User user, Integer answerId);
 
     /**
      * 获取原回答的内容
      * @param answerId 回答id
      * @return 包含原回答内容的map
      */
-    public Map<String, Object> getAnswerContent(Integer answerId);
+    Map<String, Object> getAnswerContent(User user, Integer answerId);
 
     /**
      * 更新回答内容
@@ -129,5 +129,5 @@ public interface AnswerService {
      * @param content 新的回答内容
      * @return 是否成功
      */
-    public Map<String, Object> updateAnswerContent(Integer answerId, String content);
+    Map<String, Object> updateAnswerContent(User user, Integer answerId, String content);
 }

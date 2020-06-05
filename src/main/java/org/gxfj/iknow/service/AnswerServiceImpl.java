@@ -47,8 +47,7 @@ public class AnswerServiceImpl implements AnswerService{
     final static private int COMMENT_NUM = 2;
     final static private int ANONYMOUS = 1;
     @Override
-    public Map<String, Object> getQuestiontitle(Integer questionId) {
-        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+    public Map<String, Object> getQuestiontitle(User user, Integer questionId) {
         Map<String, Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -64,8 +63,8 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String,Object> postAnswer(Integer questionId, String content, Byte isAnonymous) {
-        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+    public Map<String,Object> postAnswer(User user, Integer questionId, String content, Byte isAnonymous) {
+
         Map<String, Object> result= new HashMap<>(MAP_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -109,8 +108,8 @@ public class AnswerServiceImpl implements AnswerService{
 
 
     @Override
-    public Map<String, Object> viewAnswer(Integer questionId, Integer answerId) {
-        User user = (User)ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+    public Map<String, Object> viewAnswer(User user, Integer questionId, Integer answerId) {
+
         Map<String , Object> result = new HashMap<>(MAP_NUM);
         if(user!=null) {
             insertBrowsing(user,questionDAO.get(questionId),answerDAO.get(answerId));
@@ -285,8 +284,8 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> adoptAnswer(Integer answerId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> adoptAnswerService(User user, Integer answerId) {
+
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if (user != null) {
             if (adoptAnswer(user, answerId)) {
@@ -340,8 +339,8 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> cancelAnonymous(Integer answerId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> cancelAnonymous(User user, Integer answerId) {
+
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         Answer answer = answerDAO.getNotDelete(answerId);
         if (user != null) {
@@ -379,8 +378,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> getRecommendAnswerForUser(Integer count) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> getRecommendAnswerForUser(User user, Integer count) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         Map<String,Object> cUser=new HashMap<>(2);
         if (user != null) {
@@ -664,8 +662,8 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> approveAnswer(Integer answerId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> approveAnswer(User user, Integer answerId) {
+
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -700,8 +698,8 @@ public class AnswerServiceImpl implements AnswerService{
         return result;
     }
     @Override
-    public Map<String, Object> cancelApprove(Integer answerId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> cancelApprove(User user, Integer answerId) {
+
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -721,8 +719,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> oppositionAnswer(Integer answerId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> oppositionAnswer(User user, Integer answerId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -744,8 +741,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> cancelOppose(Integer answerId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> cancelOppose(User user, Integer answerId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -762,8 +758,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> moreRecommendAnswer( Integer count, Integer start) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> moreRecommendAnswer(User user, Integer count, Integer start) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         Map<String, Object> answers = null;
         if (user != null) {
@@ -856,8 +851,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> deleteAnswer(Integer answerId){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> deleteAnswer(User user, Integer answerId){
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if (user == null) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
@@ -887,8 +881,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> getAnswerContent(Integer answerId){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> getAnswerContent(User user, Integer answerId){
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if (user == null) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
@@ -904,16 +897,19 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Map<String, Object> updateAnswerContent(Integer answerId, String content){
+    public Map<String, Object> updateAnswerContent(User user, Integer answerId, String content){
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
-        if (TextVerifyUtil.verifyCompliance(content)) {
+        if (user == null || user.getId() == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
+        }
+        if (!TextVerifyUtil.verifyCompliance(content)) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
+        } else {
             Answer answer = answerDAO.get(answerId);
             answer.setContentHtml(content);
             answer.setContentText(HtmlUtil.html2Text(HtmlUtil.changeImgTag(content)));
             answerDAO.update(answer);
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        } else {
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
         }
         return result;
     }
