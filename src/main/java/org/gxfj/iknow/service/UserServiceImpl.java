@@ -430,7 +430,7 @@ public class UserServiceImpl<result> implements UserService{
             userInf.put("gainApproveNum",sum);
             userInf.put("badgeNum" , user.getBadgeNum());
 
-            List<Question> questionList = questionDAO.listPartByUserId(userId,0,10);
+            List<Question> questionList = questionDAO.listPartByUserIdnoAn(userId,0,10);
             List<Map<String,Object>> questions = new ArrayList<>();
             Map<String,Object> question;
             for (Question question1:questionList){
@@ -445,13 +445,14 @@ public class UserServiceImpl<result> implements UserService{
             }
             userInf.put("questionDynamic",questions);
 
-            List<Answer> answerList1 = answerDAO.listPartByUserId(userId,0,10);
+            List<Answer> answerList1 = answerDAO.listPartByUserIdnoAn(userId,0,10);
             List<Map<String,Object>> answers = new ArrayList<>();
             Map<String,Object> answer;
             for (Answer answer1:answerList1){
                 answer = new HashMap<>(6);
                 answer.put("id",answer1.getId());
                 answer.put("content",answer1.getContentText());
+                answer.put("questionId",answer1.getQuestionByQuestionId().getId());
                 answer.put("questionTitle",answer1.getQuestionByQuestionId().getTitle());
                 answer.put("time",Time.getTime(answer1.getDate()));
                 answer.put("approvNum",answer1.getApprovalCount());

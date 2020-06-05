@@ -42,6 +42,16 @@ public interface QuestionDAO extends BaseDAO<Question>{
      */
     List<Question> listPartByUserId(Integer userId, Integer start, Integer length);
 
+
+    /**
+     * 列出指定用户id提出的问题(无匿名)
+     * @param userId 用户ID
+     * @param start 起始位置
+     * @param length 问题个数
+     * @return 问题列表没有则为null
+     */
+    List<Question> listPartByUserIdnoAn(Integer userId, Integer start, Integer length);
+
     /**
      * 活得用户发布的所有问题
      * @param userId 用户id

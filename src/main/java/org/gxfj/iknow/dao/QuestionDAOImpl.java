@@ -106,6 +106,19 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
+    public List<Question> listPartByUserIdnoAn(Integer userId, Integer start, Integer length) {
+        List<Question> questions = null;
+        String hql = "from Question as q WHERE ( userID= " + userId + " ) and (q.isDelete = 0) and " +
+                "(q.isAnonymous = 0) order by date desc";
+        //Session session = sessionFactory.openSession();
+        Query query = getSession().createQuery(hql);
+        //Query query = session.createQuery(hql);
+        questions = query.setFirstResult(start).setMaxResults(length).list();
+        //session.close();
+        return questions;
+    }
+
+    @Override
     public List<Question> listPartByUserId(Integer userId) {
         Query query = getSession().createQuery("from Question as q WHERE ( userID= " + userId + " ) " +
                 "order by q.id desc");
