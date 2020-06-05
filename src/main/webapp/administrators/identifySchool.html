@@ -18,7 +18,9 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script type="text/javascript"src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.1/xlsx.full.min.js"></script>
     <script src="https://cdn.bootcss.com/xlsx/0.11.5/xlsx.core.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.1/xlsx.full.min.js"></script>
 
     <style>
         .bd-placeholder-img {
@@ -143,33 +145,40 @@
                 </div>
                 <!--            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
                 <h2>认证学校管理</h2>
-                <div class="form-group">
-                    <label class="col-sm-1 control-label">选择文件..</label>
-                    <label for="file" class="btn btn-sm btn-outline-secondary">选择文件</label>
-                    <input id="file"type="file"style="display:none">
-                    <label class="btn btn-sm btn-outline-secondary">上传</label>
+<!--                <div class="form-group">-->
+<!--                    <label class="col-sm-1 control-label">选择文件..</label>-->
+<!--                    <label for="file" class="btn btn-sm btn-outline-secondary" οnclick="$('#file').click()">选择文件</label>-->
+<!--                    <input id="file" type="file" οnchange="testImport(this)" accept="*" style="display:none">-->
+<!--                    <label class="btn btn-sm btn-outline-secondary">上传</label>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <input type="button" value="Excel导入" οnclick="$('#testImport').click()"/>-->
+<!--                    <input id="testImport" style="display: none;" type="file" οnchange="testImport(this)" accept="*"/>-->
+<!--                </div>-->
+                <div>
+                    <p class="file-name"></p>
+                    <input type="file" class="upload-btn" style="display: none">
+                    <span type="text" class="file-input-trigger btn btn-sm btn-outline-secondary">选择文件</span>
+                    <span type="text" class="btn btn-sm btn-outline-secondary">上传</span>
                 </div>
+
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead align="center">
                         <tr>
-                            <th>举报ID</th>
-                            <th>举报者ID</th>
-                            <th>被举报者ID</th>
-                            <th>举报类别</th>
-                            <th>举报日期</th>
-                            <th>原因类别</th>
+                            <th>学校ID</th>
+                            <th>学校名称</th>
+                            <th>学院数</th>
+                            <th>专业数</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody align="center">
                         <tr v-for="(reportInfo,i) in subArr">
-                            <td>{{reportInfo.id}}</td>
-                            <td>{{reportInfo.userID}}</td>
-                            <td>{{reportInfo.targetID}}</td>
-                            <td>{{reportInfo.type}}</td>
-                            <td>{{reportInfo.date}}</td>
-                            <td>{{reportInfo.reason}}</td>
+                            <td>1</td>
+                            <td>福州大学</td>
+                            <td>21</td>
+                            <td>84</td>
                             <td>
                                 <button @click="now=i+(cur-1)*15" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
@@ -311,6 +320,62 @@
         document.getElementById("window").style.display = "none";
         document.getElementById("shadow").style.display = "none";
     }
+    $(function() {
+        // 点击自定义的span标签触发input标签的点击事件
+        $('.file-input-trigger').on('click', function() {
+            $('.upload-btn').trigger('click')
+        })
+        // 文件改变时 将文件名称显示到p元素中
+        $('.upload-btn').on('change', function(event) {
+            var fileName = '已选文件：' + event.target.files[0].name
+            $('.file-name').text(fileName)
+            testImport(event.target);
+        })
+    })
+    function testImport(obj) {
+        //判断是否为文件
+        if (!obj.files) {
+            return;
+        }
+        // var index = layer.load(1, { shade: [0.1,'#fff']});
+        var f = obj.files[0];
+        var reader = new FileReader();
+        reader.onabort = function(e) {
+            alert("中断了")
+        }
+        reader.onerror = function(e) {
+            alert("出错了")
+        }
+        reader.onloadstart = function() {
+            //开始
+            console.log("onloadstart")
+        }
+        reader.onloadend = function() {
+            //结束
+            console.log("onloadend")
+        }
+        reader.onload = function(e) {
+            //$("#testImport").val(null); //清空文件栏
+            var data = e.target.result;
+            var wb = XLSX.read(data, {
+                type: 'binary'		//设置类型,读取二进制
+            });
+
+            //读第一个Sheet文件内容
+            var items = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
+            console.log(items);
+            items = JSON.parse(items);
+            console.log(items);
+
+            //读第二个Sheet文件内容
+            var itemTwo = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]]));
+            console.log(itemTwo);
+            itemTwo = JSON.parse(itemTwo);
+            // layer.closeAll();
+        }
+        reader.readAsBinaryString(f);
+    }
+
     // let reportAdmin=new Vue({
     //     el:"#reportAdmin",
     //     data:{
