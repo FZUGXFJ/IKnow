@@ -778,7 +778,7 @@ public class AnswerServiceImpl implements AnswerService{
             User quser = question.getUserByUserId();
             recommend.put("questionId",question.getId());
             recommend.put("questionTitle",question.getTitle());
-            recommend.put("answererId",user.getId());
+
             //判断答主是否匿名
 //            boolean isAnonymous = (quser.getId().equals(user.getId()) && question.getIsAnonymous() == 1) ;
             boolean isAnonymous = (answer.getIsAnonymous() == ANONYMOUS);
@@ -787,11 +787,13 @@ public class AnswerServiceImpl implements AnswerService{
                 recommend.put("answererName", ConstantUtil.ANONYMOUS_USER_NAME);
                 recommend.put("answererLevel",0);
                 recommend.put("answererBadge",0);
+                recommend.put("answererId",0);
             } else {
                 recommend.put("answererHead",ImgUtil.changeAvatar(user.getHead()));
                 recommend.put("answererName",user.getName());
                 recommend.put("answererLevel",expUtil.getLevelLabel(user.getExp()));
                 recommend.put("answererBadge",user.getBadgeNum());
+                recommend.put("answererId",user.getId());
             }
             recommend.put("answerId",answer.getId());
             //使用HtmlUtil工具类，将图片转换掉
