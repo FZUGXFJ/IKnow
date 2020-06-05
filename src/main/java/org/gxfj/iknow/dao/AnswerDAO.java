@@ -65,6 +65,15 @@ public interface AnswerDAO extends BaseDAO<Answer>{
     List<Answer> listPartByUserId(Integer userId, Integer start, Integer length);
 
     /**
+     * 列出指定用户id发布的回答(无匿名)
+     * @param userId 用户ID
+     * @param start 起始位置
+     * @param length 问题个数
+     * @return 问题列表没有则为null
+     */
+    List<Answer> listPartByUserIdnoAn(Integer userId, Integer start, Integer length);
+
+    /**
      * 获得用户发布的所有回答，包括标记为删除的
      * @param userId 用户id
      * @return 回答列表，没有为null
