@@ -2,6 +2,7 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.Approvalcomment;
 import org.gxfj.iknow.pojo.Approvalreply;
+import org.gxfj.iknow.pojo.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -62,5 +63,15 @@ public class ApprovalCommentDAOImpl implements ApprovalCommentDAO{
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select count(a) from Approvalcomment as a WHERE commentID = ?");
         return ((Long)query.setInteger(0,commentId).uniqueResult()).intValue();
+    }
+
+    @Override
+    public Integer getCountByUser(User user) {
+        if (user == null) {
+            return null;
+        }
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select count(a) from Approvalcomment as a WHERE userID = ?");
+        return ((Long)query.setInteger(0,user.getId()).uniqueResult()).intValue();
     }
 }

@@ -1,5 +1,6 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.Answer;
 import org.gxfj.iknow.pojo.Approvalanswer;
 import org.gxfj.iknow.pojo.Approvalreply;
 
@@ -17,4 +18,5 @@ public interface ApprovalAnswerDAO extends BaseDAO<Approvalanswer>{
      * @param bean  需要删除的元素
      */
     void delete(Approvalanswer bean);
+
 }

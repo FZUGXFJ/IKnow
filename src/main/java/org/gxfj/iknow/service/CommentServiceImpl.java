@@ -31,6 +31,8 @@ public class CommentServiceImpl implements CommentService {
     ApprovalReplyDAO approvalReplyDAO;
     @Autowired
     MessageUtil messageUtil;
+    @Autowired
+    AchievementUtil achievementUtil;
 
     final static private int MAP_NUM = 30;
     final static private int REPLY_NUM = 2;
@@ -130,6 +132,12 @@ public class CommentServiceImpl implements CommentService {
                         user.getId() + "'><i class=\"fas fa-link\">"+
                         user.getName() + "</i></a>赞同了你的评论</P><a href='../../mobile/comment/comment.html?answerId="
                         + comment.getAnswerByAnswerId().getId() + "'><i class=\"fas fa-link\">[评论链接]</i></a>");
+
+                //成就：我爱吃瓜
+                if (approvalCommentDAO.getCountByUser(user).equals(100)) {
+                    achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_I_AM_ONLOOKER);
+                }
+
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.RESULT_CODE_APPROVED);

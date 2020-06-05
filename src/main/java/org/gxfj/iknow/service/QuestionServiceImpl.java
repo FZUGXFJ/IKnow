@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static org.gxfj.iknow.util.ConstantUtil.*;
+
 
 /**
  * @author qmbx
@@ -44,6 +46,10 @@ public class QuestionServiceImpl implements QuestionService{
     ReplyDAO replyDAO;
     @Autowired
     ExpUtil expUtil;
+    @Autowired
+    UserIdentityDAO userIdentityDAO;
+    @Autowired
+    AchievementUtil achievementUtil;
 
     final static private int QUESTION_STATE_UNSOLVE = 1;
     final static private int QUESTION_STATE_SOLVE = 2;
@@ -88,6 +94,15 @@ public class QuestionServiceImpl implements QuestionService{
                 question.setIsAnonymous(isAnonymous);
                 result.put("questionId",questionDAO.add(question));
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+                //成就：我有问题、我是专业的
+                Integer questionCount = questionDAO.getUserQuestionCount(user.getId());
+                if (questionCount == 1) {
+                    achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_I_HAVE_PROBLEM);
+                } else if (questionCount == 100) {
+                    achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_ONE_HUNDRED_THOUSAND_WHY);
+                }
+
+
             } else {
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
             }
@@ -450,6 +465,66 @@ public class QuestionServiceImpl implements QuestionService{
         question.setId(questionId);
         questionDAO.update(question);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> findUser(String keyword) {
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
+        if(user == null){
+            result.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
+        }
+        else {
+            List<User> users=userDAO.listByKeyword(keyword);
+            List<Map<String,Object>> userMapList=new ArrayList<>();
+            Map<String,Object> userMap;
+            for (User u:users) {
+                userMap = new HashMap<>(5);
+                userMap.put("userId", u.getId());
+                userMap.put("userName", u.getName());
+                userMap.put("userHead", ImgUtil.changeAvatar(u.getHead(), 2));
+                userMap.put("userIntroduction", u.getIntroduction());
+                //获得用户的身份
+                Map<String, Object> userIdentityMap = new HashMap<>(MIN_HASH_MAP_NUM);
+                List<Useridentity> userIdentities = userIdentityDAO.listUserIdentitiesByUserId(u.getId());
+                if (userIdentities == null || userIdentities.size() == 0) {
+                    userIdentityMap.put("type", -1);
+                    userIdentityMap.put("realName", "");
+                } else {
+                    Useridentity useridentity = userIdentities.get(0);
+                    userIdentityMap.put("realName", useridentity.getName());
+                    if (useridentity.getType().equals("教师")) {
+                        userIdentityMap.put("identityType", 2);
+                    } else {
+                        userIdentityMap.put("identityType", 1);
+                    }
+                }
+                userMap.put("identity", userIdentityMap);
+                userMapList.add(userMap);
+            }
+            result.put("users", userMapList);
+            result.put(JSON_RETURN_CODE_NAME,SUCCESS);
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String,Object> inviteAnswer(Integer questionId, Integer userId){
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+        Map<String,Object> result = getQuestionType();
+        if(user == null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
+        }else {
+            MessageUtil messageUtil = new MessageUtil();
+            User invitedUser = userDAO.get(userId);
+            String content = "<p><a href='user.html?userId="+user.getId()+"'>" +
+                    "<i class=\"fas fa-link\">"+user.getName()+"</i></a>邀请你回答问题，快去看看吧</P>" +
+                    "<a href='../../mobile/question/question.html?questionId="+questionId+"'>" +
+                    "<i class=\"fas fa-link\">[问题链接]</i></a>";
+            messageUtil.newMessage(ConstantUtil.INVITE_USER_TO_ANSWER,invitedUser,content);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
+        }
         return result;
     }
 }

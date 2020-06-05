@@ -95,4 +95,19 @@ public interface QuestionService {
      */
     Map<String,Object> updateQuesiton(Integer newQuestionId, String newQuestionTitle, String newQuestionContent,
                                        Integer newCategoriesType, Integer newSubjectType, Integer newMajorType);
+
+    /**
+     * 查找用户
+     * @param keyword 查询关键字
+     * @return 用户信息
+     */
+    Map<String, Object> findUser(String keyword);
+
+    /**
+     * 邀请回答
+     * @param questionId 问题id
+     * @param userId 被邀请人用户id
+     * @return 是否成功
+     */
+    Map<String,Object> inviteAnswer(Integer questionId, Integer userId);
 }

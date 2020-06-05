@@ -101,4 +101,7 @@ public class ConstantUtil {
      * 前端发来的数据出错
      */
     public static final Integer RESULT_CODE_PARAMS_ERROR = 2;
+
+    //MessageUtil
+    public final static int INVITE_USER_TO_ANSWER = 5;
 }

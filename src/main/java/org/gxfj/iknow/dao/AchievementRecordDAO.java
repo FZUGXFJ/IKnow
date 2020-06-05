@@ -13,6 +13,8 @@ public interface AchievementRecordDAO extends BaseDAO<Achievementrecord>{
      * @param start 开始索引
      * @return 成就列表
      */
-    public List<Achievement> listAchievementsByUserId(Integer userId, Integer start );
+    List<Achievement> listAchievementsByUserId(Integer userId, Integer start );
+
+    Achievementrecord get(Integer userId, Integer achievementeId);
 
 }

@@ -13,6 +13,36 @@ public class Achievement {
     private String introduct;
     private Collection<Achievementrecord> achievementrecordsById;
 
+    /**
+     * 答题专家
+     */
+    public static final Integer ACHIEVEMENT_ANSWER_EXPERT = 1;
+    /**
+     * 我有问题
+     */
+    public static final Integer ACHIEVEMENT_I_HAVE_PROBLEM = 2;
+    /**
+     * 我爱吃瓜
+     */
+    public static final Integer ACHIEVEMENT_I_AM_ONLOOKER = 3;
+    /**
+     * 我知道
+     */
+    public static final Integer ACHIEVEMENT_I_KNOW = 4;
+    /**
+     * 就没什么我不懂的
+     */
+    public static final Integer ACHIEVEMENT_NOTHING_I_DONT_UNDERSTAND = 5;
+    /**
+     * 十万个为什么
+     */
+    public static final Integer ACHIEVEMENT_ONE_HUNDRED_THOUSAND_WHY = 6;
+    /**
+     * 我是专业的
+     */
+    public static final Integer ACHIEVEMENT_I_AM_PROFESSIONAL = 7;
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
