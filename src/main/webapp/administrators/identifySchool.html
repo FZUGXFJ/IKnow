@@ -327,7 +327,15 @@
         })
         // 文件改变时 将文件名称显示到p元素中
         $('.upload-btn').on('change', function(event) {
-            var fileName = '已选文件：' + event.target.files[0].name
+            var fileName = '已选文件：' + event.target.files[0].name;
+            let index = event.target.files[0].name.lastIndexOf(".");
+            let fname = event.target.files[0].name.substr(index+1);
+            console.log(fname);
+            if(fname!="xlsx")
+            {
+                alert("请上传xlsx文件");
+                return;
+            }
             $('.file-name').text(fileName)
             testImport(event.target);
         })
@@ -363,7 +371,7 @@
 
             //读第一个Sheet文件内容
             var items = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
-            console.log(JSON.stringify(items));
+            console.log(items);
             items = JSON.parse(items);
             console.log(items);
 
