@@ -317,19 +317,21 @@ public class AnswerServiceImpl implements AnswerService{
             question.setQuestionstateByStateId(questionstate);
             questionDAO.update(question);
             //增加用户的徽章数
-            user.setBadgeNum(user.getBadgeNum() + 1);
+            Integer badgeNum = user.getBadgeNum();
+
+            answer.getUserByUserId().setBadgeNum(answer.getUserByUserId().getBadgeNum() + 1);
             userDAO.update(user);
 
             //成就
-            switch (user.getBadgeNum()) {
+            switch (answer.getUserByUserId().getBadgeNum()) {
                 case 1: achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_I_KNOW);
                         break;
                 case 10: achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_ANSWER_EXPERT);
                         break;
                 case 100: achievementUtil.completeAchievement(user, Achievement.ACHIEVEMENT_NOTHING_I_DONT_UNDERSTAND);
                         break;
+                default: break;
             }
-
 
             return true;
         } else {
@@ -373,6 +375,7 @@ public class AnswerServiceImpl implements AnswerService{
         questionDAO.update(question);
         User user = question.getUserByUserId();
         user.setBadgeNum(user.getBadgeNum() - 1);
+        userDAO.update(user);
     }
 
     @Override
@@ -696,7 +699,6 @@ public class AnswerServiceImpl implements AnswerService{
         }
         return result;
     }
-
     @Override
     public Map<String, Object> cancelApprove(Integer answerId) {
         User user = (User) ActionContext.getContext().getSession().get("user");
