@@ -50,6 +50,8 @@ public class QuestionServiceImpl implements QuestionService{
     UserIdentityDAO userIdentityDAO;
     @Autowired
     AchievementUtil achievementUtil;
+    @Autowired
+    MessageUtil messageUtil;
 
     final static private int QUESTION_STATE_UNSOLVE = 1;
     final static private int QUESTION_STATE_SOLVE = 2;
@@ -512,11 +514,10 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Map<String,Object> inviteAnswer(Integer questionId, Integer userId){
         User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
-        Map<String,Object> result = getQuestionType();
+        Map<String,Object> result = new HashMap<>();
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
         }else {
-            MessageUtil messageUtil = new MessageUtil();
             User invitedUser = userDAO.get(userId);
             String content = "<p><a href='user.html?userId="+user.getId()+"'>" +
                     "<i class=\"fas fa-link\">"+user.getName()+"</i></a>邀请你回答问题，快去看看吧</P>" +

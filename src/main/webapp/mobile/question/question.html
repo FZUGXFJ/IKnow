@@ -121,7 +121,7 @@
     <br><br><br>
     <div id="footer">
         <table>
-            <td><button @click="popupVisible=true"><i class="fas fa-user-plus"></i>&nbsp;邀请回答</button></td>
+            <td><button @click="openInvite"><i class="fas fa-user-plus"></i>&nbsp;邀请回答</button></td>
             <td><button @click="addAnswer"><i class="fas fa-pen" @click="postAnswer"></i>&nbsp;写回答</button></td>
             <td  v-if="isCollected===1"><button @click="cancelCollect"><i class="fas fa-star"></i>&nbsp;已收藏</button></td>
             <td  v-else><button style="color: #acacac" @click="collect"><i class="fas fa-star"></i>&nbsp;收藏问题</button></td>
@@ -177,27 +177,27 @@
         </table>
         <br>
         <div>
-            <div class="inviteItem" v-for="invite in inviteList">
+            <div class="inviteItem" v-for="(invite,index) in inviteList">
                 <table>
                     <td style="width: 15%">
-                        <div v-html="invite.head" class="head"></div>
+                        <div v-html="invite.userHead" class="head"></div>
                     </td>
                     <td style="width: 55%;padding-left: 0.5em">
                         <div class="inviteName">
-                            {{invite.name}}
-                            <span v-if="invite.identity.isAuth!=0">
+                            {{invite.userName}}
+                            <span v-if="invite.identity.type!==-1">
                                 （{{invite.identity.realName}}）
-                                <i class="fas fa-shield-alt" style="color: #eec100" v-if="invite.identity.type==1"></i>
+                                <i class="fas fa-shield-alt" style="color: #eec100" v-if="invite.identity.type===1"></i>
                                 <i class="fas fa-shield-alt" style="color: #0051ee" v-else=""></i>
                             </span>
                         </div>
-                        <div class="inviteInt">{{invite.introduction}}</div>
+                        <div class="inviteInt">{{invite.userIntroduction}}</div>
                     </td>
                     <td style="width: 30%;text-align: right">
                         <span style="color: #acacac" v-if="invite.invited">
                             <i class="fas fa-check"></i>&nbsp;已邀请
                         </span>
-                        <span class="inviteBtn" v-else="" @click="doInvite(invite.id)">
+                        <span class="inviteBtn" v-else="" @click="doInvite(invite.userId,index)">
                             <i class="fas fa-user-plus"></i>&nbsp;邀请
                         </span>
                     </td>
@@ -503,6 +503,51 @@
                     return;
                 }
                 location.href = "../user/user.html?userId=" + id;
+            },
+            openInvite:function () {
+                $.ajax({
+                    url: "../../user/isLogin.action",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            question.popupVisible=true;
+                        } else {
+                            question.$messagebox.confirm("登录后才能邀请").then(action =>{
+                                location.href = "../user/login.html?boot=0";
+                            }).catch(action =>{});
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            doInvite:function (userId,index) {
+                $.ajax({
+                    url: "../../question/inviteAnswer.action",
+                    type: "POST",
+                    data: {
+                        questionId:question.questionId,
+                        userId:userId
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            question.inviteList[index].invited = true;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             }
         },
         mounted:function () {
@@ -568,7 +613,31 @@
         },
         watch:{
             keyword:function (val,oldVal) {
-
+                if (val.length ===0) {
+                    return;
+                }
+                $.ajax({
+                    url: "../../question/findUser.action",
+                    type: "POST",
+                    data: {
+                        keyword:val
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            question.inviteList = result.users;
+                            question.inviteList.forEach(function (item) {
+                                question.$set(item,"invited",false);
+                            })
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             }
         }
     });
