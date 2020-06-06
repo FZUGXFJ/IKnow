@@ -22,14 +22,14 @@ public interface QuestionService {
      * @param isAnonymous 提问者发布问题时，是否匿名
      * @return 问题id
      */
-    public Map<String, Object> postQuestion(String title, String context, Integer categoryType, Integer subjectType
-        , Integer majorType, Byte isAnonymous);
+    public Map<String, Object> postQuestion(User user, String title, String context, Integer categoryType,
+                                            Integer subjectType, Integer majorType, Byte isAnonymous);
 
     /**
      * 从数据库中读取问题分类中的所有门类、学科、专业
      * @return 以Map形式嵌套存储所有分类
      */
-    public Map<String, Object>getQuestionType();
+    public Map<String, Object>getQuestionType(User user);
     
     /**
      * 根据问题的id，获得问题及问题下的前length个回答的相关信息
@@ -38,13 +38,13 @@ public interface QuestionService {
      * @param sort 排序方式
      * @return json格式的问题信息
      */
-    public Map<String, Object>getQuestion(Integer questionId, Integer length,Integer sort);
+    public Map<String, Object> viewQuestionService(User user, Integer questionId, Integer length, Integer sort);
 
     /**
      * 根据问题的id，获得问题及问题下的前length个回答的相关信息
      * @param questionId 取消匿名的问题
      */
-    public Map<String, Object> cancelAnonymous(Integer questionId);
+    public Map<String, Object> cancelAnonymous(User user, Integer questionId);
 
     /**
      * 获取题主
@@ -75,14 +75,14 @@ public interface QuestionService {
      * @param questionId 要删除问题
      * @return 删除的结果
      */
-    Map<String, Object> deleteQuestion(Integer questionId);
+    Map<String, Object> deleteQuestion(User user, Integer questionId);
 
     /**
      * 获取问题信息
      * @param questionId 问题id
      * @return 问题信息
      */
-    Map<String,Object> getQuestioninf(Integer questionId);
+    Map<String,Object> getQuestioninf(User user, Integer questionId);
 
     /**
      * 修改问题信息
@@ -94,15 +94,16 @@ public interface QuestionService {
      * @param newMajorType 新的专业类别id
      * @return 是否成功
      */
-    Map<String,Object> updateQuesiton(Integer newQuestionId, String newQuestionTitle, String newQuestionContent,
-                                       Integer newCategoriesType, Integer newSubjectType, Integer newMajorType);
+    Map<String,Object> updateQuesiton(User user,Integer newQuestionId, String newQuestionTitle,
+                                      String newQuestionContent, Integer newCategoriesType, Integer newSubjectType,
+                                      Integer newMajorType);
 
     /**
      * 查找用户
      * @param keyword 查询关键字
      * @return 用户信息
      */
-    Map<String, Object> findUser(String keyword);
+    Map<String, Object> findUser(User user, String keyword);
 
     /**
      * 邀请回答
@@ -110,5 +111,5 @@ public interface QuestionService {
      * @param userId 被邀请人用户id
      * @return 是否成功
      */
-    Map<String,Object> inviteAnswer(Integer questionId, Integer userId);
+    Map<String,Object> inviteAnswer(User user, Integer questionId, Integer userId);
 }

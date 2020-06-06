@@ -19,12 +19,12 @@ public interface CollectionService {
      * @param questionId 用户收藏的问题
      * @return 结果码
      */
-    public Map<String, Object> cancelCollect( Integer questionId);
+    public Map<String, Object> cancelCollect(User user, Integer questionId);
 
     /**
      * 用户收藏问题
      * @param questionId 用户想要收藏的问题
      * @return 结果码
      */
-    public Map<String, Object> collectProblem(Integer questionId);
+    public Map<String, Object> collectProblem(User user, Integer questionId);
 }
