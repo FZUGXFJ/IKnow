@@ -167,17 +167,22 @@ public class QuestionServiceImpl implements QuestionService{
         if (sort == null){
             sort = ConstantUtil.ANSWER_DEFAULT_SORT;
         }
-        ActionContext.getContext().getSession().put("answersort",sort);
         //题主
-        User viewUser =get(questionId);
-        boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
-        result.put("question",getQuestion(user, questionId, length, sort));
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.SUCCESS);
-        if(user == null || !isQuestionUser){
-            result.put("viewerIsOwner",0);
-        }
-        if(isQuestionUser){
-            result.put("viewerIsOwner",1);
+        User viewUser = get(questionId);
+        Question question = questionDAO.getNotDelete(questionId);
+        if (question == null) {
+            result.put(JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_NON_EXISTENT);
+        } else {
+            boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
+            result.put("question", getQuestion(user, questionId, length, sort));
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+
+            if (user == null || !isQuestionUser) {
+                result.put("viewerIsOwner", 0);
+            }
+            if (isQuestionUser) {
+                result.put("viewerIsOwner", 1);
+            }
         }
         return result;
     }
