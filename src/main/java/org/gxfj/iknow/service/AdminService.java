@@ -202,5 +202,5 @@ public interface AdminService {
      * @param colloge 学院名
      * @return 包含响应码的map数据
      */
-    Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String colloge);
+    Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String college);
 }

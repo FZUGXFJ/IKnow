@@ -2,9 +2,7 @@ package org.gxfj.iknow.action;
 
 import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
-import org.gxfj.iknow.pojo.Admin;
 import org.gxfj.iknow.service.AdminService;
-import org.gxfj.iknow.service.QuestionService;
 import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,7 +44,7 @@ public class AdminAction {
     private String name;
     //存教师接口的教师id
     private Integer school;
-    private String colloge;
+    private String college;
 
     @Autowired
     private AdminService adminService;
@@ -323,7 +320,7 @@ public class AdminAction {
      */
     public String saveTeacher(){
         Map<String,Object> result;
-        result = adminService.saveTeacher(teacherNO, name, school, colloge);
+        result = adminService.saveTeacher(teacherNO, name, school, college);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -503,12 +500,12 @@ public class AdminAction {
         this.school = school;
     }
 
-    public String getColloge() {
-        return colloge;
+    public String getCollege() {
+        return college;
     }
 
-    public void setColloge(String colloge) {
-        this.colloge = colloge;
+    public void setCollege(String college) {
+        this.college = college;
     }
 
     public String getStudentsInfo() {

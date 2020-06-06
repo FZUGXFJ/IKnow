@@ -616,7 +616,7 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String, Object> saveStudents(String studentsInfo, Integer schoolId) {
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-        List<Map<String, Object>> collogeInfoList = new ArrayList<>();
+        List<Map<String, Object>> collegeInfoList = new ArrayList<>();
         List<Map<String, Object>> majorInfoList = new ArrayList<>();
         if(JsonUtil.isJsonArray(studentsInfo)){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.IS_NOT_JSON_ARRAY);
@@ -643,7 +643,7 @@ public class AdminServiceImpl implements AdminService{
                     }
                     collegeInfo.put("name" , collegeName);
                     collegeInfo.put("id", collegeDAO.getCollegeByName(collegeName).getId());
-                    collogeInfoList.add(collegeInfo);
+                    collegeInfoList.add(collegeInfo);
                     if(majorDAO.getMajorByName(majorName) == null){
                         Major major = new Major();
                         major.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
@@ -666,8 +666,8 @@ public class AdminServiceImpl implements AdminService{
                 }
             }
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            result.put("collogeInfo", collogeInfoList);
-            result.put("majorInfo", collogeInfoList);
+            result.put("collegeInfo", collegeInfoList);
+            result.put("majorInfo", majorInfoList);
         }
 
         return result;
@@ -681,15 +681,16 @@ public class AdminServiceImpl implements AdminService{
         String studentNO = (String)studentInfoMap.get("studentNO");
         String name = (String)studentInfoMap.get("name");
         Integer school = (Integer) studentInfoMap.get("school");
-        String colloge = (String)studentInfoMap.get("colloge");
+        String college = (String)studentInfoMap.get("college");
         String major = (String)studentInfoMap.get("major");
 
         Useridentity useridentity = new Useridentity();
         useridentity.setName(name);
         useridentity.setSchoolBySchoolId(schoolDAO.get(school));
-        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(colloge));
+        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college));
         useridentity.setMajorByMajorId(majorDAO.getMajorByName(major));
         useridentity.setStudentNum(Integer.parseInt(studentNO));
+        useridentity.setType("学生");
         userIdentityDAO.add(useridentity);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
@@ -698,6 +699,7 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String, Object> saveTeachers(String teachersInfo, Integer schoolID){
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        Useridentity useridentity;
         if(JsonUtil.isJsonArray(teachersInfo)){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.IS_NOT_JSON_ARRAY);
         }else {
@@ -706,13 +708,14 @@ public class AdminServiceImpl implements AdminService{
             for(Map<String, Object> teacherInfoMap:teachersInfoMap){
                 String teacherNO = (String)teacherInfoMap.get("工号");
                 String name = (String)teacherInfoMap.get("姓名");
-                String colloge = (String)teacherInfoMap.get("学院");
+                String college = (String)teacherInfoMap.get("学院");
 
-                Useridentity useridentity = new Useridentity();
+                useridentity = new Useridentity();
                 useridentity.setName(name);
                 useridentity.setSchoolBySchoolId(schoolDAO.get(schoolID));
-                useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(colloge));
+                useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college));
                 useridentity.setJobNum(Integer.parseInt(teacherNO));
+                useridentity.setType("教师");
                 userIdentityDAO.add(useridentity);
             }
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
@@ -721,14 +724,15 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String colloge){
+    public Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String college){
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
 
         Useridentity useridentity = new Useridentity();
         useridentity.setName(name);
         useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
-        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(colloge));
+        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college));
         useridentity.setJobNum(Integer.parseInt(teacherNO));
+        useridentity.setType("教师");
         userIdentityDAO.add(useridentity);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
