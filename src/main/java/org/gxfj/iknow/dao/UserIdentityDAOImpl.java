@@ -127,10 +127,12 @@ public class UserIdentityDAOImpl implements UserIdentityDAO{
     @Override
     public boolean delete(Integer schoolId, Integer studentNum) {
         Session session = sessionFactory.getCurrentSession();
-        Useridentity useridentity = new Useridentity();
-        useridentity.setStudentNum(studentNum);
-        useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
-        sessionFactory.getCurrentSession().delete(useridentity);
+        Query query = session.createQuery(
+                "from Useridentity as ui where (schoolID ="+schoolId+") and (studentNum ="+ studentNum+" )");
+        Useridentity useridentity = (Useridentity) query.uniqueResult();
+        if(useridentity != null){
+            sessionFactory.getCurrentSession().delete(useridentity);
+        }
         return true;
     }
 }
