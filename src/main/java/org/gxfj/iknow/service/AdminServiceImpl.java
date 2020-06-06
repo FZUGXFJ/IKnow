@@ -865,4 +865,36 @@ public class AdminServiceImpl implements AdminService{
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
+
+    @Override
+    public Map<String, Object> delSchool(Integer schoolId) {
+        schoolDAO.delete(schoolId);
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> delCollege(Integer collegeId) {
+        collegeDAO.delete(collegeId);
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> delMajor(Integer majorId) {
+        majorDAO.delete(majorId);
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> delStudent(Integer schoolId, Integer studentNum) {
+        userIdentityDAO.delete(schoolId, studentNum);
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
 }

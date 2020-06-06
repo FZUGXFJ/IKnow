@@ -47,6 +47,7 @@ public class AdminAction {
     private String college;
     private Integer collegeID;
     private Integer majorID;
+    private Integer studentID;
 
     @Autowired
     private AdminService adminService;
@@ -382,6 +383,34 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 删除学校
+     * @return SUCCESS
+     */
+    public String delSchool(){
+        Map<String, Object> response = adminService.delSchool(schoolID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    public String delCollege(){
+        Map<String, Object> response = adminService.delCollege(collegeID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    public String delMajor(){
+        Map<String, Object> response = adminService.delMajor(majorID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    public String delStudent(){
+        Map<String, Object> response = adminService.delStudent(schoolID, studentID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -588,5 +617,13 @@ public class AdminAction {
 
     public void setMajorID(Integer majorID) {
         this.majorID = majorID;
+    }
+
+    public Integer getStudentID() {
+        return studentID;
+    }
+
+    public void setStudentID(Integer studentID) {
+        this.studentID = studentID;
     }
 }

@@ -1,5 +1,6 @@
 package org.gxfj.iknow.dao;
 
+import org.gxfj.iknow.pojo.School;
 import org.gxfj.iknow.pojo.Useridentity;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,6 +15,8 @@ import java.util.List;
 public class UserIdentityDAOImpl implements UserIdentityDAO{
     private HibernateTemplate ht = null;
 
+    @Autowired
+    SchoolDAO schoolDAO;
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -119,5 +122,15 @@ public class UserIdentityDAOImpl implements UserIdentityDAO{
         String hql = "from Useridentity as ui where (majorID ="+majorId+") and (type = '教师')";
         Query query = getSession().createQuery(hql);
         return query.list();
+    }
+
+    @Override
+    public boolean delete(Integer schoolId, Integer studentNum) {
+        Session session = sessionFactory.getCurrentSession();
+        Useridentity useridentity = new Useridentity();
+        useridentity.setStudentNum(studentNum);
+        useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
+        sessionFactory.getCurrentSession().delete(useridentity);
+        return true;
     }
 }

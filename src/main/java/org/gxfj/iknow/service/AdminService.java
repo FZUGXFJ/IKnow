@@ -1,6 +1,7 @@
 package org.gxfj.iknow.service;
 
 import org.gxfj.iknow.pojo.Admin;
+import org.gxfj.iknow.pojo.Major;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Map;
@@ -233,4 +234,33 @@ public interface AdminService {
      * @return 包含所有专业内的教师信息以及响应码的返回信息
      */
     Map<String, Object> getTeacher(Integer majorId);
+
+    /**
+     * 删除学校
+     * @param schoolId 学校Id
+     * @return 结果码
+     */
+    Map<String, Object> delSchool(Integer schoolId);
+
+    /**
+     * 删除学院
+     * @param collegeId 学院Id
+     * @return 结果码
+     */
+    Map<String, Object> delCollege(Integer collegeId);
+
+    /**
+     * 删除专业
+     * @param majorId 专业Id
+     * @return 结果码
+     */
+    Map<String, Object> delMajor(Integer majorId);
+
+    /**
+     * 删除学生
+     * @param schoolId 学校Id
+     * @param studentNum 学号
+     * @return 结果码
+     */
+    Map<String, Object> delStudent(Integer schoolId, Integer studentNum);
 }

@@ -89,4 +89,12 @@ public interface UserIdentityDAO extends BaseDAO<Useridentity>{
      * @return 教师身份列表
      */
     public List<Useridentity> listTeaIdentity(Integer majorId);
+
+    /**
+     * 删除学生认证信息
+     * @param schoolId 学校Id
+     * @param studentNum 学号
+     * @return 是否删除成功
+     */
+    public  boolean delete(Integer schoolId, Integer studentNum);
 }
