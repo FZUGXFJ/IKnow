@@ -1,6 +1,7 @@
 package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.College;
+import org.gxfj.iknow.pojo.Comment;
 import org.gxfj.iknow.pojo.School;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -8,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("collegeDAO")
 public class CollegeDAOImpl implements CollegeDAO{
@@ -48,4 +51,14 @@ public class CollegeDAOImpl implements CollegeDAO{
         Query query = session.createQuery(hql);
         return (College) query.setParameter("collegeName",collegeName).uniqueResult();
     }
+
+    @Override
+    public List<College> listBySchoolId(Integer schoolId) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "from College as c WHERE schoolID = :schoolId";
+        Query query = session.createQuery(hql);
+        return  query.setParameter("schoolId",schoolId).list();
+    }
+
+
 }
