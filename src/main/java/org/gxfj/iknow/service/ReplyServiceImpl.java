@@ -75,23 +75,29 @@ public class ReplyServiceImpl implements ReplyService {
     public Map<String, Object> showAllReplys(Integer commentId, Integer sortType) {
         User user = (User) ActionContext.getContext().getSession().get("user");
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
-        result.put("comment" , getComment(commentId, user));
-        result.put("replies" , listReplies(commentId, user, sortType));
-        result.put(JSON_RETURN_CODE_NAME , SUCCESS);
-        //在session中保存排序的方式
-        ActionContext.getContext().getSession().put("sortType", sortType);
+
+        Comment comment = commentDAO.getNotDelete(commentId);
+        if (comment == null) {
+            result.put(JSON_RETURN_CODE_NAME, JSON_RESULT_CODE_NON_EXISTENT);
+        } else {
+            result.put("comment", getComment(comment, user));
+            result.put("replies", listReplies(comment, user, sortType));
+            result.put(JSON_RETURN_CODE_NAME, SUCCESS);
+            //在session中保存排序的方式
+            ActionContext.getContext().getSession().put("sortType", sortType);
+        }
         return result;
 
     }
 
     /**
      * 获得评论信息
-     * @param commentId 评论id
+     * @param comment 评论
      * @return 评论的信息
      */
-    private Map<String , Object> getComment(Integer commentId, User visitor) {
+    private Map<String , Object> getComment(Comment comment, User visitor) {
         Map<String , Object> commentMap = new HashMap<>(MAP_NUM);
-        Comment comment = commentDAO.getNotDelete(commentId);
+        Integer commentId = comment.getId();
         commentMap = commenterIsQAOwner(commentId );
         commentMap.put("userId" , comment.getUserByUserId().getId());
         commentMap.put("content",comment.getContent());
@@ -114,13 +120,14 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 获得指定评论的所有回复
-     * @param commentId 评论id
+     * @param comment 评论id
+     * @param visitor 查看者
+     * @param sortType 排序方式
      * @return 评论的所有回复
      */
-    private List<Map<String , Object>> listReplies(Integer commentId, User visitor, Integer sortType) {
+    private List<Map<String , Object>> listReplies(Comment comment, User visitor, Integer sortType) {
         List<Map<String , Object>> repliesMap  = new ArrayList<>();
-        List<Reply> replies = replyDAO.getAllRepliesSort(commentId, sortType);
-        Comment comment = commentDAO.getNotDelete(commentId);
+        List<Reply> replies = replyDAO.getAllRepliesSort(comment.getId(), sortType);
         boolean isAnonymousOwner = (getUserIdentify(comment) != NO_SPECIAL_IDENTIFY && isAnonymous(comment));
         for (Reply reply : replies) {
             Map<String ,Object> replyMap = replierIsQAOwner(reply.getId());
@@ -188,7 +195,7 @@ public class ReplyServiceImpl implements ReplyService {
     /**
      * 获取用户的身份，是否为题主/答主
      * @param comment 评论
-     * @return 用户的身份（用int表示）
+     * @return 用户的身份（用int表示） NO_SPECIAL_IDENTIFY为普通用户，IS_QUESTION_OWNER为题主，IS_ANSWERER为答主
      */
     private Integer getUserIdentify( Comment comment){
         //得到评论的用户的id
