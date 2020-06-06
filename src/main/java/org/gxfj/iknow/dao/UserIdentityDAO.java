@@ -62,4 +62,17 @@ public interface UserIdentityDAO extends BaseDAO<Useridentity>{
      */
     public Integer getCollegeStuNum(Integer collegeId);
 
+    /**
+     * 获得专业教师数量
+     * @param majorId 专业Id
+     * @return 教师数量
+     */
+    public Integer getMajorTeaNum(Integer majorId);
+
+    /**
+     * 获得专业学生数量
+     * @param majorId 专业Id
+     * @return 学生数量
+     */
+    public Integer getMajorStuNum(Integer majorId);
 }

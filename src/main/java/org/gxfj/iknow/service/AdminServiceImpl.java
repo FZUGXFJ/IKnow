@@ -798,4 +798,29 @@ public class AdminServiceImpl implements AdminService{
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
+
+    @Override
+    public Map<String, Object> getMajor(Integer collegeId){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+        College college = collegeDAO.get(collegeId);
+        List<Major> majors = (List<Major>)college.getMajorsById();
+        List<Map<String, Object>> majorMapList = new ArrayList<>();
+        School school = college.getSchoolBySchoolId();
+        Map<String, Object> majorMap;
+        for(Major major:majors){
+            majorMap = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+            majorMap.put("schoolID",school.getId());
+            majorMap.put("schoolName",school.getName());
+            majorMap.put("collegeID",college.getId());
+            majorMap.put("collegeName",college.getName());
+            majorMap.put("majorID",major.getId());
+            majorMap.put("majorName",major.getName());
+            majorMap.put("teacherNums",userIdentityDAO.getMajorTeaNum(major.getId()));
+            majorMap.put("studentNums",userIdentityDAO.getMajorStuNum(major.getId()));
+            majorMapList.add(majorMap);
+        }
+        result.put("majorInfos", majorMapList);
+        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        return result;
+    }
 }

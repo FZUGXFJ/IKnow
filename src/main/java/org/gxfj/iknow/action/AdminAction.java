@@ -45,6 +45,7 @@ public class AdminAction {
     //存教师接口的教师id
     private Integer school;
     private String college;
+    private Integer collegeID;
 
     @Autowired
     private AdminService adminService;
@@ -347,6 +348,17 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获取专业信息
+     * @return “SUCCESS”
+     */
+    public String getMajor(){
+        Map<String,Object> result;
+        result = adminService.getMajor(collegeID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -537,5 +549,13 @@ public class AdminAction {
 
     public void setStudentsInfo(String studentsInfo) {
         this.studentsInfo = studentsInfo;
+    }
+
+    public Integer getCollegeID() {
+        return collegeID;
+    }
+
+    public void setCollegeID(Integer collegeID) {
+        this.collegeID = collegeID;
     }
 }
