@@ -48,6 +48,7 @@ public class AdminAction {
     private Integer collegeID;
     private Integer majorID;
     private Integer studentID;
+    private Integer teacherID;
 
     @Autowired
     private AdminService adminService;
@@ -411,6 +412,12 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    public String delTeacher(){
+        Map<String, Object> response = adminService.delTeacher(schoolID, teacherID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -625,5 +632,13 @@ public class AdminAction {
 
     public void setStudentID(Integer studentID) {
         this.studentID = studentID;
+    }
+
+    public Integer getTeacherID() {
+        return teacherID;
+    }
+
+    public void setTeacherID(Integer teacherID) {
+        this.teacherID = teacherID;
     }
 }

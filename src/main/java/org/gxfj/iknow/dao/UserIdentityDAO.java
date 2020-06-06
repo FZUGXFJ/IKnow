@@ -96,5 +96,13 @@ public interface UserIdentityDAO extends BaseDAO<Useridentity>{
      * @param studentNum 学号
      * @return 是否删除成功
      */
-    public  boolean delete(Integer schoolId, Integer studentNum);
+    public  boolean deleteStudent(Integer schoolId, Integer studentNum);
+
+    /**
+     * 删除教师认证信息
+     * @param schoolId 学校Id
+     * @param jobNum 工号
+     * @return 是否删除成功
+     */
+    public boolean deleteTeacher(Integer schoolId, Integer jobNum);
 }
