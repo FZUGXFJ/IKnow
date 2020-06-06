@@ -41,13 +41,13 @@ public class AchievementUtil {
         if (user == null || achievementId == null || achievementRecordDAO.get(user.getId(), achievementId) != null) {
             return false;
         }
-        for (Achievement achievement : achievementList) {
+        for (Achievement achievement : getAchievementList()) {
             if (achievement.getId().equals(achievementId)) {
                 Achievementrecord achievementrecord = new Achievementrecord();
                 achievementrecord.setUserByUserId(user);
                 achievementrecord.setDate(new Date());
                 achievementrecord.setAchievementByAchievementId(achievement);
-
+                achievementRecordDAO.add(achievementrecord);
                 return true;
             }
         }
