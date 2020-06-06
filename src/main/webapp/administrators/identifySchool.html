@@ -136,6 +136,7 @@
                     <label class="col-sm-2 control-label"></label>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
+                            <button v-if="!schoolPage" type="button" class="btn btn-sm btn-outline-secondary" @click="back()">返回</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="disPlaySchool()">学校总览</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="isUpload=!isUpload">上传</button>
                         </div>
@@ -178,7 +179,7 @@
                             <td>{{schoolInfo.collegeNums}}</td>
                             <td>{{schoolInfo.majorNums}}</td>
                             <td>
-                                <button @click="now=i+(cur-1)*15;" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15;disPlayCollege(schoolInfo.schoolID)" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                             </td>
                         </tr>
@@ -207,7 +208,7 @@
                             <td>{{collegeInfo.teacherNums}}</td>
                             <td>{{collegeInfo.studentNums}}</td>
                             <td>
-                                <button @click="now=i+(cur-1)*15;" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15;disPlayMajor(collegeInfo.schoolID)" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                             </td>
                         </tr>
@@ -235,6 +236,33 @@
                             <td>{{majorInfo.majorID}}</td>
                             <td>{{majorInfo.majorName}}</td>
                             <td>{{majorInfo.studentNums}}</td>
+                            <td>
+                                <button @click="now=i+(cur-1)*15;disPlayStudent(majorInfo.schoolID)" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-sm" v-if="studentPage">
+                        <thead align="center">
+                        <tr>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>学院ID</th>
+                            <th>学院名称</th>
+                            <th>专业ID</th>
+                            <th>专业名称</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody align="center">
+                        <tr v-for="(studentInfo,i) in subArr">
+                            <td>{{studentInfo.studentID}}</td>
+                            <td>{{studentInfo.studentName}}</td>
+                            <td>{{studentInfo.collegeID}}</td>
+                            <td>{{studentInfo.collegeName}}</td>
+                            <td>{{studentInfo.majorID}}</td>
+                            <td>{{studentInfo.majorName}}</td>
                             <td>
                                 <button @click="now=i+(cur-1)*15;" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
@@ -446,6 +474,7 @@
             schoolInfoList:[],
             collegeInfoList:[],
             majorInfoList:[],
+            studentInfoList:[],
             pageInfoList:[],
             schoolName:"",
             studentsInfo:"",
@@ -465,7 +494,8 @@
             replyReport:0,
             schoolPage:true,
             collegePage:false,
-            majorPage:false
+            majorPage:false,
+            studentPage:false
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -516,7 +546,7 @@
             },
             getSchool: function(){
                 $.ajax({
-                    url: "../admin/getSchool.action",
+                    url: "../admin/getSchools.action",
                     type: "POST",
                     data: {
                     },
@@ -538,10 +568,11 @@
                 identifySchool.schoolPage=true;
                 identifySchool.collegePage=false;
                 identifySchool.majorPage=false;
+                identifySchool.studentPage=false;
             },
             disPlayCollege: function(schoolID){
                 $.ajax({
-                    url: "../admin/getCollege.action",
+                    url: "../admin/getColleges.action",
                     type: "POST",
                     data: {
                         schoolID:schoolID
@@ -552,6 +583,7 @@
                             identifySchool.schoolPage=false;
                             identifySchool.collegePage=true;
                             identifySchool.majorPage=false;
+                            identifySchool.studentPage=false;
                             identifySchool.collegeInfoList=result.collegeInfos;
                         }
                     },
@@ -576,7 +608,33 @@
                             identifySchool.schoolPage=false;
                             identifySchool.collegePage=false;
                             identifySchool.majorPage=true;
+                            identifySchool.studentPage=false;
                             identifySchool.majorInfoList=result.majorInfos;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            disPlayStudent: function(majorID){
+                $.ajax({
+                    url: "../admin/getStudent.action",
+                    type: "POST",
+                    data: {
+                        majorID:majorID
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            identifySchool.schoolPage=false;
+                            identifySchool.collegePage=false;
+                            identifySchool.majorPage=false;
+                            identifySchool.studentPage=true;
+                            identifySchool.studentInfoList=result.studentInfos;
                         }
                     },
                     error: function (request, status, error) {
@@ -687,6 +745,29 @@
             pageClick: function(){
                 console.log('现在在'+this.cur+'页');
                 // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+            },
+            back: function () {
+                if(this.collegePage)
+                {
+                    this.schoolPage=true;
+                    this.collegePage=false;
+                    this.majorPage=false;
+                    this.studentPage=false;
+                }
+                if(this.majorPage)
+                {
+                    this.schoolPage=false;
+                    this.collegePage=true;
+                    this.majorPage=false;
+                    this.studentPage=false;
+                }
+                if(this.studentPage)
+                {
+                    this.schoolPage=false;
+                    this.collegePage=false;
+                    this.majorPage=true;
+                    this.studentPage=false;
+                }
             }
         },
         computed: {
@@ -718,13 +799,14 @@
                 return ar
             },
             subArr() {
-                console.log(this.schoolInfoList.slice((this.cur-1)*15,this.cur*15));
                 if(this.schoolPage)
                     return this.schoolInfoList.slice((this.cur-1)*15,this.cur*15);
                 if(this.collegePage)
                     return this.collegeInfoList.slice((this.cur-1)*15,this.cur*15);
                 if(this.majorPage)
                     return this.majorInfoList.slice((this.cur-1)*15,this.cur*15);
+                if(this.studentPage)
+                    return this.studentInfoList.slice((this.cur-1)*15,this.cur*15);
             }
         },
         mounted:function () {
@@ -733,7 +815,7 @@
             this.getReportType(1);
             this.getReportType(2);
             this.getReportType(3);
-            // this.getSchool();
+            this.getSchool();
         }
     });
     (function () {
