@@ -18,6 +18,10 @@ public class ConstantUtil {
      * 返回的JSON中resultCode的值，代表用户被封禁
      */
     public final static int JSON_RESULT_CODE_BAN = 11;
+    /**
+     * 内容不存在
+     */
+    public final static int JSON_RESULT_CODE_NON_EXISTENT = 12;
 
     public final static int NO_MORE = 2;
     public final static String JSON_RETURN_CODE_NAME = "resultCode";
