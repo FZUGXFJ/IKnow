@@ -16,4 +16,11 @@ public interface CollegeDAO extends BaseDAO<College>{
      */
     List<College> listBySchoolId(Integer schoolId);
 
+    /**
+     * 删除学院
+     * @param collegeId 学院Id
+     * @return 是否删除成功
+     */
+    boolean delete(Integer collegeId);
+
 }

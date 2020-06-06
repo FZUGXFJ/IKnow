@@ -2,6 +2,7 @@ package org.gxfj.iknow.dao;
 
 import org.gxfj.iknow.pojo.College;
 import org.gxfj.iknow.pojo.Major;
+import org.gxfj.iknow.pojo.School;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -47,5 +48,13 @@ public class MajorDAOImpl implements MajorDAO{
         String hql = "from Major as m WHERE m.name = :majorName";
         Query query = session.createQuery(hql);
         return (Major) query.setParameter("majorName",majorName).uniqueResult();
+    }
+
+    @Override
+    public boolean delete(Integer majorId) {
+        Session session = sessionFactory.getCurrentSession();
+        Major major = (Major) session.load(Major.class, majorId);
+        sessionFactory.getCurrentSession().delete(major);
+        return true;
     }
 }

@@ -25,4 +25,11 @@ public interface SchoolDAO extends BaseDAO<School>{
      * @return  学校列表
      */
     List<School> listAllSchool();
+
+    /**
+     * 删除学校表中对应id的记录
+     * @param schoolId 学校Id
+     * @return 删除成功
+     */
+    boolean delete(Integer schoolId);
 }

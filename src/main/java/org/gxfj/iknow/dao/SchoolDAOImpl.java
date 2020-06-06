@@ -65,4 +65,12 @@ public class SchoolDAOImpl implements SchoolDAO{
         Query query = session.createQuery(hql);
         return query.list();
     }
+
+    @Override
+    public boolean delete(Integer schoolId) {
+        Session session = sessionFactory.getCurrentSession();
+        School school = (School) session.load(School.class, schoolId);
+        sessionFactory.getCurrentSession().delete(school);
+        return true;
+    }
 }

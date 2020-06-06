@@ -60,5 +60,11 @@ public class CollegeDAOImpl implements CollegeDAO{
         return  query.setParameter("schoolId",schoolId).list();
     }
 
-
+    @Override
+    public boolean delete(Integer collegeId) {
+        Session session = sessionFactory.getCurrentSession();
+        College college = (College) session.load(College.class, collegeId);
+        sessionFactory.getCurrentSession().delete(college);
+        return true;
+    }
 }
