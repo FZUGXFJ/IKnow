@@ -453,11 +453,11 @@ public class AdminAction {
     }
 
     public String getStudentInfo() {
-        return studentsInfo;
+        return studentInfo;
     }
 
     public void setStudentInfo(String studentInfo) {
-        this.studentsInfo = studentsInfo;
+        this.studentInfo = studentInfo;
     }
 
     public Integer getSchoolID() {
