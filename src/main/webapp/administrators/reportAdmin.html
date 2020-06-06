@@ -649,7 +649,7 @@
                     dataType:"json",
                     success:function (result) {
                         if (result.response === 0) {
-                            location.href = "login_new.html";
+                            location.href = "login.html";
                         }
                     },
                     error:function (request,status,error) {
@@ -668,7 +668,7 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.resultCode === 1) {
-                            location.href="login_new.html";
+                            location.href="login.html";
                         }
                     },
                     error: function (request, status, error) {
@@ -1354,7 +1354,7 @@
                     this.replyPage = true;
                 }
             } else {
-                location.href = "login_new.html"
+                location.href = "login.html";
             }
             this.getReportType(0);
             this.getReportType(1);

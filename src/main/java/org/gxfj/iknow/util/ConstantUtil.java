@@ -19,7 +19,7 @@ public class ConstantUtil {
      */
     public final static int JSON_RESULT_CODE_BAN = 11;
 
-    public final static int NO_MORE = 1;
+    public final static int NO_MORE = 2;
     public final static String JSON_RETURN_CODE_NAME = "resultCode";
     public final static String SESSION_USER = "user";
     public final static String RETURN_STRING = "success";
@@ -64,7 +64,7 @@ public class ConstantUtil {
     //Question
     public static final int QUESTION_SHOW_ANSWER_NUM = 10;
     public final static int MISS_QUESTION_INF = 2;
-    public final static int QUESTION_DEFAULT_SORT = 1;
+    public final static int ANSWER_DEFAULT_SORT = 0;
     public final static int USER_IS_NOT_QUESTION_ONWER_DELETE_FAULT = 2;
     public final static int SHOW_ANSWERS_NUM = 20;
 

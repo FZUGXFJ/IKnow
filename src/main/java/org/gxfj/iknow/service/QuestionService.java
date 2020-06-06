@@ -58,9 +58,10 @@ public interface QuestionService {
      * @param questionId 要获得的问题
      * @param length 要加载的回答个数
      * @param start 起始地址
+     * @param sort 排序格式，0为热度排序，1为时间排序
      * @return json格式的问题信息
      */
-    Map<String,Object> moreAnswers (Integer questionId,int start, int length);
+    Map<String,Object> moreAnswers (Integer questionId,int start, int length, Integer sort);
 
     /**
      * 插入浏览记录

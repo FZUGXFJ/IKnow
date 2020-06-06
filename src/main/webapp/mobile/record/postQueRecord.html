@@ -96,7 +96,7 @@
                             postQueRecord.hasMore = size >= 20;
                             postQueRecord.start += size;
                             postQueRecord.loadingMore = false;
-                        } else if (result.resultCode === 1) {
+                        } else if (result.resultCode === 2) {
                             result.records.forEach(function (item) {
                                 postQueRecord.records.push(item);
                             });
