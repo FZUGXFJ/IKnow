@@ -78,4 +78,18 @@ public class UserIdentityDAOImpl implements UserIdentityDAO{
         Query query = getSession().createQuery(hql);
         return (Useridentity)query.uniqueResult();
     }
+
+    @Override
+    public Integer getCollegeTeaNum(Integer collegeId) {
+        String hql = "select count(ui) from Useridentity as ui where (collegeID ="+collegeId+") and (type = '教师')";
+        Query query = getSession().createQuery(hql);
+        return ((Long)query.uniqueResult()).intValue();
+    }
+
+    @Override
+    public Integer getCollegeStuNum(Integer collegeId) {
+        String hql = "select count(ui) from Useridentity as ui where (collegeID ="+collegeId+") and (type = '学生')";
+        Query query = getSession().createQuery(hql);
+        return ((Long)query.uniqueResult()).intValue();
+    }
 }
