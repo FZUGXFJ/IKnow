@@ -84,11 +84,11 @@ public interface UserIdentityDAO extends BaseDAO<Useridentity>{
     public List<Useridentity> listStuIdentity(Integer majorId);
 
     /**
-     * 获得指定专业的教师
-     * @param majorId 专业Id
+     * 获得指定学院的教师
+     * @param collegeId 专业Id
      * @return 教师身份列表
      */
-    public List<Useridentity> listTeaIdentity(Integer majorId);
+    public List<Useridentity> listTeaIdentity(Integer collegeId);
 
     /**
      * 删除学生认证信息

@@ -118,8 +118,8 @@ public class UserIdentityDAOImpl implements UserIdentityDAO{
     }
 
     @Override
-    public List<Useridentity> listTeaIdentity(Integer majorId) {
-        String hql = "from Useridentity as ui where (majorID ="+majorId+") and (type = '教师')";
+    public List<Useridentity> listTeaIdentity(Integer collegeId) {
+        String hql = "from Useridentity as ui where (collegeID ="+collegeId+") and (type = '教师')";
         Query query = getSession().createQuery(hql);
         return query.list();
     }

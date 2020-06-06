@@ -233,7 +233,7 @@ public interface AdminService {
      * 获取所有某专业教师信息
      * @return 包含所有专业内的教师信息以及响应码的返回信息
      */
-    Map<String, Object> getTeacher(Integer majorId);
+    Map<String, Object> getTeacher(Integer collegeId);
 
     /**
      * 删除学校

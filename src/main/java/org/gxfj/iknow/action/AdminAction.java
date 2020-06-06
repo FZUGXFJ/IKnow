@@ -378,7 +378,7 @@ public class AdminAction {
      */
     public String getTeacher(){
         Map<String,Object> result;
-        result = adminService.getTeacher(majorID);
+        result = adminService.getTeacher(collegeID);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

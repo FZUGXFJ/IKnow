@@ -846,9 +846,9 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Map<String, Object> getTeacher(Integer majorId){
+    public Map<String, Object> getTeacher(Integer collegeId){
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-        List<Useridentity> useridentities = userIdentityDAO.listTeaIdentity(majorId);
+        List<Useridentity> useridentities = userIdentityDAO.listTeaIdentity(collegeId);
         List<Map<String, Object>> teacherMapList = new ArrayList<>();
         Map<String, Object> teacherMap;
         for(Useridentity useridentity:useridentities){
@@ -857,8 +857,6 @@ public class AdminServiceImpl implements AdminService{
             teacherMap.put("teacherName",useridentity.getName());
             teacherMap.put("collegeID",useridentity.getCollegeByCollegeId().getId());
             teacherMap.put("collegeName",useridentity.getCollegeByCollegeId().getName());
-            teacherMap.put("majorID",useridentity.getMajorByMajorId().getId());
-            teacherMap.put("majorName",useridentity.getMajorByMajorId().getName());
             teacherMapList.add(teacherMap);
         }
         result.put("TeacherInfos", teacherMapList);
