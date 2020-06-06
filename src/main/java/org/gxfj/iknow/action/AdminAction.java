@@ -335,7 +335,18 @@ public class AdminAction {
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
-    
+
+    /**
+     * 获取学院信息
+     * @return “SUCCESS”
+     */
+    public String getColleges(){
+        Map<String,Object> result;
+        result = adminService.getColleges(schoolID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
