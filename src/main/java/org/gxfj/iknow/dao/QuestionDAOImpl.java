@@ -86,11 +86,7 @@ public class QuestionDAOImpl implements QuestionDAO {
         Question question = null;
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Question WHERE (id = ?) and (isDelete = 0)");
-        List<Question> list = query.setInteger(0, id).list();
-        if (!list.isEmpty()) {
-            question = list.get(0);
-        }
-        return question;
+        return (Question)query.setInteger(0, id).uniqueResult();
     }
 
     @Override
