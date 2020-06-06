@@ -371,6 +371,17 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获取教师信息
+     * @return “SUCCESS”
+     */
+    public String getTeacher(){
+        Map<String,Object> result;
+        result = adminService.getTeacher(majorID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
