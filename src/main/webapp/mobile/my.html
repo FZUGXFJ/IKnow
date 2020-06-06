@@ -85,9 +85,10 @@
                     <td style="text-align: right">{{inf.badgeNum}}</td>
                 </table>
                 <div id="achievementList">
-                    <span v-for="inf.achievementList" class="achievementItem">
-
-                    </span>
+                    <div v-for="achievement in inf.achievementList" class="achievementItem" @click="popupVisible=true">
+                        <i class="fas fa-trophy" style="color: #d48d00"></i>
+                        {{achievement.achievementName}}
+                    </div>
                 </div>
             </div>
             <br>
@@ -162,7 +163,8 @@
             recommendPage:true,
             loading:0,
             start:0,
-            loaded:false
+            loaded:false,
+            popupVisible:false
         },
         methods:{
             logout:function () {
