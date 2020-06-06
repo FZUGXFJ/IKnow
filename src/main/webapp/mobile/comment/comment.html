@@ -432,7 +432,8 @@
                     commentNum:this.commentNum,
                     start:this.start,
                     hasMore:this.hasMore,
-                    sortType:this.sortType
+                    sortType:this.sortType,
+                    answerId:this.answerId
                 };
                 sessionStorage.setItem("commentsInfo",JSON.stringify(commentsInfo));
             },
@@ -616,12 +617,14 @@
             loc = loc.replace("?","&").split("&");
             let answerId = loc[1];
             if (answerId.indexOf("answerId=")!==-1) {
-                answerId = answerId.replace("answerId=","");
+                answerId = parseInt(answerId.replace("answerId=",""));
                 this.answerId = answerId;
             } else {
                 location.href = "../../error/mobile/404error.html"
             }
-            if (sessionStorage.getItem("comments") != null && sessionStorage.getItem("commentsInfo") != null) {
+            if (sessionStorage.getItem("comments") != null
+                && sessionStorage.getItem("commentsInfo") != null
+                && JSON.parse(sessionStorage.getItem("commentsInfo")).answerId === answerId) {
                 this.loadLocalData();
                 this.load = true;
                 return;
