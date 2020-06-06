@@ -562,6 +562,60 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="getSchools" class="org.gxfj.iknow.action.AdminAction" method="getSchools">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="getColleges" class="org.gxfj.iknow.action.AdminAction" method="getColleges">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="getMajor" class="org.gxfj.iknow.action.AdminAction" method="getMajor">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="getStudent" class="org.gxfj.iknow.action.AdminAction" method="getStudent">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="getTeacher" class="org.gxfj.iknow.action.AdminAction" method="getTeacher">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="delCollege" class="org.gxfj.iknow.action.AdminAction" method="delCollege">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="delMajor" class="org.gxfj.iknow.action.AdminAction" method="delMajor">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="delStudent" class="org.gxfj.iknow.action.AdminAction" method="delStudent">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="delSchool" class="org.gxfj.iknow.action.AdminAction" method="delSchool">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
 
     </package>
 
