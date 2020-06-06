@@ -610,6 +610,12 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
+        <action name="delTeacher" class="org.gxfj.iknow.action.AdminAction" method="delTeacher">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
         <action name="delSchool" class="org.gxfj.iknow.action.AdminAction" method="delSchool">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>

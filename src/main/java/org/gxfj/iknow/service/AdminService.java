@@ -263,4 +263,12 @@ public interface AdminService {
      * @return 结果码
      */
     Map<String, Object> delStudent(Integer schoolId, Integer studentNum);
+
+    /**
+     * 删除教师
+     * @param schoolId 学校Id
+     * @param jobNum 工号
+     * @return 结果码
+     */
+    Map<String, Object> delTeacher(Integer schoolId, Integer jobNum);
 }
