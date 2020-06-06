@@ -603,8 +603,9 @@ public class AdminServiceImpl implements AdminService{
         if(school1 != null){
             result.put("schoolID", school1.getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SCHOOL_IS_EXIST);
-        }
-        else{
+        }else if(schoolName == ""){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SCHOOLNAME_IS_BLANK);
+        } else{
             School school = new School();
             school.setName(schoolName);
             schoolDAO.add(school);
