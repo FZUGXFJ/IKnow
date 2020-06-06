@@ -324,8 +324,8 @@
                         </thead>
                         <tbody align="center">
                         <tr v-for="(teacherInfo,i) in subArr">
-                            <td>{{teacherInfo.studentID}}</td>
-                            <td>{{teacherInfo.studentName}}</td>
+                            <td>{{teacherInfo.teacherID}}</td>
+                            <td>{{teacherInfo.teacherName}}</td>
                             <td>{{teacherInfo.collegeID}}</td>
                             <td>{{teacherInfo.collegeName}}</td>
                             <td>
@@ -527,7 +527,7 @@
             //读第二个Sheet文件内容
             var itemTwo = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]]));
             console.log(itemTwo);
-            itemTwo = JSON.parse(itemTwo);
+            identifySchool.teachersInfo = itemTwo;
             // layer.closeAll();
         }
         reader.readAsBinaryString(f);
@@ -739,7 +739,7 @@
                             identifySchool.majorPage=false;
                             identifySchool.studentPage=false;
                             identifySchool.teacherPage=true;
-                            identifySchool.teacherInfoList=result.teacherInfoList;
+                            identifySchool.teacherInfoList=result.TeacherInfos;
                         }
                     },
                     error: function (request, status, error) {
@@ -750,7 +750,7 @@
                     }
                 });
             },
-            uploadSchool: function(schoolName,studentsInfo){
+            uploadSchool: function(schoolName,studentsInfo,teachersInfo){
                 $.ajax({
                     url: "../admin/saveSchool.action",
                     type: "POST",
@@ -760,7 +760,15 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.resultCode === 0) {
-                            identifySchool.uploadStudentsInfo(studentsInfo,result.schoolID,schoolName);
+                            identifySchool.uploadStudentsInfo(studentsInfo,result.schoolID,schoolName,0);
+                            identifySchool.uploadTeachersInfo(teachersInfo,result.schoolID);
+                        }
+                        if (result.resultCode === 1) {
+                            identifySchool.uploadStudentsInfo(studentsInfo,result.schoolID,schoolName,1);
+                            identifySchool.uploadTeachersInfo(teachersInfo,result.schoolID);
+                        }
+                        if (result.resultCode === 2) {
+                            alert("未选择文件");
                         }
                     },
                     error: function (request, status, error) {
@@ -771,7 +779,7 @@
                     }
                 });
             },
-            uploadStudentsInfo: function(studentsInfo,schoolID,schoolName){
+            uploadStudentsInfo: function(studentsInfo,schoolID,schoolName,type){
                 $.ajax({
                     url: "../admin/saveStudents.action",
                     type: "POST",
@@ -783,19 +791,36 @@
                     success: function (result) {
                         if (result.resultCode === 0) {
                             alert("录入成功");
-                            let obj = new Object();
-                            obj.schoolID = schoolID;
-                            obj.schoolName = schoolName;
-                            obj.collegeNums = result.collegeInfo.length;
-                            obj.majorNums = result.majorInfo.length;
-                            identifySchool.schoolInfoList.push(obj);
-                            console.log(identifySchool.schoolInfoList[0]);
+                            if(type===0) {
+                                let obj = new Object();
+                                obj.schoolID = schoolID;
+                                obj.schoolName = schoolName;
+                                obj.collegeNums = result.collegeInfo.length;
+                                obj.majorNums = result.majorInfo.length;
+                                identifySchool.schoolInfoList.push(obj);
+                                console.log(identifySchool.schoolInfoList[0]);
+                            }
                         }
-                        if (result.resultCode === 1) {
-                            alert("录入成功");
-                        }
-                        if (result.resultCode === 1) {
-                            alert("xlsx文件格式有误");
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            uploadTeachersInfo: function(teachersInfo,schoolID){
+                $.ajax({
+                    url: "../admin/saveTeachers.action",
+                    type: "POST",
+                    data: {
+                        teachersInfo:teachersInfo,
+                        schoolID:schoolID
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
                         }
                     },
                     error: function (request, status, error) {
@@ -807,7 +832,7 @@
                 });
             },
             upload: function(){
-                this.uploadSchool(identifySchool.schoolName,identifySchool.studentsInfo);
+                this.uploadSchool(identifySchool.schoolName,identifySchool.studentsInfo,identifySchool.teachersInfo);
             },
             getReportType: function(reportType){
                 $.ajax({
@@ -837,8 +862,160 @@
                     }
                 });
             },
+            delOneSchool: function(i,n){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/delSchool.action",
+                    data:{
+                        schoolID:i,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if(identifySchool.schoolPage)
+                            {
+                                identifySchool.schoolInfoList.splice(n,1);
+                                if((identifySchool.schoolInfoList.length+1)%15==1&&identifySchool.cur==identifySchool.all){
+                                    identifySchool.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                identifySchool.page();
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delOneCollege: function(i,n){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/delCollege.action",
+                    data:{
+                        collegeID:i,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if(identifySchool.collegePage)
+                            {
+                                identifySchool.collegeInfoList.splice(n,1);
+                                if((identifySchool.collegeInfoList.length+1)%15==1&&identifySchool.cur==identifySchool.all){
+                                    identifySchool.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                identifySchool.page();
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delOneMajor: function(i,n){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/delMajor.action",
+                    data:{
+                        majorID:i,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if(identifySchool.majorPage)
+                            {
+                                identifySchool.majorInfoList.splice(n,1);
+                                if((identifySchool.majorInfoList.length+1)%15==1&&identifySchool.cur==identifySchool.all){
+                                    identifySchool.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                identifySchool.page();
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delOneStudent: function(i,si,n){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/delStudent.action",
+                    data:{
+                        studentID:i,
+                        schoolID:si
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if(identifySchool.studentPage)
+                            {
+                                identifySchool.studentInfoList.splice(n,1);
+                                if((identifySchool.studentInfoList.length+1)%15==1&&identifySchool.cur==identifySchool.all){
+                                    identifySchool.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                identifySchool.page();
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            delOneTeacher: function(i,si,n){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/delTeacher.action",
+                    data:{
+                        teacherID:i,
+                        schoolID:si
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if(identifySchool.teacherPage)
+                            {
+                                identifySchool.teacherInfoList.splice(n,1);
+                                if((identifySchool.teacherInfoList.length+1)%15==1&&identifySchool.cur==identifySchool.all){
+                                    identifySchool.cur--;
+                                }   //当最后一页的最后一条数据被删除时，也要改变当前页面
+                                identifySchool.page();
+                            }
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
             page: function(){
-                identifySchool.all = Math.ceil(identifySchool.schoolInfoList.length/15) || 1;
+                if(this.schoolPage)
+                    identifySchool.all = Math.ceil(identifySchool.schoolInfoList.length / 15) || 1;
+                if(this.collegePage)
+                    identifySchool.all = Math.ceil(identifySchool.collegeInfoList.length/15) || 1;
+                if(this.majorPage)
+                    identifySchool.all = Math.ceil(identifySchool.majorInfoList.length/15) || 1;
+                if(this.studentPage)
+                    identifySchool.all = Math.ceil(identifySchool.studentInfoList.length/15) || 1;
+                if(this.teacherPage)
+                    identifySchool.all = Math.ceil(identifySchool.teacherInfoList.length/15) || 1;
+                identifySchool.cur = 1;
                 console.log(identifySchool.all);
             },
             btnClick: function(data){
@@ -912,6 +1089,8 @@
                     return this.majorInfoList.slice((this.cur-1)*15,this.cur*15);
                 if(this.studentPage)
                     return this.studentInfoList.slice((this.cur-1)*15,this.cur*15);
+                if(this.teacherPage)
+                    return this.teacherInfoList.slice((this.cur-1)*15,this.cur*15);
             }
         },
         mounted:function () {
