@@ -68,7 +68,7 @@ public class Major {
         this.collegeByCollegeId = collegeByCollegeId;
     }
 
-    @OneToMany(mappedBy = "majorByMajorId")
+    @OneToMany(mappedBy = "majorByMajorId",orphanRemoval=true)
     public Collection<Useridentity> getUseridentitiesById() {
         return useridentitiesById;
     }

@@ -1,6 +1,7 @@
 package org.gxfj.iknow.pojo;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -61,7 +62,7 @@ public class School {
         return result;
     }
 
-    @OneToMany(mappedBy = "schoolBySchoolId")
+    @OneToMany(mappedBy = "schoolBySchoolId",orphanRemoval=true)
     public Collection<College> getCollegesById() {
         return collegesById;
     }
@@ -70,7 +71,7 @@ public class School {
         this.collegesById = collegesById;
     }
 
-    @OneToMany(mappedBy = "schoolBySchoolId")
+    @OneToMany(mappedBy = "schoolBySchoolId",orphanRemoval=true)
     public Collection<Useridentity> getUseridentitiesById() {
         return useridentitiesById;
     }

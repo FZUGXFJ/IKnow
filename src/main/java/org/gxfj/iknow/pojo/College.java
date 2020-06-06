@@ -62,7 +62,7 @@ public class College {
         return result;
     }
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "schoolID", referencedColumnName = "id", nullable = false)
     public School getSchoolBySchoolId() {
         return schoolBySchoolId;
@@ -72,7 +72,7 @@ public class College {
         this.schoolBySchoolId = schoolBySchoolId;
     }
 
-    @OneToMany(mappedBy = "collegeByCollegeId")
+    @OneToMany(mappedBy = "collegeByCollegeId",orphanRemoval=true)
     public Collection<Major> getMajorsById() {
         return majorsById;
     }
@@ -81,7 +81,7 @@ public class College {
         this.majorsById = majorsById;
     }
 
-    @OneToMany(mappedBy = "collegeByCollegeId")
+    @OneToMany(mappedBy = "collegeByCollegeId",orphanRemoval=true)
     public Collection<Useridentity> getUseridentitiesById() {
         return useridentitiesById;
     }
