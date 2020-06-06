@@ -599,14 +599,14 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String, Object> saveSchool(String schoolName) {
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-        School school = new School();
-        school.setName(schoolName);
-        schoolDAO.add(school);
         School school1 = schoolDAO.getSchoolByName(schoolName);
-        if(school1 == null){
-            System.out.println("存入失败！");
+        if(school1 != null){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         else{
+            School school = new School();
+            school.setName(schoolName);
+            schoolDAO.add(school);
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             result.put("schoolID", school1.getId());
         }
