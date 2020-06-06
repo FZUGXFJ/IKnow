@@ -38,6 +38,7 @@ public class ConstantUtil {
     public final static int DAILY_ACTIVE_USER_STATICS_LENGTH = 7;
     public final static int MONTHLY_ACTIVATE_USER_STATICS_TYPE_CODE = 1;
     public final static int MONTHLY_ACTIVATE_USER_STATICS_LENGTH = 3;
+    public final static int SCHOOL_IS_EXIST = 1;
 
 
     //Answer

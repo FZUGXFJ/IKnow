@@ -602,7 +602,7 @@ public class AdminServiceImpl implements AdminService{
         School school1 = schoolDAO.getSchoolByName(schoolName);
         if(school1 != null){
             result.put("schoolID", school1.getId());
-            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SCHOOL_IS_EXIST);
         }
         else{
             School school = new School();
