@@ -714,10 +714,10 @@ public class AdminServiceImpl implements AdminService{
         if(!JsonUtil.isJsonArray(teachersInfo)){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.IS_NOT_JSON_ARRAY);
         }else {
-            /*List<Map<String, Object>> teachersInfoMap = (List<Map<String,Object>>) JSONArray.parse(teachersInfo);
+            List<Map<String, Object>> teachersInfoMap = (List<Map<String,Object>>) JSONArray.parse(teachersInfo);
 
             for(Map<String, Object> teacherInfoMap:teachersInfoMap){
-                String teacherNO = (String)teacherInfoMap.get("工号");
+                Integer teacherNO = (Integer)teacherInfoMap.get("工号");
                 String name = (String)teacherInfoMap.get("姓名");
                 String college = (String)teacherInfoMap.get("学院");
 
@@ -725,12 +725,12 @@ public class AdminServiceImpl implements AdminService{
                 useridentity.setName(name);
                 useridentity.setSchoolBySchoolId(schoolDAO.get(schoolID));
                 useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college));
-                useridentity.setJobNum(Integer.parseInt(teacherNO));
+                useridentity.setJobNum(teacherNO);
                 useridentity.setType("教师");
                 userIdentityDAO.add(useridentity);
             }
-            */
-            JSONArray teachersInfoMap = JSONArray.parseArray(teachersInfo);
+
+            /*JSONArray teachersInfoMap = JSONArray.parseArray(teachersInfo);
 
             if(teachersInfoMap.size()>0) {
                 for(int i = 0;i < teachersInfoMap.size(); i ++) {
@@ -747,7 +747,7 @@ public class AdminServiceImpl implements AdminService{
                     useridentity.setType("教师");
                     userIdentityDAO.add(useridentity);
                 }
-            }
+            }*/
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         return result;
