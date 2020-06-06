@@ -263,7 +263,7 @@ public class CommentServiceImpl implements CommentService {
             commentMap.put("approveNum",comment.getCount());
             commentMap.put("isQuestionOwner",questionOwner.getId().equals(commentUser.getId()) ? 1 : 0);
             commentMap.put("isAnswerer",answerOwner.getId().equals(commentUser.getId()) ? 1 : 0);
-
+            commentMap.put("viewerIsOwner", 0);
             //如果当前浏览者已登录，且评论有人点赞，且用户对该评论点过赞则为1,否则为0
             if (visitor != null) {
                 //判断浏览者是否为该评论的评论者
