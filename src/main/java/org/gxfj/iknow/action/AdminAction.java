@@ -46,6 +46,7 @@ public class AdminAction {
     private Integer school;
     private String college;
     private Integer collegeID;
+    private Integer majorID;
 
     @Autowired
     private AdminService adminService;
@@ -359,6 +360,17 @@ public class AdminAction {
         return ConstantUtil.RETURN_STRING;
     }
 
+    /**
+     * 获取学生信息
+     * @return “SUCCESS”
+     */
+    public String getStudent(){
+        Map<String,Object> result;
+        result = adminService.getStudent(majorID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
     public Integer getAccountNum() {
         return accountNum;
     }
@@ -557,5 +569,13 @@ public class AdminAction {
 
     public void setCollegeID(Integer collegeID) {
         this.collegeID = collegeID;
+    }
+
+    public Integer getMajorID() {
+        return majorID;
+    }
+
+    public void setMajorID(Integer majorID) {
+        this.majorID = majorID;
     }
 }

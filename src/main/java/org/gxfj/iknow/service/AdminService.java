@@ -221,4 +221,10 @@ public interface AdminService {
      * @return 包含所有专业信息以及响应码的返回信息
      */
     Map<String, Object> getMajor(Integer collegeId);
+
+    /**
+     * 获取所有学生信息
+     * @return 包含所有专业内的学生信息以及响应码的返回信息
+     */
+    Map<String, Object> getStudent(Integer majorId);
 }
