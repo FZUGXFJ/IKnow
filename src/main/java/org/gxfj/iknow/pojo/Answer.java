@@ -8,6 +8,8 @@ import java.util.Date;
 public class Answer {
     public static final byte ANSWER_UN_DELETED = 0;
     public static final byte ANSWER_DELETED = 1;
+    public static final byte ANSWER_ANONYMOUS = 1;
+    public static final byte ANSWER_UN_ANONYMOUS = 0;
 
     private Integer id;
     private String contentHtml;
