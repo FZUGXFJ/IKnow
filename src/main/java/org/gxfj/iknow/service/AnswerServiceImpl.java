@@ -476,7 +476,7 @@ public class AnswerServiceImpl implements AnswerService{
         }
 
         //获得所有的回答
-        List<Answer> answerList = answerDAO.list();
+        List<Answer> answerList = answerDAO.listLastAnswerNoDelete();
         int answersLength = answerList.size();
         //获得所有的非封禁用户uid
         List<Integer> userIdList = userDAO.getAllUserId();
