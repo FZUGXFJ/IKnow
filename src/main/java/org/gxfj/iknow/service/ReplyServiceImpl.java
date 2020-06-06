@@ -223,9 +223,15 @@ public class ReplyServiceImpl implements ReplyService {
      * @return 是否匿名（boolean）
      */
     private boolean isAnonymous(Comment comment){
+        Integer commentOnwerUserId = comment.getUserByUserId().getId();
         Answer answer = comment.getAnswerByAnswerId();
         Question question = answer.getQuestionByQuestionId();
-        if(answer.getIsAnonymous() == 1 || question.getIsAnonymous() == 1){
+        if ((answer.getUserByUserId().getId().equals(commentOnwerUserId)
+                && answer.getIsAnonymous() == Answer.ANSWER_ANONYMOUS)) {
+            return true;
+        }
+        if ((question.getUserByUserId().getId().equals(commentOnwerUserId)
+                && question.getIsAnonymous() == Question.QUESTION_ANONYMOUS)) {
             return true;
         }
         return false;
