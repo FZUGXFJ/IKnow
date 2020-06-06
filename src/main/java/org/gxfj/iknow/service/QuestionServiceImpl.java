@@ -63,9 +63,8 @@ public class QuestionServiceImpl implements QuestionService{
     final static private int MILLIS_PER_MINUTE = 60;
 
     @Override
-    public Map<String, Object> postQuestion(String title, String context, Integer categoryType, Integer subjectType
-            , Integer majorType, Byte isAnonymous) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> postQuestion(User user, String title, String context, Integer categoryType,
+                                            Integer subjectType, Integer majorType, Byte isAnonymous) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
@@ -115,8 +114,7 @@ public class QuestionServiceImpl implements QuestionService{
     final static private int MAP_NUM = 20;
 
     @Override
-    public Map<String, Object> getQuestionType() {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> getQuestionType(User user) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if(user == null) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
@@ -164,8 +162,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> getQuestion(Integer questionId, Integer length,Integer sort){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> viewQuestionService(User user, Integer questionId, Integer length, Integer sort){
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (sort == null){
             sort = ConstantUtil.ANSWER_DEFAULT_SORT;
@@ -341,8 +338,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> cancelAnonymous(Integer questionId){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> cancelAnonymous(User user, Integer questionId){
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         User viewUser = get(questionId);
         boolean isQuestionUser = (user != null && user.getId().equals(viewUser.getId()));
@@ -397,8 +393,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> deleteQuestion(Integer questionId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> deleteQuestion(User user, Integer questionId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.UN_LOGIN);
@@ -427,9 +422,8 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> getQuestioninf(Integer questionId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String,Object> result = getQuestionType();
+    public Map<String, Object> getQuestioninf(User user, Integer questionId) {
+        Map<String,Object> result = getQuestionType(user);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,1);;
         }
@@ -448,11 +442,17 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String,Object> updateQuesiton(Integer questionId, String newQuestionTitle, String newQuestionContent,
-                                             Integer newCategoriesType, Integer newSubjectType, Integer newMajorType) {
+    public Map<String,Object> updateQuesiton(User user, Integer questionId, String newQuestionTitle,
+                                             String newQuestionContent, Integer newCategoriesType,
+                                             Integer newSubjectType, Integer newMajorType) {
+
         Map<String,Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
 
-        if (!TextVerifyUtil.verifyCompliance(newQuestionTitle) && !TextVerifyUtil.verifyCompliance(newQuestionContent)) {
+        if (user == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, UN_LOGIN);
+            return result;
+        } else if (!TextVerifyUtil.verifyCompliance(newQuestionTitle)
+                && !TextVerifyUtil.verifyCompliance(newQuestionContent)) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL);
             return result;
         }
@@ -470,8 +470,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String, Object> findUser(String keyword) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> findUser(User user, String keyword) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if(user == null){
             result.put(JSON_RETURN_CODE_NAME, UN_LOGIN);
@@ -511,8 +510,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Map<String,Object> inviteAnswer(Integer questionId, Integer userId){
-        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
+    public Map<String,Object> inviteAnswer(User user, Integer questionId, Integer userId){
         Map<String,Object> result = new HashMap<>();
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
