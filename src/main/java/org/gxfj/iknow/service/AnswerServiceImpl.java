@@ -111,42 +111,49 @@ public class AnswerServiceImpl implements AnswerService{
     public Map<String, Object> viewAnswer(User user, Integer questionId, Integer answerId) {
 
         Map<String , Object> result = new HashMap<>(MAP_NUM);
-        if(user!=null) {
-            insertBrowsing(user,questionDAO.get(questionId),answerDAO.get(answerId));
-        }
-        //获得回答关联的问题
-        result.put("question" , getQuestionMap(questionId));
-        //获得回答答主
-        result.put("answerer" , getAnswererMap(answerId));
-        //回答的信息转化为json格式
-        //获得一个存储评论列表
-        result.put("comments" , getCommentsMap(questionId, answerId,user));
-        //获得查看回答的用户的头像
-        //未登录
-        if(user == null){
-            result.put("userHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
-            result.put("answer" , getAnswerMap(questionId, answerId,null));
-        }
-        //已登录
-        else{
-            result.put("answer" , getAnswerMap(questionId, answerId,user.getId()));
-            result.put("userHead" , ImgUtil.changeAvatar(user.getHead(), 2));
-        }
 
-        Answer answer=answerDAO.getNotDelete(answerId);
-        int viewerIsAnswerer = 0;
-        int viewerIsQuestionOwner = 0;
-        if (user != null) {
-            if (user.getId().equals(answer.getQuestionByQuestionId().getUserByUserId().getId())) {
-                viewerIsQuestionOwner = 1;
+        Answer answer = answerDAO.getNotDelete(answerId);
+        //问题是否存在
+        if (answer == null ) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_NON_EXISTENT);
+        } else {
+
+            if (user != null) {
+                insertBrowsing(user, questionDAO.get(questionId), answerDAO.get(answerId));
             }
-            if (user.getId().equals(answer.getUserByUserId().getId())) {
-                viewerIsAnswerer = 1;
+            //获得回答关联的问题
+            result.put("question", getQuestionMap(questionId));
+            //获得回答答主
+            result.put("answerer", getAnswererMap(answerId));
+            //回答的信息转化为json格式
+            //获得一个存储评论列表
+            result.put("comments", getCommentsMap(questionId, answerId, user));
+            //获得查看回答的用户的头像
+            //未登录
+            if (user == null) {
+                result.put("userHead", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
+                result.put("answer", getAnswerMap(questionId, answerId, null));
             }
+            //已登录
+            else {
+                result.put("answer", getAnswerMap(questionId, answerId, user.getId()));
+                result.put("userHead", ImgUtil.changeAvatar(user.getHead(), 2));
+            }
+
+            int viewerIsAnswerer = 0;
+            int viewerIsQuestionOwner = 0;
+            if (user != null) {
+                if (user.getId().equals(answer.getQuestionByQuestionId().getUserByUserId().getId())) {
+                    viewerIsQuestionOwner = 1;
+                }
+                if (user.getId().equals(answer.getUserByUserId().getId())) {
+                    viewerIsAnswerer = 1;
+                }
+            }
+            result.put("viewerIsAnswerer", viewerIsAnswerer);
+            result.put("viewerIsQuestionOwner", viewerIsQuestionOwner);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
-        result.put("viewerIsAnswerer", viewerIsAnswerer);
-        result.put("viewerIsQuestionOwner", viewerIsQuestionOwner);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
