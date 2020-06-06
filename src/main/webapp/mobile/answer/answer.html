@@ -521,7 +521,7 @@
                 this.answerId = answerId;
                 this.questionId = questionId;
             } else {
-                //location.href = "../../error/mobile/404error.html"
+                location.href = "../../error/mobile/404error.html"
             }
             $.ajax({
                 url:"../../answer/viewAnswer.action",
@@ -541,6 +541,10 @@
                         answer.viewerIsAnswerer = result.viewerIsAnswerer;
                         answer.viewerIsQuestionOwner = result.viewerIsQuestionOwner;
                         answer.load = true;
+                    } else if (result.resultCode === 12) {
+                        answer.$messagebox.alert("内容不存在").then(action => {
+                            history.go(-1);
+                        });
                     }
                 },
                 error:function (request,status,error) {

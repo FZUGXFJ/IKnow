@@ -473,6 +473,10 @@
                             allComment.load = true;
                             allComment.start += result.comments.length;
                             allComment.hasMore = result.comments.length >= 20;
+                        } else if (result.resultCode === 12) {
+                            allComment.$messagebox.alert("内容不存在").then(action => {
+                                history.go(-1);
+                            });
                         }
                     },
                     error:function (request,status,error) {
