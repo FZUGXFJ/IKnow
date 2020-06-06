@@ -633,16 +633,16 @@ public class AdminServiceImpl implements AdminService{
                     Integer studentNum = (Integer) studentInfoMap.get("学号");
                     String realname = (String) studentInfoMap.get("姓名");
 
-                    if(collegeDAO.getCollegeByName(collegeName) == null){
+                    if(collegeDAO.getCollegeByName(collegeName,schoolId) == null){
                         College college = new College();
                         college.setSchoolBySchoolId(schoolDAO.get(schoolId));
                         college.setName(collegeName);
                         collegeDAO.add(college);
                     }
 
-                    if(majorDAO.getMajorByName(majorName) == null){
+                    if(majorDAO.getMajorByName(majorName,collegeDAO.getCollegeByName(collegeName,schoolId).getId()) == null){
                         Major major = new Major();
-                        major.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
+                        major.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName,schoolId));
                         major.setName(majorName);
                         majorDAO.add(major);
                     }
@@ -650,8 +650,9 @@ public class AdminServiceImpl implements AdminService{
                     if(userIdentityDAO.getStudentIdentity(schoolId, studentNum) == null){
                         Useridentity useridentity = new Useridentity();
                         useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
-                        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
-                        useridentity.setMajorByMajorId(majorDAO.getMajorByName(majorName));
+                        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName,schoolId));
+                        useridentity.setMajorByMajorId(majorDAO.getMajorByName(majorName,
+                                collegeDAO.getCollegeByName(collegeName,schoolId).getId()));
                         useridentity.setStudentNum(studentNum);
                         useridentity.setName(realname);
                         useridentity.setType("学生");
@@ -698,8 +699,8 @@ public class AdminServiceImpl implements AdminService{
         Useridentity useridentity = new Useridentity();
         useridentity.setName(name);
         useridentity.setSchoolBySchoolId(schoolDAO.get(school));
-        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college));
-        useridentity.setMajorByMajorId(majorDAO.getMajorByName(major));
+        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college,school));
+        useridentity.setMajorByMajorId(majorDAO.getMajorByName(major,collegeDAO.getCollegeByName(college,school).getId()));
         useridentity.setStudentNum(Integer.parseInt(studentNO));
         useridentity.setType("学生");
         userIdentityDAO.add(useridentity);
@@ -717,15 +718,15 @@ public class AdminServiceImpl implements AdminService{
             List<Map<String, Object>> teachersInfoMap = (List<Map<String,Object>>) JSONArray.parse(teachersInfo);
 
             for(Map<String, Object> teacherInfoMap:teachersInfoMap){
-                String teacherNO = (String)teacherInfoMap.get("工号");
+                Integer teacherNO = (Integer) teacherInfoMap.get("工号");
                 String name = (String)teacherInfoMap.get("姓名");
                 String college = (String)teacherInfoMap.get("学院");
 
                 useridentity = new Useridentity();
                 useridentity.setName(name);
                 useridentity.setSchoolBySchoolId(schoolDAO.get(schoolID));
-                useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college));
-                useridentity.setJobNum(Integer.parseInt(teacherNO));
+                useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college,schoolID));
+                useridentity.setJobNum(teacherNO);
                 useridentity.setType("教师");
                 userIdentityDAO.add(useridentity);
             }
@@ -741,7 +742,7 @@ public class AdminServiceImpl implements AdminService{
         Useridentity useridentity = new Useridentity();
         useridentity.setName(name);
         useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
-        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college));
+        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college,schoolId));
         useridentity.setJobNum(Integer.parseInt(teacherNO));
         useridentity.setType("教师");
         userIdentityDAO.add(useridentity);

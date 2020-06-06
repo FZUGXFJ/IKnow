@@ -603,7 +603,13 @@
                         sessionStorage.setItem("questionData",JSON.stringify(question.questionData));
                         question.saveInfo();
                     } else if (result.resultCode === 1) {
-                        alert("问题找不到！")
+                        question.$messagebox.alert("问题找不到").then(action => {
+                            history.go(-1);
+                        });
+                    } else if (result.resultCode === 12) {
+                        question.$messagebox.alert("内容不存在").then(action => {
+                            history.go(-1);
+                        });
                     }
                 },
                 error:function (e) {

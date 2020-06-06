@@ -351,6 +351,10 @@
                                 allReply.$messagebox.confirm("请先登录").then(action =>{
                                     location.href = "../user/login.html?boot=0";
                                 }).catch(action =>{});
+                            } else if (result.resultCode === 12) {
+                                allReply.$messagebox.alert("内容不存在").then(action => {
+                                    history.go(-1);
+                                });
                             }
                             allReply.noAction = false;
                         },

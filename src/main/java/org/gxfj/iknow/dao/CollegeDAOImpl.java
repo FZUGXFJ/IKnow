@@ -45,11 +45,12 @@ public class CollegeDAOImpl implements CollegeDAO{
     }
 
     @Override
-    public College getCollegeByName(String collegeName) {
+    public College getCollegeByName(String collegeName, Integer schoolId) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "from College as c WHERE c.name = :collegeName";
+        String hql = "from College as c WHERE name = :collegeName and schoolID = :schoolId";
         Query query = session.createQuery(hql);
-        return (College) query.setParameter("collegeName",collegeName).uniqueResult();
+        return (College) query.setParameter("collegeName",collegeName)
+                .setParameter("schoolId",schoolId).uniqueResult();
     }
 
     @Override
