@@ -601,6 +601,7 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         School school1 = schoolDAO.getSchoolByName(schoolName);
         if(school1 != null){
+            result.put("schoolID", school1.getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         else{
@@ -608,7 +609,7 @@ public class AdminServiceImpl implements AdminService{
             school.setName(schoolName);
             schoolDAO.add(school);
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-            result.put("schoolID", school1.getId());
+            result.put("schoolID", schoolDAO.getSchoolByName(schoolName).getId());
         }
         return result;
     }
