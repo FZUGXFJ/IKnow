@@ -289,7 +289,7 @@ public class AnswerServiceImpl implements AnswerService{
         Map<String , Object> result = new HashMap<>(ConstantUtil.RESPONSE_NUM);
         if (user != null) {
             if (adoptAnswer(user, answerId)) {
-                //用户已登录，且用户为题主，返回采纳成功
+                //用户已登录，且用户为题主，且该问题未解决，返回采纳成功
                 result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             } else {
                 //用户已登录，但用户不是题主，返回用户不是提问者
@@ -306,6 +306,10 @@ public class AnswerServiceImpl implements AnswerService{
         Answer answer = answerDAO.getNotDelete(answerId);
         Question question = answer.getQuestionByQuestionId();
 
+        if (question.getQuestionstateByStateId().getId().equals(Questionstate.QUESTION_STATE_SOLVED_ID)) {
+            return false;
+        }
+
         //构造已解决的问题状态对象
         Questionstate questionstate = new Questionstate();
         questionstate.setId(Questionstate.QUESTION_STATE_SOLVED_ID);
@@ -319,7 +323,7 @@ public class AnswerServiceImpl implements AnswerService{
             Integer badgeNum = user.getBadgeNum();
 
             answer.getUserByUserId().setBadgeNum(answer.getUserByUserId().getBadgeNum() + 1);
-            userDAO.update(user);
+            userDAO.update(answer.getUserByUserId());
 
             //成就
             switch (answer.getUserByUserId().getBadgeNum()) {
