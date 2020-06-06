@@ -73,38 +73,42 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<String, Object> getComments(User user, Integer answerId, Integer sort){
+    public Map<String, Object> viewComments(User user, Integer answerId, Integer sort){
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
-        Integer commentsSort;
-        if (sort == null) {
-            commentsSort = ConstantUtil.COMMENT_DEFAULT_SORT;
-        }
-        else {
-            commentsSort = sort;
-        }
-        ActionContext.getContext().getSession().put("commentsort",commentsSort);
-        //获取问题下的20条评论
-        List<Comment> comments = commentDAO.listByAnswerIdSort(answerId,0,20,commentsSort);
-        //json数组
-        List<Map<String, Object>> commentListMap;
+
         //获取回答
         Answer answer = answerDAO.getNotDelete(answerId);
-        //获取问题
-        Question question = answer.getQuestionByQuestionId();
-        //获取回答者
-        User answerOwner = answer.getUserByUserId();
-        //获取题主
-        User questionOwner = question.getUserByUserId();
-        //获取问题评论数
-        Integer count = commentDAO.getCount(answerId);
-        result.put("commentNum",count);
-        if (count != 0) {
-            commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, user);
+        if (answer == null) {
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JSON_RESULT_CODE_NON_EXISTENT);
         } else {
-            commentListMap = new ArrayList<>();
+
+            Integer commentsSort;
+            if (sort == null) {
+                commentsSort = ConstantUtil.COMMENT_DEFAULT_SORT;
+            } else {
+                commentsSort = sort;
+            }
+            //获取问题下的20条评论
+            List<Comment> comments = commentDAO.listByAnswerIdSort(answerId, 0, 20, commentsSort);
+            //json数组
+            List<Map<String, Object>> commentListMap;
+            //获取问题
+            Question question = answer.getQuestionByQuestionId();
+            //获取回答者
+            User answerOwner = answer.getUserByUserId();
+            //获取题主
+            User questionOwner = question.getUserByUserId();
+            //获取问题评论数
+            Integer count = commentDAO.getCount(answerId);
+            result.put("commentNum", count);
+            if (count != 0) {
+                commentListMap = getCommentsMapArray(comments, questionOwner, answerOwner, question, answer, user);
+            } else {
+                commentListMap = new ArrayList<>();
+            }
+            result.put("comments", commentListMap);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
-        result.put("comments",commentListMap);
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
@@ -336,7 +340,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Map<String, Object> moreComments(User user, Integer answerId, Integer start, Integer sort){
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
-//        Integer sort =(Integer)ActionContext.getContext().getSession().get("commentsort");
         if(sort ==null){
             sort =ConstantUtil.COMMENT_DEFAULT_SORT;
         }

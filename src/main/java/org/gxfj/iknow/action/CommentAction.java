@@ -11,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
-
-import static org.gxfj.iknow.util.ServiceConstantUtil.JSON_RESULT_CODE_VERIFY_TEXT_FAIL;
 
 /**
  * @author hhj
@@ -68,7 +65,7 @@ public class CommentAction {
      */
     public String viewComments(){
         User user = (User) ActionContext.getContext().getSession().get("user");
-        Map<String, Object> response = commentService.getComments(user, answerId, sort);
+        Map<String, Object> response = commentService.viewComments(user, answerId, sort);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
