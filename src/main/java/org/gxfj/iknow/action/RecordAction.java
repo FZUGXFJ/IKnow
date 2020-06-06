@@ -42,25 +42,29 @@ public class RecordAction {
     public InputStream getInputStream() { return inputStream; }
 
     public String collectionRecord(){
-        Map<String, Object> response = recordService.collectionRecord(start);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = recordService.collectionRecord(user, start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String browsingRecord(){
-        Map<String, Object> response = recordService.browsingRecord(start);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = recordService.browsingRecord(user, start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String postQueRecord(){
-        Map<String, Object> response = recordService.listPostQuestionRecord(start);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = recordService.listPostQuestionRecord(user, start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
 
     public String postAnsRecord(){
-        Map<String, Object> response = recordService.listPostAnswerRecord(start);
+        User user = (User) ActionContext.getContext().getSession().get("user");
+        Map<String, Object> response = recordService.listPostAnswerRecord(user, start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }

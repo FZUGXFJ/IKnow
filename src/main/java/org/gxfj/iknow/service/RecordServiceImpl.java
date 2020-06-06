@@ -30,8 +30,7 @@ public class RecordServiceImpl implements RecordService {
 
     final static private int MAP_NUM = 20;
     @Override
-    public Map<String, Object> collectionRecord(Integer start) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> collectionRecord(User user, Integer start) {
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME , UN_LOGIN);
@@ -69,8 +68,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Map<String, Object> browsingRecord(Integer start) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> browsingRecord(User user, Integer start) {
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME , UN_LOGIN);
@@ -119,8 +117,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Map<String,Object> listPostQuestionRecord(Integer start){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String,Object> listPostQuestionRecord(User user, Integer start){
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME , UN_LOGIN);
@@ -154,8 +151,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Map<String,Object> listPostAnswerRecord(Integer start){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String,Object> listPostAnswerRecord(User user, Integer start){
         Map<String , Object> result = new HashMap<>(HASH_MAP_NUM);
         if(user == null){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME , UN_LOGIN);

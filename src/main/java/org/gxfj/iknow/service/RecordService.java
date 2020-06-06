@@ -14,26 +14,26 @@ public interface RecordService {
      * @param start 起始地址
      * @return 收藏数据
      */
-    public Map<String,Object> collectionRecord(Integer start);
+    public Map<String,Object> collectionRecord(User user, Integer start);
 
     /**
      *浏览记录
      * @param start 起始地址
      * @return 浏览数据
      */
-    public Map<String,Object> browsingRecord(Integer start);
+    public Map<String,Object> browsingRecord(User user, Integer start);
 
     /**
      *  获取用户发表的问题记录
      * @param start 起始地址
      * @return 用户发表问题列表
      */
-    public Map<String,Object> listPostQuestionRecord(Integer start);
+    public Map<String,Object> listPostQuestionRecord(User user, Integer start);
 
     /**
      *  获取用户发表的回答记录
      * @param start 起始地址
      * @return 用户发表问题列表
      */
-    public Map<String,Object> listPostAnswerRecord(Integer start);
+    public Map<String,Object> listPostAnswerRecord(User user, Integer start);
 }

@@ -84,7 +84,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String adoptAnswer() {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = answerService.adoptAnswerService(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -95,7 +95,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String cancelAnonymous(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = answerService.cancelAnonymous(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -106,7 +106,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String recommendAnswer(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = answerService.getRecommendAnswerForUser(user, 20);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -117,7 +117,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String approveAnswer(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = answerService.approveAnswer(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -128,7 +128,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String cancelApprove(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = answerService.cancelApprove(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -139,7 +139,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String oppositionAnswer(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = answerService.oppositionAnswer(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -150,7 +150,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String cancelOppose(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = answerService.cancelOppose(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -161,7 +161,7 @@ public class AnswerAction {
      * @return
      */
     public String moreRecommend(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response=answerService.moreRecommendAnswer(user,
                 ConstantUtil.RECOMMEND_ANSWERS_NUM_PER_TIME,start);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
@@ -173,7 +173,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String deleteAnswer(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response =answerService.deleteAnswer(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -184,7 +184,7 @@ public class AnswerAction {
      * @return
      */
     public String getAnswerInfo(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = answerService.getAnswerContent(user, answerId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -195,7 +195,7 @@ public class AnswerAction {
      * @return SUCCESS
      */
     public String updateAnswer(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response=answerService.updateAnswerContent(user, answerId,content);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;

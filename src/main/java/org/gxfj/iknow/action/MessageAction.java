@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import org.gxfj.iknow.pojo.User;
 import org.gxfj.iknow.service.MessageService;
+import org.gxfj.iknow.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -32,7 +33,7 @@ public class MessageAction {
      * @return 前端
      */
     public String getMessage(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = messageService.messageInf(user);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;
@@ -43,7 +44,7 @@ public class MessageAction {
      * @return 前端
      */
     public String readMessage(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = messageService.readMessage(user, messageId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return RETURN_STRING;

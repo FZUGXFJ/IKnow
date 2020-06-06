@@ -53,7 +53,7 @@ public class CommentAction {
      * @return SUCCUESS
      */
     public String postComment(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = commentService.postComment(user, answerId, content);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -64,7 +64,7 @@ public class CommentAction {
      * @return SUCCESS
      */
     public String viewComments(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = commentService.viewComments(user, answerId, sort);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -75,7 +75,7 @@ public class CommentAction {
      * @return SUCCESS
      */
     public String approveComment() {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = commentService.approveComment(user, commentId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -86,7 +86,7 @@ public class CommentAction {
      * @return SUCCESS
      */
     public String cancelApprove() {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response = commentService.cancelApprove(user, commentId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -97,7 +97,7 @@ public class CommentAction {
      * @return SUCCESS
      */
     public String moreComment(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response= commentService.moreComments(user, answerId, start, sort);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
@@ -108,7 +108,7 @@ public class CommentAction {
      * @return SUCCESS
      */
     public String deleteComment(){
-        User user = (User) ActionContext.getContext().getSession().get("user");
+        User user = (User) ActionContext.getContext().getSession().get(ConstantUtil.SESSION_USER);
         Map<String, Object> response= commentService.deleteComment(user, commentId);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
