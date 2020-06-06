@@ -22,7 +22,7 @@ public interface CommentService {
      * @param sort 排序方式
      * @return 构造好的MAP
      */
-    public Map<String, Object> getComments(User user, Integer answerId, Integer sort);
+    public Map<String, Object> viewComments(User user, Integer answerId, Integer sort);
 
     /**
      * 验证用户是否点过赞，如果点过，则更新数据库中点赞相关记录
