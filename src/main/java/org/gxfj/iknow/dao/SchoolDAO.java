@@ -19,4 +19,10 @@ public interface SchoolDAO extends BaseDAO<School>{
      * @return  School对象
      */
     School getSchoolByName(String schoolName);
+
+    /**
+     * 获得所有学校
+     * @return  学校列表
+     */
+    List<School> listAllSchool();
 }

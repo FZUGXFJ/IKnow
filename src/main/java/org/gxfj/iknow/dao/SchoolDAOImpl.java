@@ -57,4 +57,12 @@ public class SchoolDAOImpl implements SchoolDAO{
         Query query = session.createQuery(hql);
         return (School)query.setParameter("schoolName",schoolName).uniqueResult();
     }
+
+    @Override
+    public List<School> listAllSchool(){
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "from School as s WHERE 1=1";
+        Query query = session.createQuery(hql);
+        return query.list();
+    }
 }
