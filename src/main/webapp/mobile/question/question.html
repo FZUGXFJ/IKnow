@@ -423,7 +423,8 @@
                 let questionInfo = {
                     viewerIsOwner:question.viewerIsOwner,
                     hasMore:question.hasMore,
-                    start:question.start
+                    start:question.start,
+                    id:question.questionId
                 };
                 sessionStorage.setItem("questionInfo",JSON.stringify(questionInfo));
             },
@@ -568,12 +569,14 @@
             let qid = loc.replace("?","&").split("&")[1];
             let questionId;
             if (qid.indexOf("questionId=")!==-1) {
-                questionId = qid.replace("questionId=","");
+                questionId = parseInt(qid.replace("questionId=",""));
                 this.questionId = questionId;
             } else {
                 location.href = "../../error/mobile/404error.html"
             }
-            if (sessionStorage.getItem("questionInfo") != null && sessionStorage.getItem("questionData") != null) {
+            if (sessionStorage.getItem("questionInfo") != null
+                && sessionStorage.getItem("questionData") != null
+                && JSON.parse(sessionStorage.getItem("questionInfo")).id === questionId) {
                 this.loadLocalData();
                 this.loadingMore = false;
                 return;

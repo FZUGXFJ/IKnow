@@ -136,15 +136,15 @@
                    this.alertMsg.head = "问题内容不能多于25000字";
                    this.alertMsg.body = "";
                    $("#alert").slideDown();
-               } else if (categoriesType === "") {
+               } else if (categoriesType === "" || categoriesType === 0) {
                    this.alertMsg.head = "门类分类不能为空";
                    this.alertMsg.body = "";
                    $("#alert").slideDown();
-               } else if (subjectType === "") {
+               } else if (subjectType === "" || subjectType === 0) {
                    this.alertMsg.head = "科目分类不能为空";
                    this.alertMsg.body = "";
                    $("#alert").slideDown();
-               } else if (majorType === "") {
+               } else if (majorType === "" || subjectType === 0) {
                    this.alertMsg.head = "专业分类不能为空";
                    this.alertMsg.body = "";
                    $("#alert").slideDown();
@@ -197,12 +197,16 @@
             categoriesTypes:[],
             subjectTypes:[],
             majorTypes:[],
-            selectedCatId:0,
-            selectedSubId:0,
-            selectedMajId:0,
+            selectedCatId:"",
+            selectedSubId:"",
+            selectedMajId:"",
         },
         methods:{
             categoriesTypeChange:function () {
+                this.subjectTypes = [];
+                this.selectedSubId = "";
+                this.majorTypes = [];
+                this.selectedMajId = "";
                 for (let i = 0;i< this.categoriesTypes.length;i++) {
                     if (this.categoriesTypes[i].id === this.selectedCatId) {
                         this.subjectTypes = this.categoriesTypes[i].subjectTypes;
@@ -210,6 +214,8 @@
                 }
             },
             subjectTypeChange:function () {
+                this.majorTypes = [];
+                this.selectedMajId = "";
                 for (let i = 0;i< this.subjectTypes.length;i++) {
                     if (this.subjectTypes[i].id === this.selectedSubId) {
                         this.majorTypes = this.subjectTypes[i].majorTypes;

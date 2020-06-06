@@ -225,6 +225,10 @@
         },
         methods:{
             categoriesTypeChange:function () {
+                this.subjectTypes = [];
+                this.selectedSubId = "";
+                this.majorTypes = [];
+                this.selectedMajId = "";
                 for (let i = 0;i< this.categoriesTypes.length;i++) {
                     if (this.categoriesTypes[i].id === this.selectedCatId) {
                         this.subjectTypes = this.categoriesTypes[i].subjectTypes;
@@ -232,6 +236,8 @@
                 }
             },
             subjectTypeChange:function () {
+                this.majorTypes = [];
+                this.selectedMajId = "";
                 for (let i = 0;i< this.subjectTypes.length;i++) {
                     if (this.subjectTypes[i].id === this.selectedSubId) {
                         this.majorTypes = this.subjectTypes[i].majorTypes;
