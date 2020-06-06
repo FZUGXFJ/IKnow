@@ -27,8 +27,7 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public Map<String, Object> cancelCollect(Integer questionId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> cancelCollect(User user, Integer questionId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);
@@ -44,8 +43,7 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public Map<String, Object> collectProblem(Integer questionId) {
-        User user = (User) ActionContext.getContext().getSession().get("user");
+    public Map<String, Object> collectProblem(User user, Integer questionId) {
         Map<String , Object> result = new HashMap<>(ConstantUtil.HASH_MAP_NUM);
         if (user == null) {
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME,ConstantUtil.UN_LOGIN);

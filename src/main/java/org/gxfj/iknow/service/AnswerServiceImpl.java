@@ -511,7 +511,8 @@ public class AnswerServiceImpl implements AnswerService{
 
         //构建浏览表，行是回答id，列是用户id
         for (Browsinghistory browsinghistory : browsinghistoryList) {
-            if (browsinghistory.getAnswerByAnswerId() == null || browsinghistory.getAnswerByAnswerId().getId() == null) {
+            if (browsinghistory.getAnswerByAnswerId() == null || browsinghistory.getAnswerByAnswerId().getId() == null
+                    || browsinghistory.getAnswerByAnswerId().getIsDelete() == Answer.ANSWER_DELETED) {
                 continue;
             }
             //通过浏览记录获得浏览的问题的问题分类id
