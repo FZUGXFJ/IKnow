@@ -199,8 +199,14 @@ public interface AdminService {
      * @param teacherNO 教师工号
      * @param name 姓名
      * @param schoolId 学校id
-     * @param colloge 学院名
+     * @param college 学院名
      * @return 包含响应码的map数据
      */
     Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String college);
+
+    /**
+     * 获取所有学校信息
+     * @return 包含所有学校信息以及响应码的返回信息
+     */
+    Map<String, Object> getSchools();
 }
