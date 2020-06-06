@@ -319,12 +319,16 @@ public class UserServiceImpl<result> implements UserService{
      * @return 哈希表的列表形式的用户成就
      */
     private List<Map> listUserAchievements(Integer userId){
-        List<Achievement> achievements = achievementRecordDAO.listAchievementsByUserId(userId , 0);
+        List<Achievementrecord> achievementRecords = achievementRecordDAO.listAchievementsByUserId(userId , 0);
         List<Map> achievementsMap = new ArrayList<>();
-        Map<String, Object> achievementMap = new HashMap<>(MAP_NUM);
-        for(Achievement achievement :achievements){
+        Map<String, Object> achievementMap;
+        Achievement achievement;
+        for(Achievementrecord achievementRecord :achievementRecords){
+            achievementMap = new HashMap<>(MAP_NUM);
+            achievement = achievementRecord.getAchievementByAchievementId();
             achievementMap.put("achievementName" , achievement.getName());
             achievementMap.put("achievementId" , achievement.getId());
+            achievementMap.put("achievementInt" , achievement.getIntroduct());
             achievementsMap.add(achievementMap);
         }
         return  achievementsMap;
