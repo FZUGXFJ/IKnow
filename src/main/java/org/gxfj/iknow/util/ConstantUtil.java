@@ -104,4 +104,7 @@ public class ConstantUtil {
 
     //MessageUtil
     public final static int INVITE_USER_TO_ANSWER = 5;
+
+    //JsonUtil
+    public final static int IS_NOT_JSON_ARRAY = 1;
 }
