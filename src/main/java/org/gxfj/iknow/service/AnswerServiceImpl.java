@@ -274,6 +274,7 @@ public class AnswerServiceImpl implements AnswerService{
                 if (comment.getAnswerByAnswerId().getQuestionByQuestionId().getIsAnonymous() == 1) {
                     commentMap.put("uName",ConstantUtil.ANONYMOUS_USER_NAME);
                     commentMap.put("uHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
+                    commentMap.put("uid" , 0);
                 }
             }
             if(comment.getUserByUserId().getId().equals(answerDAO.getNotDelete(answerId).getUserByUserId().getId())){
@@ -281,6 +282,7 @@ public class AnswerServiceImpl implements AnswerService{
                 if (comment.getAnswerByAnswerId().getIsAnonymous() == 1) {
                     commentMap.put("uName",ConstantUtil.ANONYMOUS_USER_NAME);
                     commentMap.put("uHead" , ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
+                    commentMap.put("uid" , 0);
                 }
             }
             commentMap.put("isQuestionOwner" , isQuestionOwner);
