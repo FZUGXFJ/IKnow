@@ -19,10 +19,16 @@ public class ConstantUtil {
      */
     public final static int JSON_RESULT_CODE_BAN = 11;
     /**
-     * 内容不存在
+     * 返回的JSON中resultCode的值
+     * 内容不存在，现在用于question/viewQuestion.action、answer/viewAnswer.action、comment/viewComments.action、
+     * reply/showMoreReply.action中
      */
     public final static int JSON_RESULT_CODE_NON_EXISTENT = 12;
 
+    /**
+     * 返回的JSON中resultCode的值
+     * 没有更多了
+     */
     public final static int NO_MORE = 2;
     public final static String JSON_RETURN_CODE_NAME = "resultCode";
     public final static String SESSION_USER = "user";
