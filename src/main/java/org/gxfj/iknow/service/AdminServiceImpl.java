@@ -618,53 +618,58 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         List<Map<String, Object>> collogeInfoList = new ArrayList<>();
         List<Map<String, Object>> majorInfoList = new ArrayList<>();
-        //将字符串转化为json数组
-        JSONArray studentsInfoArray = JSONArray.parseArray(studentsInfo);
+        if(JsonUtil.isJsonArray(studentsInfo)){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.IS_NOT_JSON_ARRAY);
+        }else {
+            //将字符串转化为json数组
+            JSONArray studentsInfoArray = JSONArray.parseArray(studentsInfo);
 
-        if(studentsInfoArray.size()>0){
-            for(int i = 0;i < studentsInfoArray.size(); i ++){
-                Map<String, Object> studentInfoMap = studentsInfoArray.getJSONObject(i);
-                String collegeName = (String) studentInfoMap.get("学院");
-                String majorName = (String) studentInfoMap.get("专业");
-                Integer studentNum = (Integer) studentInfoMap.get("学号");
-                String realname = (String) studentInfoMap.get("姓名");
+            if(studentsInfoArray.size()>0){
+                for(int i = 0;i < studentsInfoArray.size(); i ++){
+                    Map<String, Object> studentInfoMap = studentsInfoArray.getJSONObject(i);
+                    String collegeName = (String) studentInfoMap.get("学院");
+                    String majorName = (String) studentInfoMap.get("专业");
+                    Integer studentNum = (Integer) studentInfoMap.get("学号");
+                    String realname = (String) studentInfoMap.get("姓名");
 
-                Map<String, Object> collegeInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-                Map<String, Object> majorInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+                    Map<String, Object> collegeInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+                    Map<String, Object> majorInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
 
-                if(collegeDAO.getCollegeByName(collegeName) == null){
-                    College college = new College();
-                    college.setSchoolBySchoolId(schoolDAO.get(schoolId));
-                    college.setName(collegeName);
-                    collegeDAO.add(college);
-                }
-                collegeInfo.put("name" , collegeName);
-                collegeInfo.put("id", collegeDAO.getCollegeByName(collegeName).getId());
-                collogeInfoList.add(collegeInfo);
-                if(majorDAO.getMajorByName(majorName) == null){
-                    Major major = new Major();
-                    major.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
-                    major.setName(collegeName);
-                    majorDAO.add(major);
-                }
-                majorInfo.put("name", majorName);
-                majorInfo.put("id", majorDAO.getMajorByName(majorName).getId());
-                majorInfoList.add(majorInfo);
-                if(userIdentityDAO.getStudentIdentity(schoolId, studentNum) == null){
-                    Useridentity useridentity = new Useridentity();
-                    useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
-                    useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
-                    useridentity.setMajorByMajorId(majorDAO.getMajorByName(majorName));
-                    useridentity.setStudentNum(studentNum);
-                    useridentity.setName(realname);
-                    useridentity.setType("学生");
-                    userIdentityDAO.add(useridentity);
+                    if(collegeDAO.getCollegeByName(collegeName) == null){
+                        College college = new College();
+                        college.setSchoolBySchoolId(schoolDAO.get(schoolId));
+                        college.setName(collegeName);
+                        collegeDAO.add(college);
+                    }
+                    collegeInfo.put("name" , collegeName);
+                    collegeInfo.put("id", collegeDAO.getCollegeByName(collegeName).getId());
+                    collogeInfoList.add(collegeInfo);
+                    if(majorDAO.getMajorByName(majorName) == null){
+                        Major major = new Major();
+                        major.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
+                        major.setName(collegeName);
+                        majorDAO.add(major);
+                    }
+                    majorInfo.put("name", majorName);
+                    majorInfo.put("id", majorDAO.getMajorByName(majorName).getId());
+                    majorInfoList.add(majorInfo);
+                    if(userIdentityDAO.getStudentIdentity(schoolId, studentNum) == null){
+                        Useridentity useridentity = new Useridentity();
+                        useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
+                        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
+                        useridentity.setMajorByMajorId(majorDAO.getMajorByName(majorName));
+                        useridentity.setStudentNum(studentNum);
+                        useridentity.setName(realname);
+                        useridentity.setType("学生");
+                        userIdentityDAO.add(useridentity);
+                    }
                 }
             }
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+            result.put("collogeInfo", collogeInfoList);
+            result.put("majorInfo", collogeInfoList);
         }
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
-        result.put("collogeInfo", collogeInfoList);
-        result.put("majorInfo", collogeInfoList);
+
         return result;
     }
 
@@ -693,22 +698,25 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String, Object> saveTeachers(String teachersInfo, Integer schoolID){
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-        List<Map<String, Object>> teachersInfoMap = (List<Map<String,Object>>) JSONArray.parse(teachersInfo);
+        if(JsonUtil.isJsonArray(teachersInfo)){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.IS_NOT_JSON_ARRAY);
+        }else {
+            List<Map<String, Object>> teachersInfoMap = (List<Map<String,Object>>) JSONArray.parse(teachersInfo);
 
-        for(Map<String, Object> teacherInfoMap:teachersInfoMap){
-            String teacherNO = (String)teacherInfoMap.get("工号");
-            String name = (String)teacherInfoMap.get("姓名");
-            String colloge = (String)teacherInfoMap.get("学院");
+            for(Map<String, Object> teacherInfoMap:teachersInfoMap){
+                String teacherNO = (String)teacherInfoMap.get("工号");
+                String name = (String)teacherInfoMap.get("姓名");
+                String colloge = (String)teacherInfoMap.get("学院");
 
-            Useridentity useridentity = new Useridentity();
-            useridentity.setName(name);
-            useridentity.setSchoolBySchoolId(schoolDAO.get(schoolID));
-            useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(colloge));
-            useridentity.setJobNum(Integer.parseInt(teacherNO));
-            userIdentityDAO.add(useridentity);
+                Useridentity useridentity = new Useridentity();
+                useridentity.setName(name);
+                useridentity.setSchoolBySchoolId(schoolDAO.get(schoolID));
+                useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(colloge));
+                useridentity.setJobNum(Integer.parseInt(teacherNO));
+                userIdentityDAO.add(useridentity);
+            }
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
-
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
 
