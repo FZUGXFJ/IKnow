@@ -633,27 +633,20 @@ public class AdminServiceImpl implements AdminService{
                     Integer studentNum = (Integer) studentInfoMap.get("学号");
                     String realname = (String) studentInfoMap.get("姓名");
 
-                    Map<String, Object> collegeInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-                    Map<String, Object> majorInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-
                     if(collegeDAO.getCollegeByName(collegeName) == null){
                         College college = new College();
                         college.setSchoolBySchoolId(schoolDAO.get(schoolId));
                         college.setName(collegeName);
                         collegeDAO.add(college);
                     }
-                    collegeInfo.put("name" , collegeName);
-                    collegeInfo.put("id", collegeDAO.getCollegeByName(collegeName).getId());
-                    collegeInfoList.add(collegeInfo);
+
                     if(majorDAO.getMajorByName(majorName) == null){
                         Major major = new Major();
                         major.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
                         major.setName(majorName);
                         majorDAO.add(major);
                     }
-                    majorInfo.put("name", majorName);
-                    majorInfo.put("id", majorDAO.getMajorByName(majorName).getId());
-                    majorInfoList.add(majorInfo);
+
                     if(userIdentityDAO.getStudentIdentity(schoolId, studentNum) == null){
                         Useridentity useridentity = new Useridentity();
                         useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
@@ -666,6 +659,23 @@ public class AdminServiceImpl implements AdminService{
                     }
                 }
             }
+            School school = schoolDAO.get(schoolId);
+            List<College> colleges = (List<College>)school.getCollegesById();
+
+            for(College college:colleges){
+                Map<String, Object> collegeInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+                collegeInfo.put("name" , college.getName());
+                collegeInfo.put("id", college.getId());
+                collegeInfoList.add(collegeInfo);
+                List<Major> majors = (List<Major>)college.getMajorsById();
+                for(Major major:majors){
+                    Map<String, Object> majorInfo = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+                    majorInfo.put("name", major.getName());
+                    majorInfo.put("id", major.getId());
+                    majorInfoList.add(majorInfo);
+                }
+            }
+
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
             result.put("collegeInfo", collegeInfoList);
             result.put("majorInfo", majorInfoList);
