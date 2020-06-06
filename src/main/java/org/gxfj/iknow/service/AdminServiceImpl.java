@@ -618,7 +618,7 @@ public class AdminServiceImpl implements AdminService{
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         List<Map<String, Object>> collegeInfoList = new ArrayList<>();
         List<Map<String, Object>> majorInfoList = new ArrayList<>();
-        if(JsonUtil.isJsonArray(studentsInfo)){
+        if(!JsonUtil.isJsonArray(studentsInfo)){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.IS_NOT_JSON_ARRAY);
         }else {
             //将字符串转化为json数组
@@ -700,7 +700,7 @@ public class AdminServiceImpl implements AdminService{
     public Map<String, Object> saveTeachers(String teachersInfo, Integer schoolID){
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         Useridentity useridentity;
-        if(JsonUtil.isJsonArray(teachersInfo)){
+        if(!JsonUtil.isJsonArray(teachersInfo)){
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.IS_NOT_JSON_ARRAY);
         }else {
             List<Map<String, Object>> teachersInfoMap = (List<Map<String,Object>>) JSONArray.parse(teachersInfo);
