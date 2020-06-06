@@ -99,7 +99,7 @@ public class ReplyServiceImpl implements ReplyService {
         Map<String , Object> commentMap = new HashMap<>(MAP_NUM);
         Integer commentId = comment.getId();
         commentMap = commenterIsQAOwner(commentId );
-        commentMap.put("userId" , comment.getUserByUserId().getId());
+//        commentMap.put("userId" , comment.getUserByUserId().getId());
         commentMap.put("content",comment.getContent());
         commentMap.put("replyNum" , replyDAO.getCount(commentId));
         commentMap.put("approveNum" , comment.getCount());
@@ -175,9 +175,12 @@ public class ReplyServiceImpl implements ReplyService {
         if (userIdentify != NO_SPECIAL_IDENTIFY && isAnonymous(comment)){
             commentMap.put("head", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
             commentMap.put("name",ConstantUtil.ANONYMOUS_USER_NAME);
+            commentMap.put("userId" , 0);
+
         } else {
             commentMap.put("head",ImgUtil.changeAvatar(comment.getUserByUserId().getHead(), 2));
             commentMap.put("name",comment.getUserByUserId().getName());
+            commentMap.put("userId" , comment.getUserByUserId().getId());
         }
         if (userIdentify == IS_QUESTION_OWNER) {
             commentMap.put("isQuestionOwner" , 1);
