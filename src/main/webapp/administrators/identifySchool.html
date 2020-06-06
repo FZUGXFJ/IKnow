@@ -42,7 +42,7 @@
     <link href="dashboard.css" rel="stylesheet">
 </head>
 <body>
-<div id="reportAdmin">
+<div id="identifySchool">
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">IKnow</a>
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,35 +64,33 @@
         <div class="row">
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div class="sidebar-sticky pt-3">
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>举报管理</span>
-                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
-                        <!--                        <span data-feather="plus-circle"></span>-->
-                        <!--                    </a>-->
-                    </h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" @click="toReportPage(0)">
                                 <span data-feather="book"></span>
                                 问题举报
+                                <span class="badge badge-pill badge-dark" v-if="questionReport>0">{{questionReport}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link" href="#" @click="toReportPage(1)">
                                 <span data-feather="feather"></span>
                                 回答举报
+                                <span class="badge badge-pill badge-dark" v-if="answerReport>0">{{answerReport}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" @click="toReportPage(2)">
                                 <span data-feather="message-circle"></span>
                                 评论举报
+                                <span class="badge badge-pill badge-dark" v-if="commentReport>0">{{commentReport}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" @click="toReportPage(3)">
                                 <span data-feather="refresh-cw"></span>
                                 回复举报
+                                <span class="badge badge-pill badge-dark" v-if="replyReport>0">{{replyReport}}</span>
                             </a>
                         </li>
                     </ul>
@@ -104,7 +102,7 @@
                     </h6>
                     <ul class="nav flex-column mb-2">
                         <li class="nav-item">
-                            <a class="nav-link" href="statisticsUserAdmin.html">
+                            <a class="nav-link active" href="statisticsUserAdmin.html">
                                 <span data-feather="check-circle"></span>
                                 学校认证管理
                             </a>
@@ -124,7 +122,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="statisticsQuestionAdmin.html">
+                            <a class="nav-link" href="#">
                                 <span data-feather="book"></span>
                                 问题统计
                             </a>
@@ -139,7 +137,7 @@
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary">总览</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">上传</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="isUpload=!isUpload">上传</button>
                         </div>
                     </div>
                 </div>
@@ -155,11 +153,11 @@
 <!--                    <input type="button" value="Excel导入" οnclick="$('#testImport').click()"/>-->
 <!--                    <input id="testImport" style="display: none;" type="file" οnchange="testImport(this)" accept="*"/>-->
 <!--                </div>-->
-                <div>
+                <div v-show="isUpload">
                     <p class="file-name"></p>
                     <input type="file" class="upload-btn" style="display: none">
                     <span type="text" class="file-input-trigger btn btn-sm btn-outline-secondary">选择文件</span>
-                    <span type="text" class="btn btn-sm btn-outline-secondary">上传</span>
+                    <span type="text" class="btn btn-sm btn-outline-secondary"  @click="upload()">上传</span>
                 </div>
 
                 <div class="table-responsive">
@@ -174,13 +172,13 @@
                         </tr>
                         </thead>
                         <tbody align="center">
-                        <tr v-for="(reportInfo,i) in subArr">
-                            <td>1</td>
-                            <td>福州大学</td>
-                            <td>21</td>
-                            <td>84</td>
+                        <tr v-for="(schoolInfo,i) in subArr">
+                            <td>{{schoolInfo.schoolID}}</td>
+                            <td>{{schoolInfo.schoolName}}</td>
+                            <td>{{schoolInfo.collegeNums}}</td>
+                            <td>{{schoolInfo.majorNums}}</td>
                             <td>
-                                <button @click="now=i+(cur-1)*15" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">处理</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                             </td>
                         </tr>
@@ -368,12 +366,12 @@
             var wb = XLSX.read(data, {
                 type: 'binary'		//设置类型,读取二进制
             });
-
+            let index = obj.files[0].name.lastIndexOf(".");
             //读第一个Sheet文件内容
             var items = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
             console.log(items);
-            items = JSON.parse(items);
-            console.log(items);
+            identifySchool.schoolName = obj.files[0].name.substr(0,index);
+            identifySchool.studentsInfo = items;
 
             //读第二个Sheet文件内容
             var itemTwo = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]]));
@@ -384,172 +382,218 @@
         reader.readAsBinaryString(f);
     }
 
-    // let reportAdmin=new Vue({
-    //     el:"#reportAdmin",
-    //     data:{
-    //         reportInfoList:[],
-    //         pageInfoList:[],
-    //         isRmb:false,
-    //         accountNumError:false,
-    //         accountNumErrorMsg:"",
-    //         passwordError:false,
-    //         passwordErrorMsg:"",
-    //         alertMsg:{head:"",body:""},
-    //         all: 1, //总页数
-    //         cur: 1,//当前页码
-    //         now:-1//当前索引
-    //     },
-    //     watch: {
-    //         cur: function(oldValue , newValue){
-    //             console.log(arguments);
-    //         }
-    //     },
-    //     methods:{
-    //         logout:function () {
-    //             $.ajax({
-    //                 type:"POST",
-    //                 url:"../admin/logout.action",
-    //                 data:{},
-    //                 dataType:"json",
-    //                 success:function (result) {
-    //                     if (result.response === 0) {
-    //                         location.href = "login.html";
-    //                     }
-    //                 },
-    //                 error:function (request,status,error) {
-    //                     alert("系统异常！");
-    //                     console.log(request.status);
-    //                     console.log(request.readyState);
-    //                     console.log(status);
-    //                 }
-    //             });
-    //         },
-    //         isLogin:function(){
-    //             $.ajax({
-    //                 url: "../admin/isLogin.action",
-    //                 type: "POST",
-    //                 data: {},
-    //                 dataType: "json",
-    //                 success: function (result) {
-    //                     if (result.resultCode === 1) {
-    //                         location.href="login.html";
-    //                     }
-    //                 },
-    //                 error: function (request, status, error) {
-    //                     alert("系统异常！");
-    //                     console.log(request.status);
-    //                     console.log(request.readyState);
-    //                     console.log(status);
-    //                 }
-    //             });
-    //         },
-    //         getReportType: function(reportType){
-    //             $.ajax({
-    //                 type:"POST",
-    //                 url:"../admin/reportType.action",
-    //                 data:{
-    //                     reportType:reportType,
-    //                 },
-    //                 dataType:"json",
-    //                 success:function (result) {
-    //                     if (result.resultCode === 0) {
-    //                         reportAdmin.reportInfoList = result.reportInfoList;
-    //                         reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
-    //                         console.log(reportAdmin.all);
-    //                         for(let i = 0;i < reportAdmin.reportInfoList.length;i++)
-    //                         {
-    //                             reportAdmin.pageInfoList[i] = reportAdmin.reportInfoList.slice(15*i,15*(i+1));
-    //                             console.log(reportAdmin.pageInfoList[i]);
-    //                         }
-    //                     }
-    //                 },
-    //                 error:function (request,status,error) {
-    //                     alert("系统异常！");
-    //                     console.log(request.status);
-    //                     console.log(request.readyState);
-    //                     console.log(status);
-    //                 }
-    //             });
-    //         },
-    //         del: function(){
-    //             $.ajax({
-    //                 type:"POST",
-    //                 url:"../admin/reportDel.action",
-    //                 data:{
-    //                     reportID:reportAdmin.reportInfoList[reportAdmin.now].id,
-    //                 },
-    //                 dataType:"json",
-    //                 success:function (result) {
-    //                     if (result.resultCode === 0) {
-    //                         reportAdmin.reportInfoList.splice(reportAdmin.now,1);
-    //                         if((reportAdmin.reportInfoList.length+1)%15==1&&reportAdmin.cur==reportAdmin.all){
-    //                             reportAdmin.cur--;
-    //                         }   //当最后一页的最后一条数据被删除时，也要改变当前页面
-    //                         reportAdmin.page();
-    //                         console.log(reportAdmin.now);
-    //                     }
-    //                 },
-    //                 error:function (request,status,error) {
-    //                     alert("系统异常！");
-    //                     console.log(request.status);
-    //                     console.log(request.readyState);
-    //                     console.log(status);
-    //                 }
-    //             });
-    //         },
-    //         page: function(){
-    //             reportAdmin.all = Math.ceil(reportAdmin.reportInfoList.length/15) || 1;
-    //             console.log(reportAdmin.all);
-    //         },
-    //         btnClick: function(data){
-    //             if(data != this.cur){
-    //                 this.cur = data;
-    //                 // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
-    //             }
-    //         },
-    //         pageClick: function(){
-    //             console.log('现在在'+this.cur+'页');
-    //             // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
-    //         }
-    //     },
-    //     computed: {
-    //         indexs: function(){
-    //             var left = 1;
-    //             var right = this.all;
-    //             var ar = [];
-    //             if(this.all>= 5){
-    //                 //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
-    //                 if(this.cur > 3 && this.cur < this.all-1){
-    //                     //以4为参考基准，左面加2右边加2
-    //                     left = this.cur - 2
-    //                     right = this.cur + 2
-    //                 }else{
-    //                     if(this.cur<=3){
-    //                         left = 1
-    //                         right = 5
-    //                     }else{
-    //                         right = this.all
-    //                         left = this.all -4
-    //                     }
-    //                 }
-    //             }
-    //             while (left <= right){
-    //                 ar.push(left)
-    //                 left ++
-    //             }
-    //             console.log(ar);
-    //             return ar
-    //         },
-    //         subArr() {
-    //             console.log(this.reportInfoList.slice((this.cur-1)*15,this.cur*15));
-    //             return this.reportInfoList.slice((this.cur-1)*15,this.cur*15);
-    //         }
-    //     },
-    //     mounted:function () {
-    //         this.isLogin();
-    //         this.getReportType(1);
-    //     }
-    // });
+    let identifySchool=new Vue({
+        el:"#identifySchool",
+        data:{
+            schoolInfoList:[],
+            collegeInfoList:[],
+            majorInfoList:[],
+            pageInfoList:[],
+            schoolName:"",
+            studentsInfo:"",
+            isRmb:false,
+            accountNumError:false,
+            accountNumErrorMsg:"",
+            passwordError:false,
+            passwordErrorMsg:"",
+            alertMsg:{head:"",body:""},
+            all: 1, //总页数
+            cur: 1,//当前页码
+            now:-1,//当前索引
+            isUpload:false,
+            questionReport:0,
+            answerReport:0,
+            commentReport:0,
+            replyReport:0
+        },
+        watch: {
+            cur: function(oldValue , newValue){
+                console.log(arguments);
+            }
+        },
+        methods:{
+            logout:function () {
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/logout.action",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.response === 0) {
+                            location.href = "login.html";
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            isLogin:function(){
+                $.ajax({
+                    url: "../admin/isLogin.action",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 1) {
+                            location.href="login.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            toReportPage: function(type){
+                location.href = "reportAdmin.html?type=" +type;
+            },
+            uploadSchool: function(schoolName,studentsInfo){
+                $.ajax({
+                    url: "../admin/saveSchool.action",
+                    type: "POST",
+                    data: {
+                        schoolName:schoolName
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            identifySchool.uploadStudentsInfo(studentsInfo,result.schoolID,schoolName);
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            uploadStudentsInfo: function(studentsInfo,schoolID,schoolName){
+                $.ajax({
+                    url: "../admin/saveStudents.action",
+                    type: "POST",
+                    data: {
+                        studentsInfo:studentsInfo,
+                        schoolID:schoolID
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            alert("录入成功");
+                            let obj = new Object();
+                            obj.schoolID = schoolID;
+                            obj.schoolName = schoolName;
+                            obj.collegeNums = result.collegeInfo.length;
+                            obj.majorNums = result.majorInfo.length;
+                            identifySchool.schoolInfoList.push(obj);
+                            console.log(identifySchool.schoolInfoList[0]);
+
+                        }
+                        if (result.resultCode === 1) {
+                            alert("xlsx文件格式有误");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            upload: function(){
+                this.uploadSchool(identifySchool.schoolName,identifySchool.studentsInfo);
+            },
+            getReportType: function(reportType){
+                $.ajax({
+                    type:"POST",
+                    url:"../admin/reportType.action",
+                    data:{
+                        reportType:reportType,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.resultCode === 0) {
+                            if(reportType===0)
+                                identifySchool.questionReport=result.reportInfoList.length;
+                            if(reportType===1)
+                                identifySchool.answerReport=result.reportInfoList.length;
+                            if(reportType===2)
+                                identifySchool.commentReport=result.reportInfoList.length;
+                            if(reportType===3)
+                                identifySchool.replyReport=result.reportInfoList.length;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            page: function(){
+                identifySchool.all = Math.ceil(identifySchool.schoolInfoList.length/15) || 1;
+                console.log(identifySchool.all);
+            },
+            btnClick: function(data){
+                if(data != this.cur){
+                    this.cur = data;
+                    // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+                }
+            },
+            pageClick: function(){
+                console.log('现在在'+this.cur+'页');
+                // reportAdmin.reportInfoList = reportAdmin.pageInfoList[this.cur-1];
+            }
+        },
+        computed: {
+            indexs: function(){
+                var left = 1;
+                var right = this.all;
+                var ar = [];
+                if(this.all>= 5){
+                    //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
+                    if(this.cur > 3 && this.cur < this.all-1){
+                        //以4为参考基准，左面加2右边加2
+                        left = this.cur - 2
+                        right = this.cur + 2
+                    }else{
+                        if(this.cur<=3){
+                            left = 1
+                            right = 5
+                        }else{
+                            right = this.all
+                            left = this.all -4
+                        }
+                    }
+                }
+                while (left <= right){
+                    ar.push(left)
+                    left ++
+                }
+                console.log(ar);
+                return ar
+            },
+            subArr() {
+                console.log(this.schoolInfoList.slice((this.cur-1)*15,this.cur*15));
+                return this.schoolInfoList.slice((this.cur-1)*15,this.cur*15);
+            }
+        },
+        mounted:function () {
+            // this.isLogin();
+            this.getReportType(0);
+            this.getReportType(1);
+            this.getReportType(2);
+            this.getReportType(3);
+        }
+    });
     (function () {
         'use strict'
         feather.replace()
