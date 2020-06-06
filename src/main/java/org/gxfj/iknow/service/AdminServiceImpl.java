@@ -647,7 +647,7 @@ public class AdminServiceImpl implements AdminService{
                     if(majorDAO.getMajorByName(majorName) == null){
                         Major major = new Major();
                         major.setCollegeByCollegeId(collegeDAO.getCollegeByName(collegeName));
-                        major.setName(collegeName);
+                        major.setName(majorName);
                         majorDAO.add(major);
                     }
                     majorInfo.put("name", majorName);
