@@ -88,9 +88,8 @@
                             result.records.forEach(function (item) {
                                 browsingRecord.records.push(item);
                             });
-                            let size = result.records.length;
-                            browsingRecord.hasMore = size >= 20;
-                            browsingRecord.start += size;
+                            browsingRecord.hasMore = true;
+                            browsingRecord.start += 20;
                             browsingRecord.loadingMore = false;
                             browsingRecord.loading = false;
                         } else if (result.resultCode === 2) {
@@ -104,9 +103,9 @@
                             browsingRecord.loading = false;
                         } else {
                             browsingRecord.loadingMore = false;
-                            if (confirm("请先登录")) {
-                                location.href = "../user/login.html?boot=0"
-                            }
+                            browsingRecord.$messagebox.alert("请先登录").then(action => {
+                                location.href = "login.html?boot=0";
+                            });
                         }
                     },
                     error: function (request, status, error) {

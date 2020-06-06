@@ -106,9 +106,9 @@
                             postQueRecord.loadingMore = false;
                         } else {
                             postQueRecord.loadingMore = false;
-                            if (confirm("请先登录")) {
-                                location.href = "../user/login.html?boot=0"
-                            }
+                            postQueRecord.$messagebox.alert("请先登录").then(action => {
+                                location.href = "login.html?boot=0";
+                            });
                         }
                     },
                     error: function (request, status, error) {
