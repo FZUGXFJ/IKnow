@@ -5,7 +5,7 @@ import org.gxfj.iknow.pojo.Major;
 
 public interface MajorDAO extends BaseDAO<Major>{
 
-    public Major getMajorByName(String majorName);
+    public Major getMajorByName(String majorName,Integer collegeId);
 
     /**
      * 删除专业

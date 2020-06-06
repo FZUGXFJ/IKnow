@@ -43,11 +43,12 @@ public class MajorDAOImpl implements MajorDAO{
     }
 
     @Override
-    public Major getMajorByName(String majorName) {
+    public Major getMajorByName(String majorName,Integer collegeId) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "from Major as m WHERE m.name = :majorName";
+        String hql = "from Major as m WHERE name = :majorName and collegeID = :collegeId";
         Query query = session.createQuery(hql);
-        return (Major) query.setParameter("majorName",majorName).uniqueResult();
+        return (Major) query.setParameter("majorName",majorName)
+                .setParameter("collegeId",collegeId).uniqueResult();
     }
 
     @Override
