@@ -185,12 +185,14 @@ public class CommentServiceImpl implements CommentService {
         Map<String, Object> commentMap = new HashMap<>(MAP_NUM);
         boolean isAnonymous = (questionOwner.getId().equals(commentUser.getId()) && question.getIsAnonymous() == 1)
                 ||(answerOwner.getId().equals(commentUser.getId()) && answer.getIsAnonymous() == 1);
-        if(isAnonymous){
+        if (isAnonymous) {
             commentMap.put("head", ImgUtil.changeAvatar(ConstantUtil.ANONYMOUS_USER_AVATAR, 2));
             commentMap.put("name",ConstantUtil.ANONYMOUS_USER_NAME);
-        }else{
+            commentMap.put("userId", 0);
+        } else {
             commentMap.put("head",ImgUtil.changeAvatar(commentUser.getHead(), 2));
             commentMap.put("name",commentUser.getName());
+            commentMap.put("userId",commentUser.getId());
         }
         return  commentMap;
     }
@@ -257,7 +259,6 @@ public class CommentServiceImpl implements CommentService {
             //评论者是题主或者回答者且匿名,则设置相应的头像和名称
             commentMap = commenterIsQAOwner(questionOwner,answerOwner,comment,question,answer);
             commentMap.put("id",comment.getId());
-            commentMap.put("userId",commentUser.getId());
             commentMap.put("content",comment.getContent());
             commentMap.put("approveNum",comment.getCount());
             commentMap.put("isQuestionOwner",questionOwner.getId().equals(commentUser.getId()) ? 1 : 0);
