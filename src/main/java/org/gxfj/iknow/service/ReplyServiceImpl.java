@@ -99,6 +99,7 @@ public class ReplyServiceImpl implements ReplyService {
         Map<String , Object> commentMap = new HashMap<>(MAP_NUM);
         Integer commentId = comment.getId();
         commentMap = commenterIsQAOwner(commentId );
+//        commentMap.put("userId" , comment.getUserByUserId().getId());
         commentMap.put("content",comment.getContent());
         commentMap.put("replyNum" , replyDAO.getCount(commentId));
         commentMap.put("approveNum" , comment.getCount());
