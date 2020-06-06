@@ -116,7 +116,7 @@ public class Useridentity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "userID", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "userID", referencedColumnName = "id", nullable = true)
     public User getUserByUserId() {
         return userByUserId;
     }
