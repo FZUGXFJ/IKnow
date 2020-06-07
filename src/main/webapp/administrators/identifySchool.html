@@ -221,7 +221,7 @@
                             <td>{{schoolInfo.majorNums}}</td>
                             <td>
                                 <button @click="now=i+(cur-1)*15;disPlayCollege(schoolInfo.schoolID);schoolNow=schoolInfo.schoolName;schoolNowID=schoolInfo.schoolID" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
+                                <button @click="now=i+(cur-1)*15;" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                             </td>
                         </tr>
                         </tbody>
@@ -363,7 +363,7 @@
                     </div>
                     <div class="modal-body text-right">
                         <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
-                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="del()">确认</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="delOne()">确认</button>
                     </div>
                 </div>
             </div>
@@ -376,7 +376,7 @@
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
             </div>
-            <div class="userInfo">
+            <div class="userInfo" style="margin-top: 5%">
                 <h5>基本信息：</h5>
                 <div class="form-row">
                     <div class="form-group col-1">
@@ -567,10 +567,12 @@
             collegeNow:"",
             majorNow:"",
             studentNow:"",
+            teacherNow:"",
             schoolNowID:"",
             collegeNowID:"",
             majorNowID:"",
-            studentNowID:""
+            studentNowID:"",
+            teacherNowID:"",
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -712,7 +714,7 @@
                             identifySchool.collegePage=false;
                             identifySchool.majorPage=false;
                             identifySchool.studentPage=true;
-                            identifySchool.teacherPage=true;
+                            identifySchool.teacherPage=false;
                             identifySchool.studentInfoList=result.studentInfos;
                         }
                     },
@@ -861,6 +863,30 @@
                         console.log(status);
                     }
                 });
+            },
+            delOne: function(){
+                if(this.schoolPage)
+                {
+                    this.delOneSchool(this.schoolInfoList[this.now].schoolID,this.now);
+                }
+                if(this.collegePage)
+                {
+                    this.delOneCollege(this.collegeInfoList[this.now].collegeID,this.now);
+                }
+                if(this.majorPage)
+                {
+                    this.delOneMajor(this.majorInfoList[this.now].majorID,this.now);
+                }
+                if(this.studentPage)
+                {
+                    this.delOneStudent(this.studentInfoList[this.now].studentID,this.schoolNowID,this.now);
+                }
+                if(this.teacherPage)
+                {
+                    console.log(typeof(this.teacherInfoList[this.now].teacherID.toString()));
+                    console.log(typeof(this.schoolNowID));
+                    this.delOneTeacher(this.teacherInfoList[this.now].teacherID.toString(),this.schoolNowID.toString(),this.now);
+                }
             },
             delOneSchool: function(i,n){
                 $.ajax({
@@ -1049,6 +1075,14 @@
                     this.collegePage=false;
                     this.majorPage=true;
                     this.studentPage=false;
+                }
+                if(this.teacherPage)
+                {
+                    this.schoolPage=false;
+                    this.collegePage=true;
+                    this.majorPage=false;
+                    this.studentPage=false;
+                    this.teacherPage=false;
                 }
             }
         },
