@@ -262,7 +262,7 @@ public interface AdminService {
      * @param studentNum 学号
      * @return 结果码
      */
-    Map<String, Object> delStudent(Integer schoolId, Integer studentNum);
+    Map<String, Object> delStudent(Integer schoolId, String studentNum);
 
     /**
      * 删除教师
@@ -270,5 +270,5 @@ public interface AdminService {
      * @param jobNum 工号
      * @return 结果码
      */
-    Map<String, Object> delTeacher(Integer schoolId, Integer jobNum);
+    Map<String, Object> delTeacher(Integer schoolId, String jobNum);
 }

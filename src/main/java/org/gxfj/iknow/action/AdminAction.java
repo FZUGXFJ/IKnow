@@ -47,8 +47,8 @@ public class AdminAction {
     private String college;
     private Integer collegeID;
     private Integer majorID;
-    private Integer studentID;
-    private Integer teacherID;
+    private String studentID;
+    private String teacherID;
 
     @Autowired
     private AdminService adminService;
@@ -626,19 +626,19 @@ public class AdminAction {
         this.majorID = majorID;
     }
 
-    public Integer getStudentID() {
+    public String getStudentID() {
         return studentID;
     }
 
-    public void setStudentID(Integer studentID) {
+    public void setStudentID(String studentID) {
         this.studentID = studentID;
     }
 
-    public Integer getTeacherID() {
+    public String getTeacherID() {
         return teacherID;
     }
 
-    public void setTeacherID(Integer teacherID) {
+    public void setTeacherID(String teacherID) {
         this.teacherID = teacherID;
     }
 }

@@ -891,7 +891,7 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Map<String, Object> delStudent(Integer schoolId, Integer studentNum) {
+    public Map<String, Object> delStudent(Integer schoolId, String studentNum) {
         userIdentityDAO.deleteStudent(schoolId, studentNum);
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
@@ -899,7 +899,7 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Map<String, Object> delTeacher(Integer schoolId, Integer jobNum) {
+    public Map<String, Object> delTeacher(Integer schoolId, String jobNum) {
         userIdentityDAO.deleteTeacher(schoolId, jobNum);
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
