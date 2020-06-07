@@ -739,14 +739,15 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String college){
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-
-        Useridentity useridentity = new Useridentity();
-        useridentity.setName(name);
-        useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
-        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college,schoolId));
-        useridentity.setJobNum(Integer.parseInt(teacherNO));
-        useridentity.setType("教师");
-        userIdentityDAO.add(useridentity);
+        if(userIdentityDAO.getTeaIdentitie(schoolId,name,teacherNO) == null){
+            Useridentity useridentity = new Useridentity();
+            useridentity.setName(name);
+            useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
+            useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college,schoolId));
+            useridentity.setJobNum(Integer.parseInt(teacherNO));
+            useridentity.setType("教师");
+            userIdentityDAO.add(useridentity);
+        }
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
