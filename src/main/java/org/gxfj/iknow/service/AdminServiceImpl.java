@@ -841,6 +841,7 @@ public class AdminServiceImpl implements AdminService{
             studentMap.put("collegeName",useridentity.getCollegeByCollegeId().getName());
             studentMap.put("majorID",useridentity.getMajorByMajorId().getId());
             studentMap.put("majorName",useridentity.getMajorByMajorId().getName());
+            studentMap.put("id",useridentity.getId());
             studentMapList.add(studentMap);
         }
         result.put("studentInfos", studentMapList);
@@ -860,6 +861,7 @@ public class AdminServiceImpl implements AdminService{
             teacherMap.put("teacherName",useridentity.getName());
             teacherMap.put("collegeID",useridentity.getCollegeByCollegeId().getId());
             teacherMap.put("collegeName",useridentity.getCollegeByCollegeId().getName());
+            teacherMap.put("id",useridentity.getId());
             teacherMapList.add(teacherMap);
         }
         result.put("TeacherInfos", teacherMapList);
