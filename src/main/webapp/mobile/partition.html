@@ -30,6 +30,9 @@
             <td style="width: 12%;text-align: center">
                 <div class="headPortrait" v-html="user.head" @click="toMyPage"></div>
             </td>
+            <td v-if="hasNotReadMsg === 1">
+                <div class="redDot1"></div>
+            </td>
         </table>
         <br>
         <table>
@@ -154,7 +157,8 @@
             questions:[],
             loading:true,
             hasMore:false,
-            loadingMore:false
+            loadingMore:false,
+            hasNotReadMsg:0
         },
         methods:{
             toSearch:function () {
@@ -314,6 +318,7 @@
             }
         },
         mounted:function () {
+            this.hasNotReadMsg = parseInt(sessionStorage.getItem("hasNotReadMsg"));
             if(sessionStorage.getItem("user") != null) {
                 this.user = JSON.parse(sessionStorage.getItem("user"));
             }

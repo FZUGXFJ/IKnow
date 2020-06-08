@@ -14,15 +14,21 @@
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 </head>
 <body>
-<div id="container">
+<div id="container" v-cloak>
     <div id="header">
         <i class="fas fa-times" style="color: #acacac;font-size: 1.3em" @click="back"></i>
     </div>
     <br>
     <div id="middle">
         <h3>HI~</h3>
-        <span v-html="headPortrait"></span>
-        <span style="opacity: 0.5">{{message}}</span>
+        <table>
+            <td style="width: 10%">
+                <div v-html="headPortrait" style="border-radius: 100%"></div>
+            </td>
+            <td style="width: 90%">
+                <span style="opacity: 0.5">{{message}}</span>
+            </td>
+        </table>
         <br><br>
         <div id="addQuestion" @click="toPostQuestion">
             <div>
@@ -60,21 +66,7 @@
             ],
             headPortrait:"<i class='fas fa-user-circle' style='color: #12eee7'></i>",
             message:"今天也要继续开心呀",
-            recQuestions:[
-                {
-                    headPortrait:"<i class='fas fa-user-circle' style='color: #12eee7'></i>",
-                    title:"Spring的依赖注入是什么原理呢？",
-                    collectCount:777,
-                },{
-                    headPortrait:"<i class='fas fa-user-circle' style='color: #12eee7'></i>",
-                    title:"怎么用爬虫爬取数据呢？",
-                    collectCount:534,
-                },{
-                    headPortrait:"<i class='fas fa-user-circle' style='color: #12eee7'></i>",
-                    title:"如何统一四大基本作用力？",
-                    collectCount:8343,
-                },
-            ]
+            recQuestions:[]
         },
         methods:{
             back:function () {
@@ -83,6 +75,9 @@
             toPostQuestion:function () {
                 location.href = "question/postQuestion.html";
             }
+        },
+        mounted:function () {
+            this.headPortrait = JSON.parse(sessionStorage.getItem("user")).head;
         }
     });
 </script>
