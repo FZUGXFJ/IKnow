@@ -897,6 +897,12 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Map<String, Object> delStudent(Integer schoolId, String studentNum) {
+        Useridentity useridentity = userIdentityDAO.getStudentIdentity(schoolId, Integer.parseInt(studentNum));
+        if(useridentity != null && useridentity.getUserByUserId() != null){
+            User user = useridentity.getUserByUserId();
+            user.setUseridentityByIdentityId(null);
+            userDAO.update(user);
+        }
         userIdentityDAO.deleteStudent(schoolId, studentNum);
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
@@ -905,6 +911,12 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Map<String, Object> delTeacher(Integer schoolId, String jobNum) {
+        Useridentity useridentity = userIdentityDAO.getTeacherIdentity(schoolId, Integer.parseInt(jobNum));
+        if(useridentity != null && useridentity.getUserByUserId() != null){
+            User user = useridentity.getUserByUserId();
+            user.setUseridentityByIdentityId(null);
+            userDAO.update(user);
+        }
         userIdentityDAO.deleteTeacher(schoolId, jobNum);
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);

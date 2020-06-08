@@ -41,7 +41,7 @@ public interface UserIdentityDAO extends BaseDAO<Useridentity>{
     public Useridentity getStudentIdentity(Integer schoolId, Integer studentNum);
 
     /**
-     * 获得指定学校，指定工号的学生
+     * 获得指定学校，指定工号的教师
      * @param schoolId 学校Id
      * @param jobNum 工号
      * @return 用户身份

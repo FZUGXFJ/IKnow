@@ -126,10 +126,7 @@ public class UserIdentityDAOImpl implements UserIdentityDAO{
 
     @Override
     public boolean deleteStudent(Integer schoolId, String studentNum) {
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery(
-                "from Useridentity as ui where (schoolID ="+schoolId+") and (studentNum ="+ studentNum+" )");
-        Useridentity useridentity = (Useridentity) query.uniqueResult();
+        Useridentity useridentity = getStudentIdentity(schoolId, Integer.parseInt(studentNum));
         if(useridentity != null){
             sessionFactory.getCurrentSession().delete(useridentity);
         }
@@ -138,10 +135,7 @@ public class UserIdentityDAOImpl implements UserIdentityDAO{
 
     @Override
     public boolean deleteTeacher(Integer schoolId, String jobNum) {
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery(
-                "from Useridentity as ui where (schoolID ="+schoolId+") and (jobNum ="+ jobNum+" )");
-        Useridentity useridentity = (Useridentity) query.uniqueResult();
+        Useridentity useridentity = getTeacherIdentity(schoolId, Integer.parseInt(jobNum));
         if(useridentity != null){
             sessionFactory.getCurrentSession().delete(useridentity);
         }
