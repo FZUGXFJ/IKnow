@@ -697,16 +697,24 @@ public class AdminServiceImpl implements AdminService{
         String college = (String)studentInfoMap.get("college");
         String major = (String)studentInfoMap.get("major");
 
-        Useridentity useridentity = new Useridentity();
-        useridentity.setName(name);
-        useridentity.setSchoolBySchoolId(schoolDAO.get(school));
-        useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college,school));
-        useridentity.setMajorByMajorId(majorDAO.getMajorByName(major,collegeDAO.getCollegeByName(college,school).getId()));
-        useridentity.setStudentNum(Integer.parseInt(studentNO));
-        useridentity.setType("学生");
-        userIdentityDAO.add(useridentity);
-        result.put("id",userIdentityDAO.getStudentIdentity(school,Integer.parseInt(studentNO)).getId());
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        if(userIdentityDAO.getCountByStuNo(Integer.parseInt(studentNO)) > 0){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.STUDENT_NUM_IS_EXIST);
+        }else{
+            Useridentity useridentity = new Useridentity();
+            useridentity.setName(name);
+            useridentity.setSchoolBySchoolId(schoolDAO.get(school));
+            useridentity.setCollegeByCollegeId(collegeDAO.getCollegeByName(college,school));
+            useridentity.setMajorByMajorId(majorDAO.getMajorByName(major,collegeDAO.getCollegeByName(college,school).getId()));
+            useridentity.setStudentNum(Integer.parseInt(studentNO));
+            useridentity.setType("学生");
+            userIdentityDAO.add(useridentity);
+            result.put("id",userIdentityDAO.getStudentIdentity(school,Integer.parseInt(studentNO)).getId());
+            result.put("collegeID",userIdentityDAO.getStudentIdentity(school,
+                    Integer.parseInt(studentNO)).getCollegeByCollegeId().getId());
+            result.put("majorID",userIdentityDAO.getStudentIdentity(school,
+                    Integer.parseInt(studentNO)).getMajorByMajorId().getId());
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
         return result;
     }
 
@@ -740,7 +748,9 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Map<String, Object> saveTeacher(String teacherNO, String name, Integer schoolId, String college){
         Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
-        if(userIdentityDAO.getTeaIdentitie(schoolId,name,teacherNO) == null){
+        if(userIdentityDAO.getCountByTeaNo(Integer.parseInt(teacherNO)) > 0){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JOB_NUM_IS_EXIST);
+        }else {
             Useridentity useridentity = new Useridentity();
             useridentity.setName(name);
             useridentity.setSchoolBySchoolId(schoolDAO.get(schoolId));
@@ -748,9 +758,12 @@ public class AdminServiceImpl implements AdminService{
             useridentity.setJobNum(Integer.parseInt(teacherNO));
             useridentity.setType("教师");
             userIdentityDAO.add(useridentity);
+            result.put("id",userIdentityDAO.getTeacherIdentity(schoolId,Integer.parseInt(teacherNO)).getId());
+            result.put("collegeID",userIdentityDAO.getTeacherIdentity(schoolId,
+                    Integer.parseInt(teacherNO)).getCollegeByCollegeId().getId());
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
-        result.put("id",userIdentityDAO.getTeacherIdentity(schoolId,Integer.parseInt(teacherNO)).getId());
-        result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+
         return result;
     }
 

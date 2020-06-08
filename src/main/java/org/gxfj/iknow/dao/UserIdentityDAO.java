@@ -121,4 +121,18 @@ public interface UserIdentityDAO extends BaseDAO<Useridentity>{
      * @return 记录个数
      */
     public Integer getCountByTeaNo(Integer id, Integer teacherNO);
+
+    /**
+     * 查询某学号身份个数
+     * @param studentNO 学号
+     * @return 记录个数
+     */
+    public Integer getCountByStuNo(Integer studentNO);
+
+    /**
+     * 查询某工号身份个数
+     * @param teacherNO 学号
+     * @return 记录个数
+     */
+    public Integer getCountByTeaNo(Integer teacherNO);
 }
