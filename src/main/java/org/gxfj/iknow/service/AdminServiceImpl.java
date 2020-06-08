@@ -705,6 +705,7 @@ public class AdminServiceImpl implements AdminService{
         useridentity.setStudentNum(Integer.parseInt(studentNO));
         useridentity.setType("学生");
         userIdentityDAO.add(useridentity);
+        result.put("id",userIdentityDAO.getStudentIdentity(school,Integer.parseInt(studentNO)));
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
@@ -748,6 +749,7 @@ public class AdminServiceImpl implements AdminService{
             useridentity.setType("教师");
             userIdentityDAO.add(useridentity);
         }
+        result.put("id",userIdentityDAO.getTeacherIdentity(schoolId,Integer.parseInt(teacherNO)));
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
