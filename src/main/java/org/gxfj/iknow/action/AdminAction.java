@@ -50,6 +50,9 @@ public class AdminAction {
     private String studentID;
     private String teacherID;
 
+    private String studentNO;
+    private String major;
+    private Integer id;
     @Autowired
     private AdminService adminService;
 
@@ -355,7 +358,7 @@ public class AdminAction {
      * 获取专业信息
      * @return “SUCCESS”
      */
-    public String getMajor(){
+    public String getMajors(){
         Map<String,Object> result;
         result = adminService.getMajor(collegeID);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
@@ -414,6 +417,26 @@ public class AdminAction {
 
     public String delTeacher(){
         Map<String, Object> response = adminService.delTeacher(schoolID, teacherID);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 修改学生信息
+     * @return SUCCESS
+     */
+    public String modifyStudent(){
+        Map<String, Object> response = adminService.modifyStudent(Integer.parseInt(studentNO),name,college,major,id);
+        inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
+        return ConstantUtil.RETURN_STRING;
+    }
+
+    /**
+     * 修改教师信息
+     * @return SUCCESS
+     */
+    public String modifyTeacher(){
+        Map<String, Object> response = adminService.modifyTeacher(Integer.parseInt(teacherNO),name,college,id);
         inputStream = new ByteArrayInputStream(JSON.toJSONString(response).getBytes(StandardCharsets.UTF_8));
         return ConstantUtil.RETURN_STRING;
     }
@@ -641,4 +664,30 @@ public class AdminAction {
     public void setTeacherID(String teacherID) {
         this.teacherID = teacherID;
     }
+
+    public String getStudentNO() {
+        return studentNO;
+    }
+
+    public void setStudentNO(String studentNO) {
+        this.studentNO = studentNO;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
 }

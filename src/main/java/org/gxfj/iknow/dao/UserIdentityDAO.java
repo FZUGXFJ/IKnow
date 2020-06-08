@@ -105,4 +105,20 @@ public interface UserIdentityDAO extends BaseDAO<Useridentity>{
      * @return 是否删除成功
      */
     public boolean deleteTeacher(Integer schoolId, String jobNum);
+
+    /**
+     * 查询除了id此纪录外的某学号身份个数
+     * @param id 某个学生的id
+     * @param studentNO 学号
+     * @return 记录个数
+     */
+    public Integer getCountByStuNo(Integer id, Integer studentNO);
+
+    /**
+     * 查询除了id此纪录外的某工号身份个数
+     * @param id 某个教师的id
+     * @param teacherNO 学号
+     * @return 记录个数
+     */
+    public Integer getCountByTeaNo(Integer id, Integer teacherNO);
 }

@@ -50,6 +50,8 @@ public class ConstantUtil {
     public final static int MONTHLY_ACTIVATE_USER_STATICS_LENGTH = 3;
     public final static int SCHOOL_IS_EXIST = 1;
     public final static int SCHOOLNAME_IS_BLANK = 2;
+    public final static int STUDENT_NUM_IS_EXIST = 1;
+    public final static int JOB_NUM_IS_EXIST = 1;
 
 
     //Answer

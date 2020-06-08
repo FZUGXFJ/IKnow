@@ -574,7 +574,7 @@
                 <param name="inputName">inputStream</param>
             </result>
         </action>
-        <action name="getMajor" class="org.gxfj.iknow.action.AdminAction" method="getMajor">
+        <action name="getMajors" class="org.gxfj.iknow.action.AdminAction" method="getMajors">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>
@@ -617,6 +617,18 @@
             </result>
         </action>
         <action name="delSchool" class="org.gxfj.iknow.action.AdminAction" method="delSchool">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="modifyTeacher" class="org.gxfj.iknow.action.AdminAction" method="modifyTeacher">
+            <result name="success" type="stream">
+                <param name="contentType">application/json;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="modifyStudent" class="org.gxfj.iknow.action.AdminAction" method="modifyStudent">
             <result name="success" type="stream">
                 <param name="contentType">application/json;charset=utf-8</param>
                 <param name="inputName">inputStream</param>

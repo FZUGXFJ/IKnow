@@ -922,4 +922,42 @@ public class AdminServiceImpl implements AdminService{
         result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         return result;
     }
+
+    @Override
+    public Map<String, Object> modifyStudent(Integer studentNO,String name,String college,String major,Integer id){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+
+        if(userIdentityDAO.getCountByStuNo(id,studentNO) > 0){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.STUDENT_NUM_IS_EXIST);
+        }else{
+            Useridentity useridentity = userIdentityDAO.get(id);
+            College college1 = collegeDAO.getCollegeByName(college,useridentity.getSchoolBySchoolId().getId());
+            Major major1 = majorDAO.getMajorByName(major,college1.getId());
+            useridentity.setStudentNum(studentNO);
+            useridentity.setName(name);
+            useridentity.setCollegeByCollegeId(college1);
+            useridentity.setMajorByMajorId(major1);
+            userIdentityDAO.update(useridentity);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> modifyTeacher(Integer teacherNO,String name,String college,Integer id){
+        Map<String, Object> result = new HashMap<>(ConstantUtil.MIN_HASH_MAP_NUM);
+
+        if(userIdentityDAO.getCountByTeaNo(id,teacherNO) > 0){
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.JOB_NUM_IS_EXIST);
+        }else{
+            Useridentity useridentity = userIdentityDAO.get(id);
+            College college1 = collegeDAO.getCollegeByName(college,useridentity.getSchoolBySchoolId().getId());
+            useridentity.setJobNum(teacherNO);
+            useridentity.setName(name);
+            useridentity.setCollegeByCollegeId(college1);
+            userIdentityDAO.update(useridentity);
+            result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
+        }
+        return result;
+    }
 }

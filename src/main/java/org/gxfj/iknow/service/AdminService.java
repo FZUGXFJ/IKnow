@@ -271,4 +271,25 @@ public interface AdminService {
      * @return 结果码
      */
     Map<String, Object> delTeacher(Integer schoolId, String jobNum);
+
+    /**
+     * 修改学生信息
+     * @param studentNO 学生学号
+     * @param name 学生姓名
+     * @param college 学院名
+     * @param major 专业名
+     * @param id 学生id
+     * @return 结果码
+     */
+    Map<String, Object> modifyStudent(Integer studentNO,String name,String college,String major,Integer id);
+
+    /**
+     * 修改学生信息
+     * @param teacherNO 学生学号
+     * @param name 学生姓名
+     * @param college 学院名
+     * @param id 学生id
+     * @return 结果码
+     */
+    Map<String, Object> modifyTeacher(Integer teacherNO,String name,String college,Integer id);
 }
