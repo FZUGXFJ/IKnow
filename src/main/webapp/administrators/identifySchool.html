@@ -378,7 +378,7 @@
         <div v-if="teacherPage" id="window" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
             <div class="head" v-if="teacherInfoList.length>0">
                 <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >教师信息:{{teacherInfoList[now].teacherName}}</span>
-                <a href="javascript:void(0)" onclick="hideWindow()">
+                <a href="javascript:void(0)" onclick="hideWindow()" @click="isNewTeacher=false;isNewStudent=false">
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
             </div>
@@ -395,7 +395,7 @@
                         <input type="text" readonly class="form-control-plaintext" value="姓名:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" :placeholder="teacherNowInfo.teacherName" v-model="teacherInfoList[now].teacherName">
+                        <input type="text" class="form-control" :placeholder="teacherNowInfo.teacherName" v-model="newTeacherName">
                     </div>
                 </div>
                 <div class="form-row">
@@ -403,32 +403,33 @@
                         <input type="text" readonly class="form-control-plaintext" value="工号:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" :placeholder="teacherNowInfo.teacherID" v-model="teacherInfoList[now].teacherID">
+                        <input type="text" class="form-control" :placeholder="teacherNowInfo.teacherID" v-model="newTeacherNO">
                     </div>
                     <div class="form-group col-1">
                         <input type="text" readonly class="form-control-plaintext" value="学院:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" :placeholder="teacherNowInfo.collegeName" v-model="teacherInfoList[now].collegeName">
+                        <input type="text" class="form-control" :placeholder="teacherNowInfo.collegeName" v-model="newTeacherCollege">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-4">
                         &nbsp;&nbsp;
-                        <button @click="saveOne(studentInfoList[now])" type="submit" class="btn btn-primary">保存</button> &nbsp;&nbsp;&nbsp;
+                        <button @click="saveOneTeacher()" type="submit" class="btn btn-primary">保存</button> &nbsp;&nbsp;&nbsp;
                         <button class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
                     </div>
                 </div>
+                <h5 v-if="isNewTeacher" style="color: red;margin-left: 5%">修改成功</h5>
             </div>
         </div>
         <div v-if="studentPage" id="window1" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
             <div class="head" v-if="studentInfoList.length>0">
-                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >学生信息:{{studentInfoList[now].studentName}}</span>
-                <a href="javascript:void(0)" onclick="hideWindow1()">
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" ></span>
+                <a href="javascript:void(0)" onclick="hideWindow1()" @click="isNewTeacher=false;isNewStudent=false">
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
             </div>
-            <div class="userInfo" style="margin-top: 8%" v-if="studentInfoList.length>0">
+            <div class="userInfo" style="margin-top: 8%">
                 <h5>基本信息：</h5>
                 <div class="form-row">
                     <div class="form-group col-1">
@@ -441,7 +442,7 @@
                         <input type="text" readonly class="form-control-plaintext" value="姓名:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" :placeholder="studentNowInfo.studentName" v-model="studentInfoList[now].studentName">
+                        <input type="text" class="form-control" :placeholder="studentNowInfo.studentName" v-model="newStudentName">
                     </div>
                 </div>
                 <div class="form-row">
@@ -449,13 +450,13 @@
                         <input type="text" readonly class="form-control-plaintext" value="学号:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" :placeholder="studentNowInfo.studentID" v-model="studentInfoList[now].studentID">
+                        <input type="text" class="form-control" :placeholder="studentNowInfo.studentID" v-model="newStudentNO">
                     </div>
                     <div class="form-group col-1">
                         <input type="text" readonly class="form-control-plaintext" value="学院:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" :placeholder="studentNowInfo.collegeName" v-model="studentInfoList[now].collegeName">
+                        <input type="text" class="form-control" :placeholder="studentNowInfo.collegeName" v-model="newStudentCollege">
                     </div>
                 </div>
                 <div class="form-row">
@@ -463,7 +464,7 @@
                         <input type="text" readonly class="form-control-plaintext" value="专业:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" :placeholder="studentNowInfo.majorName" v-model="studentInfoList[now].majorName">
+                        <input type="text" class="form-control" :placeholder="studentNowInfo.majorName" v-model="newStudentMajor">
                     </div>
                     <div class="form-group col-1">
                     </div>
@@ -473,17 +474,18 @@
                 <div class="form-row">
                     <div class="form-group col-4">
                         &nbsp;&nbsp;
-                        <button @click="saveOne(studentInfoList[now])" type="submit" class="btn btn-primary">保存</button> &nbsp;&nbsp;&nbsp;
+                        <button @click="saveOneStudent()" type="submit" class="btn btn-primary">保存</button> &nbsp;&nbsp;&nbsp;
                         <button data-toggle="modal" data-target="#layer" class="btn btn-danger">删除</button>
                     </div>
                 </div>
+                <h5 v-if="isNewTeacher" style="color: red;margin-left: 5%">修改成功</h5>
             </div>
         </div>
 
         <div v-if="teacherPage" id="window2" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
             <div class="head">
                 <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >新增教师</span>
-                <a href="javascript:void(0)" onclick="hideWindow2()" @click="isNewTeacher=false">
+                <a href="javascript:void(0)" onclick="hideWindow2()" @click="isNewTeacher=false;isNewStudent=false">
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
             </div>
@@ -523,7 +525,7 @@
         <div v-if="studentPage" id="window3" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
             <div class="head">
                 <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >学生信息:{{studentInfoList[now].studentName}}</span>
-                <a href="javascript:void(0)" onclick="hideWindow3()">
+                <a href="javascript:void(0)" onclick="hideWindow3()" @click="isNewTeacher=false;isNewStudent=false">
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
             </div>
@@ -869,6 +871,85 @@
                                 identifySchool.studentInfoList.push(obj);
                                 identifySchool.page();
                             }
+                        }
+                        if (result.resultCode === 1) {
+                            alert("学号已存在");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            saveOneTeacher: function(){
+                if(this.newTeacherNO === "" || this.newTeacherCollege==="" || this.newTeacherName==="")
+                    alert("数据不可为空");
+                else {
+                    this.modifyTeacher();
+                }
+            },
+            modifyTeacher: function(){
+                $.ajax({
+                    url: "../admin/modifyTeacher.action",
+                    type: "POST",
+                    data: {
+                        teacherNO:identifySchool.newTeacherNO,
+                        name:identifySchool.newTeacherName,
+                        id:identifySchool.teacherInfoList[identifySchool.now].id,
+                        college:identifySchool.newTeacherCollege
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            identifySchool.isNewTeacher = true;
+                            identifySchool.teacherInfoList[identifySchool.now].teacherID = identifySchool.newTeacherNO;
+                            identifySchool.teacherInfoList[identifySchool.now].collegeName = identifySchool.newTeacherCollege;
+                            identifySchool.teacherInfoList[identifySchool.now].collegeID = result.collegeID;
+                            identifySchool.teacherInfoList[identifySchool.now].teacherName = identifySchool.newTeacherName;
+                        }
+                        if (result.resultCode === 1) {
+                            alert("工号已存在");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            saveOneStudent: function(){
+                if(this.newStudentNO === "" || this.newStudentCollege==="" || this.newStudentName==="" || this.newStudentMajor==="")
+                    alert("数据不可为空");
+                else {
+                    this.modifyStudent();
+                }
+            },
+            modifyStudent: function(){
+                $.ajax({
+                    url: "../admin/modifyStudent.action",
+                    type: "POST",
+                    data: {
+                        studentNO:identifySchool.newStudentNO,
+                        name:identifySchool.newStudentName,
+                        college:identifySchool.newStudentCollege,
+                        major:identifySchool.newStudentMajor,
+                        id:identifySchool.studentInfoList[identifySchool.now].id
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            identifySchool.isNewStudent = true;
+                            identifySchool.studentInfoList[identifySchool.now].studentID = identifySchool.newStudentNO;
+                            identifySchool.studentInfoList[identifySchool.now].studentName = identifySchool.newStudentName;
+                            identifySchool.studentInfoList[identifySchool.now].collegeID = result.collegeID;
+                            identifySchool.studentInfoList[identifySchool.now].collegeName = identifySchool.newStudentCollege;
+                            identifySchool.studentInfoList[identifySchool.now].majorID = result.majorID;
+                            identifySchool.studentInfoList[identifySchool.now].majorName = identifySchool.newStudentMajor;
                         }
                         if (result.resultCode === 1) {
                             alert("学号已存在");
