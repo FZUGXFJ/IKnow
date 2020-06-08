@@ -138,7 +138,12 @@
                         <div class="btn-group mr-2">
                             <button v-if="!schoolPage" type="button" class="btn btn-sm btn-outline-secondary" @click="back()">返回</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="disPlaySchool()">学校总览</button>
+                            <button v-if="teacherPage" type="button" class="btn btn-sm btn-outline-secondary" @click="disPlaySchool()">新增</button>
+                            <button v-if="studentPage" type="button" class="btn btn-sm btn-outline-secondary" @click="disPlaySchool()">新增</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="isUpload=!isUpload">上传</button>
+                        </div>
+                        <div class="btn-group mr-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="back()">批量操作</button>
                         </div>
                     </div>
                 </div>
@@ -169,7 +174,7 @@
                         {{schoolNow}}
                     </a>
                     /
-                    <a href="#" @click="disPlayMajor(majorNowID)">
+                    <a href="#" @click="disPlayMajor(collegeNowID)">
                         {{collegeNow}}
                     </a>
                     /{{majorNow}}
@@ -279,7 +284,7 @@
                             <td>{{majorInfo.majorName}}</td>
                             <td>{{majorInfo.studentNums}}</td>
                             <td>
-                                <button @click="now=i+(cur-1)*15;disPlayStudent(majorInfo.schoolID);majorNow=majorInfo.majorName;majorNowID=majorInfo.majorID" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15;disPlayStudent(majorInfo.majorID);majorNow=majorInfo.majorName;majorNowID=majorInfo.majorID" class="btn btn-primary btn-sm" data-toggle="modal">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                             </td>
                         </tr>
@@ -306,7 +311,7 @@
                             <td>{{studentInfo.majorID}}</td>
                             <td>{{studentInfo.majorName}}</td>
                             <td>
-                                <button @click="now=i+(cur-1)*15;" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15;getStudentNowInfo()" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow1()">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                             </td>
                         </tr>
@@ -329,7 +334,7 @@
                             <td>{{teacherInfo.collegeID}}</td>
                             <td>{{teacherInfo.collegeName}}</td>
                             <td>
-                                <button @click="now=i+(cur-1)*15;" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button @click="now=i+(cur-1)*15;getTeacherNowInfo()" class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button @click="now=i+(cur-1)*15" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer">删除</button>
                             </td>
                         </tr>
@@ -369,85 +374,108 @@
             </div>
         </div>
         <!--悬浮窗口-->
-        <div id="window" class="window_css" style="background-color: white">
+        <div v-if="teacherPage && teacherInfoList.lenghth>0" id="window" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
             <div class="head">
-                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white" >学生信息</span>
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >教师信息:{{teacherInfoList[now].teacherName}}</span>
                 <a href="javascript:void(0)" onclick="hideWindow()">
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
             </div>
-            <div class="userInfo" style="margin-top: 5%">
+            <div class="userInfo" style="margin-top: 8%">
                 <h5>基本信息：</h5>
                 <div class="form-row">
                     <div class="form-group col-1">
                         <input type="text" readonly class="form-control-plaintext" value="ID:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="number" readonly class="form-control-plaintext" value="1">
+                        <input type="text" readonly class="form-control-plaintext" v-model="teacherInfoList[now].id">
                     </div>
                     <div class="form-group col-1">
-                        <input type="text" readonly class="form-control-plaintext" value="用户名:" style="text-align: center;font-weight: bold">
+                        <input type="text" readonly class="form-control-plaintext" value="姓名:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="password" class="form-control">
+                        <input type="text" class="form-control" :placeholder="teacherNowInfo.teacherName" v-model="teacherInfoList[now].teacherName">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-1">
-                        <input type="text" readonly class="form-control-plaintext" value="个人介绍:" style="text-align: center;font-weight: bold">
+                        <input type="text" readonly class="form-control-plaintext" value="工号:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" value="春翔的父亲">
+                        <input type="text" class="form-control" :placeholder="teacherNowInfo.teacherID" v-model="teacherInfoList[now].teacherID">
                     </div>
                     <div class="form-group col-1">
-                        <input type="text" readonly class="form-control-plaintext" value="性别:" style="text-align: center;font-weight: bold">
+                        <input type="text" readonly class="form-control-plaintext" value="学院:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <select id="inputState" class="form-control">
-                            <option selected>保密</option>
-                            <option>男/option>
-                            <option>女/option>
-                        </select>
+                        <input type="text" class="form-control" :placeholder="teacherNowInfo.collegeName" v-model="teacherInfoList[now].collegeName">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-4">
+                        &nbsp;&nbsp;
+                        <button @click="saveOne(studentInfoList[now])" type="submit" class="btn btn-primary">保存</button> &nbsp;&nbsp;&nbsp;
+                        <button data-target="#layer" type="submit" class="btn btn-danger">删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="studentPage && studentInfoList.lenghth>0" id="window1" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
+            <div class="head">
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >学生信息:{{studentInfoList[now].studentName}}</span>
+                <a href="javascript:void(0)" onclick="hideWindow1()">
+                    <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
+                </a>
+            </div>
+            <div class="userInfo" style="margin-top: 8%">
+                <h5>基本信息：</h5>
+                <div class="form-row">
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="ID:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" readonly class="form-control-plaintext" v-model="studentInfoList[now].id">
+                    </div>
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="姓名:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" :placeholder="studentNowInfo.studentName" v-model="studentInfoList[now].studentName">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-1">
-                        <input type="text" readonly class="form-control-plaintext" value="用户身份:" style="text-align: center;font-weight: bold">
+                        <input type="text" readonly class="form-control-plaintext" value="学号:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <select class="form-control">
-                            <option selected>学生</option>
-                            <option>老师</option>
-                        </select>
+                        <input type="text" class="form-control" :placeholder="studentNowInfo.studentID" v-model="studentInfoList[now].studentID">
                     </div>
                     <div class="form-group col-1">
-                        <input type="text" readonly class="form-control-plaintext" value="用户状态:" style="text-align: center;font-weight: bold">
+                        <input type="text" readonly class="form-control-plaintext" value="学院:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <select class="form-control">
-                            <option selected>正常</option>
-                            <option>停封</option>
-                            <option>禁言</option>
-                        </select>
+                        <input type="text" class="form-control" :placeholder="studentNowInfo.collegeName" v-model="studentInfoList[now].collegeName">
                     </div>
                 </div>
-                <h5>设置账户密码：</h5>
                 <div class="form-row">
                     <div class="form-group col-1">
-                        <input type="text" readonly class="form-control-plaintext" value="邮箱:" style="text-align: center;font-weight: bold">
+                        <input type="text" readonly class="form-control-plaintext" value="专业:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="email" class="form-control" value="1185229277@qq.com">
+                        <input type="text" class="form-control" :placeholder="studentNowInfo.majorName" v-model="studentInfoList[now].majorName">
                     </div>
                     <div class="form-group col-1">
-                        <input type="text" readonly class="form-control-plaintext" value="密码:" style="text-align: center;font-weight: bold">
                     </div>
                     <div class="form-group col-4">
-                        <input type="text" class="form-control" value="123456">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">保存</button>
-                <button type="submit" class="btn btn-danger">删除</button>
+                <div class="form-row">
+                    <div class="form-group col-4">
+                        &nbsp;&nbsp;
+                        <button @click="saveOne(studentInfoList[now])" type="submit" class="btn btn-primary">保存</button> &nbsp;&nbsp;&nbsp;
+                        <button data-target="#layer" type="submit" class="btn btn-danger">删除</button>
+                    </div>
+                </div>
             </div>
         </div>
         <!--出现悬浮窗口后,背景变暗-->
@@ -467,6 +495,18 @@
     /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
     function hideWindow() {
         document.getElementById("window").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+    /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
+    function displayWindow1() {
+        /*悬浮窗口的显示,需要将display变成block*/
+        document.getElementById("window1").style.display = "block";
+        /*将背景变暗*/
+        document.getElementById("shadow").style.display = "block";
+    }
+    /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+    function hideWindow1() {
+        document.getElementById("window1").style.display = "none";
         document.getElementById("shadow").style.display = "none";
     }
     $(function() {
@@ -573,6 +613,8 @@
             majorNowID:"",
             studentNowID:"",
             teacherNowID:"",
+            teacherNowInfo:[],
+            studentNowInfo:[]
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -620,6 +662,12 @@
             },
             toReportPage: function(type){
                 location.href = "reportAdmin.html?type=" +type;
+            },
+            getTeacherNowInfo: function(){
+                this.teacherNowInfo = JSON.parse(JSON.stringify(this.teacherInfoList[this.now]));
+            },
+            getStudentNowInfo: function(){
+                this.studentNowInfo = JSON.parse(JSON.stringify(this.studentInfoList[this.now]));
             },
             getSchool: function(){
                 $.ajax({
@@ -883,8 +931,6 @@
                 }
                 if(this.teacherPage)
                 {
-                    console.log(typeof(this.teacherInfoList[this.now].teacherID.toString()));
-                    console.log(typeof(this.schoolNowID));
                     this.delOneTeacher(this.teacherInfoList[this.now].teacherID.toString(),this.schoolNowID.toString(),this.now);
                 }
             },
@@ -1019,6 +1065,7 @@
                                     identifySchool.cur--;
                                 }   //当最后一页的最后一条数据被删除时，也要改变当前页面
                                 identifySchool.page();
+                                console.log(identifySchool.teacherInfoList);
                             }
                         }
                     },
@@ -1041,8 +1088,6 @@
                     identifySchool.all = Math.ceil(identifySchool.studentInfoList.length/15) || 1;
                 if(this.teacherPage)
                     identifySchool.all = Math.ceil(identifySchool.teacherInfoList.length/15) || 1;
-                identifySchool.cur = 1;
-                console.log(identifySchool.all);
             },
             btnClick: function(data){
                 if(data != this.cur){
