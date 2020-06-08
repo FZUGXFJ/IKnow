@@ -951,6 +951,8 @@ public class AdminServiceImpl implements AdminService{
             useridentity.setCollegeByCollegeId(college1);
             useridentity.setMajorByMajorId(major1);
             userIdentityDAO.update(useridentity);
+            result.put("collegeID", userIdentityDAO.get(id).getCollegeByCollegeId().getId());
+            result.put("majorID", userIdentityDAO.get(id).getMajorByMajorId().getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         return result;
@@ -969,6 +971,7 @@ public class AdminServiceImpl implements AdminService{
             useridentity.setName(name);
             useridentity.setCollegeByCollegeId(college1);
             userIdentityDAO.update(useridentity);
+            result.put("collegeID", userIdentityDAO.get(id).getCollegeByCollegeId().getId());
             result.put(ConstantUtil.JSON_RETURN_CODE_NAME, ConstantUtil.SUCCESS);
         }
         return result;
