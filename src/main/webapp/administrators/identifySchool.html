@@ -12,9 +12,9 @@
 
     <!-- Bootstrap core CSS -->
     <link href="../css/administrators/reportAdmin.css" rel="stylesheet">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
-    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
@@ -138,8 +138,8 @@
                         <div class="btn-group mr-2">
                             <button v-if="!schoolPage" type="button" class="btn btn-sm btn-outline-secondary" @click="back()">返回</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="disPlaySchool()">学校总览</button>
-                            <button v-if="teacherPage" type="button" class="btn btn-sm btn-outline-secondary" @click="disPlaySchool()">新增</button>
-                            <button v-if="studentPage" type="button" class="btn btn-sm btn-outline-secondary" @click="disPlaySchool()">新增</button>
+                            <button v-if="teacherPage" type="button" class="btn btn-sm btn-outline-secondary" onclick="displayWindow2()">新增教师</button>
+                            <button v-if="studentPage" type="button" class="btn btn-sm btn-outline-secondary" onclick="displayWindow3()">新增学生</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="isUpload=!isUpload">上传</button>
                         </div>
                         <div class="btn-group mr-2">
@@ -350,6 +350,7 @@
                             <li v-for="index in indexs"  v-bind:class="{ 'active': cur == index}">
                                 <a v-on:click="btnClick(index)">{{ index }}</a>
                             </li>
+
                             <li v-if="cur<all"><a v-on:click="cur++,pageClick()">下一页</a></li>
                             <li v-if="cur == all"><a class="banclick">下一页</a></li>
                             <li v-if="cur<all"><a v-on:click="cur=all,pageClick()">尾页</a></li>
@@ -374,14 +375,14 @@
             </div>
         </div>
         <!--悬浮窗口-->
-        <div v-if="teacherPage && teacherInfoList.lenghth>0" id="window" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
-            <div class="head">
+        <div v-if="teacherPage" id="window" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
+            <div class="head" v-if="teacherInfoList.length>0">
                 <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >教师信息:{{teacherInfoList[now].teacherName}}</span>
                 <a href="javascript:void(0)" onclick="hideWindow()">
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
             </div>
-            <div class="userInfo" style="margin-top: 8%">
+            <div class="userInfo" style="margin-top: 8%" v-if="teacherInfoList.length>0">
                 <h5>基本信息：</h5>
                 <div class="form-row">
                     <div class="form-group col-1">
@@ -415,19 +416,19 @@
                     <div class="form-group col-4">
                         &nbsp;&nbsp;
                         <button @click="saveOne(studentInfoList[now])" type="submit" class="btn btn-primary">保存</button> &nbsp;&nbsp;&nbsp;
-                        <button data-target="#layer" type="submit" class="btn btn-danger">删除</button>
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-if="studentPage && studentInfoList.lenghth>0" id="window1" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
-            <div class="head">
+        <div v-if="studentPage" id="window1" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
+            <div class="head" v-if="studentInfoList.length>0">
                 <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >学生信息:{{studentInfoList[now].studentName}}</span>
                 <a href="javascript:void(0)" onclick="hideWindow1()">
                     <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
                 </a>
             </div>
-            <div class="userInfo" style="margin-top: 8%">
+            <div class="userInfo" style="margin-top: 8%" v-if="studentInfoList.length>0">
                 <h5>基本信息：</h5>
                 <div class="form-row">
                     <div class="form-group col-1">
@@ -473,11 +474,99 @@
                     <div class="form-group col-4">
                         &nbsp;&nbsp;
                         <button @click="saveOne(studentInfoList[now])" type="submit" class="btn btn-primary">保存</button> &nbsp;&nbsp;&nbsp;
-                        <button data-target="#layer" type="submit" class="btn btn-danger">删除</button>
+                        <button data-toggle="modal" data-target="#layer" class="btn btn-danger">删除</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div v-if="teacherPage" id="window2" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
+            <div class="head">
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >新增教师</span>
+                <a href="javascript:void(0)" onclick="hideWindow2()" @click="isNewTeacher=false">
+                    <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
+                </a>
+            </div>
+            <div class="userInfo" style="margin-top: 8%">
+                <h5>基本信息：</h5>
+                <div class="form-row">
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="工号:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" v-model="newTeacherNO">
+                    </div>
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="姓名:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" v-model="newTeacherName">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="学院:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" v-model="newTeacherCollege">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-4">
+                        &nbsp;&nbsp;
+                        <button @click="newOneTeacher()" type="submit" class="btn btn-primary">新增</button> &nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+                <h5 v-if="isNewTeacher" style="color: red;margin-left: 5%">新增成功</h5>
+            </div>
+        </div>
+        <div v-if="studentPage" id="window3" class="window_css" style="background-color: white;width: 50%;height: 50%;left: 30%">
+            <div class="head">
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white;width: 100%" >学生信息:{{studentInfoList[now].studentName}}</span>
+                <a href="javascript:void(0)" onclick="hideWindow3()">
+                    <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
+                </a>
+            </div>
+            <div class="userInfo" style="margin-top: 8%">
+                <h5>基本信息：</h5>
+                <div class="form-row">
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="学号:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" v-model="newStudentNO">
+                    </div>
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="姓名:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" v-model="newStudentName">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="学院:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" v-model="newStudentCollege">
+                    </div>
+                    <div class="form-group col-1">
+                        <input type="text" readonly class="form-control-plaintext" value="专业:" style="text-align: center;font-weight: bold">
+                    </div>
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" v-model="newStudentMajor">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-4">
+                        &nbsp;&nbsp;
+                        <button @click="newOneStudent()" type="submit" class="btn btn-primary">新增</button> &nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+                <h5 v-if="isNewStudent" style="color: red;margin-left: 5%">新增成功</h5>
+            </div>
+        </div>
+
         <!--出现悬浮窗口后,背景变暗-->
         <div id="shadow" class="shadow_css"></div>
     </div>
@@ -497,6 +586,7 @@
         document.getElementById("window").style.display = "none";
         document.getElementById("shadow").style.display = "none";
     }
+
     /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
     function displayWindow1() {
         /*悬浮窗口的显示,需要将display变成block*/
@@ -509,6 +599,33 @@
         document.getElementById("window1").style.display = "none";
         document.getElementById("shadow").style.display = "none";
     }
+
+    /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
+    function displayWindow2() {
+        /*悬浮窗口的显示,需要将display变成block*/
+        document.getElementById("window2").style.display = "block";
+        /*将背景变暗*/
+        document.getElementById("shadow").style.display = "block";
+    }
+    /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+    function hideWindow2() {
+        document.getElementById("window2").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+
+    /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
+    function displayWindow3() {
+        /*悬浮窗口的显示,需要将display变成block*/
+        document.getElementById("window3").style.display = "block";
+        /*将背景变暗*/
+        document.getElementById("shadow").style.display = "block";
+    }
+    /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+    function hideWindow3() {
+        document.getElementById("window3").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+
     $(function() {
         // 点击自定义的span标签触发input标签的点击事件
         $('.file-input-trigger').on('click', function() {
@@ -614,7 +731,16 @@
             studentNowID:"",
             teacherNowID:"",
             teacherNowInfo:[],
-            studentNowInfo:[]
+            studentNowInfo:[],
+            newTeacherNO:"",
+            newTeacherName:"",
+            newTeacherCollege:"",
+            isNewTeacher:false,
+            newStudentNO:"",
+            newStudentName:"",
+            newStudentCollege:"",
+            newStudentMajor:"",
+            isNewStudent:false
         },
         watch: {
             cur: function(oldValue , newValue){
@@ -662,6 +788,99 @@
             },
             toReportPage: function(type){
                 location.href = "reportAdmin.html?type=" +type;
+            },
+            newOneTeacher: function(){
+                if(this.newTeacherNO === "" || this.newTeacherCollege==="" || this.newTeacherName==="")
+                    alert("数据不可为空");
+                else {
+                    this.saveTeacher();
+                }
+            },
+            saveTeacher: function(){
+                $.ajax({
+                    url: "../admin/saveTeacher.action",
+                    type: "POST",
+                    data: {
+                        teacherNO:identifySchool.newTeacherNO,
+                        name:identifySchool.newTeacherName,
+                        school:identifySchool.schoolNowID,
+                        college:identifySchool.newTeacherCollege
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            identifySchool.isNewTeacher = true;
+                            if(identifySchool.collegeNow === identifySchool.newTeacherCollege) {
+                                let obj = new Object();
+                                obj.collegeName = identifySchool.newTeacherCollege;
+                                obj.teacherID = identifySchool.newTeacherNO;
+                                obj.teacherName = identifySchool.newTeacherName;
+                                obj.collegeID = result.collegeID;
+                                obj.id = result.id;
+                                identifySchool.teacherInfoList.push(obj);
+                                identifySchool.page();
+                            }
+                        }
+                        if (result.resultCode === 1) {
+                            alert("工号已存在");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            newOneStudent: function(){
+                if(this.newStudentNO === "" || this.newStudentCollege==="" || this.newStudentName==="" || this.newStudentMajor==="")
+                    alert("数据不可为空");
+                else {
+                    let obj = new Object();
+                    obj.studentNO=identifySchool.newStudentNO;
+                    obj.name=identifySchool.newStudentName;
+                    obj.school=identifySchool.schoolNowID;
+                    obj.college=identifySchool.newStudentCollege;
+                    obj.major=identifySchool.newStudentMajor;
+                    this.saveStudent(JSON.stringify(obj));
+                }
+            },
+            saveStudent: function(studentInfo){
+                $.ajax({
+                    url: "../admin/saveStudent.action",
+                    type: "POST",
+                    data: {
+                        studentInfo:studentInfo
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.resultCode === 0) {
+                            identifySchool.isNewStudent = true;
+                            if(identifySchool.majorNow === identifySchool.newStudentMajor) {
+                                let obj = new Object();
+                                obj.studentID = identifySchool.newStudentNO;
+                                obj.collegeName = identifySchool.newStudentCollege;
+                                obj.majorID = result.majorID;
+                                obj.studentName = identifySchool.newStudentName;
+                                obj.collegeID = result.collegeID;
+                                obj.majorName = identifySchool.newStudentMajor;
+                                obj.id = result.id;
+                                identifySchool.studentInfoList.push(obj);
+                                identifySchool.page();
+                            }
+                        }
+                        if (result.resultCode === 1) {
+                            alert("学号已存在");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
             },
             getTeacherNowInfo: function(){
                 this.teacherNowInfo = JSON.parse(JSON.stringify(this.teacherInfoList[this.now]));
@@ -724,7 +943,7 @@
             },
             disPlayMajor: function(collegeID){
                 $.ajax({
-                    url: "../admin/getMajor.action",
+                    url: "../admin/getMajors.action",
                     type: "POST",
                     data: {
                         collegeID:collegeID
@@ -1036,6 +1255,7 @@
                                     identifySchool.cur--;
                                 }   //当最后一页的最后一条数据被删除时，也要改变当前页面
                                 identifySchool.page();
+                                identifySchool.now--;
                             }
                         }
                     },
@@ -1065,6 +1285,7 @@
                                     identifySchool.cur--;
                                 }   //当最后一页的最后一条数据被删除时，也要改变当前页面
                                 identifySchool.page();
+                                identifySchool.now--;
                                 console.log(identifySchool.teacherInfoList);
                             }
                         }
