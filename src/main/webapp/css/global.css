@@ -12,6 +12,3 @@ input[type="number"]{
 div{
     word-break: break-all;
 }
-[v-cloak] {
-    display: none;
-}
