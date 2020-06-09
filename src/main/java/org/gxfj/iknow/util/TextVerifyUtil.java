@@ -38,6 +38,8 @@ public class TextVerifyUtil {
 
     public final static Integer VERIFY_RESULT_SUCCESS = 1;
 
+    public final static Integer VERIFY_RESULT_SUSPECTED = 3;
+
     /**
      * 验证文本是否合规
      * @param text  需要验证的文本
@@ -48,7 +50,9 @@ public class TextVerifyUtil {
             return true;
         }
         JSONObject jsonObject = JSON.parseObject(httpPostRequest(VERIFY_URL, text));
-        if (VERIFY_RESULT_SUCCESS.equals(jsonObject.get(VERIFY_RESULT_KEY))) {
+        System.out.println(JSON.toJSONString(jsonObject));
+        if (VERIFY_RESULT_SUCCESS.equals(jsonObject.get(VERIFY_RESULT_KEY))
+                || VERIFY_RESULT_SUSPECTED.equals(jsonObject.get(VERIFY_RESULT_KEY))) {
             return true;
         } else {
             return false;
