@@ -364,6 +364,7 @@
             back:function () {
                 sessionStorage.removeItem("questionData");
                 sessionStorage.removeItem("questionInfo");
+                sessionStorage.setItem("goBack"," ");
                 history.go(-1);
             },
             loadMore:function () {

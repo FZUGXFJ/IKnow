@@ -17,6 +17,12 @@
     <script type="text/javascript" src="https://lib.baomitu.com/quill/1.3.7/quill.min.js"></script>
     <link rel="stylesheet" href="https://lib.baomitu.com/mint-ui/2.2.13/style.min.css">
     <script type="text/javascript" src="https://lib.baomitu.com/mint-ui/2.2.13/index.js"></script>
+    <script>
+        if (sessionStorage.getItem("goBack") != null) {
+            sessionStorage.removeItem("goBack");
+            history.go(-1);
+        }
+    </script>
 </head>
 <body>
 <div id="postQuestion">
