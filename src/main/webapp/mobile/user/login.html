@@ -314,6 +314,14 @@
             }
         },
         mounted:function () {
+            if (sessionStorage.getItem("notice") != null) {
+                this.$toast({
+                    message:sessionStorage.getItem("notice"),
+                    position: 'bottom',
+                    duration: 2000
+                });
+                sessionStorage.removeItem("notice");
+            }
             let boot = 1;
             let loc = location.href;
             loc = loc.replace("?","&").split("&")[1];
