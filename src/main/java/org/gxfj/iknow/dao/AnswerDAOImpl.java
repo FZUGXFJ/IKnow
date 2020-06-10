@@ -130,7 +130,7 @@ public class AnswerDAOImpl implements AnswerDAO{
 
     @Override
     public List<Answer> listByQuestionIdSort(int questionId, int start, int length, int sort) {
-        Session session=sessionFactory.openSession();
+        Session session = getSession();
         Query query;
         if (sort==0){
             query = session.createQuery("from Answer WHERE (questionID = ?) and (isDelete = 0) " +
