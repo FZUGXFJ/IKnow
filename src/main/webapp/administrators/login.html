@@ -65,12 +65,7 @@
     <label for="password" class="sr-only" >Password</label>
     <input type="password" id="password" class="form-control input"placeholder="请输入您的密码" maxlength="20" style="margin-top: 1%">
         <div class="errorMessage" v-if="passwordError" style="margin-left: 5px">{{passwordErrorMsg}}</div>
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" value="remember-me"> 记住我
-        </label>
-    </div>
-    <button class="btn btn-lg btn-primary btn-block input"  @click="validator()"  id="loginBut1">登录</button>
+    <button class="btn btn-lg btn-primary btn-block input"  @click="validator()"  id="loginBut1" style="margin-top: 1%">登录</button>
     <p class="mt-5 mb-3 text-muted">&copy; 2020-2020</p>
 </div>
 <script type="text/javascript">
