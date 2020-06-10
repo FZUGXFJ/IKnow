@@ -79,7 +79,7 @@ public class CommentDAOImpl implements CommentDAO{
 
     @Override
     public List<Comment> listByAnswerIdSort(int answerId, int start, int length, Integer sort) {
-        Session session = sessionFactory.openSession();
+        Session session = getSession();
         Query query ;
         if(sort==0){
             query=session.createQuery("from Comment WHERE (answerID = ?) and (isDelete = 0)" +
