@@ -106,7 +106,7 @@
         </div>
         <br>
         <div style="text-align: center">
-            <el-button type="primary" plain>认证</el-button>
+            <el-button type="primary" plain @click="doAuthentication">认证</el-button>
         </div>
     </div>
 </div>
@@ -159,6 +159,10 @@
                 let studentNum = this.studentNum;
                 let jobNum = this.jobNum;
                 let realName = this.realName;
+                if (school.length <= 0 || (studentNum.length <= 0 && jobNum.length <= 0) || realName.length <= 0) {
+                    this.$messagebox.alert("信息不能为空").then(action => {});
+                    return;
+                }
                 if (this.tab === 0) {
                     $.ajax({
                         type:"POST",
@@ -172,6 +176,7 @@
                         success:function (result) {
                             if (result.resultCode === 0) {
                                 sessionStorage.setItem("notice","认证成功");
+                                location.href = "../my.html";
                             } else if (result.resultCode === 1) {
                                 location.href = "login.html?boot=1";
                                 location.href = "../my.html";
