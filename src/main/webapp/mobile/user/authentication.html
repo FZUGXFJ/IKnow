@@ -179,9 +179,8 @@
                                 location.href = "../my.html";
                             } else if (result.resultCode === 1) {
                                 location.href = "login.html?boot=1";
-                                location.href = "../my.html";
                             } else if (result.resultCode === 2) {
-                                this.$toast({
+                                authentication.$toast({
                                     message: '认证失败，信息无法匹配',
                                     position: 'bottom',
                                     duration: 3000
